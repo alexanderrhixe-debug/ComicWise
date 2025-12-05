@@ -22,7 +22,7 @@ const config: Config = {
   // ═══════════════════════════════════════════════════
   // Plugin Configuration
   // ═══════════════════════════════════════════════════
-  plugins: ["prettier-plugin-tailwindcss"],
+  plugins: ["prettier-plugin-tailwindcss", "prettier-plugin-organize-imports"],
 
   // ═══════════════════════════════════════════════════
   // File-Specific Overrides

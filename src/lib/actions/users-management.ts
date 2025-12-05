@@ -211,7 +211,7 @@ export async function getUserById(userId: string) {
     }
 
     // Remove sensitive data
-    const { password, ...safeUser } = result;
+    const { password: _password, ...safeUser } = result;
 
     return { success: true, data: safeUser };
   } catch (error) {

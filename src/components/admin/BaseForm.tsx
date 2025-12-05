@@ -38,7 +38,8 @@ export type FieldType =
   | "date"
   | "file";
 
-export interface FormFieldConfig<T extends z.ZodType<any, any, any>> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface FormFieldConfig<T extends z.ZodType<any>> {
   name: keyof z.infer<T>;
   label: string;
   type: FieldType;
@@ -49,7 +50,8 @@ export interface FormFieldConfig<T extends z.ZodType<any, any, any>> {
   required?: boolean;
 }
 
-interface BaseFormProps<T extends z.ZodType<any, any, any>> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface BaseFormProps<T extends z.ZodType<any>> {
   schema: T;
   fields: FormFieldConfig<T>[];
   defaultValues: Partial<z.infer<T>>;
@@ -59,7 +61,8 @@ interface BaseFormProps<T extends z.ZodType<any, any, any>> {
   className?: string;
 }
 
-export function BaseForm<T extends z.ZodType<any, any, any>>({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function BaseForm<T extends z.ZodType<any>>({
   schema,
   fields,
   defaultValues,
@@ -71,7 +74,9 @@ export function BaseForm<T extends z.ZodType<any, any, any>>({
   type FormValues = z.output<T>;
 
   const form = useForm<FormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(schema) as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     defaultValues: defaultValues as any,
   });
 
@@ -86,6 +91,7 @@ export function BaseForm<T extends z.ZodType<any, any, any>>({
   };
 
   const renderField = (field: FormFieldConfig<T>, formInstance: UseFormReturn<FormValues>) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldName = field.name as any;
 
     switch (field.type) {

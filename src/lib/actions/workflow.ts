@@ -5,12 +5,13 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { user, verificationToken, passwordResetToken } from "@/db/schema";
-import { sendVerificationEmail, sendPasswordResetEmail, sendWelcomeEmail } from "@/lib/nodemailer";
+import { passwordResetToken, user, verificationToken } from "@/db/schema";
+import { error } from "@/lib/actions/utils";
+import { sendPasswordResetEmail, sendVerificationEmail, sendWelcomeEmail } from "@/lib/nodemailer";
 import { checkRateLimit } from "@/lib/ratelimit";
 import {
-  registerSchema,
   forgotPasswordSchema,
+  registerSchema,
   resetPasswordSchema,
   verifyEmailSchema,
 } from "@/lib/validator";
@@ -28,7 +29,7 @@ export async function registerWorkflow(formData: FormData): Promise<ActionRespon
     // Rate limiting
     const rateLimit = checkRateLimit(`register:${data.email}`, appConfig.rateLimit.auth);
     if (!rateLimit.allowed) {
-      return { error: "Too many registration attempts. Please try again later." };
+      return error("Too many registration attempts. Please try again later.");
     }
 
     // Check if user exists
@@ -37,7 +38,7 @@ export async function registerWorkflow(formData: FormData): Promise<ActionRespon
     });
 
     if (existingUser) {
-      return { error: "User with this email already exists" };
+      return error("User with this email already exists");
     }
 
     // Hash password
@@ -55,7 +56,7 @@ export async function registerWorkflow(formData: FormData): Promise<ActionRespon
       .returning();
 
     if (!newUser) {
-      return { error: "Failed to create user" };
+      return error("Failed to create user");
     }
 
     // Create verification token
@@ -72,12 +73,12 @@ export async function registerWorkflow(formData: FormData): Promise<ActionRespon
     await sendVerificationEmail(data.email, data.name, token);
 
     return { success: true, data: { userId: newUser.id } };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues?.[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues?.[0]?.message || "Validation error");
     }
-    console.error("Registration error:", error);
-    return { error: "Failed to register user" };
+    console.error("Registration error:", err);
+    return error("Failed to register user");
   }
 }
 
@@ -90,7 +91,7 @@ export async function forgotPasswordWorkflow(formData: FormData): Promise<Action
     // Rate limiting
     const rateLimit = checkRateLimit(`reset:${data.email}`, appConfig.rateLimit.email);
     if (!rateLimit.allowed) {
-      return { error: "Too many reset attempts. Please try again later." };
+      return error("Too many reset attempts. Please try again later.");
     }
 
     const existingUser = await db.query.user.findFirst({
@@ -119,12 +120,12 @@ export async function forgotPasswordWorkflow(formData: FormData): Promise<Action
     await sendPasswordResetEmail(data.email, existingUser.name || "User", token);
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues?.[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues?.[0]?.message || "Validation error");
     }
-    console.error("Forgot password error:", error);
-    return { error: "Failed to process request" };
+    console.error("Forgot password error:", err);
+    return error("Failed to process request");
   }
 }
 
@@ -140,7 +141,7 @@ export async function resetPasswordWorkflow(formData: FormData): Promise<ActionR
     });
 
     if (!resetToken || resetToken.expires < new Date()) {
-      return { error: "Invalid or expired token" };
+      return error("Invalid or expired token");
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -150,12 +151,12 @@ export async function resetPasswordWorkflow(formData: FormData): Promise<ActionR
     await db.delete(passwordResetToken).where(eq(passwordResetToken.token, data.token));
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues?.[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues?.[0]?.message || "Validation error");
     }
-    console.error("Reset password error:", error);
-    return { error: "Failed to reset password" };
+    console.error("Reset password error:", err);
+    return error("Failed to reset password");
   }
 }
 
@@ -170,7 +171,7 @@ export async function verifyEmailWorkflow(formData: FormData): Promise<ActionRes
     });
 
     if (!token || token.expires < new Date()) {
-      return { error: "Invalid or expired token" };
+      return error("Invalid or expired token");
     }
 
     const existingUser = await db.query.user.findFirst({
@@ -178,7 +179,7 @@ export async function verifyEmailWorkflow(formData: FormData): Promise<ActionRes
     });
 
     if (!existingUser) {
-      return { error: "User not found" };
+      return error("User not found");
     }
 
     await db
@@ -192,12 +193,12 @@ export async function verifyEmailWorkflow(formData: FormData): Promise<ActionRes
     await sendWelcomeEmail(existingUser.email!, existingUser.name || "User");
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues?.[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues?.[0]?.message || "Validation error");
     }
-    console.error("Verify email error:", error);
-    return { error: "Failed to verify email" };
+    console.error("Verify email error:", err);
+    return error("Failed to verify email");
   }
 }
 
@@ -206,7 +207,7 @@ export async function resendVerificationEmail(email: string): Promise<ActionResp
     // Rate limiting
     const rateLimit = checkRateLimit(`resend:${email}`, appConfig.rateLimit.email);
     if (!rateLimit.allowed) {
-      return { error: "Too many requests. Please try again later." };
+      return error("Too many requests. Please try again later.");
     }
 
     const existingUser = await db.query.user.findFirst({
@@ -214,11 +215,11 @@ export async function resendVerificationEmail(email: string): Promise<ActionResp
     });
 
     if (!existingUser) {
-      return { error: "User not found" };
+      return error("User not found");
     }
 
     if (existingUser.emailVerified) {
-      return { error: "Email already verified" };
+      return error("Email already verified");
     }
 
     // Delete existing tokens
@@ -237,8 +238,8 @@ export async function resendVerificationEmail(email: string): Promise<ActionResp
     await sendVerificationEmail(email, existingUser.name || "User", token);
 
     return { success: true };
-  } catch (error) {
-    console.error("Resend verification error:", error);
-    return { error: "Failed to resend verification email" };
+  } catch (err) {
+    console.error("Resend verification error:", err);
+    return error("Failed to resend verification email");
   }
 }

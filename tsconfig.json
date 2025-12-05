@@ -121,6 +121,9 @@
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "eslint.config.ts",
+    "postcss.config.ts",
+    "prettier.config.ts"
   ]
 }

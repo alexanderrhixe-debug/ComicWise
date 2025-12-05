@@ -26,9 +26,9 @@ export default async function BookmarksPage() {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="space-y-4 text-center">
-          <BookmarkX className="text-muted-foreground mx-auto h-16 w-16" />
+          <BookmarkX className="mx-auto h-16 w-16 text-muted-foreground" />
           <h1 className="text-3xl font-bold">No Bookmarks Yet</h1>
-          <p className="text-muted-foreground mx-auto max-w-md">
+          <p className="mx-auto max-w-md text-muted-foreground">
             Start bookmarking comics you want to read and track your progress here.
           </p>
           <Link href="/comics">
@@ -58,7 +58,7 @@ export default async function BookmarksPage() {
               {chapter && (
                 <div className="absolute top-2 left-2 z-10">
                   <Link href={`/comics/${comic.id}/read/${chapter.id}`}>
-                    <Badge className="hover:bg-primary/90 cursor-pointer" variant="default">
+                    <Badge className="cursor-pointer hover:bg-primary/90" variant="default">
                       Continue: Ch. {chapter.chapterNumber}
                     </Badge>
                   </Link>

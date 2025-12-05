@@ -56,7 +56,6 @@ export function MultiSelect({
     const getNewSet = (prev: Set<string>) => {
       const newSet = new Set(prev);
       if (newSet.has(value)) {
-        // eslint-disable-next-line drizzle/enforce-delete-with-where
         newSet.delete(value);
       } else {
         newSet.add(value);
@@ -110,7 +109,7 @@ export function MultiSelectTrigger({
         role={props.role ?? "combobox"}
         aria-expanded={props["aria-expanded"] ?? open}
         className={cn(
-          "border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='text-'])]:text-muted-foreground flex h-auto min-h-9 w-fit items-center justify-between gap-2 overflow-hidden rounded-md border bg-transparent px-3 py-1.5 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+          "flex h-auto min-h-9 w-fit items-center justify-between gap-2 overflow-hidden rounded-md border border-input bg-transparent px-3 py-1.5 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
           className
         )}
       >
@@ -150,6 +149,7 @@ export function MultiSelectValue({
     items.forEach((child) => child.style.removeProperty("display"));
     let amount = 0;
     for (let i = items.length - 1; i >= 0; i--) {
+      // eslint-disable-next-line security/detect-object-injection
       const child = items[i]!;
       if (containerElement.scrollWidth <= containerElement.clientWidth) {
         break;
@@ -186,7 +186,7 @@ export function MultiSelectValue({
 
   if (selectedValues.size === 0 && placeholder) {
     return (
-      <span className="text-muted-foreground min-w-0 overflow-hidden font-normal">
+      <span className="min-w-0 overflow-hidden font-normal text-muted-foreground">
         {placeholder}
       </span>
     );
@@ -221,7 +221,7 @@ export function MultiSelectValue({
           >
             {items.get(value)}
             {clickToRemove && (
-              <XIcon className="text-muted-foreground group-hover:text-destructive size-2" />
+              <XIcon className="size-2 text-muted-foreground group-hover:text-destructive" />
             )}
           </Badge>
         ))}
@@ -259,7 +259,12 @@ export function MultiSelectContent({
         <Command {...props}>
           {canSearch ? (
             <CommandInput
-              placeholder={typeof search === "object" ? search.placeholder : undefined}
+              {...(typeof search === "object" &&
+              search !== null &&
+              "placeholder" in search &&
+              search.placeholder
+                ? { value: search.placeholder as string }
+                : {})}
             />
           ) : (
             <button autoFocus className="sr-only" />
@@ -267,7 +272,7 @@ export function MultiSelectContent({
           <CommandList>
             {canSearch && (
               <CommandEmpty>
-                {typeof search === "object" ? search.emptyMessage : undefined}
+                {typeof search === "object" && search !== null ? search.emptyMessage : undefined}
               </CommandEmpty>
             )}
             {children}

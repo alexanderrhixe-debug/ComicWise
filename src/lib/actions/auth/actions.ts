@@ -5,7 +5,8 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { user, passwordResetToken } from "@/db/schema";
+import { passwordResetToken, user } from "@/db/schema";
+import { error } from "@/lib/actions/utils";
 import type { ActionResponse } from "@/types";
 import { signIn } from "lib/auth";
 
@@ -37,7 +38,7 @@ export async function registerUser(formData: FormData): Promise<ActionResponse> 
     });
 
     if (existingUser) {
-      return { error: "User with this email already exists" };
+      return error("User with this email already exists");
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -50,11 +51,11 @@ export async function registerUser(formData: FormData): Promise<ActionResponse> 
     });
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues?.[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues?.[0]?.message || "Validation error");
     }
-    return { error: "Failed to register user" };
+    return error("Failed to register user");
   }
 }
 
@@ -69,7 +70,7 @@ export async function requestPasswordReset(formData: FormData): Promise<ActionRe
     });
 
     if (!existingUser) {
-      return { error: "User not found" };
+      return error("User not found");
     }
 
     const token = crypto.randomUUID();
@@ -85,11 +86,11 @@ export async function requestPasswordReset(formData: FormData): Promise<ActionRe
     // await sendPasswordResetEmail(data.email, token);
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues?.[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues?.[0]?.message || "Validation error");
     }
-    return { error: "Failed to request password reset" };
+    return error("Failed to request password reset");
   }
 }
 
@@ -105,7 +106,7 @@ export async function resetPassword(formData: FormData): Promise<ActionResponse>
     });
 
     if (!resetToken || resetToken.expires < new Date()) {
-      return { error: "Invalid or expired token" };
+      return error("Invalid or expired token");
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -115,11 +116,11 @@ export async function resetPassword(formData: FormData): Promise<ActionResponse>
     await db.delete(passwordResetToken).where(eq(passwordResetToken.token, data.token));
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues?.[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues?.[0]?.message || "Validation error");
     }
-    return { error: "Failed to reset password" };
+    return error("Failed to reset password");
   }
 }
 
@@ -136,6 +137,6 @@ export async function signInUser(formData: FormData): Promise<ActionResponse> {
 
     return { success: true };
   } catch {
-    return { error: "Invalid email or password" };
+    return error("Invalid email or password");
   }
 }

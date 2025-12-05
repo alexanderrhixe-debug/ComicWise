@@ -1,6 +1,6 @@
 "use client";
 
-import { X, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -124,7 +124,7 @@ export function Filters({ types, genres }: FiltersProps) {
                 <Badge
                   key={type.id}
                   variant={selectedType === type.id ? "default" : "outline"}
-                  className="hover:bg-primary/10 cursor-pointer"
+                  className="cursor-pointer hover:bg-primary/10"
                   onClick={() => setSelectedType(selectedType === type.id ? null : type.id)}
                 >
                   {type.name}
@@ -142,7 +142,7 @@ export function Filters({ types, genres }: FiltersProps) {
                 <Badge
                   key={status}
                   variant={selectedStatus === status ? "default" : "outline"}
-                  className="hover:bg-primary/10 cursor-pointer"
+                  className="cursor-pointer hover:bg-primary/10"
                   onClick={() => setSelectedStatus(selectedStatus === status ? null : status)}
                 >
                   {status}
@@ -163,7 +163,7 @@ export function Filters({ types, genres }: FiltersProps) {
                 <Badge
                   key={genre.id}
                   variant={selectedGenres.includes(genre.id) ? "default" : "outline"}
-                  className="hover:bg-primary/10 cursor-pointer"
+                  className="cursor-pointer hover:bg-primary/10"
                   onClick={() => toggleGenre(genre.id)}
                 >
                   {genre.name}

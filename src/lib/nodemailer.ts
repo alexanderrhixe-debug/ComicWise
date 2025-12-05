@@ -298,7 +298,7 @@ export async function sendNewChapterNotification(
 // EXPORTS
 // ═══════════════════════════════════════════════════
 
-export default {
+export const emailService = {
   sendEmail,
   sendVerificationEmail,
   sendPasswordResetEmail,
@@ -307,3 +307,5 @@ export default {
   sendNewComicNotification,
   sendNewChapterNotification,
 };
+
+export default emailService;

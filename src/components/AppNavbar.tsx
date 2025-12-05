@@ -1,9 +1,9 @@
 "use client";
 
-import { BookOpen, Search, Menu, User, Bookmark, LogOut } from "lucide-react";
+import { Bookmark, BookOpen, LogOut, Menu, Search, User } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
 import { useState, type FormEvent } from "react";
 
 import { Button } from "components/ui/button";
@@ -39,7 +39,7 @@ export function AppNavbar() {
   };
 
   return (
-    <nav className="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 border-b backdrop-blur">
+    <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 text-xl font-bold">
@@ -56,7 +56,7 @@ export function AppNavbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "hover:text-primary text-sm font-medium transition-colors",
+                  "text-sm font-medium transition-colors hover:text-primary",
                   isActive(link.href) ? "text-foreground" : "text-muted-foreground"
                 )}
               >
@@ -69,7 +69,7 @@ export function AppNavbar() {
         {/* Search Bar (Desktop) */}
         <form onSubmit={handleSearch} className="mx-6 hidden max-w-sm flex-1 lg:flex">
           <div className="relative w-full">
-            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Search comics..."
@@ -83,7 +83,7 @@ export function AppNavbar() {
         {/* User Menu */}
         <div className="flex items-center gap-2">
           {status === "loading" ? (
-            <div className="bg-muted h-8 w-8 animate-pulse rounded-full" />
+            <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
           ) : status === "authenticated" ? (
             <>
               <Link href="/bookmarks" className="hidden md:inline-block">
@@ -136,7 +136,7 @@ export function AppNavbar() {
           <div className="container mx-auto space-y-4 px-4 py-4">
             {/* Mobile Search */}
             <form onSubmit={handleSearch} className="relative">
-              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+              <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Search comics..."
@@ -172,7 +172,7 @@ export function AppNavbar() {
                   <Link
                     href="/profile"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-muted-foreground hover:bg-muted rounded-md px-4 py-2 text-sm font-medium"
+                    className="rounded-md px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted"
                   >
                     Profile
                   </Link>

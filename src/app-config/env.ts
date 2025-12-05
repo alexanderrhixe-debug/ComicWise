@@ -157,6 +157,7 @@ export const env = validateEnv();
  * Check if a specific environment variable is set
  */
 export function hasEnv(key: keyof Env): boolean {
+  // eslint-disable-next-line security/detect-object-injection
   return !!env[key];
 }
 
@@ -164,6 +165,7 @@ export function hasEnv(key: keyof Env): boolean {
  * Get environment variable with type safety
  */
 export function getEnv<K extends keyof Env>(key: K, defaultValue?: Env[K]): Env[K] {
+  // eslint-disable-next-line security/detect-object-injection
   return env[key] ?? (defaultValue as Env[K]);
 }
 

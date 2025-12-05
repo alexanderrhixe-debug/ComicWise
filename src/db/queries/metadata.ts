@@ -1,7 +1,7 @@
 import { asc, eq } from "drizzle-orm";
 
 import { db } from "@/db/client";
-import { type, genre } from "@/db/schema";
+import { genre, type } from "@/db/schema";
 
 export async function getAllTypes() {
   return await db.select().from(type).orderBy(asc(type.name));

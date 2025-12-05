@@ -1,4 +1,4 @@
-import { User, Mail, BookMarked } from "lucide-react";
+import { BookMarked, Mail, User } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { getBookmarkCount } from "@/db/queries";
@@ -45,10 +45,10 @@ export default async function ProfilePage() {
                 <AvatarFallback className="text-3xl">{initials}</AvatarFallback>
               </Avatar>
               <h2 className="text-xl font-bold">{session.user.name}</h2>
-              <p className="text-muted-foreground text-sm">{session.user.email}</p>
+              <p className="text-sm text-muted-foreground">{session.user.email}</p>
               {session.user.role && (
                 <div className="mt-3">
-                  <span className="bg-primary/10 text-primary inline-block rounded-full px-3 py-1 text-xs font-medium">
+                  <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                     {session.user.role}
                   </span>
                 </div>
@@ -63,10 +63,10 @@ export default async function ProfilePage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-3">
-                <BookMarked className="text-muted-foreground h-5 w-5" />
+                <BookMarked className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="text-2xl font-bold">{bookmarkCount}</p>
-                  <p className="text-muted-foreground text-sm">Bookmarks</p>
+                  <p className="text-sm text-muted-foreground">Bookmarks</p>
                 </div>
               </div>
             </CardContent>
@@ -84,7 +84,7 @@ export default async function ProfilePage() {
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <div className="flex items-center gap-3">
-                  <User className="text-muted-foreground h-5 w-5" />
+                  <User className="h-5 w-5 text-muted-foreground" />
                   <Input id="name" defaultValue={session.user.name || ""} disabled />
                 </div>
               </div>
@@ -92,7 +92,7 @@ export default async function ProfilePage() {
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="flex items-center gap-3">
-                  <Mail className="text-muted-foreground h-5 w-5" />
+                  <Mail className="h-5 w-5 text-muted-foreground" />
                   <Input id="email" type="email" defaultValue={session.user.email || ""} disabled />
                 </div>
               </div>

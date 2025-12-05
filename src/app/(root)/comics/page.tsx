@@ -7,7 +7,7 @@ import { Pagination } from "@/components/Pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllComics } from "@/db/queries/comics";
 import { getAllGenres, getAllTypes } from "@/lib/actions/genres-types";
-import type { ComicFilters } from "@/lib/validator";
+import type { ComicFilters } from "@/types/database";
 
 interface Type {
   id: number;
@@ -33,6 +33,8 @@ async function ComicsGrid({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const sortByParam = (searchParams.sort as string) || "latest";
+
   const filters: ComicFilters = {
     search: typeof searchParams.search === "string" ? searchParams.search : undefined,
     typeId: searchParams.type ? Number(searchParams.type) : undefined,
@@ -40,7 +42,7 @@ async function ComicsGrid({
       typeof searchParams.status === "string"
         ? (searchParams.status as "Ongoing" | "Completed" | "Hiatus" | "Dropped" | "Coming Soon")
         : undefined,
-    sortBy: (searchParams.sort as "latest" | "rating" | "views" | "title") || "latest",
+    sortBy: sortByParam as "latest" | "rating" | "title" | "views",
     page: searchParams.page ? Number(searchParams.page) : 1,
     limit: 12,
   };

@@ -17,8 +17,8 @@ export default function VerifyRequestPage() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <div className="bg-primary/10 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
-          <Mail className="text-primary h-8 w-8" />
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+          <Mail className="h-8 w-8 text-primary" />
         </div>
         <CardTitle>Check your email</CardTitle>
         <CardDescription>
@@ -27,9 +27,9 @@ export default function VerifyRequestPage() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="border-border bg-muted/50 rounded-lg border p-4">
+        <div className="rounded-lg border border-border bg-muted/50 p-4">
           <h3 className="mb-2 font-semibold">What&apos;s next?</h3>
-          <ul className="text-muted-foreground list-inside list-disc space-y-1 text-sm">
+          <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
             <li>Check your inbox (and spam folder)</li>
             <li>Click the verification link</li>
             <li>Sign in to your account</li>
@@ -40,7 +40,7 @@ export default function VerifyRequestPage() {
         <Link href="/sign-in" className="w-full">
           <Button className="w-full">Back to Sign In</Button>
         </Link>
-        <p className="text-muted-foreground text-center text-sm">
+        <p className="text-center text-sm text-muted-foreground">
           Didn&apos;t receive the email?{" "}
           <Link href="/resend-verification" className="text-primary hover:underline">
             Resend

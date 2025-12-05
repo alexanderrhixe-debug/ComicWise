@@ -137,9 +137,9 @@ function ResetPasswordForm() {
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-destructive text-sm">{errors.password.message}</p>
+              <p className="text-sm text-destructive">{errors.password.message}</p>
             )}
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               Must be at least 8 characters with uppercase, lowercase, and number
             </p>
           </div>
@@ -153,7 +153,7 @@ function ResetPasswordForm() {
               {...register("confirmPassword")}
             />
             {errors.confirmPassword && (
-              <p className="text-destructive text-sm">{errors.confirmPassword.message}</p>
+              <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
             )}
           </div>
         </CardContent>

@@ -6,9 +6,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -108,7 +108,7 @@ export default function SignInPage() {
               disabled={isLoading}
               {...register("email")}
             />
-            {errors.email && <p className="text-destructive text-sm">{errors.email.message}</p>}
+            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -116,7 +116,7 @@ export default function SignInPage() {
               <Label htmlFor="password">Password</Label>
               <Link
                 href="/forgot-password"
-                className="text-muted-foreground hover:text-primary text-sm underline-offset-4 hover:underline"
+                className="text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
                 tabIndex={-1}
               >
                 Forgot password?
@@ -129,7 +129,7 @@ export default function SignInPage() {
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-destructive text-sm">{errors.password.message}</p>
+              <p className="text-sm text-destructive">{errors.password.message}</p>
             )}
           </div>
         </CardContent>
@@ -144,7 +144,7 @@ export default function SignInPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card text-muted-foreground px-2">Or continue with</span>
+              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
             </div>
           </div>
           <Button
@@ -174,7 +174,7 @@ export default function SignInPage() {
             </svg>
             Sign in with Google
           </Button>
-          <p className="text-muted-foreground text-center text-sm">
+          <p className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="text-primary hover:underline">
               Sign up

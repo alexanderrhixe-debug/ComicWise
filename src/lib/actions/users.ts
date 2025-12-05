@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import * as mutations from "@/db/mutations";
 import * as queries from "@/db/queries";
+import { error } from "@/lib/actions/utils";
 import { sendPasswordResetEmail, sendWelcomeEmail } from "@/lib/nodemailer";
 import { registerSchema } from "@/lib/validator";
 import type { ActionResponse } from "@/types";
@@ -26,7 +27,7 @@ export async function registerUser(formData: FormData): Promise<ActionResponse<{
     const email = formData.get("email") as string;
     const rateLimit = checkRateLimit(`register:${email}`, appConfig.rateLimit.auth);
     if (!rateLimit.allowed) {
-      return { error: "Too many registration attempts. Please try again later." };
+      return error("Too many registration attempts. Please try again later.");
     }
 
     const data = registerSchema.parse({
@@ -38,7 +39,7 @@ export async function registerUser(formData: FormData): Promise<ActionResponse<{
     // Check if user already exists
     const existingUser = await queries.getUserByEmail(data.email);
     if (existingUser) {
-      return { error: "Email already registered" };
+      return error("Email already registered");
     }
 
     // Hash password
@@ -51,19 +52,19 @@ export async function registerUser(formData: FormData): Promise<ActionResponse<{
     });
 
     if (!user) {
-      return { error: "Failed to create user" };
+      return error("Failed to create user");
     }
 
     // Send welcome email
     await sendWelcomeEmail(user.email, user.name || "User");
 
     return { success: true, data: { id: user.id } };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Register user error:", error);
-    return { error: "Failed to register user" };
+    console.error("Register user error:", err);
+    return error("Failed to register user");
   }
 }
 
@@ -81,12 +82,12 @@ export async function updateUser(userId: string, formData: FormData): Promise<Ac
     revalidatePath(`/admin/users/${userId}`);
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Update user error:", error);
-    return { error: "Failed to update user" };
+    console.error("Update user error:", err);
+    return error("Failed to update user");
   }
 }
 
@@ -96,9 +97,9 @@ export async function deleteUser(userId: string): Promise<ActionResponse> {
     revalidatePath("/admin/users");
 
     return { success: true };
-  } catch (error) {
-    console.error("Delete user error:", error);
-    return { error: "Failed to delete user" };
+  } catch (err) {
+    console.error("Delete user error:", err);
+    return error("Failed to delete user");
   }
 }
 
@@ -107,7 +108,7 @@ export async function requestPasswordReset(email: string): Promise<ActionRespons
     // Rate limiting
     const rateLimit = checkRateLimit(`password-reset:${email}`, appConfig.rateLimit.email);
     if (!rateLimit.allowed) {
-      return { error: "Too many password reset requests. Please try again later." };
+      return error("Too many password reset requests. Please try again later.");
     }
 
     const user = await queries.getUserByEmail(email);
@@ -133,9 +134,9 @@ export async function requestPasswordReset(email: string): Promise<ActionRespons
     await sendPasswordResetEmail(email, user.name || "User", token);
 
     return { success: true };
-  } catch (error) {
-    console.error("Password reset request error:", error);
-    return { error: "Failed to process password reset request" };
+  } catch (err) {
+    console.error("Password reset request error:", err);
+    return error("Failed to process password reset request");
   }
 }
 
@@ -144,16 +145,16 @@ export async function resetPassword(token: string, newPassword: string): Promise
     const resetToken = await queries.getPasswordResetToken(token);
 
     if (!resetToken) {
-      return { error: "Invalid or expired reset token" };
+      return error("Invalid or expired reset token");
     }
 
     if (new Date() > resetToken.expires) {
-      return { error: "Reset token has expired" };
+      return error("Reset token has expired");
     }
 
     const user = await queries.getUserByEmail(resetToken.email);
     if (!user) {
-      return { error: "User not found" };
+      return error("User not found");
     }
 
     // Hash new password
@@ -166,8 +167,8 @@ export async function resetPassword(token: string, newPassword: string): Promise
     await mutations.deletePasswordResetToken(token);
 
     return { success: true };
-  } catch (error) {
-    console.error("Reset password error:", error);
-    return { error: "Failed to reset password" };
+  } catch (err) {
+    console.error("Reset password error:", err);
+    return error("Failed to reset password");
   }
 }

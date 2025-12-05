@@ -59,7 +59,7 @@ function VerifyEmailContent() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center">
-            <Loader2 className="text-primary h-8 w-8 animate-spin" />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
           <CardTitle className="text-2xl font-bold">Verifying Email</CardTitle>
           <CardDescription>Please wait while we verify your email address...</CardDescription>
@@ -104,9 +104,9 @@ function VerifyEmailContent() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="border-border bg-muted/50 rounded-lg border p-4">
+        <div className="rounded-lg border border-border bg-muted/50 p-4">
           <h3 className="mb-2 font-semibold">Welcome to ComicWise!</h3>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             Start exploring thousands of comics, bookmark your favorites, and join our community of
             readers.
           </p>

@@ -26,6 +26,7 @@ export async function getArtists(params?: {
   }
 
   // Apply sorting
+  // eslint-disable-next-line security/detect-object-injection
   const sortColumn = artist[sortBy];
   query = query.orderBy(sortOrder === "asc" ? asc(sortColumn) : desc(sortColumn));
 

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import * as mutations from "@/db/mutations";
+import { error } from "@/lib/actions/utils";
 import { createAuthorSchema, updateAuthorSchema } from "@/lib/validator";
 import type { ActionResponse } from "@/types";
 import { appConfig, checkRateLimit } from "app-config";
@@ -13,7 +14,7 @@ export async function createAuthor(formData: FormData): Promise<ActionResponse<{
     // Rate limiting
     const rateLimit = checkRateLimit("create:author", appConfig.rateLimit.default);
     if (!rateLimit.allowed) {
-      return { error: "Too many requests. Please try again later." };
+      return error("Too many requests. Please try again later.");
     }
 
     const data = createAuthorSchema.parse({
@@ -30,17 +31,17 @@ export async function createAuthor(formData: FormData): Promise<ActionResponse<{
 
     const author = await mutations.createAuthor(cleanData);
     if (!author) {
-      return { error: "Failed to create author" };
+      return error("Failed to create author");
     }
 
     revalidatePath("/admin/authors");
     return { success: true, data: { id: author.id } };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Create author error:", error);
-    return { error: "Failed to create author" };
+    console.error("Create author error:", err);
+    return error("Failed to create author");
   }
 }
 
@@ -57,12 +58,12 @@ export async function updateAuthor(authorId: number, formData: FormData): Promis
     revalidatePath(`/admin/authors/${authorId}`);
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Update author error:", error);
-    return { error: "Failed to update author" };
+    console.error("Update author error:", err);
+    return error("Failed to update author");
   }
 }
 
@@ -72,8 +73,8 @@ export async function deleteAuthor(authorId: number): Promise<ActionResponse> {
     revalidatePath("/admin/authors");
 
     return { success: true };
-  } catch (error) {
-    console.error("Delete author error:", error);
-    return { error: "Failed to delete author" };
+  } catch (err) {
+    console.error("Delete author error:", err);
+    return error("Failed to delete author");
   }
 }

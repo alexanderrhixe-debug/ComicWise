@@ -6,8 +6,6 @@ import { render } from "@react-email/components";
 import nodemailer from "nodemailer";
 
 import { appConfig } from "@/app-config";
-
-// Import email templates
 import AccountUpdatedEmail from "@/components/emails/AccountUpdatedEmail";
 import CommentNotificationEmail from "@/components/emails/CommentNotificationEmail";
 import NewChapterEmail from "@/components/emails/NewChapterEmail";

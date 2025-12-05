@@ -84,28 +84,34 @@ export class SeedOrchestrator {
       logger.info(`Loaded ${rawComics.length} comics from files`);
 
       // Preprocess dates and status
-      const preprocessedComics = rawComics.map((comic: any) => {
-        // Normalize status to valid enum value or default to "Ongoing"
-        const validStatuses = ["Ongoing", "Hiatus", "Completed", "Dropped", "Coming Soon"];
-        let status = "Ongoing";
-        if (comic.status && typeof comic.status === "string") {
-          // Try to match status case-insensitively
-          const matchedStatus = validStatuses.find(
-            (s) => s.toLowerCase() === comic.status.toLowerCase()
-          );
-          if (matchedStatus) {
-            status = matchedStatus;
-          }
-        }
 
-        return {
-          ...comic,
-          status,
-          publicationDate: comic.publicationDate ? normalizeDate(comic.publicationDate) : undefined,
-          updatedAt: comic.updatedAt ? normalizeDate(comic.updatedAt) : undefined,
-          updated_at: comic.updated_at ? normalizeDate(comic.updated_at) : undefined,
-        };
-      });
+      const preprocessedComics = rawComics.map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (comic: any) => {
+          // Normalize status to valid enum value or default to "Ongoing"
+          const validStatuses = ["Ongoing", "Hiatus", "Completed", "Dropped", "Coming Soon"];
+          let status = "Ongoing";
+          if (comic.status && typeof comic.status === "string") {
+            // Try to match status case-insensitively
+            const matchedStatus = validStatuses.find(
+              (s) => s.toLowerCase() === comic.status.toLowerCase()
+            );
+            if (matchedStatus) {
+              status = matchedStatus;
+            }
+          }
+
+          return {
+            ...comic,
+            status,
+            publicationDate: comic.publicationDate
+              ? normalizeDate(comic.publicationDate)
+              : undefined,
+            updatedAt: comic.updatedAt ? normalizeDate(comic.updatedAt) : undefined,
+            updated_at: comic.updated_at ? normalizeDate(comic.updated_at) : undefined,
+          };
+        }
+      );
 
       const comics = comicArraySchema.parse(preprocessedComics);
       const uniqueComics = deduplicateByKey(comics, (c) => c.title);
@@ -136,12 +142,20 @@ export class SeedOrchestrator {
       logger.info(`Loaded ${rawChapters.length} chapters from files`);
 
       // Preprocess dates
-      const preprocessedChapters = rawChapters.map((chapter: any) => ({
-        ...chapter,
-        releaseDate: chapter.releaseDate ? normalizeDate(chapter.releaseDate) : undefined,
-        updatedAt: chapter.updatedAt ? normalizeDate(chapter.updatedAt) : undefined,
-        updated_at: chapter.updated_at ? normalizeDate(chapter.updated_at) : undefined,
-      }));
+
+      const preprocessedChapters = rawChapters.map(
+        (chapter: {
+          releaseDate?: string;
+          updatedAt?: string;
+          updated_at?: string;
+          [key: string]: unknown;
+        }) => ({
+          ...chapter,
+          releaseDate: chapter.releaseDate ? normalizeDate(chapter.releaseDate) : undefined,
+          updatedAt: chapter.updatedAt ? normalizeDate(chapter.updatedAt) : undefined,
+          updated_at: chapter.updated_at ? normalizeDate(chapter.updated_at) : undefined,
+        })
+      );
 
       const chapters = chapterArraySchema.parse(preprocessedChapters);
       logger.info(`Valid chapters: ${chapters.length}`);

@@ -9,6 +9,7 @@
 
 import { z } from "zod";
 
+import { error } from "@/lib/actions/utils";
 import { signIn, signOut } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/ratelimit";
 import { loginSchema } from "@/lib/validator";
@@ -25,7 +26,7 @@ export async function signInWithCredentials(formData: FormData): Promise<ActionR
     // Rate limiting
     const rateLimit = checkRateLimit(`signin:${data.email}`, appConfig.rateLimit.auth);
     if (!rateLimit.allowed) {
-      return { error: "Too many sign in attempts. Please try again later." };
+      return error("Too many sign in attempts. Please try again later.");
     }
 
     const result = await signIn("credentials", {
@@ -35,16 +36,16 @@ export async function signInWithCredentials(formData: FormData): Promise<ActionR
     });
 
     if (result?.error) {
-      return { error: "Invalid email or password" };
+      return error("Invalid email or password");
     }
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Sign in error:", error);
-    return { error: "Failed to sign in" };
+    console.error("Sign in error:", err);
+    return error("Failed to sign in");
   }
 }
 
@@ -60,8 +61,8 @@ export async function handleSignOut() {
   try {
     await signOut({ redirectTo: "/sign-in" });
     return { success: true };
-  } catch (error) {
-    console.error("Sign out error:", error);
-    return { error: "Failed to sign out" };
+  } catch (err) {
+    console.error("Sign out error:", err);
+    return error("Failed to sign out");
   }
 }

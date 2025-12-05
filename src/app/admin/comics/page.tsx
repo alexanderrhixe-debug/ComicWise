@@ -5,7 +5,7 @@ import Link from "next/link";
 import { DataTable } from "@/components/admin/DataTable";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db/client";
-import { comic, author, artist, type } from "@/db/schema";
+import { artist, author, comic, type } from "@/db/schema";
 
 export default async function AdminComicsPage() {
   const comics = await db

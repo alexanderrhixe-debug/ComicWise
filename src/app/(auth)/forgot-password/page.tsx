@@ -117,7 +117,7 @@ export default function ForgotPasswordPage() {
               disabled={isLoading}
               {...register("email")}
             />
-            {errors.email && <p className="text-destructive text-sm">{errors.email.message}</p>}
+            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
         </CardContent>
         <CardFooter className="flex-col space-y-4">
@@ -126,7 +126,7 @@ export default function ForgotPasswordPage() {
             Send Reset Link
           </Button>
 
-          <p className="text-muted-foreground text-center text-sm">
+          <p className="text-center text-sm text-muted-foreground">
             Remember your password?{" "}
             <Link href="/sign-in" className="text-primary hover:underline">
               Sign in

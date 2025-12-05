@@ -6,9 +6,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -106,7 +106,7 @@ export default function RegisterPage() {
               disabled={isLoading}
               {...register("name")}
             />
-            {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
+            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -119,7 +119,7 @@ export default function RegisterPage() {
               disabled={isLoading}
               {...register("email")}
             />
-            {errors.email && <p className="text-destructive text-sm">{errors.email.message}</p>}
+            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -131,9 +131,9 @@ export default function RegisterPage() {
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-destructive text-sm">{errors.password.message}</p>
+              <p className="text-sm text-destructive">{errors.password.message}</p>
             )}
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               Must be at least 8 characters with uppercase, lowercase, and number
             </p>
           </div>
@@ -147,7 +147,7 @@ export default function RegisterPage() {
               {...register("confirmPassword")}
             />
             {errors.confirmPassword && (
-              <p className="text-destructive text-sm">{errors.confirmPassword.message}</p>
+              <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
             )}
           </div>
         </CardContent>
@@ -162,7 +162,7 @@ export default function RegisterPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card text-muted-foreground px-2">Or continue with</span>
+              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
             </div>
           </div>
 
@@ -198,7 +198,7 @@ export default function RegisterPage() {
             Google
           </Button>
 
-          <p className="text-muted-foreground text-center text-sm">
+          <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link href="/sign-in" className="text-primary hover:underline">
               Sign in

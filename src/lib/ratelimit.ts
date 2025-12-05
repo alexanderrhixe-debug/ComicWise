@@ -1,4 +1,3 @@
-/* eslint-disable drizzle/enforce-delete-with-where */
 import { appConfig } from "app-config";
 
 interface RateLimitRecord {

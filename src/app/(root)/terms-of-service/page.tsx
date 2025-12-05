@@ -234,14 +234,14 @@ export default function TermsOfServicePage() {
           <section>
             <h2 className="mb-4 text-2xl font-semibold">Contact Us</h2>
             <p className="mb-4">If you have any questions about these Terms, please contact us:</p>
-            <div className="bg-muted mb-4 rounded-lg p-4">
+            <div className="mb-4 rounded-lg bg-muted p-4">
               <p className="font-mono">
                 Email: legal@comicwise.com
                 <br />
                 Subject: Terms of Service Inquiry
               </p>
             </div>
-            <p className="text-muted-foreground mt-4 text-sm">
+            <p className="mt-4 text-sm text-muted-foreground">
               Last updated: {new Date().toLocaleDateString()}
             </p>
           </section>

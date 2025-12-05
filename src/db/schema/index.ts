@@ -1,13 +1,13 @@
 import {
-  pgTable,
-  serial,
-  text,
+  boolean,
   integer,
-  timestamp,
   numeric,
   pgEnum,
+  pgTable,
   primaryKey,
-  boolean,
+  serial,
+  text,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 // ═══════════════════════════════════════════════════

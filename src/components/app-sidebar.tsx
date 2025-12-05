@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  LayoutDashboard,
   BookOpen,
-  Users,
   FileText,
+  FolderOpen,
+  LayoutDashboard,
   Palette,
   UserCircle,
-  FolderOpen,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,14 +15,14 @@ import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
-  SidebarFooter,
 } from "@/components/ui/sidebar";
 
 const menuItems = [
@@ -94,7 +94,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="text-muted-foreground px-4 py-2 text-xs">ComicWise v1.0.0</div>
+        <div className="px-4 py-2 text-xs text-muted-foreground">ComicWise v1.0.0</div>
       </SidebarFooter>
     </Sidebar>
   );

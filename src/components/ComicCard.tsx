@@ -1,6 +1,6 @@
 "use client";
 
-import { Star, Eye } from "lucide-react";
+import { Eye, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -36,11 +36,11 @@ export function ComicCard({ comic, authorName, typeName }: ComicCardProps) {
 
         <CardContent className="p-4">
           <h3 className="line-clamp-2 font-semibold">{comic.title}</h3>
-          {authorName && <p className="text-muted-foreground mt-1 text-sm">{authorName}</p>}
-          {typeName && <p className="text-muted-foreground mt-1 text-xs">{typeName}</p>}
+          {authorName && <p className="mt-1 text-sm text-muted-foreground">{authorName}</p>}
+          {typeName && <p className="mt-1 text-xs text-muted-foreground">{typeName}</p>}
         </CardContent>
 
-        <CardFooter className="text-muted-foreground flex items-center gap-4 p-4 pt-0 text-sm">
+        <CardFooter className="flex items-center gap-4 p-4 pt-0 text-sm text-muted-foreground">
           {comic.rating && (
             <div className="flex items-center gap-1">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />

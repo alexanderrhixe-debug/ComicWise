@@ -3,8 +3,7 @@
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
-import { type ComponentProps, type ReactNode } from "react";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ComponentProps, type ReactNode } from "react";
 
 const Toaster = lazy(() => import("ui/sonner").then((mod) => ({ default: mod.Toaster })));
 

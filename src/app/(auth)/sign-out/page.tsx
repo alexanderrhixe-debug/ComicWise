@@ -1,8 +1,8 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "components/ui/card";
@@ -27,7 +27,7 @@ export default function SignOutPage() {
     <Card>
       <CardHeader className="text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center">
-          <Loader2 className="text-primary h-8 w-8 animate-spin" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
         <CardTitle>Signing Out</CardTitle>
         <CardDescription>Please wait while we sign you out...</CardDescription>

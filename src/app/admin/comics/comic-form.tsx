@@ -107,7 +107,7 @@ export default function ComicForm() {
               placeholder="https://example.com/cover.jpg"
               required
             />
-            <p className="text-muted-foreground text-sm">Provide a URL to the cover image</p>
+            <p className="text-sm text-muted-foreground">Provide a URL to the cover image</p>
           </div>
 
           {/* Status */}

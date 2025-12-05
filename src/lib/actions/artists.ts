@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import * as mutations from "@/db/mutations";
+import { error } from "@/lib/actions/utils";
 import { createArtistSchema, updateArtistSchema } from "@/lib/validator";
 import type { ActionResponse } from "@/types";
 import { appConfig, checkRateLimit } from "app-config";
@@ -13,7 +14,7 @@ export async function createArtist(formData: FormData): Promise<ActionResponse<{
     // Rate limiting
     const rateLimit = checkRateLimit("create:artist", appConfig.rateLimit.default);
     if (!rateLimit.allowed) {
-      return { error: "Too many requests. Please try again later." };
+      return error("Too many requests. Please try again later.");
     }
 
     const data = createArtistSchema.parse({
@@ -30,17 +31,17 @@ export async function createArtist(formData: FormData): Promise<ActionResponse<{
 
     const artist = await mutations.createArtist(cleanData);
     if (!artist) {
-      return { error: "Failed to create artist" };
+      return error("Failed to create artist");
     }
 
     revalidatePath("/admin/artists");
     return { success: true, data: { id: artist.id } };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Create artist error:", error);
-    return { error: "Failed to create artist" };
+    console.error("Create artist error:", err);
+    return error("Failed to create artist");
   }
 }
 
@@ -57,12 +58,12 @@ export async function updateArtist(artistId: number, formData: FormData): Promis
     revalidatePath(`/admin/artists/${artistId}`);
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Update artist error:", error);
-    return { error: "Failed to update artist" };
+    console.error("Update artist error:", err);
+    return error("Failed to update artist");
   }
 }
 
@@ -72,8 +73,8 @@ export async function deleteArtist(artistId: number): Promise<ActionResponse> {
     revalidatePath("/admin/artists");
 
     return { success: true };
-  } catch (error) {
-    console.error("Delete artist error:", error);
-    return { error: "Failed to delete artist" };
+  } catch (err) {
+    console.error("Delete artist error:", err);
+    return error("Failed to delete artist");
   }
 }

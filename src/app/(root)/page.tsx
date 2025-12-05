@@ -56,7 +56,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="space-y-4 py-8 text-center md:py-16">
         <h1 className="text-4xl font-bold tracking-tight md:text-6xl">Welcome to ComicWise</h1>
-        <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
+        <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
           Discover and read thousands of comics from around the world
         </p>
         <div className="flex justify-center gap-4 pt-4">
@@ -107,9 +107,9 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-muted space-y-4 rounded-lg p-8 text-center md:p-12">
+      <section className="space-y-4 rounded-lg bg-muted p-8 text-center md:p-12">
         <h2 className="text-2xl font-bold md:text-3xl">Join Our Community</h2>
-        <p className="text-muted-foreground mx-auto max-w-xl">
+        <p className="mx-auto max-w-xl text-muted-foreground">
           Sign up to bookmark your favorite comics, track your reading progress, and get
           personalized recommendations.
         </p>

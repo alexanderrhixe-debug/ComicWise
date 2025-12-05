@@ -26,10 +26,10 @@ export const useBookmarkStore = create<BookmarkState>()(
       removeBookmark: (comicId) =>
         set((state) => {
           const newBookmarks = new Set(state.bookmarks);
-          // eslint-disable-next-line drizzle/enforce-delete-with-where
+
           newBookmarks.delete(comicId);
           const newProgress = new Map(state.readingProgress);
-          // eslint-disable-next-line drizzle/enforce-delete-with-where
+
           newProgress.delete(comicId);
           return { bookmarks: newBookmarks, readingProgress: newProgress };
         }),

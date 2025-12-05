@@ -14,6 +14,7 @@
 import { sql } from "drizzle-orm";
 
 import { db } from "@/db/client";
+import { isDevelopment } from "app-config";
 
 import type { SeedConfig } from "./config";
 import { parseCLIArgs } from "./config";
@@ -51,7 +52,7 @@ async function seed(config: SeedConfig) {
 
     if (error instanceof Error) {
       logger.error(`Error: ${error.message}`);
-      if (process.env.DEBUG) {
+      if (isDevelopment) {
         logger.error(`Stack: ${error.stack}`);
       }
     } else {

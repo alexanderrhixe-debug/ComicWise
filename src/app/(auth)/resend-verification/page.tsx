@@ -73,8 +73,8 @@ export default function ResendVerificationPage() {
     return (
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
-          <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
-            <Mail className="text-primary h-6 w-6" />
+          <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <Mail className="h-6 w-6 text-primary" />
           </div>
           <CardTitle className="text-2xl font-bold">Email Sent!</CardTitle>
           <CardDescription>
@@ -86,7 +86,7 @@ export default function ResendVerificationPage() {
           <Link href="/sign-in" className="w-full">
             <Button className="w-full">Back to Sign In</Button>
           </Link>
-          <p className="text-muted-foreground text-center text-sm">
+          <p className="text-center text-sm text-muted-foreground">
             Still didn&apos;t receive it?{" "}
             <button onClick={() => setIsSubmitted(false)} className="text-primary hover:underline">
               Try again
@@ -123,7 +123,7 @@ export default function ResendVerificationPage() {
               disabled={isLoading}
               {...register("email")}
             />
-            {errors.email && <p className="text-destructive text-sm">{errors.email.message}</p>}
+            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
         </CardContent>
         <CardFooter className="flex-col space-y-4">
@@ -132,7 +132,7 @@ export default function ResendVerificationPage() {
             Send Verification Email
           </Button>
 
-          <p className="text-muted-foreground text-center text-sm">
+          <p className="text-center text-sm text-muted-foreground">
             Already verified?{" "}
             <Link href="/sign-in" className="text-primary hover:underline">
               Sign in

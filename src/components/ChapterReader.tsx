@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Home, List, Maximize, Minimize } from "lucid
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "components/ui/button";
 import { Skeleton } from "components/ui/skeleton";

@@ -1,16 +1,16 @@
 Read and understand the entire codebase and structure of the project
 ensure all missing package, types and any needed package are installed
 create,update or generate an Optimized custom type definitions for all packages wth stub types definition.
-ensure all usage of process.env comes from app-config and verify its  properly typed and handled with fallbacks where necessary
-create,update or generate an Optimized  components,pages,routes for crud operations for comics,chapters,users,genres,types,authors,artists,comicimages,chapterimages,bookmarks,comments with sending necessary emails functionality,  pagination,filtering and zod validation use existing  components as reference update all existing code if needed
-create,update or generate an Optimized  tsconfig.json to use next 16 best practices
-create,update or generate an Optimized  prettier.config.ts to use next 16 best practices and all recommended plugins
-create,update or generate an Optimized  postcss.config.mjs to use next 16 best practices and all recommended plugins
-create,update or generate an Optimized  proxy.ts to use next 16 best practices
-create,update or generate an Optimized  eslint.config.mjs to use next 16 best practices
-create,update or generate an Optimized  Dockerfile in my compose folder to use next 16 best practices
-create,update or generate an Optimized  docker-compose.yml,docker-compose.dev.yml files to use next 16 best practices 
-create,update or generate an Optimized both  Makefile and test-docker.sh to use next 16 best practices 
-create,update or generate an Optimized README.md reference *.md to use next 16 best practices
-fix all linting,typechecking and any other errors in the project
-create,update or generate an Optimized generate.txt to setup my project with next 16 best practices
+ensure all usage of process.env comes from app-config and verify its  properly typed and handled with fallbacks where necessary use dotenv,dotenv-safe,convex or any other needed package
+create,update or generate an Optimized  proxy.ts to use next-js 16.0.7 best practices
+create,update or generate an Optimized  components,pages,routes for full create,read,update,delete,filtering,pagination, for comics,chapters,users,genres,types,authors,artists,comicimages,chapterimages,bookmarks,comments with functionality like sending necessary emails functionality and zod validation, image upload functionality use existing  components as reference update all existing code if needed
+create,update or generate an Optimized  eslint.config.ts,prettier.config.ts,postcss.config.ts,cspell.config.ts,npm-check-updates install all need packages and packages like npm-check-updates cspell eslint-config-prettier eslint-plugin-better-tailwindcss eslint-plugin-jsx-a11y @types/eslint-plugin-jsx-a11y  eslint-plugin-prettier eslint-plugin-drizzle eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-simple-import-sort eslint-plugin-zod globals prettier prettier-plugin-organize-imports prettier-plugin-tailwindcss @eslint/css @eslint/json @eslint/markdown eslint-formatter-compact autoprefixer cssnano postcss-import postcss-nested @eslint/js @typescript-eslint/parser typescript-eslint @eslint/eslintrc tailwindcss-animate tw-animate-css @typescript-eslint/eslint-plugin use next-js 16.0.7 best practices and all recommended plugins
+fix all linting,typechecking and any other errors in the project for @typescript-eslint/no-explicit-any setup proper types instead of using any for tailwindcss setup its styles properly
+create,update or generate an Optimized clean scripts for project with rimraf ensure it runs before dev and build scripts
+create,update or generate an Optimized  tsconfig.json with custom paths alias update use next-js 16.0.7 best practices
+create,update or generate an Optimized  Dockerfile in my compose folder to use next-js 16.0.7 best practices
+create,update or generate an Optimized  docker-compose.yml,docker-compose.dev.yml files to use next-js 16.0.7 best practices 
+create,update or generate an Optimized both  Makefile and test-docker.sh to use next-js 16.0.7 best practices 
+create,update or generate an Optimized README.md reference *.md to use next-js 16.0.7 best practices
+
+create,update or generate an Optimized generate.txt to setup my project with next-js 16.0.7 best practices

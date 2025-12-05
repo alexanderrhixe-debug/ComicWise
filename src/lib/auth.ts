@@ -22,7 +22,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     sessionsTable: session,
     verificationTokensTable: verificationToken,
     authenticatorsTable: authenticator,
-  }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }) as any, // Type assertion necessary due to version mismatch between @auth/core and DrizzleAdapter
   session: {
     strategy: "jwt",
     maxAge: 7 * 24 * 60 * 60, // 7 days

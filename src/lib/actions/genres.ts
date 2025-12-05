@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import * as mutations from "@/db/mutations";
+import { error } from "@/lib/actions/utils";
 import { createGenreSchema, updateGenreSchema } from "@/lib/validator";
 import type { ActionResponse } from "@/types";
 import { appConfig, checkRateLimit } from "app-config";
@@ -13,7 +14,7 @@ export async function createGenre(formData: FormData): Promise<ActionResponse<{ 
     // Rate limiting
     const rateLimit = checkRateLimit("create:genre", appConfig.rateLimit.default);
     if (!rateLimit.allowed) {
-      return { error: "Too many requests. Please try again later." };
+      return error("Too many requests. Please try again later.");
     }
 
     const data = createGenreSchema.parse({
@@ -23,17 +24,17 @@ export async function createGenre(formData: FormData): Promise<ActionResponse<{ 
 
     const genre = await mutations.createGenre(data);
     if (!genre) {
-      return { error: "Failed to create genre" };
+      return error("Failed to create genre");
     }
 
     revalidatePath("/admin/genres");
     return { success: true, data: { id: genre.id } };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Create genre error:", error);
-    return { error: "Failed to create genre" };
+    console.error("Create genre error:", err);
+    return error("Failed to create genre");
   }
 }
 
@@ -49,12 +50,12 @@ export async function updateGenre(genreId: number, formData: FormData): Promise<
     revalidatePath(`/admin/genres/${genreId}`);
 
     return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0]?.message || "Validation error" };
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return error(err.issues[0]?.message || "Validation error");
     }
-    console.error("Update genre error:", error);
-    return { error: "Failed to update genre" };
+    console.error("Update genre error:", err);
+    return error("Failed to update genre");
   }
 }
 
@@ -64,8 +65,8 @@ export async function deleteGenre(genreId: number): Promise<ActionResponse> {
     revalidatePath("/admin/genres");
 
     return { success: true };
-  } catch (error) {
-    console.error("Delete genre error:", error);
-    return { error: "Failed to delete genre" };
+  } catch (err) {
+    console.error("Delete genre error:", err);
+    return error("Failed to delete genre");
   }
 }

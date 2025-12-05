@@ -58,6 +58,7 @@ export class ChapterSeeder {
       const chapterSlug = createSlug(chapterTitle);
 
       for (let i = 0; i < chapterData.images.length; i++) {
+        // eslint-disable-next-line security/detect-object-injection
         const img = chapterData.images[i];
         const imageUrl = typeof img === "string" ? img : img?.url || "";
         if (imageUrl) {

@@ -10,7 +10,7 @@ export default function RootLayout({
       <AppNavbar />
       <main className="flex-1">{children}</main>
       <footer className="border-t py-6 md:py-8">
-        <div className="text-muted-foreground container mx-auto px-4 text-center text-sm">
+        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>© 2025 ComicWise. All rights reserved.</p>
         </div>
       </footer>
