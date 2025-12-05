@@ -1,0 +1,40 @@
+import { notFound } from "next/navigation";
+
+import { incrementChapterViews } from "@/db/mutations";
+import { getChapter, getNextChapter, getPreviousChapter } from "@/db/queries";
+import { ChapterReader } from "components/ChapterReader";
+
+interface PageProps {
+  params: Promise<{ id: string; chapterId: string }>;
+}
+
+export default async function ChapterReaderPage({ params }: PageProps) {
+  const { chapterId } = await params;
+  const chapterIdNum = parseInt(chapterId);
+
+  if (isNaN(chapterIdNum)) {
+    notFound();
+  }
+
+  const chapter = await getChapter(chapterIdNum);
+
+  if (!chapter || !chapter.comic) {
+    notFound();
+  }
+
+  const [nextChapter, prevChapter] = await Promise.all([
+    getNextChapter(chapterIdNum),
+    getPreviousChapter(chapterIdNum),
+    incrementChapterViews(chapterIdNum),
+  ]);
+
+  return (
+    <ChapterReader
+      chapter={chapter}
+      comic={chapter.comic}
+      images={chapter.images}
+      prevChapter={prevChapter}
+      nextChapter={nextChapter}
+    />
+  );
+}

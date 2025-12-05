@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "comicwise",
+    "nextauth",
+    "drizzle",
+    "imagekit",
+    "cloudinary",
+    "qstash",
+    "upstash",
+    "nodemailer",
+    "zustand",
+    "lucide",
+    "sonner",
+    "tailwindcss",
+    "postcss",
+    "clsx",
+    "bcryptjs",
+    "postgresql",
+    "neon",
+    "vercel",
+    "turbopack",
+    "shadcn",
+    "webhooks",
+    "manhwa",
+    "manhua",
+    "webtoon"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "pnpm-lock.yaml",
+    "package-lock.json"
+  ]
+}

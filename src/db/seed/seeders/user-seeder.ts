@@ -1,0 +1,86 @@
+/**
+ * User Seeder
+ */
+
+import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
+
+import { db } from "@/db/client";
+import { user } from "@/db/schema";
+import type { UserSeed } from "@/lib/validations/seed";
+import { imageService } from "@/services/image.service";
+
+import type { SeedConfig } from "../config";
+import { ProgressTracker } from "../logger";
+
+export class UserSeeder {
+  private options: SeedConfig["options"];
+
+  constructor(options: SeedConfig["options"]) {
+    this.options = options;
+  }
+
+  async seed(users: UserSeed[]): Promise<void> {
+    const tracker = new ProgressTracker("Users", users.length);
+
+    for (const userData of users) {
+      try {
+        await this.processUser(userData, tracker);
+      } catch (error) {
+        tracker.incrementError(`${userData.email}: ${error}`);
+      }
+    }
+
+    tracker.complete();
+  }
+
+  private async processUser(userData: UserSeed, tracker: ProgressTracker): Promise<void> {
+    // Check if user exists
+    const existing = await db.query.user.findFirst({
+      where: eq(user.email, userData.email),
+    });
+
+    // Hash password if provided
+    let hashedPassword: string | null = null;
+    if (userData.password) {
+      hashedPassword = await bcrypt.hash(userData.password, 10);
+    }
+
+    // Process image
+    let processedImage: string | null = null;
+    if (userData.image && !this.options.skipImageDownload) {
+      processedImage = await imageService.processImageUrl(userData.image, "avatars");
+    }
+
+    if (existing) {
+      // Update existing user
+      await db
+        .update(user)
+        .set({
+          name: userData.name,
+          image: processedImage || existing.image,
+          password: hashedPassword || existing.password,
+          role: userData.role || existing.role,
+          updatedAt: new Date(),
+        })
+        .where(eq(user.id, existing.id));
+
+      tracker.incrementUpdated(userData.email);
+    } else {
+      // Create new user
+      await db.insert(user).values({
+        id: userData.id,
+        name: userData.name,
+        email: userData.email,
+        emailVerified: userData.emailVerified || null,
+        image: processedImage,
+        password: hashedPassword,
+        role: userData.role || "user",
+        createdAt: userData.createdAt || new Date(),
+        updatedAt: userData.updatedAt || new Date(),
+      });
+
+      tracker.incrementCreated(userData.email);
+    }
+  }
+}

@@ -1,0 +1,37 @@
+"use client";
+
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { useEffect } from "react";
+
+import { Card, CardDescription, CardHeader, CardTitle } from "components/ui/card";
+
+export default function SignOutPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleSignOut = async () => {
+      try {
+        await signOut({ callbackUrl: "/sign-in", redirect: true });
+      } catch (error) {
+        console.error("Sign out error:", error);
+        router.push("/sign-in");
+      }
+    };
+
+    handleSignOut();
+  }, [router]);
+
+  return (
+    <Card>
+      <CardHeader className="text-center">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center">
+          <Loader2 className="text-primary h-8 w-8 animate-spin" />
+        </div>
+        <CardTitle>Signing Out</CardTitle>
+        <CardDescription>Please wait while we sign you out...</CardDescription>
+      </CardHeader>
+    </Card>
+  );
+}

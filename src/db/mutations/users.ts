@@ -1,0 +1,77 @@
+import { eq } from "drizzle-orm";
+
+import { db } from "../client";
+import { user } from "../schema";
+
+export async function createUser(data: {
+  email: string;
+  name?: string;
+  password?: string;
+  image?: string;
+  role?: "user" | "admin" | "moderator";
+}) {
+  const [newUser] = await db
+    .insert(user)
+    .values({
+      email: data.email,
+      name: data.name,
+      password: data.password,
+      image: data.image,
+      role: data.role || "user",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .returning();
+  return newUser;
+}
+
+export async function updateUser(
+  userId: string,
+  data: {
+    name?: string;
+    email?: string;
+    image?: string | null;
+    role?: "user" | "admin" | "moderator";
+    emailVerified?: Date;
+  }
+) {
+  const cleanData = {
+    ...(data.name !== undefined && { name: data.name }),
+    ...(data.email !== undefined && { email: data.email }),
+    ...(data.image !== undefined && { image: data.image || null }),
+    ...(data.role !== undefined && { role: data.role }),
+    ...(data.emailVerified !== undefined && { emailVerified: data.emailVerified }),
+    updatedAt: new Date(),
+  };
+  const [updatedUser] = await db.update(user).set(cleanData).where(eq(user.id, userId)).returning();
+  return updatedUser;
+}
+
+export async function updateUserPassword(userId: string, password: string) {
+  const [updatedUser] = await db
+    .update(user)
+    .set({
+      password,
+      updatedAt: new Date(),
+    })
+    .where(eq(user.id, userId))
+    .returning();
+  return updatedUser;
+}
+
+export async function deleteUser(userId: string) {
+  const [deletedUser] = await db.delete(user).where(eq(user.id, userId)).returning();
+  return deletedUser;
+}
+
+export async function verifyUserEmail(userId: string) {
+  const [updatedUser] = await db
+    .update(user)
+    .set({
+      emailVerified: new Date(),
+      updatedAt: new Date(),
+    })
+    .where(eq(user.id, userId))
+    .returning();
+  return updatedUser;
+}

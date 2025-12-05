@@ -1,0 +1,16 @@
+Read and understand the entire codebase and structure of the project
+ensure all missing package, types and any needed package are installed
+create,update or generate an Optimized custom type definitions for all packages wth stub types definition.
+ensure all usage of process.env comes from app-config and verify its  properly typed and handled with fallbacks where necessary
+create,update or generate an Optimized  components,pages,routes for crud operations for comics,chapters,users,genres,types,authors,artists,comicimages,chapterimages,bookmarks,comments with sending necessary emails functionality,  pagination,filtering and zod validation use existing  components as reference update all existing code if needed
+create,update or generate an Optimized  tsconfig.json to use next 16 best practices
+create,update or generate an Optimized  prettier.config.ts to use next 16 best practices and all recommended plugins
+create,update or generate an Optimized  postcss.config.mjs to use next 16 best practices and all recommended plugins
+create,update or generate an Optimized  proxy.ts to use next 16 best practices
+create,update or generate an Optimized  eslint.config.mjs to use next 16 best practices
+create,update or generate an Optimized  Dockerfile in my compose folder to use next 16 best practices
+create,update or generate an Optimized  docker-compose.yml,docker-compose.dev.yml files to use next 16 best practices 
+create,update or generate an Optimized both  Makefile and test-docker.sh to use next 16 best practices 
+create,update or generate an Optimized README.md reference *.md to use next 16 best practices
+fix all linting,typechecking and any other errors in the project
+create,update or generate an Optimized generate.txt to setup my project with next 16 best practices
