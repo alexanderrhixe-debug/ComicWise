@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "../client";
-import { type } from "../schema";
+import { db } from "@/db/client";
+import { type } from "@/db/schema";
 
 export async function createType(data: { name: string; description?: string | null }) {
   const [newType] = await db

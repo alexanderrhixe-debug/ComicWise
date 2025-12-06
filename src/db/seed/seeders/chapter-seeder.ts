@@ -9,28 +9,34 @@ import { chapter, comic } from "@/db/schema";
 import type { ChapterSeed } from "@/lib/validations/seed";
 import { imageService } from "@/services/image.service";
 
-import type { SeedConfig } from "../config";
-import { ProgressTracker } from "../logger";
-import { createSlug, extractChapterNumber, normalizeDate } from "../utils/helpers";
+import type { SeedConfig } from "@/db/seed/config";
+import { ProgressTracker } from "@/db/seed/logger";
+import { BatchProcessor } from "@/db/seed/utils/batch-processor";
+import { createSlug, extractChapterNumber, normalizeDate } from "@/db/seed/utils/helpers";
 
 export class ChapterSeeder {
   private options: SeedConfig["options"];
   private comicCache = new Map<string, number>();
+  private batchProcessor: BatchProcessor<ChapterSeed, void>;
 
   constructor(options: SeedConfig["options"]) {
     this.options = options;
+    this.batchProcessor = new BatchProcessor<ChapterSeed, void>({
+      batchSize: 100,
+      concurrency: 5,
+    });
   }
 
   async seed(chapters: ChapterSeed[]): Promise<void> {
     const tracker = new ProgressTracker("Chapters", chapters.length);
 
-    for (const chapterData of chapters) {
+    await this.batchProcessor.process(chapters, async (chapterData) => {
       try {
         await this.processChapter(chapterData, tracker);
       } catch (error) {
         tracker.incrementError(`${chapterData.chaptername || chapterData.title}: ${error}`);
       }
-    }
+    });
 
     tracker.complete();
   }

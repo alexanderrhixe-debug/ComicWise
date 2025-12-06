@@ -109,7 +109,18 @@ export function MultiSelectTrigger({
         role={props.role ?? "combobox"}
         aria-expanded={props["aria-expanded"] ?? open}
         className={cn(
-          "flex h-auto min-h-9 w-fit items-center justify-between gap-2 overflow-hidden rounded-md border border-input bg-transparent px-3 py-1.5 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
+          `
+            flex h-auto min-h-9 w-fit items-center justify-between gap-2 overflow-hidden rounded-md
+            border border-input bg-transparent px-3 py-1.5 text-sm whitespace-nowrap shadow-xs
+            transition-[color,box-shadow] outline-none
+            focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50
+            disabled:cursor-not-allowed disabled:opacity-50
+            aria-invalid:border-destructive aria-invalid:ring-destructive/20
+            data-placeholder:text-muted-foreground
+            dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40
+            [&_svg]:pointer-events-none [&_svg]:shrink-0
+            [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground
+          `,
           className
         )}
       >
@@ -250,7 +261,7 @@ export function MultiSelectContent({
 
   return (
     <>
-      <div style={{ display: "none" }}>
+      <div className="hidden">
         <Command>
           <CommandList>{children}</CommandList>
         </Command>
@@ -259,15 +270,15 @@ export function MultiSelectContent({
         <Command {...props}>
           {canSearch ? (
             <CommandInput
-              {...(typeof search === "object" &&
-              search !== null &&
-              "placeholder" in search &&
-              search.placeholder
-                ? { value: search.placeholder as string }
-                : {})}
+              {...({
+                placeholder:
+                  typeof search === "object" && search !== null && "placeholder" in search
+                    ? (search.placeholder as string)
+                    : undefined,
+              } as React.ComponentProps<typeof CommandInput>)}
             />
           ) : (
-            <button autoFocus className="sr-only" />
+            <button autoFocus className="sr-only" aria-label="Focus placeholder" />
           )}
           <CommandList>
             {canSearch && (

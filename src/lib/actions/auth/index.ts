@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 // ═══════════════════════════════════════════════════
@@ -33,7 +32,7 @@ import { signIn } from "lib/auth";
 // TYPES
 // ═══════════════════════════════════════════════════
 
-export interface ActionResponse<T = any> {
+export interface ActionResponse<T = unknown> {
   success?: boolean;
   error?: string;
   data?: T;
@@ -131,14 +130,11 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
         name: newUser.name,
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Sign up error:", error);
 
-    if (error.name === "ZodError") {
-      return {
-        error: error.errors?.[0]?.message || "Invalid input data.",
-        field: error.errors?.[0]?.path?.[0],
-      };
+    if (error instanceof Error && error.message.includes("duplicate")) {
+      return { error: "An account with this email already exists.", field: "email" };
     }
 
     return { error: "Failed to create account. Please try again." };
@@ -204,13 +200,13 @@ export async function signInAction(data: SignInInput): Promise<ActionResponse> {
         role: existingUser.role,
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Sign in error:", error);
 
-    if (error.name === "ZodError") {
+    if (error instanceof Error && error.message.includes("Invalid")) {
       return {
-        error: error.errors?.[0]?.message || "Invalid input data.",
-        field: error.errors?.[0]?.path?.[0],
+        error: "Invalid email or password.",
+        field: "email",
       };
     }
 
@@ -286,15 +282,8 @@ export async function forgotPasswordAction(data: ForgotPasswordInput): Promise<A
         message: "If an account exists with this email, you will receive a password reset link.",
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Forgot password error:", error);
-
-    if (error.name === "ZodError") {
-      return {
-        error: error.errors?.[0]?.message || "Invalid email address.",
-        field: "email",
-      };
-    }
 
     return { error: "Failed to process request. Please try again." };
   }
@@ -364,15 +353,8 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
         message: "Your password has been reset successfully.",
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Reset password error:", error);
-
-    if (error.name === "ZodError") {
-      return {
-        error: error.errors?.[0]?.message || "Invalid input data.",
-        field: error.errors?.[0]?.path?.[0],
-      };
-    }
 
     return { error: "Failed to reset password. Please try again." };
   }
@@ -425,14 +407,8 @@ export async function verifyEmailAction(data: VerifyEmailInput): Promise<ActionR
         message: "Your email has been verified successfully.",
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Verify email error:", error);
-
-    if (error.name === "ZodError") {
-      return {
-        error: error.errors?.[0]?.message || "Invalid token.",
-      };
-    }
 
     return { error: "Failed to verify email. Please try again." };
   }
@@ -514,7 +490,7 @@ export async function resendVerificationEmailAction(
         message: "Verification email has been sent.",
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Resend verification error:", error);
     return { error: "Failed to send verification email. Please try again." };
   }
@@ -566,15 +542,8 @@ export async function updateProfileAction(
         image: updatedUser.image,
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Update profile error:", error);
-
-    if (error.name === "ZodError") {
-      return {
-        error: error.errors?.[0]?.message || "Invalid input data.",
-        field: error.errors?.[0]?.path?.[0],
-      };
-    }
 
     return { error: "Failed to update profile. Please try again." };
   }

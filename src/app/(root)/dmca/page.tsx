@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Digital Millennium Copyright Act (DMCA) notice and copyright infringement policy for ComicWise.",
 };
 
+// Force dynamic rendering for current date display
+export const dynamic = "force-dynamic";
+
 export default function DMCAPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">

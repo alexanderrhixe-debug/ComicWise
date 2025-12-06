@@ -75,7 +75,7 @@ export function BaseForm<T extends z.ZodType<any>>({
 
   const form = useForm<FormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(schema) as any,
+    resolver: zodResolver(schema as any) as any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     defaultValues: defaultValues as any,
   });

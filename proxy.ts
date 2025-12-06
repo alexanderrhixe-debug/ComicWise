@@ -1,5 +1,12 @@
 // ═══════════════════════════════════════════════════
-// MIDDLEWARE - Authentication & Route Protection (Next.js 16)
+// MIDDLEWARE - Authentication & Route Protection (Next.js 16.0.7)
+// ═══════════════════════════════════════════════════
+// Optimized for:
+// - Next.js 16.0.7 middleware patterns
+// - Edge runtime compatibility
+// - Performance optimization with route matching
+// - Proper redirect handling
+// - Security headers
 // ═══════════════════════════════════════════════════
 
 import { NextResponse } from "next/server";
@@ -11,7 +18,7 @@ import { auth } from "lib/auth";
 // ═══════════════════════════════════════════════════
 
 // Protected routes that require authentication
-const protectedRoutes = ["/admin", "/profile", "/dashboard", "/bookmarks"];
+const protectedRoutes = ["/admin", "/profile", "/dashboard", "/bookmarks"] as const;
 
 // Auth routes that should redirect to home if already authenticated
 const authRoutes = [
@@ -20,10 +27,39 @@ const authRoutes = [
   "/(auth)/register",
   "/sign-in",
   "/register",
-];
+] as const;
 
 // Admin-only routes
-const adminRoutes = ["/admin"];
+const adminRoutes = ["/admin"] as const;
+
+// Public API routes that should bypass auth
+const publicApiRoutes = ["/api/health", "/api/webhooks"] as const;
+
+// Static assets and Next.js internal routes to skip
+const skipPatterns = [
+  "/_next",
+  "/favicon.ico",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/static",
+  "/public",
+] as const;
+
+// ═══════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ═══════════════════════════════════════════════════
+
+function shouldSkipMiddleware(pathname: string): boolean {
+  return skipPatterns.some((pattern) => pathname.startsWith(pattern));
+}
+
+function isPublicApiRoute(pathname: string): boolean {
+  return publicApiRoutes.some((route) => pathname.startsWith(route));
+}
+
+function matchRoute(pathname: string, routes: readonly string[]): boolean {
+  return routes.some((route) => pathname.startsWith(route));
+}
 
 // ═══════════════════════════════════════════════════
 // MIDDLEWARE HANDLER
@@ -33,16 +69,20 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
   const isAuthenticated = !!req.auth;
 
-  // Check if route is protected
-  const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
+  // Skip middleware for static assets and Next.js internals
+  if (shouldSkipMiddleware(pathname)) {
+    return NextResponse.next();
+  }
 
-  // Check if route is auth page
-  const isAuthRoute = authRoutes.some(
-    (route) => pathname.includes(route) || pathname.startsWith(route)
-  );
+  // Skip middleware for public API routes
+  if (isPublicApiRoute(pathname)) {
+    return NextResponse.next();
+  }
 
-  // Check if route is admin-only
-  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
+  // Check route types
+  const isProtected = matchRoute(pathname, protectedRoutes);
+  const isAuthRoute = matchRoute(pathname, authRoutes);
+  const isAdminRoute = matchRoute(pathname, adminRoutes);
 
   // ═══════════════════════════════════════════════════
   // Authentication Guards
@@ -51,7 +91,7 @@ export default auth((req) => {
   // Redirect to sign-in if accessing protected route without session
   if (isProtected && !isAuthenticated) {
     const signInUrl = new URL("/(auth)/sign-in", req.url);
-    signInUrl.searchParams.set("callbackUrl", pathname);
+    signInUrl.searchParams.set("callbackUrl", encodeURIComponent(pathname));
     return NextResponse.redirect(signInUrl);
   }
 
@@ -74,7 +114,7 @@ export default auth((req) => {
   }
 
   // ═══════════════════════════════════════════════════
-  // Security Headers
+  // Security Headers (Next.js 16 Best Practices)
   // ═══════════════════════════════════════════════════
 
   const response = NextResponse.next();
@@ -92,19 +132,19 @@ export default auth((req) => {
 });
 
 // ═══════════════════════════════════════════════════
-// MATCHER CONFIGURATION
+// MIDDLEWARE CONFIGURATION (Next.js 16.0.7)
 // ═══════════════════════════════════════════════════
 
 export const config = {
   matcher: [
     /*
      * Match all request paths except:
-     * - API routes (except auth)
      * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico (favicon)
-     * - public assets (images, etc.)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     * - static assets (images, fonts, etc.)
      */
-    "/((?!api/(?!auth)|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot)$).*)",
   ],
 };

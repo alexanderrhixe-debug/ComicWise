@@ -1,7 +1,7 @@
 import { asc, desc, eq, ilike } from "drizzle-orm";
 
-import { db } from "../client";
-import { type } from "../schema";
+import { db } from "@/db/client";
+import { type } from "@/db/schema";
 
 export async function getTypeById(typeId: number) {
   return await db.query.type.findFirst({
@@ -53,4 +53,27 @@ export async function getTypeCount(params?: { search?: string }) {
 
   const result = await query;
   return result.length;
+}
+
+// Wrapper function for API compatibility
+export async function getAllTypes(filters?: {
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}) {
+  const { search, page = 1, limit = 50, sortBy = "name", sortOrder = "asc" } = filters || {};
+
+  const offset = (page - 1) * limit;
+  const items = await getTypes({ search, limit, offset, sortBy: sortBy as any, sortOrder });
+  const total = await getTypeCount({ search });
+
+  return {
+    items,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 }

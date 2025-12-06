@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 
-import ComicForm from "../comic-form";
+import ComicForm from "@/app/admin/comics/comic-form";
 
 export const metadata: Metadata = {
   title: "Create Comic | Admin",

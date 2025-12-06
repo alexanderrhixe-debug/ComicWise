@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: "Terms and conditions for using ComicWise services.",
 };
 
+// Force dynamic rendering for current date display
+export const dynamic = "force-dynamic";
+
 export default function TermsOfServicePage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">

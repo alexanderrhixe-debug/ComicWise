@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════
 
 import { isProduction } from "./src/app-config";
-
+/** @type {import('postcss-load-config').Config} */
 const config = {
   plugins: {
     // ═══════════════════════════════════════════════════

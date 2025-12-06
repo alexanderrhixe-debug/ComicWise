@@ -72,7 +72,11 @@ function VerifyEmailContent() {
     return (
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
-          <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+          <div
+            className={`
+            mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100
+          `}
+          >
             <XCircle className="h-6 w-6 text-red-600" />
           </div>
           <CardTitle className="text-2xl font-bold">Verification Failed</CardTitle>
@@ -95,7 +99,11 @@ function VerifyEmailContent() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1 text-center">
-        <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+        <div
+          className={`
+          mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-green-100
+        `}
+        >
           <CheckCircle2 className="h-6 w-6 text-green-600" />
         </div>
         <CardTitle className="text-2xl font-bold">Email Verified!</CardTitle>

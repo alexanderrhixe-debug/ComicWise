@@ -9,32 +9,38 @@ import { comic, comicImage, comicToGenre } from "@/db/schema";
 import type { ComicSeed } from "@/lib/validations/seed";
 import { imageService } from "@/services/image.service";
 
-import type { SeedConfig } from "../config";
-import { ProgressTracker } from "../logger";
-import { createSlug, normalizeDate } from "../utils/helpers";
-import { MetadataCache } from "../utils/metadata-cache";
+import type { SeedConfig } from "@/db/seed/config";
+import { ProgressTracker } from "@/db/seed/logger";
+import { BatchProcessor } from "@/db/seed/utils/batch-processor";
+import { createSlug, normalizeDate } from "@/db/seed/utils/helpers";
+import { MetadataCache } from "@/db/seed/utils/metadata-cache";
 
 export class ComicSeeder {
   private metadataCache: MetadataCache;
   private options: SeedConfig["options"];
   private comicSlugCache = new Map<string, number>();
+  private batchProcessor: BatchProcessor<ComicSeed, void>;
 
   constructor(metadataCache: MetadataCache, options: SeedConfig["options"]) {
     this.metadataCache = metadataCache;
     this.options = options;
+    this.batchProcessor = new BatchProcessor<ComicSeed, void>({
+      batchSize: 50,
+      concurrency: 3,
+    });
   }
 
   async seed(comics: ComicSeed[]): Promise<void> {
     const tracker = new ProgressTracker("Comics", comics.length);
 
-    for (const comicData of comics) {
+    await this.batchProcessor.process(comics, async (comicData) => {
       try {
         await this.processComic(comicData, tracker);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         tracker.incrementError(`${comicData.title}: ${errorMessage}`);
       }
-    }
+    });
 
     tracker.complete();
   }

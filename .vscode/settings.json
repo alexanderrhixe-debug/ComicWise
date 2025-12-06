@@ -1,10 +1,11 @@
 {
   // ═══════════════════════════════════════════════════
-  // EDITOR CONFIGURATION
+  // EDITOR CONFIGURATION (Next.js 16.0.7 + React 19 Optimized)
   // ═══════════════════════════════════════════════════
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
+  "editor.formatOnType": false,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
@@ -12,14 +13,17 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
   "editor.guides.indentation": true,
+  "editor.guides.highlightActiveIndentation": true,
   "editor.inlineSuggest.enabled": true,
   "editor.suggestSelection": "first",
   "editor.quickSuggestions": {
-    "strings": true
+    "strings": true,
+    "comments": false,
+    "other": true
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit",
+    "source.organizeImports": "never",
     "source.removeUnusedImports": "explicit",
     "source.addMissingImports": "explicit"
   },
@@ -30,24 +34,44 @@
   "editor.rulers": [80, 120],
   "editor.wordWrap": "on",
   "editor.cursorBlinking": "smooth",
-  "editor.fontFamily": "Fira Code, Consolas, 'Courier New', monospace",
+  "editor.fontFamily": "Fira Code, Cascadia Code, JetBrains Mono, Consolas, 'Courier New', monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 14,
+  "editor.lineHeight": 1.6,
   "editor.semanticHighlighting.enabled": true,
+  "editor.smoothScrolling": true,
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.renderWhitespace": "boundary",
+  "editor.renderControlCharacters": false,
+  "editor.trimAutoWhitespace": true,
+  "editor.unicodeHighlight.ambiguousCharacters": true,
+  "editor.unicodeHighlight.invisibleCharacters": true,
+  "editor.acceptSuggestionOnCommitCharacter": true,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.snippetSuggestions": "top",
+  "editor.wordBasedSuggestions": "matchingDocuments",
+  "editor.parameterHints.enabled": true,
+  "editor.hover.enabled": true,
+  "editor.hover.delay": 300,
+  "editor.lightbulb.enabled": "onCode",
+  "editor.rename.enablePreview": true,
 
   // ═══════════════════════════════════════════════════
-  // TYPESCRIPT CONFIGURATION
+  // TYPESCRIPT CONFIGURATION (React 19 + Next.js 16)
   // ═══════════════════════════════════════════════════
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "typescript.preferences.includePackageJsonAutoImports": "on",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.suggest.autoImports": true,
   "typescript.suggest.paths": true,
+  "typescript.suggest.completeFunctionCalls": true,
   "typescript.inlayHints.parameterNames.enabled": "literals",
   "typescript.inlayHints.parameterTypes.enabled": true,
   "typescript.inlayHints.variableTypes.enabled": true,
+  "typescript.inlayHints.enumMemberValues.enabled": true,
   "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
   "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
 

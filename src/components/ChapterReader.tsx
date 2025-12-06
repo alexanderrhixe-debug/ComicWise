@@ -189,7 +189,13 @@ export function ChapterReader({ chapter, comic, images, prevChapter, nextChapter
       </div>
 
       {/* Keyboard Shortcuts Help */}
-      <div className="fixed right-4 bottom-4 hidden rounded-lg border border-white/10 bg-black/90 p-4 text-xs backdrop-blur md:block">
+      <div
+        className={`
+        fixed right-4 bottom-4 hidden rounded-lg border border-white/10 bg-black/90 p-4 text-xs
+        backdrop-blur
+        md:block
+      `}
+      >
         <p className="mb-2 font-semibold">Keyboard Shortcuts</p>
         <ul className="space-y-1 text-gray-400">
           <li>← Previous Page</li>

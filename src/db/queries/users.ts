@@ -1,7 +1,7 @@
 import { asc, desc, eq, ilike, or } from "drizzle-orm";
 
-import { db } from "../client";
-import { user } from "../schema";
+import { db } from "@/db/client";
+import { user } from "@/db/schema";
 
 export async function getUserById(userId: string) {
   return await db.query.user.findFirst({
@@ -80,4 +80,45 @@ export async function getUserCount(params?: {
 
   const result = await query;
   return result.length;
+}
+
+// Wrapper function for API compatibility
+export async function getAllUsers(filters?: {
+  search?: string;
+  role?: "user" | "admin" | "moderator";
+  emailVerified?: boolean;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}) {
+  const {
+    search,
+    role,
+    emailVerified: _emailVerified,
+    page = 1,
+    limit = 12,
+    sortBy = "createdAt",
+    sortOrder = "desc",
+  } = filters || {};
+
+  const offset = (page - 1) * limit;
+  const users = await getUsers({
+    search,
+    role,
+    limit,
+    offset,
+    sortBy: sortBy as any,
+    sortOrder,
+  });
+
+  const total = await getUserCount({ search, role });
+
+  return {
+    users,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 }

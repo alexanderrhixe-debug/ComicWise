@@ -1,49 +1,274 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ═══════════════════════════════════════════════════
+# ComicWise - Optimized .gitignore
+# ═══════════════════════════════════════════════════
+# Last Updated: December 6, 2025
+# For: Node.js, Next.js 16, TypeScript, PostgreSQL
+# ═══════════════════════════════════════════════════
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# ═══════════════════════════════════════════════════
+# Dependencies
+# ═══════════════════════════════════════════════════
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
-# env files (can opt-in for committing if needed)
-.env*
+# ═══════════════════════════════════════════════════
+# Next.js
+# ═══════════════════════════════════════════════════
+.next/
+out/
+dist/
+build/
+.turbo/
+.cache/
 
-# vercel
-.vercel
-
-# typescript
+# ═══════════════════════════════════════════════════
+# TypeScript
+# ═══════════════════════════════════════════════════
 *.tsbuildinfo
 next-env.d.ts
+*.d.ts.map
+tsconfig.tsbuildinfo
 
-# Playwright
-node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
+# ═══════════════════════════════════════════════════
+# Environment Variables
+# ═══════════════════════════════════════════════════
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+.env*.local
+*.env
+
+# Keep example env
+!.env.example
+!.env.sample
+
+# ═══════════════════════════════════════════════════
+# Testing
+# ═══════════════════════════════════════════════════
+coverage/
+*.lcov
+.nyc_output/
+junit.xml
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+.playwright/
+__tests__/__snapshots__/
+
+# ═══════════════════════════════════════════════════
+# Deployment
+# ═══════════════════════════════════════════════════
+.vercel
+.netlify
+.firebase
+.serverless/
+.fusion/
+
+# ═══════════════════════════════════════════════════
+# Database
+# ═══════════════════════════════════════════════════
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+.postgres-data/
+postgres-data/
+drizzle-data/
+
+# ═══════════════════════════════════════════════════
+# Logs
+# ═══════════════════════════════════════════════════
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ═══════════════════════════════════════════════════
+# OS Files - macOS
+# ═══════════════════════════════════════════════════
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon
+ehthumbs.db
+ehthumbs_vista.db
+Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# ═══════════════════════════════════════════════════
+# OS Files - Linux
+# ═══════════════════════════════════════════════════
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ═══════════════════════════════════════════════════
+# OS Files - Windows
+# ═══════════════════════════════════════════════════
+[Tt]humbs.db
+[Tt]humbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ═══════════════════════════════════════════════════
+# IDEs - VSCode
+# ═══════════════════════════════════════════════════
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+.ionide/
+
+# ═══════════════════════════════════════════════════
+# IDEs - JetBrains (WebStorm, IntelliJ, etc.)
+# ═══════════════════════════════════════════════════
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+atlassian-ide-plugin.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# ═══════════════════════════════════════════════════
+# IDEs - Sublime Text
+# ═══════════════════════════════════════════════════
+*.sublime-workspace
+*.sublime-project
+
+# ═══════════════════════════════════════════════════
+# IDEs - Vim
+# ═══════════════════════════════════════════════════
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+Sessionx.vim
+.netrwhist
+*~
+tags
+[._]*.un~
+
+# ═══════════════════════════════════════════════════
+# Certificates & Keys
+# ═══════════════════════════════════════════════════
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+
+# ═══════════════════════════════════════════════════
+# Docker
+# ═══════════════════════════════════════════════════
+docker-compose.override.yml
+.dockerignore
+
+# ═══════════════════════════════════════════════════
+# Temporary Files
+# ═══════════════════════════════════════════════════
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.backup
+*~
+
+# ═══════════════════════════════════════════════════
+# Archive Files
+# ═══════════════════════════════════════════════════
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# ═══════════════════════════════════════════════════
+# Project Specific
+# ═══════════════════════════════════════════════════
+# Uploads directory (if storing locally)
+public/uploads/
+uploads/
+
+# Generated files
+*.generated.*
+
+# Backup files
+*.backup.*
+backup/
+
+# Development database files
+dev.db
+dev-*.db
+
+# Local scripts
+local-*.sh
+local-*.ps1
+
+# ═══════════════════════════════════════════════════
+# Misc
+# ═══════════════════════════════════════════════════
+.pnpm-store/
+.eslintcache
+.stylelintcache
+.prettiercache
+.npmrc
+.yarnrc
+.yarn/
+.pnp.*

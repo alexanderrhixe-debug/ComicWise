@@ -1,7 +1,7 @@
 import { asc, desc, eq, ilike } from "drizzle-orm";
 
-import { db } from "../client";
-import { author } from "../schema";
+import { db } from "@/db/client";
+import { author } from "@/db/schema";
 
 export async function getAuthorById(authorId: number) {
   return await db.query.author.findFirst({
@@ -47,4 +47,27 @@ export async function getAuthorCount(params?: { search?: string }) {
 
   const result = await query;
   return result.length;
+}
+
+// Wrapper function for API compatibility
+export async function getAllAuthors(filters?: {
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}) {
+  const { search, page = 1, limit = 50, sortBy = "name", sortOrder = "asc" } = filters || {};
+
+  const offset = (page - 1) * limit;
+  const items = await getAuthors({ search, limit, offset, sortBy: sortBy as any, sortOrder });
+  const total = await getAuthorCount({ search });
+
+  return {
+    items,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 }

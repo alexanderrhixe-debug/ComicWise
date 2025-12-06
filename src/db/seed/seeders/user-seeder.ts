@@ -10,26 +10,32 @@ import { user } from "@/db/schema";
 import type { UserSeed } from "@/lib/validations/seed";
 import { imageService } from "@/services/image.service";
 
-import type { SeedConfig } from "../config";
-import { ProgressTracker } from "../logger";
+import type { SeedConfig } from "@/db/seed/config";
+import { ProgressTracker } from "@/db/seed/logger";
+import { BatchProcessor } from "@/db/seed/utils/batch-processor";
 
 export class UserSeeder {
   private options: SeedConfig["options"];
+  private batchProcessor: BatchProcessor<UserSeed, void>;
 
   constructor(options: SeedConfig["options"]) {
     this.options = options;
+    this.batchProcessor = new BatchProcessor<UserSeed, void>({
+      batchSize: 50,
+      concurrency: 5,
+    });
   }
 
   async seed(users: UserSeed[]): Promise<void> {
     const tracker = new ProgressTracker("Users", users.length);
 
-    for (const userData of users) {
+    await this.batchProcessor.process(users, async (userData) => {
       try {
         await this.processUser(userData, tracker);
       } catch (error) {
         tracker.incrementError(`${userData.email}: ${error}`);
       }
-    }
+    });
 
     tracker.complete();
   }

@@ -6,12 +6,14 @@ import {
   FolderOpen,
   LayoutDashboard,
   Palette,
+  Tag,
   UserCircle,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { ThemeToggle } from "@/components/admin/ThemeToggle";
 import {
   Sidebar,
   SidebarContent,
@@ -61,6 +63,11 @@ const menuItems = [
     icon: FolderOpen,
     href: "/admin/genres",
   },
+  {
+    title: "Types",
+    icon: Tag,
+    href: "/admin/types",
+  },
 ];
 
 export function AppSidebar() {
@@ -69,9 +76,12 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-4 py-2">
-          <BookOpen className="h-6 w-6" />
-          <span className="text-lg font-bold">ComicWise Admin</span>
+        <div className="flex items-center justify-between px-4 py-2">
+          <div className="flex items-center gap-2">
+            <BookOpen className="h-6 w-6" />
+            <span className="text-lg font-bold">ComicWise Admin</span>
+          </div>
+          <ThemeToggle />
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -94,7 +104,11 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-4 py-2 text-xs text-muted-foreground">ComicWise v1.0.0</div>
+        <div className="px-4 py-2 text-xs text-muted-foreground">
+          ComicWise v1.0.0 • Press{" "}
+          <kbd className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold">⌘K</kbd> to
+          search
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

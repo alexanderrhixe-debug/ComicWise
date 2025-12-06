@@ -1,20 +1,21 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import type { z } from "zod";
 
 import {
   createChapter as createChapterMutation,
   updateChapter as updateChapterMutation,
 } from "@/db/mutations";
 import { getChapterImages as getChapterImagesMutation } from "@/db/queries";
+import { createChapterSchema, updateChapterSchema } from "@/lib/validations/schemas";
 import { auth } from "lib/auth";
 
 export async function getChapterImages(chapterId: number) {
   return await getChapterImagesMutation(chapterId);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function createChapter(data: any) {
+export async function createChapter(data: z.infer<typeof createChapterSchema>) {
   const session = await auth();
 
   if (!session?.user?.id || session.user.role !== "admin") {
@@ -28,8 +29,7 @@ export async function createChapter(data: any) {
   return chapter;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function updateChapter(id: number, data: any) {
+export async function updateChapter(id: number, data: z.infer<typeof updateChapterSchema>) {
   const session = await auth();
 
   if (!session?.user?.id || session.user.role !== "admin") {

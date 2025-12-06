@@ -2,8 +2,8 @@
 // APP CONFIGURATION (Next.js 16 Optimized)
 // ═══════════════════════════════════════════════════
 
-export * from "./env";
-import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "./env";
+export * from "@/app-config/env";
+import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "@/app-config/env";
 
 // ═══════════════════════════════════════════════════
 // APPLICATION CONFIGURATION

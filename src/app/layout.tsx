@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 
+import { Providers } from "@/app/Providers";
 import "styles/globals.css";
-import { Providers } from "./Providers";
 // Primary Font: IBM Plex Sans (Variable)
 const ibmPlexSans = localFont({
   src: [
@@ -134,7 +134,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
       <body
-        className={`${ibmPlexSans.variable} ${bebasNeue.variable} ${schibstedGrotesk.variable} ${martianMono.variable} ${firaSans.variable} ${firaMono.variable} font-sans antialiased`}
+        className={`${ibmPlexSans.variable} ${bebasNeue.variable} ${schibstedGrotesk.variable} ${martianMono.variable}
+          ${firaSans.variable}
+          ${firaMono.variable}
+          font-sans antialiased
+        `}
       >
         <Providers attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}

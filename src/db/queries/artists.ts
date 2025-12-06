@@ -1,7 +1,7 @@
 import { asc, desc, eq, ilike } from "drizzle-orm";
 
-import { db } from "../client";
-import { artist } from "../schema";
+import { db } from "@/db/client";
+import { artist } from "@/db/schema";
 
 export async function getArtistById(artistId: number) {
   return await db.query.artist.findFirst({
@@ -47,4 +47,27 @@ export async function getArtistCount(params?: { search?: string }) {
 
   const result = await query;
   return result.length;
+}
+
+// Wrapper function for API compatibility
+export async function getAllArtists(filters?: {
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}) {
+  const { search, page = 1, limit = 50, sortBy = "name", sortOrder = "asc" } = filters || {};
+
+  const offset = (page - 1) * limit;
+  const items = await getArtists({ search, limit, offset, sortBy: sortBy as any, sortOrder });
+  const total = await getArtistCount({ search });
+
+  return {
+    items,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 }

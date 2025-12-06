@@ -17,6 +17,7 @@
 
     // Database & ORM
     "drizzle-team.drizzle-vscode",
+    "cweijan.vscode-postgresql-client2",
 
     // Productivity & Navigation
     "christian-kohler.path-intellisense",
@@ -28,10 +29,16 @@
     // Git
     "eamodio.gitlens",
     "mhutchie.git-graph",
+    "donjayamanne.githistory",
 
     // API & Testing
     "humao.rest-client",
     "ms-playwright.playwright",
+    "vitest.explorer",
+
+    // Docker & DevOps
+    "ms-azuretools.vscode-docker",
+    "ms-vscode-remote.remote-containers",
 
     // Icons & Visual
     "pkief.material-icon-theme",
@@ -43,7 +50,12 @@
     "mikestead.dotenv",
     "editorconfig.editorconfig",
     "github.copilot",
-    "github.copilot-chat"
+    "github.copilot-chat",
+    "graphql.vscode-graphql",
+    "bierner.markdown-mermaid",
+    "yzhang.markdown-all-in-one",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml"
   ],
   "unwantedRecommendations": [
     "hookyqr.beautify",

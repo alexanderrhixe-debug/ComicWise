@@ -1,16 +1,26 @@
-Read and understand the entire codebase and structure of the project
-ensure all missing package, types and any needed package are installed
-create,update or generate an Optimized custom type definitions for all packages wth stub types definition.
-ensure all usage of process.env comes from app-config and verify its  properly typed and handled with fallbacks where necessary use dotenv,dotenv-safe,convex or any other needed package
-create,update or generate an Optimized  proxy.ts to use next-js 16.0.7 best practices
-create,update or generate an Optimized  components,pages,routes for full create,read,update,delete,filtering,pagination, for comics,chapters,users,genres,types,authors,artists,comicimages,chapterimages,bookmarks,comments with functionality like sending necessary emails functionality and zod validation, image upload functionality use existing  components as reference update all existing code if needed
-create,update or generate an Optimized  eslint.config.ts,prettier.config.ts,postcss.config.ts,cspell.config.ts,npm-check-updates install all need packages and packages like npm-check-updates cspell eslint-config-prettier eslint-plugin-better-tailwindcss eslint-plugin-jsx-a11y @types/eslint-plugin-jsx-a11y  eslint-plugin-prettier eslint-plugin-drizzle eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-simple-import-sort eslint-plugin-zod globals prettier prettier-plugin-organize-imports prettier-plugin-tailwindcss @eslint/css @eslint/json @eslint/markdown eslint-formatter-compact autoprefixer cssnano postcss-import postcss-nested @eslint/js @typescript-eslint/parser typescript-eslint @eslint/eslintrc tailwindcss-animate tw-animate-css @typescript-eslint/eslint-plugin use next-js 16.0.7 best practices and all recommended plugins
-fix all linting,typechecking and any other errors in the project for @typescript-eslint/no-explicit-any setup proper types instead of using any for tailwindcss setup its styles properly
-create,update or generate an Optimized clean scripts for project with rimraf ensure it runs before dev and build scripts
-create,update or generate an Optimized  tsconfig.json with custom paths alias update use next-js 16.0.7 best practices
-create,update or generate an Optimized  Dockerfile in my compose folder to use next-js 16.0.7 best practices
-create,update or generate an Optimized  docker-compose.yml,docker-compose.dev.yml files to use next-js 16.0.7 best practices 
-create,update or generate an Optimized both  Makefile and test-docker.sh to use next-js 16.0.7 best practices 
-create,update or generate an Optimized README.md reference *.md to use next-js 16.0.7 best practices
-
-create,update or generate an Optimized generate.txt to setup my project with next-js 16.0.7 best practices
+Read and understand the entire project.
+Tasks:
+create update or generate an Optimized ./vscode/* folder with all necessary settings extensions  configurations mcp tasks launch for the project. use next-js 16.0.7 best practices and any other recommended packages configuration and implementations .
+ensure all missing package  types and any needed package are installed.
+create update or generate an Optimized custom type definitions for all packages wth stub types definition.
+create update or generate an Optimized  src/types/* folder to manage all custom types and interfaces needed for the project use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  src/app-config/* to manage all environment variables with proper typing and fallbacks where necessary using dotenv dotenv-safe convex or any other needed package ensure all usage of process.env comes from app-config and verify its  properly typed and handled with fallbacks where necessary use dotenv dotenv-safe convex or any other needed package update my env files accordingly.
+create update or generate an Optimized  tsconfig.json with custom paths alias  use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  a script to update all imports and exports to use custom paths alias and  use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  eslint.config.ts prettier.config.ts postcss.config.ts next.config.ts use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized .gitignore .dockerignore .prettierignore with all necessary ignores for node nextjs typescript vscode macos linux windows and any other needed ignores.
+create update or generate an Optimized  package.json with all scripts needed for development build test lint format clean deploy and any other scripts needed for the project.
+create update or generate an Optimized Image Upload cloudinary imagekit aws s3 or any other needed package to handle image upload transformation optimization and delivery use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  proxy.ts for my project to use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  src/lib/* folder to manage all utilities helpers services api clients data fetching data manipulation state management context providers custom hooks and any other code that doesn't belong to components or pages use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  src/components/* folder to manage all reusable components use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+optimize src/db/seed.ts to seed all tables in src/db/schema/index.ts with realistic data using comics*.json users.json chapters*.json faker.js or any other needed package use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  src/db/client.ts to setup drizzle-orm with pg database use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  components pages routes for src/app/(root) page to view Comics setup carousel accordion  use shadcn components if code exists recreate an Optimized version.
+create update or generate an Optimized  components pages routes for src/app/(auth) pages to allow all sign-in sign-out newUser forgot-password verify-request and  implement zod validation sending necessary emails functionality ratelimit use shadcn components if code exists recreate an Optimized version.
+create update or generate an Optimized  components pages routes for crud operations for all tables in src/db/schema/index.ts with sending necessary emails functionality   pagination filtering and zod validation use shadcn components if code exists recreate an Optimized version.
+create update or generate an Optimized  a script to fix all linting typechecking and any other errors in the project.
+create update or generate an Optimized  Dockerfile bash scripts and all scripts needed for development build test lint format clean deploy and any other scripts needed for the project in my compose folder.
+create update or generate an Optimized  docker-compose.yml docker-compose.dev.yml files and create all services my project needs to use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized both  Makefile and test-docker.sh to use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
+create update or generate an Optimized  README.md with all necessary information about the project including setup installation usage contribution license and any other information needed.

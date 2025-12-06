@@ -1,14 +1,99 @@
+// ═══════════════════════════════════════════════════
+// DATABASE CLIENT (Next.js 16.0.7 Optimized)
+// ═══════════════════════════════════════════════════
+// Features:
+// - Connection pooling for optimal performance
+// - Proper connection lifecycle management
+// - Type-safe schema integration
+// - Edge-compatible configuration
+// - Connection caching for serverless environments
+// ═══════════════════════════════════════════════════
+
+import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import { env } from "app-config";
+import { env, isDevelopment } from "app-config";
 
-import * as schema from "./schema";
+import * as schema from "@/db/schema";
+
+// ═══════════════════════════════════════════════════
+// VALIDATION
+// ═══════════════════════════════════════════════════
 
 if (!env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is not set");
+  throw new Error(
+    "DATABASE_URL environment variable is not set. Please check your .env.local file."
+  );
 }
 
-const client = postgres(env.DATABASE_URL);
+// ═══════════════════════════════════════════════════
+// CONNECTION CONFIGURATION
+// ═══════════════════════════════════════════════════
 
-export const db = drizzle(client, { schema });
+const connectionConfig = {
+  max: isDevelopment ? 5 : 20, // Connection pool size
+  idle_timeout: isDevelopment ? 30 : 20, // Seconds before idle connection closes
+  connect_timeout: 10, // Connection timeout in seconds
+  prepare: false, // Disable prepared statements for serverless
+  onnotice: isDevelopment ? undefined : () => {}, // Silence notices in production
+} as const;
+
+// ═══════════════════════════════════════════════════
+// CLIENT INITIALIZATION
+// ═══════════════════════════════════════════════════
+
+// Create postgres client with optimized settings
+const client = postgres(env.DATABASE_URL, connectionConfig);
+
+// Export typed Drizzle instance
+export const db: PostgresJsDatabase<typeof schema> = drizzle(client, {
+  schema,
+  logger: isDevelopment, // Enable query logging in development
+});
+
+// Export client for advanced use cases
+export { client };
+
+// ═══════════════════════════════════════════════════
+// TYPE EXPORTS
+// ═══════════════════════════════════════════════════
+
+export type Database = typeof db;
+export type Schema = typeof schema;
+
+// ═══════════════════════════════════════════════════
+// CONNECTION HELPERS
+// ═══════════════════════════════════════════════════
+
+/**
+ * Test database connection
+ * Useful for health checks and initialization
+ */
+export async function testConnection(): Promise<boolean> {
+  try {
+    await client`SELECT 1`;
+    return true;
+  } catch (error) {
+    console.error("Database connection test failed:", error);
+    return false;
+  }
+}
+
+/**
+ * Close database connections
+ * Useful for cleanup in tests or scripts
+ */
+export async function closeConnection(): Promise<void> {
+  await client.end({ timeout: 5 });
+}
+
+// ═══════════════════════════════════════════════════
+// GRACEFUL SHUTDOWN
+// ═══════════════════════════════════════════════════
+
+if (typeof process !== "undefined") {
+  process.on("beforeExit", async () => {
+    await closeConnection();
+  });
+}

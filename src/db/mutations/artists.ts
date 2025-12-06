@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "../client";
-import { artist } from "../schema";
+import { db } from "@/db/client";
+import { artist } from "@/db/schema";
 
 export async function createArtist(data: { name: string; bio?: string; image?: string }) {
   const [newArtist] = await db

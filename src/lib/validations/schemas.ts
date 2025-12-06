@@ -376,6 +376,90 @@ export const chapterFilterSchema = paginationSchema.extend({
 export const userFilterSchema = paginationSchema.extend({
   search: z.string().optional(),
   role: z.enum(["user", "admin", "moderator"]).optional(),
+  emailVerified: z.boolean().optional(),
+});
+
+export const commentFilterSchema = paginationSchema.extend({
+  chapterId: z.coerce.number().int().positive().optional(),
+  comicId: z.coerce.number().int().positive().optional(),
+  userId: z.string().uuid().optional(),
+  search: z.string().optional(),
+});
+
+export const bookmarkFilterSchema = paginationSchema.extend({
+  userId: z.string().uuid().optional(),
+  search: z.string().optional(),
+});
+
+export const authorFilterSchema = paginationSchema.extend({
+  search: z.string().optional(),
+});
+
+export const artistFilterSchema = paginationSchema.extend({
+  search: z.string().optional(),
+});
+
+export const genreFilterSchema = paginationSchema.extend({
+  search: z.string().optional(),
+});
+
+export const typeFilterSchema = paginationSchema.extend({
+  search: z.string().optional(),
+});
+
+// ═══════════════════════════════════════════════════
+// BATCH OPERATION SCHEMAS
+// ═══════════════════════════════════════════════════
+
+export const batchDeleteSchema = z.object({
+  ids: z.array(z.number().int().positive()).min(1, "At least one ID is required"),
+});
+
+export const batchUpdateComicImagesSchema = z.object({
+  images: z.array(
+    z.object({
+      id: z.number().int().positive(),
+      imageOrder: z.number().int().min(0),
+    })
+  ),
+});
+
+export const batchUpdateChapterImagesSchema = z.object({
+  images: z.array(
+    z.object({
+      id: z.number().int().positive(),
+      pageNumber: z.number().int().positive(),
+    })
+  ),
+});
+
+export const batchCreateChapterImagesSchema = z.object({
+  chapterId: z.coerce.number().int().positive(),
+  images: z
+    .array(
+      z.object({
+        imageUrl: z.string().url(),
+        pageNumber: z.number().int().positive(),
+      })
+    )
+    .min(1),
+});
+
+export const batchCreateComicImagesSchema = z.object({
+  comicId: z.coerce.number().int().positive(),
+  images: z
+    .array(
+      z.object({
+        imageUrl: z.string().url(),
+        imageOrder: z.number().int().min(0),
+      })
+    )
+    .min(1),
+});
+
+export const bulkAssignGenresSchema = z.object({
+  comicId: z.coerce.number().int().positive(),
+  genreIds: z.array(z.number().int().positive()).min(1),
 });
 
 // ═══════════════════════════════════════════════════
@@ -453,5 +537,17 @@ export type PaginationInput = z.infer<typeof paginationSchema>;
 export type ComicFilterInput = z.infer<typeof comicFilterSchema>;
 export type ChapterFilterInput = z.infer<typeof chapterFilterSchema>;
 export type UserFilterInput = z.infer<typeof userFilterSchema>;
+export type CommentFilterInput = z.infer<typeof commentFilterSchema>;
+export type BookmarkFilterInput = z.infer<typeof bookmarkFilterSchema>;
+export type AuthorFilterInput = z.infer<typeof authorFilterSchema>;
+export type ArtistFilterInput = z.infer<typeof artistFilterSchema>;
+export type GenreFilterInput = z.infer<typeof genreFilterSchema>;
+export type TypeFilterInput = z.infer<typeof typeFilterSchema>;
 
 export type SendEmailInput = z.infer<typeof sendEmailSchema>;
+export type BatchDeleteInput = z.infer<typeof batchDeleteSchema>;
+export type BatchUpdateComicImagesInput = z.infer<typeof batchUpdateComicImagesSchema>;
+export type BatchUpdateChapterImagesInput = z.infer<typeof batchUpdateChapterImagesSchema>;
+export type BatchCreateChapterImagesInput = z.infer<typeof batchCreateChapterImagesSchema>;
+export type BatchCreateComicImagesInput = z.infer<typeof batchCreateComicImagesSchema>;
+export type BulkAssignGenresInput = z.infer<typeof bulkAssignGenresSchema>;

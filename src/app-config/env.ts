@@ -59,7 +59,17 @@ const envSchema = z.object({
   QSTASH_URL: z.string().url().optional(),
 
   // ═══════════════════════════════════════════════════
-  // Rate Limiting (Upstash Redis)
+  // Redis Configuration (ioredis for caching & BullMQ)
+  // ═══════════════════════════════════════════════════
+  REDIS_HOST: z.string().default("localhost"),
+  REDIS_PORT: z.coerce.number().int().positive().default(6379),
+  REDIS_PASSWORD: z.string().optional(),
+  REDIS_DB: z.coerce.number().int().nonnegative().default(0),
+  REDIS_URL: z.string().optional(),
+  REDIS_TLS_ENABLED: z.coerce.boolean().default(false),
+
+  // ═══════════════════════════════════════════════════
+  // Rate Limiting (Upstash Redis - Optional Alternative)
   // ═══════════════════════════════════════════════════
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),

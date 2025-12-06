@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════
 
 // Export all schemas from schemas.ts
-export * from "./schemas";
+export * from "@/lib/validations/schemas";
 
 import { z } from "zod";
 

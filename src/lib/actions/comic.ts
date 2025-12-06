@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import type { z } from "zod";
 
 import {
   createComic as createComicMutation,
@@ -8,6 +9,7 @@ import {
   updateComic as updateComicMutation,
 } from "@/db/mutations";
 import { getAllComics, getComic } from "@/db/queries";
+import { createComicSchema, updateComicSchema } from "@/lib/validations/schemas";
 import type { ComicFilters } from "@/types";
 import { auth } from "lib/auth";
 
@@ -19,8 +21,7 @@ export async function getComicById(id: number) {
   return await getComic(id);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function createComic(data: any) {
+export async function createComic(data: z.infer<typeof createComicSchema>) {
   const session = await auth();
 
   if (!session?.user?.id || session.user.role !== "admin") {
@@ -34,8 +35,7 @@ export async function createComic(data: any) {
   return comic;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function updateComic(id: number, data: any) {
+export async function updateComic(id: number, data: z.infer<typeof updateComicSchema>) {
   const session = await auth();
 
   if (!session?.user?.id || session.user.role !== "admin") {

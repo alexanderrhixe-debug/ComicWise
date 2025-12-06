@@ -16,10 +16,10 @@ import { sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { isDevelopment } from "app-config";
 
-import type { SeedConfig } from "./config";
-import { parseCLIArgs } from "./config";
-import { logger } from "./logger";
-import { SeedOrchestrator } from "./orchestrator";
+import type { SeedConfig } from "@/db/seed/config";
+import { parseCLIArgs } from "@/db/seed/config";
+import { logger } from "@/db/seed/logger";
+import { SeedOrchestrator } from "@/db/seed/orchestrator";
 
 async function seed(config: SeedConfig) {
   const startTime = Date.now();

@@ -1,2 +1,2 @@
-export * from "./bookmark.store";
-export * from "./ui.store";
+export * from "@/stores/bookmark.store";
+export * from "@/stores/ui.store";

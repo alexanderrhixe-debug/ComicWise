@@ -12,6 +12,7 @@ import NewChapterEmail from "@/components/emails/NewChapterEmail";
 import PasswordResetEmail from "@/components/emails/PasswordResetEmail";
 import VerificationEmail from "@/components/emails/VerificationEmail";
 import WelcomeEmail from "@/components/emails/WelcomeEmail";
+import type { SendEmailOptions } from "@/types";
 
 // ═══════════════════════════════════════════════════
 // NODEMAILER TRANSPORTER SETUP
@@ -43,7 +44,7 @@ if (appConfig.email.enabled) {
 // EMAIL SENDING FUNCTIONS
 // ═══════════════════════════════════════════════════
 
-interface SendEmailOptions {
+export interface SendEmailParams {
   to: string;
   subject: string;
   html: string;
@@ -53,7 +54,7 @@ interface SendEmailOptions {
 /**
  * Send email using configured transporter
  */
-async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
+export async function sendEmail({ to, subject, html, text }: SendEmailParams) {
   if (!appConfig.email.enabled) {
     console.warn("⚠️ Email feature is disabled. Skipping email send.");
     return { success: false, error: "Email feature is disabled" };
@@ -206,6 +207,37 @@ export async function sendNewChapterEmail(params: {
 }
 
 /**
+ * Send new chapter notification (simplified)
+ */
+export async function sendNewChapterNotification(params: {
+  to: string;
+  userName: string;
+  comicTitle: string;
+  chapterTitle: string;
+  chapterNumber: number;
+  chapterUrl: string;
+}) {
+  const html = await render(
+    NewChapterEmail({
+      userName: params.userName,
+      userEmail: params.to,
+      comicTitle: params.comicTitle,
+      comicCoverUrl: "",
+      chapterNumber: params.chapterNumber,
+      chapterTitle: params.chapterTitle,
+      chapterUrl: params.chapterUrl,
+      releaseDate: new Date().toLocaleDateString(),
+    })
+  );
+
+  return sendEmail({
+    to: params.to,
+    subject: `New chapter of ${params.comicTitle} is available!`,
+    html,
+  });
+}
+
+/**
  * Send comment notification
  */
 export async function sendCommentNotificationEmail(params: {
@@ -274,7 +306,17 @@ export async function sendBulkEmails(
   const results = await Promise.allSettled(
     recipients.map(async (email) => {
       const emailOptions = await emailGenerator(email);
-      return sendEmail(emailOptions);
+      // Convert SendEmailOptions to SendEmailParams (single recipient only)
+      const recipientEmail = Array.isArray(emailOptions.to) ? emailOptions.to[0] : emailOptions.to;
+      if (!recipientEmail) {
+        throw new Error("No recipient email provided");
+      }
+      return sendEmail({
+        to: recipientEmail,
+        subject: emailOptions.subject,
+        html: emailOptions.html,
+        text: emailOptions.text,
+      });
     })
   );
 

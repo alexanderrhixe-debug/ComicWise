@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../client";
-import { authenticator } from "../schema";
+import { db } from "@/db/client";
+import { authenticator } from "@/db/schema";
 
 // ═══════════════════════════════════════════════════
 // AUTHENTICATOR QUERIES

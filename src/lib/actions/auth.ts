@@ -4,7 +4,7 @@
 // AUTH ACTIONS - LEGACY EXPORTS
 // ═══════════════════════════════════════════════════
 
-// NOTE: For new auth actions, import directly from "./auth/index"
+// NOTE: For new auth actions, import directly from "@/lib/actions/auth/index"
 // This file maintains backward compatibility for legacy imports
 
 import { z } from "zod";

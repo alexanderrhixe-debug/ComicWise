@@ -5,13 +5,13 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { getComic, getRecommendedComics } from "@/db/queries";
+import { formatDate, formatNumber } from "@/lib/utils";
 import { BookmarkButton } from "components/BookmarkButton";
 import { ComicCard } from "components/ComicCard";
 import { Badge } from "components/ui/badge";
 import { Button } from "components/ui/button";
 import { Card, CardContent } from "components/ui/card";
 import { Skeleton } from "components/ui/skeleton";
-import { formatDate, formatNumber } from "utils";
 
 interface PageProps {
   params: Promise<{ id: string }>;

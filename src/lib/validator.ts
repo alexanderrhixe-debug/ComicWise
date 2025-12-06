@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════════════════
 // RE-EXPORT ALL VALIDATION SCHEMAS
 // ═══════════════════════════════════════════════════
-export * from "./validations";
+export * from "@/lib/validations";
 
 import { z } from "zod";
 
-import { userSchema } from "./validations";
+import { userSchema } from "@/lib/validations";
 
 // ═══════════════════════════════════════════════════
 // SEED DATA VALIDATION SCHEMAS

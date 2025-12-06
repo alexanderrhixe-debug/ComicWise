@@ -6,13 +6,11 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import prettierConfig from "eslint-config-prettier/flat";
 import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
-// @ts-expect-error - Missing type definitions for eslint-plugin-drizzle
 import * as drizzle from "eslint-plugin-drizzle";
 import importPlugin from "eslint-plugin-import";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
-// @ts-expect-error - Missing type definitions for eslint-plugin-security
 import security from "eslint-plugin-security";
 import pluginSimpleImportSort from "eslint-plugin-simple-import-sort";
 import unusedImports from "eslint-plugin-unused-imports";
@@ -139,6 +137,7 @@ const eslintConfig = defineConfig([
     rules: {
       // TypeScript
       "@typescript-eslint/no-unused-vars": "off", // Disable base rule
+      "@typescript-eslint/no-explicit-any": "warn",
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [
         "warn",
@@ -169,11 +168,8 @@ const eslintConfig = defineConfig([
       ...pluginReactHooks.configs.flat["recommended-latest"].rules,
 
       // Use only one severity variant per Better Tailwind CSS category
-      ...pluginBetterTailwindcss.configs["recommended-warn"].rules,
-      ...pluginBetterTailwindcss.configs["correctness-warn"].rules,
-      ...pluginBetterTailwindcss.configs["stylistic-warn"].rules,
       "better-tailwindcss/no-conflicting-classes": "warn",
-      "better-tailwindcss/no-unregistered-classes": "off",
+      "better-tailwindcss/no-unregistered-classes": "warn",
       "better-tailwindcss/enforce-consistent-class-order": "warn",
       "better-tailwindcss/no-duplicate-classes": "warn",
       "better-tailwindcss/no-unnecessary-whitespace": "warn",
@@ -182,7 +178,7 @@ const eslintConfig = defineConfig([
         {
           group: "newLine",
           preferSingleLine: true,
-          printWidth: 150,
+          printWidth: 100,
         },
       ],
     },

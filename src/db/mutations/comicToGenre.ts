@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../client";
-import { comicToGenre } from "../schema";
+import { db } from "@/db/client";
+import { comicToGenre } from "@/db/schema";
 
 export async function addGenreToComic(comicId: number, genreId: number) {
   const [newRelation] = await db

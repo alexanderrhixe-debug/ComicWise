@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../client";
-import { account } from "../schema";
+import { db } from "@/db/client";
+import { account } from "@/db/schema";
 
 // ═══════════════════════════════════════════════════
 // ACCOUNT QUERIES

@@ -5,14 +5,14 @@
 
 import { chapterArraySchema, comicArraySchema, userArraySchema } from "@/lib/validations/seed";
 
-import type { SeedConfig } from "./config";
-import { logger } from "./logger";
-import { ChapterSeeder } from "./seeders/chapter-seeder";
-import { ComicSeeder } from "./seeders/comic-seeder";
-import { UserSeeder } from "./seeders/user-seeder";
-import { fileUtils } from "./utils/file-utils";
-import { deduplicateByKey, normalizeDate } from "./utils/helpers";
-import { MetadataCache } from "./utils/metadata-cache";
+import type { SeedConfig } from "@/db/seed/config";
+import { logger } from "@/db/seed/logger";
+import { ChapterSeeder } from "@/db/seed/seeders/chapter-seeder";
+import { ComicSeeder } from "@/db/seed/seeders/comic-seeder";
+import { UserSeeder } from "@/db/seed/seeders/user-seeder";
+import { fileUtils } from "@/db/seed/utils/file-utils";
+import { deduplicateByKey, normalizeDate } from "@/db/seed/utils/helpers";
+import { MetadataCache } from "@/db/seed/utils/metadata-cache";
 
 export class SeedOrchestrator {
   private config: SeedConfig;
@@ -143,19 +143,19 @@ export class SeedOrchestrator {
 
       // Preprocess dates
 
-      const preprocessedChapters = rawChapters.map(
-        (chapter: {
-          releaseDate?: string;
-          updatedAt?: string;
-          updated_at?: string;
-          [key: string]: unknown;
-        }) => ({
-          ...chapter,
-          releaseDate: chapter.releaseDate ? normalizeDate(chapter.releaseDate) : undefined,
-          updatedAt: chapter.updatedAt ? normalizeDate(chapter.updatedAt) : undefined,
-          updated_at: chapter.updated_at ? normalizeDate(chapter.updated_at) : undefined,
-        })
-      );
+      type RawChapter = {
+        releaseDate?: string;
+        updatedAt?: string;
+        updated_at?: string;
+        [key: string]: unknown;
+      };
+
+      const preprocessedChapters = (rawChapters as RawChapter[]).map((chapter: RawChapter) => ({
+        ...chapter,
+        releaseDate: chapter.releaseDate ? normalizeDate(chapter.releaseDate) : undefined,
+        updatedAt: chapter.updatedAt ? normalizeDate(chapter.updatedAt) : undefined,
+        updated_at: chapter.updated_at ? normalizeDate(chapter.updated_at) : undefined,
+      }));
 
       const chapters = chapterArraySchema.parse(preprocessedChapters);
       logger.info(`Valid chapters: ${chapters.length}`);

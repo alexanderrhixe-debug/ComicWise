@@ -48,7 +48,12 @@ export default async function ProfilePage() {
               <p className="text-sm text-muted-foreground">{session.user.email}</p>
               {session.user.role && (
                 <div className="mt-3">
-                  <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                  <span
+                    className={`
+                    inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium
+                    text-primary
+                  `}
+                  >
                     {session.user.role}
                   </span>
                 </div>

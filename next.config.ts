@@ -20,7 +20,8 @@ const nextConfig: NextConfig = {
     // ppr: true,
     // reactCompiler: true,
   },
-  cacheComponents: true,
+  // Disabled due to conflicts with dynamic route segment config
+  // cacheComponents: true,
   images: {
     remotePatterns: [
       {

@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: "Learn how ComicWise collects, uses, and protects your personal information.",
 };
 
+// Force dynamic rendering for current date display
+export const dynamic = "force-dynamic";
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">

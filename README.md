@@ -324,6 +324,87 @@ All templates are built with `@react-email/components` and support:
 - **JWT Sessions** - Secure session management
 - **Input Validation** - Zod schemas for all user inputs
 
+## 🖼️ Image Upload & Optimization
+
+ComicWise supports flexible, production-grade image upload and optimization with
+a unified API and pluggable providers:
+
+- **Cloudinary** (cloud)
+- **ImageKit** (cloud)
+- **Local** (filesystem, for development/testing)
+
+### Provider Configuration
+
+Set the provider in your environment:
+
+```env
+UPLOAD_PROVIDER=cloudinary   # or imagekit or local
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+# ImageKit
+IMAGEKIT_PUBLIC_KEY=your-public-key
+IMAGEKIT_PRIVATE_KEY=your-private-key
+IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your-id
+
+# Local (no extra config needed)
+```
+
+### Usage Example
+
+```typescript
+import { uploadImage, deleteImage, getImageUrl } from "@/services/upload";
+
+// Upload an image (Buffer or File)
+const result = await uploadImage(fileBuffer, {
+  folder: "comic-covers",
+  filename: "my-comic-cover",
+  tags: ["cover", "comicwise"],
+  transformation: {
+    width: 800,
+    height: 1200,
+    quality: 85,
+    format: "webp",
+  },
+});
+
+if (result.success) {
+  console.log("Image URL:", result.url);
+  console.log("Thumbnail:", result.thumbnail);
+} else {
+  console.error("Upload failed:", result.error);
+}
+
+// Get optimized URL for display
+const optimizedUrl = await getImageUrl(result.publicId, {
+  width: 400,
+  quality: 80,
+});
+
+// Delete an image
+await deleteImage(result.publicId);
+```
+
+### Provider Features
+
+| Feature          | Cloudinary | ImageKit | Local (dev) |
+| ---------------- | :--------: | :------: | :---------: |
+| Upload           |     ✅     |    ✅    |     ✅      |
+| Transform/Resize |     ✅     |    ✅    |     ✅      |
+| Format Convert   |     ✅     |    ✅    |     ✅      |
+| Thumbnail        |     ✅     |    ✅    |    ⚠️\*     |
+| Batch Upload     |     ✅     |    ✅    |     ✅      |
+| Delete           |     ✅     |    ✅    |     ✅      |
+| Responsive URLs  |     ✅     |    ✅    |     ✅      |
+
+\*Local provider does not generate separate thumbnails, but you can request
+resized images via transformation options.
+
+---
+
 ## 🔧 Configuration
 
 ### App Configuration

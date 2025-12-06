@@ -20,7 +20,8 @@ CREATE TABLE "artist" (
 	"name" text NOT NULL,
 	"bio" text,
 	"image" text,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"search_vector" text
 );
 --> statement-breakpoint
 CREATE TABLE "authenticator" (
@@ -41,7 +42,8 @@ CREATE TABLE "author" (
 	"name" text NOT NULL,
 	"bio" text,
 	"image" text,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"search_vector" text
 );
 --> statement-breakpoint
 CREATE TABLE "bookmark" (
@@ -85,7 +87,9 @@ CREATE TABLE "comic" (
 	"artistId" integer,
 	"typeId" integer,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"search_vector" text,
+	CONSTRAINT "comic_title_unique" UNIQUE("title")
 );
 --> statement-breakpoint
 CREATE TABLE "comicImage" (
@@ -125,6 +129,21 @@ CREATE TABLE "passwordResetToken" (
 	"token" text NOT NULL,
 	"expires" timestamp NOT NULL,
 	CONSTRAINT "passwordResetToken_token_unique" UNIQUE("token")
+);
+--> statement-breakpoint
+CREATE TABLE "reading_progress" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"comic_id" integer NOT NULL,
+	"chapter_id" integer NOT NULL,
+	"page_number" integer DEFAULT 0 NOT NULL,
+	"scroll_position" integer DEFAULT 0 NOT NULL,
+	"total_pages" integer DEFAULT 0 NOT NULL,
+	"progress_percent" integer DEFAULT 0 NOT NULL,
+	"completed_at" timestamp,
+	"last_read_at" timestamp DEFAULT now() NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "session" (
@@ -176,4 +195,33 @@ ALTER TABLE "comicToGenre" ADD CONSTRAINT "comicToGenre_comic_id_comic_id_fk" FO
 ALTER TABLE "comicToGenre" ADD CONSTRAINT "comicToGenre_genre_id_genre_id_fk" FOREIGN KEY ("genre_id") REFERENCES "public"."genre"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "comment" ADD CONSTRAINT "comment_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "comment" ADD CONSTRAINT "comment_chapter_id_chapter_id_fk" FOREIGN KEY ("chapter_id") REFERENCES "public"."chapter"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "reading_progress" ADD CONSTRAINT "reading_progress_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "reading_progress" ADD CONSTRAINT "reading_progress_comic_id_comic_id_fk" FOREIGN KEY ("comic_id") REFERENCES "public"."comic"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "reading_progress" ADD CONSTRAINT "reading_progress_chapter_id_chapter_id_fk" FOREIGN KEY ("chapter_id") REFERENCES "public"."chapter"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "bookmark_user_id_idx" ON "bookmark" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "bookmark_comic_id_idx" ON "bookmark" USING btree ("comic_id");--> statement-breakpoint
+CREATE INDEX "chapter_comic_id_idx" ON "chapter" USING btree ("comic_id");--> statement-breakpoint
+CREATE INDEX "chapter_number_idx" ON "chapter" USING btree ("chapter_number");--> statement-breakpoint
+CREATE INDEX "chapter_release_date_idx" ON "chapter" USING btree ("release_date");--> statement-breakpoint
+CREATE INDEX "chapter_comic_chapter_idx" ON "chapter" USING btree ("comic_id","chapter_number");--> statement-breakpoint
+CREATE INDEX "chapter_image_chapter_id_idx" ON "chapterImage" USING btree ("chapter_id");--> statement-breakpoint
+CREATE INDEX "chapter_image_page_number_idx" ON "chapterImage" USING btree ("pageNumber");--> statement-breakpoint
+CREATE INDEX "comic_title_idx" ON "comic" USING btree ("title");--> statement-breakpoint
+CREATE INDEX "comic_status_idx" ON "comic" USING btree ("status");--> statement-breakpoint
+CREATE INDEX "comic_rating_idx" ON "comic" USING btree ("rating");--> statement-breakpoint
+CREATE INDEX "comic_views_idx" ON "comic" USING btree ("views");--> statement-breakpoint
+CREATE INDEX "comic_author_idx" ON "comic" USING btree ("authorId");--> statement-breakpoint
+CREATE INDEX "comic_artist_idx" ON "comic" USING btree ("artistId");--> statement-breakpoint
+CREATE INDEX "comic_type_idx" ON "comic" USING btree ("typeId");--> statement-breakpoint
+CREATE INDEX "comic_created_at_idx" ON "comic" USING btree ("created_at");--> statement-breakpoint
+CREATE INDEX "comment_user_id_idx" ON "comment" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "comment_chapter_id_idx" ON "comment" USING btree ("chapter_id");--> statement-breakpoint
+CREATE INDEX "comment_created_at_idx" ON "comment" USING btree ("created_at");--> statement-breakpoint
+CREATE INDEX "reading_progress_user_id_idx" ON "reading_progress" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "reading_progress_comic_id_idx" ON "reading_progress" USING btree ("comic_id");--> statement-breakpoint
+CREATE INDEX "reading_progress_chapter_id_idx" ON "reading_progress" USING btree ("chapter_id");--> statement-breakpoint
+CREATE INDEX "reading_progress_last_read_idx" ON "reading_progress" USING btree ("last_read_at");--> statement-breakpoint
+CREATE INDEX "reading_progress_user_comic_idx" ON "reading_progress" USING btree ("user_id","comic_id");--> statement-breakpoint
+CREATE INDEX "user_email_idx" ON "user" USING btree ("email");--> statement-breakpoint
+CREATE INDEX "user_role_idx" ON "user" USING btree ("role");

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "../client";
-import { genre } from "../schema";
+import { db } from "@/db/client";
+import { genre } from "@/db/schema";
 
 export async function createGenre(data: { name: string; description?: string | null }) {
   const [newGenre] = await db

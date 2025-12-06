@@ -106,3 +106,62 @@ export async function getLatestChapter(comicId: number) {
 
   return result[0] || null;
 }
+
+// Wrapper function for API compatibility
+export async function getAllChapters(filters?: {
+  comicId?: number;
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}) {
+  const {
+    comicId,
+    search,
+    page = 1,
+    limit = 12,
+    sortBy = "chapterNumber",
+    sortOrder = "asc",
+  } = filters || {};
+
+  let query = db.select().from(chapter).$dynamic();
+
+  if (comicId) {
+    query = query.where(eq(chapter.comicId, comicId));
+  }
+
+  if (search) {
+    query = query.where(eq(chapter.title, `%${search}%`));
+  }
+
+  // Apply sorting
+  if (sortBy === "chapterNumber") {
+    query = query.orderBy(
+      sortOrder === "asc" ? asc(chapter.chapterNumber) : desc(chapter.chapterNumber)
+    );
+  } else if (sortBy === "views") {
+    query = query.orderBy(sortOrder === "asc" ? asc(chapter.views) : desc(chapter.views));
+  } else {
+    query = query.orderBy(sortOrder === "asc" ? asc(chapter.createdAt) : desc(chapter.createdAt));
+  }
+
+  const offset = (page - 1) * limit;
+  const chapters = await query.limit(limit).offset(offset);
+
+  // Get total count
+  let countQuery = db.select().from(chapter).$dynamic();
+  if (comicId) {
+    countQuery = countQuery.where(eq(chapter.comicId, comicId));
+  }
+  const allChapters = await countQuery;
+  const total = allChapters.length;
+
+  return {
+    chapters,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
+}

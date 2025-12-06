@@ -116,7 +116,10 @@ export default function SignInPage() {
               <Label htmlFor="password">Password</Label>
               <Link
                 href="/forgot-password"
-                className="text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+                className={`
+                  text-sm text-muted-foreground underline-offset-4
+                  hover:text-primary hover:underline
+                `}
                 tabIndex={-1}
               >
                 Forgot password?

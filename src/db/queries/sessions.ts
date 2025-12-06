@@ -1,7 +1,7 @@
 import { and, eq, gt } from "drizzle-orm";
 
-import { db } from "../client";
-import { session } from "../schema";
+import { db } from "@/db/client";
+import { session } from "@/db/schema";
 
 // ═══════════════════════════════════════════════════
 // SESSION QUERIES
