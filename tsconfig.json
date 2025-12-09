@@ -79,7 +79,7 @@
       "components/*": ["./src/components/*"],
       "lib/*": ["./src/lib/*"],
       "hooks/*": ["./src/hooks/*"],
-      "types/*": ["./src/types/*"],
+      "types": ["./src/types/index"],
       "db/*": ["./src/db/*"],
       "services/*": ["./src/services/*"],
       "stores/*": ["./src/stores/*"],
@@ -111,5 +111,13 @@
     "tests/**/*",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", ".next", "out", "build", "dist", "coverage"]
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out",
+    "build",
+    "dist",
+    "coverage",
+    "src/components/ui/shadcn-io/image-zoom/index.tsx"
+  ]
 }

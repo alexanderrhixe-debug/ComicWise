@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "ui/badge";
 import { Card, CardContent, CardFooter } from "ui/card";
-import { formatNumber } from "utils";
 
 interface ComicCardProps {
   comic: Partial<Comic> & { id: number; title: string; coverImage: string; rating?: string | null };
@@ -49,7 +48,7 @@ export function ComicCard({ comic, authorName, typeName }: ComicCardProps) {
           {comic.views !== undefined && (
             <div className="flex items-center gap-1">
               <Eye className="h-4 w-4" />
-              <span>{formatNumber(comic.views)}</span>
+              <span>{Number(comic.views)}</span>
             </div>
           )}
         </CardFooter>

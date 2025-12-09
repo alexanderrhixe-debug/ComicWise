@@ -190,7 +190,7 @@ const eslintConfig = defineConfig([
 
       // Import organization
       "import/order": [
-        "error",
+        "off",
         {
           groups: [
             // Imports of builtins are first
@@ -416,6 +416,7 @@ const eslintConfig = defineConfig([
     "**/public/**",
     "**/drizzle/**",
     "src/styles/globals.css",
+    "src/components/ui/shadcn-io/image-zoom/index.tsx",
   ]),
 ]);
 

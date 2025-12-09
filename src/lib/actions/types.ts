@@ -1,11 +1,12 @@
 "use server";
 
-import type { ActionResponse } from "@/types";
 import { error } from "actions/utils";
 import { appConfig, checkRateLimit } from "app-config";
 import * as mutations from "db/mutations";
 import { createTypeSchema, updateTypeSchema } from "lib/validator";
-
+import { revalidatePath } from "next/cache";
+import type { ActionResponse } from "types";
+import z from "zod";
 export async function createType(formData: FormData): Promise<ActionResponse<{ id: number }>> {
   try {
     // Rate limiting
@@ -24,7 +25,7 @@ export async function createType(formData: FormData): Promise<ActionResponse<{ i
       return error("Failed to create type");
     }
 
-    revalidatePath("/admin/@/types");
+    revalidatePath("/admin/types");
     return { success: true, data: { id: type.id } };
   } catch (err) {
     if (err instanceof z.ZodError) {
@@ -43,8 +44,8 @@ export async function updateType(typeId: number, formData: FormData): Promise<Ac
     });
 
     await mutations.updateType(typeId, data);
-    revalidatePath("/admin/@/types");
-    revalidatePath(`/admin/@/types/${typeId}`);
+    revalidatePath("/admin/types");
+    revalidatePath(`/admin/types/${typeId}`);
 
     return { success: true };
   } catch (err) {
@@ -59,7 +60,7 @@ export async function updateType(typeId: number, formData: FormData): Promise<Ac
 export async function deleteType(typeId: number): Promise<ActionResponse> {
   try {
     await mutations.deleteType(typeId);
-    revalidatePath("/admin/@/types");
+    revalidatePath("/admin/types");
 
     return { success: true };
   } catch (err) {

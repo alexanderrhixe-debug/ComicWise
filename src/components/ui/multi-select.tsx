@@ -1,5 +1,18 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { CheckIcon, ChevronsUpDownIcon, XIcon } from "lucide-react";
 import {
   createContext,
@@ -11,19 +24,6 @@ import {
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from "react";
-import { Badge } from "ui/badge";
-import { Button } from "ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "ui/popover";
-import { cn } from "utils";
 
 type MultiSelectContextType = {
   open: boolean;
@@ -67,9 +67,7 @@ export function MultiSelect({
 
   const onItemAdded = useCallback((value: string, label: ReactNode) => {
     setItems((prev) => {
-      if (prev.get(value) === label) {
-        return prev;
-      }
+      if (prev.get(value) === label) return prev;
       return new Map(prev).set(value, label);
     });
   }, []);
@@ -110,18 +108,7 @@ export function MultiSelectTrigger({
         role={props.role ?? "combobox"}
         aria-expanded={props["aria-expanded"] ?? open}
         className={cn(
-          `
-            flex h-auto min-h-9 w-fit items-center justify-between gap-2 overflow-hidden rounded-md
-            border border-input bg-transparent px-3 py-1.5 text-sm whitespace-nowrap shadow-xs
-            transition-[color,box-shadow] outline-none
-            focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50
-            disabled:cursor-not-allowed disabled:opacity-50
-            aria-invalid:border-destructive aria-invalid:ring-destructive/20
-            data-placeholder:text-muted-foreground
-            dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40
-            [&_svg]:pointer-events-none [&_svg]:shrink-0
-            [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground
-          `,
+          "flex h-auto min-h-9 w-fit items-center justify-between gap-2 overflow-hidden rounded-md border border-input bg-transparent px-3 py-1.5 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[placeholder]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
           className
         )}
       >
@@ -151,21 +138,16 @@ export function MultiSelectValue({
   const shouldWrap = overflowBehavior === "wrap" || (overflowBehavior === "wrap-when-open" && open);
 
   const checkOverflow = useCallback(() => {
-    if (valueRef.current == null) {
-      return;
-    }
+    if (valueRef.current == null) return;
 
     const containerElement = valueRef.current;
     const overflowElement = overflowRef.current;
     const items = containerElement.querySelectorAll<HTMLElement>("[data-selected-item]");
 
-    if (overflowElement != null) {
-      overflowElement.style.display = "none";
-    }
+    if (overflowElement != null) overflowElement.style.display = "none";
     items.forEach((child) => child.style.removeProperty("display"));
     let amount = 0;
     for (let i = items.length - 1; i >= 0; i--) {
-      // eslint-disable-next-line security/detect-object-injection
       const child = items[i]!;
       if (containerElement.scrollWidth <= containerElement.clientWidth) {
         break;
@@ -266,29 +248,24 @@ export function MultiSelectContent({
 
   return (
     <>
-      <div className="hidden">
+      <div style={{ display: "none" }}>
         <Command>
           <CommandList>{children}</CommandList>
         </Command>
       </div>
-      <PopoverContent className="min-w-(--radix-popover-trigger-width) p-0">
+      <PopoverContent className="min-w-[var(--radix-popover-trigger-width)] p-0">
         <Command {...props}>
           {canSearch ? (
             <CommandInput
-              {...({
-                placeholder:
-                  typeof search === "object" && search !== null && "placeholder" in search
-                    ? (search.placeholder as string)
-                    : undefined,
-              } as React.ComponentProps<typeof CommandInput>)}
+              placeholder={typeof search === "object" ? search.placeholder : undefined}
             />
           ) : (
-            <button autoFocus className="sr-only" aria-label="Focus placeholder" />
+            <button autoFocus className="sr-only" />
           )}
           <CommandList>
             {canSearch && (
               <CommandEmpty>
-                {typeof search === "object" && search !== null ? search.emptyMessage : undefined}
+                {typeof search === "object" ? search.emptyMessage : undefined}
               </CommandEmpty>
             )}
             {children}
@@ -352,9 +329,7 @@ function debounce<T extends (...args: never[]) => void>(
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
   return function (this: unknown, ...args: Parameters<T>) {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
+    if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }

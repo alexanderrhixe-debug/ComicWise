@@ -11,6 +11,7 @@ import { BatchProcessor } from "db/seed/utils/batch-processor";
 import { imageService } from "services/image.service";
 
 import type { SeedConfig } from "db/seed/config";
+import { eq } from "drizzle-orm";
 import type { UserSeed } from "lib/validations/seed";
 
 export class UserSeeder {

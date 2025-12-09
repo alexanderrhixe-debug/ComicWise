@@ -1,11 +1,12 @@
 "use server";
 
-import type { ActionResponse } from "@/types";
 import { error } from "actions/utils";
 import { appConfig, checkRateLimit } from "app-config";
 import * as mutations from "db/mutations";
 import { createArtistSchema, updateArtistSchema } from "lib/validator";
-
+import { revalidatePath } from "next/cache";
+import type { ActionResponse } from "types";
+import z from "zod";
 export async function createArtist(formData: FormData): Promise<ActionResponse<{ id: number }>> {
   try {
     // Rate limiting

@@ -1,5 +1,6 @@
 "use server";
 
+import type { ComicFilters } from "@/types";
 import { auth } from "auth";
 import {
   createComic as createComicMutation,
@@ -8,10 +9,8 @@ import {
 } from "db/mutations";
 import { getAllComics, getComic } from "db/queries";
 import { createComicSchema, updateComicSchema } from "lib/validations/schemas";
-
-import type { ComicFilters } from "@/types";
-import type { z } from "zod";
-
+import { revalidatePath } from "next/cache";
+import z from "zod";
 export async function getComics(filters?: ComicFilters) {
   return await getAllComics(filters);
 }

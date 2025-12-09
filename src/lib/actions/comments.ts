@@ -3,9 +3,9 @@
 import { error } from "actions/utils";
 import { appConfig, checkRateLimit } from "app-config";
 import * as mutations from "db/mutations";
-
-import type { ActionResponse } from "@/types";
-
+import { revalidatePath } from "next/cache";
+import type { ActionResponse } from "types";
+import z from "zod";
 const commentSchema = z
   .object({
     content: z.string().min(1, "Comment cannot be empty").max(1000, "Comment too long"),

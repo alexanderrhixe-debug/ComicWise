@@ -1,5 +1,6 @@
 "use server";
 
+import type { ActionResponse } from "@/types";
 import { error } from "actions/utils";
 import { appConfig, checkRateLimit } from "app-config";
 import bcrypt from "bcryptjs";
@@ -8,6 +9,8 @@ import * as mutations from "db/mutations";
 import * as queries from "db/queries";
 import { sendPasswordResetEmail, sendWelcomeEmail } from "lib/nodemailer";
 import { registerSchema } from "lib/validator";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 const updateUserAdminSchema = z
   .object({

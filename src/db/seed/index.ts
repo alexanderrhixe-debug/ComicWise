@@ -13,9 +13,10 @@
 
 import { isDevelopment } from "app-config";
 import { db } from "db/client";
-import { parseCLIArgs } from "db/seed/config";
+import { parseCLIArgs, type SeedConfig } from "db/seed/config";
 import { logger } from "db/seed/logger";
 import { SeedOrchestrator } from "db/seed/orchestrator";
+import { sql } from "drizzle-orm";
 
 async function seed(config: SeedConfig) {
   const startTime = Date.now();

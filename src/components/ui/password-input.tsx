@@ -1,5 +1,14 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import {
@@ -13,10 +22,6 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
-import { Input } from "ui/input";
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "ui/input-group";
-import { Tooltip, TooltipContent, TooltipTrigger } from "ui/tooltip";
-import { cn } from "utils";
 
 const PasswordInputContext = createContext<{ password: string } | null>(null);
 
@@ -80,30 +85,24 @@ export function PasswordInputStrengthChecker() {
 
   useEffect(() => {
     Promise.all([import("@zxcvbn-ts/language-common"), import("@zxcvbn-ts/language-en")])
-      .then((modules) => {
-        const [common, english] = modules as any;
-        const options = {
+      .then(([common, english]) => {
+        zxcvbnOptions.setOptions({
           translations: english.translations,
           graphs: common.adjacencyGraphs,
+          maxLength: 50,
           dictionary: {
             ...common.dictionary,
             ...english.dictionary,
           },
-        };
-        // @ts-expect-error - zxcvbnOptions is actually an Options instance with setOptions method
-        zxcvbnOptions.setOptions(options);
+        });
         setOptionsLoaded(true);
       })
       .catch(() => setErrorLoadingOptions(true));
   }, []);
 
   function getLabel() {
-    if (deferredPassword.length === 0) {
-      return "Password strength";
-    }
-    if (!optionsLoaded) {
-      return "Loading strength checker";
-    }
+    if (deferredPassword.length === 0) return "Password strength";
+    if (!optionsLoaded) return "Loading strength checker";
 
     const score = strengthResult.score;
     switch (score) {
@@ -123,16 +122,14 @@ export function PasswordInputStrengthChecker() {
 
   const label = getLabel();
 
-  if (errorLoadingOptions) {
-    return null;
-  }
+  if (errorLoadingOptions) return null;
 
   return (
     <div className="space-y-0.5">
       <div
         role="progressbar"
         aria-label="Password Strength"
-        aria-valuenow={strengthResult.score as number}
+        aria-valuenow={strengthResult.score}
         aria-valuemin={0}
         aria-valuemax={4}
         aria-valuetext={label}
@@ -153,7 +150,7 @@ export function PasswordInputStrengthChecker() {
         })}
       </div>
       <div className="flex justify-end text-sm text-muted-foreground">
-        {strengthResult.feedback.warning === null ? (
+        {strengthResult.feedback.warning == null ? (
           label
         ) : (
           <Tooltip>
@@ -170,7 +167,7 @@ export function PasswordInputStrengthChecker() {
 
 const usePasswordInput = () => {
   const context = useContext(PasswordInputContext);
-  if (context === null) {
+  if (context == null) {
     throw new Error("usePasswordInput must be used within a PasswordInputContext");
   }
   return context;
