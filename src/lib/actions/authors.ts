@@ -1,8 +1,8 @@
 "use server";
 
+import * as mutations from "database/mutations";
 import { error } from "actions/utils";
-import { appConfig, checkRateLimit } from "app-config";
-import * as mutations from "db/mutations";
+import { appConfig, checkRateLimit } from "appConfig";
 import { createAuthorSchema, updateAuthorSchema } from "lib/validator";
 import { revalidatePath } from "next/cache";
 import type { ActionResponse } from "types";

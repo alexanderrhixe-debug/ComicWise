@@ -1,13 +1,13 @@
 "use server";
 
-import type { ComicFilters } from "@/types";
-import { auth } from "auth";
 import {
   createComic as createComicMutation,
   deleteComic as deleteComicMutation,
   updateComic as updateComicMutation,
-} from "db/mutations";
-import { getAllComics, getComic } from "db/queries";
+} from "database/mutations";
+import { getAllComics, getComic } from "database/queries";
+import type { ComicFilters } from "types";
+import { auth } from "auth";
 import { createComicSchema, updateComicSchema } from "lib/validations/schemas";
 import { revalidatePath } from "next/cache";
 import z from "zod";

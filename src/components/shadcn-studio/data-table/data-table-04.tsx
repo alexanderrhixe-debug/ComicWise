@@ -22,18 +22,18 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar";
+import { Badge } from "ui/badge";
+import { Checkbox } from "ui/checkbox";
+import { Input } from "ui/input";
+import { Label } from "ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "ui/select";
 import {
   Table,
   TableBody,
@@ -41,9 +41,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "ui/table";
 
-import { cn } from "@/lib/utils";
+import { cn } from "utils";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -298,7 +298,7 @@ const DataTableWithColumnFilterDemo = () => {
         </Table>
       </div>
 
-      <p className="text-muted-foreground mt-4 text-center text-sm">
+      <p className="mt-4 text-center text-sm text-muted-foreground">
         Data table with column filter
       </p>
     </div>
@@ -404,7 +404,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
           placeholder={`Search ${columnHeader.toLowerCase()}`}
           type="text"
         />
-        <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 text-muted-foreground/80 peer-disabled:opacity-50">
           <SearchIcon size={16} />
         </div>
       </div>

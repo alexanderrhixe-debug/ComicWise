@@ -4,11 +4,11 @@
 // COMPREHENSIVE AUTH ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "app-config";
+import { database } from "database";
+import { passwordResetToken, user, verificationToken } from "database/schema";
+import { appConfig } from "appConfig";
 import { signIn } from "auth";
 import bcrypt from "bcryptjs";
-import { db } from "db/client";
-import { passwordResetToken, user, verificationToken } from "db/schema";
 import { eq } from "drizzle-orm";
 import { checkRateLimit } from "lib/ratelimit";
 import {
@@ -57,7 +57,7 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
     const validatedData = signUpSchema.parse(data);
 
     // Check if user already exists
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, validatedData.email.toLowerCase()),
     });
 
@@ -75,7 +75,7 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
     );
 
     // Create user
-    const [newUser] = await db
+    const [newUser] = await database
       .insert(user)
       .values({
         name: validatedData.name.trim(),
@@ -94,7 +94,7 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
     const token = crypto.randomUUID();
     const expires = new Date(Date.now() + appConfig.security.tokenExpiry.emailVerification);
 
-    await db.insert(verificationToken).values({
+    await database.insert(verificationToken).values({
       identifier: newUser.email,
       token,
       expires,
@@ -159,7 +159,7 @@ export async function signInAction(data: SignInInput): Promise<ActionResponse> {
     const validatedData = signInSchema.parse(data);
 
     // Find user
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, validatedData.email.toLowerCase()),
     });
 
@@ -235,7 +235,7 @@ export async function forgotPasswordAction(data: ForgotPasswordInput): Promise<A
     const validatedData = forgotPasswordSchema.parse(data);
 
     // Find user
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, validatedData.email.toLowerCase()),
     });
 
@@ -254,10 +254,10 @@ export async function forgotPasswordAction(data: ForgotPasswordInput): Promise<A
     const expires = new Date(Date.now() + appConfig.security.tokenExpiry.passwordReset);
 
     // Delete any existing tokens for this email
-    await db.delete(passwordResetToken).where(eq(passwordResetToken.email, existingUser.email));
+    await database.delete(passwordResetToken).where(eq(passwordResetToken.email, existingUser.email));
 
     // Create new token
-    await db.insert(passwordResetToken).values({
+    await database.insert(passwordResetToken).values({
       email: existingUser.email,
       token,
       expires,
@@ -298,7 +298,7 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
     const validatedData = resetPasswordSchema.parse(data);
 
     // Find valid token
-    const resetToken = await db.query.passwordResetToken.findFirst({
+    const resetToken = await database.query.passwordResetToken.findFirst({
       where: eq(passwordResetToken.token, validatedData.token),
     });
 
@@ -309,7 +309,7 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
     }
 
     // Find user
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, resetToken.email),
     });
 
@@ -324,7 +324,7 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
     );
 
     // Update password
-    await db
+    await database
       .update(user)
       .set({
         password: hashedPassword,
@@ -333,7 +333,7 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
       .where(eq(user.id, existingUser.id));
 
     // Delete used token
-    await db.delete(passwordResetToken).where(eq(passwordResetToken.token, validatedData.token));
+    await database.delete(passwordResetToken).where(eq(passwordResetToken.token, validatedData.token));
 
     // Send confirmation email (async, don't wait)
     executeWorkflow({
@@ -369,7 +369,7 @@ export async function verifyEmailAction(data: VerifyEmailInput): Promise<ActionR
     const validatedData = verifyEmailSchema.parse(data);
 
     // Find valid token
-    const token = await db.query.verificationToken.findFirst({
+    const token = await database.query.verificationToken.findFirst({
       where: eq(verificationToken.token, validatedData.token),
     });
 
@@ -380,7 +380,7 @@ export async function verifyEmailAction(data: VerifyEmailInput): Promise<ActionR
     }
 
     // Find user
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, token.identifier),
     });
 
@@ -389,7 +389,7 @@ export async function verifyEmailAction(data: VerifyEmailInput): Promise<ActionR
     }
 
     // Update email verification status
-    await db
+    await database
       .update(user)
       .set({
         emailVerified: new Date(),
@@ -398,7 +398,7 @@ export async function verifyEmailAction(data: VerifyEmailInput): Promise<ActionR
       .where(eq(user.id, existingUser.id));
 
     // Delete used token
-    await db.delete(verificationToken).where(eq(verificationToken.token, validatedData.token));
+    await database.delete(verificationToken).where(eq(verificationToken.token, validatedData.token));
 
     return {
       success: true,
@@ -437,7 +437,7 @@ export async function resendVerificationEmailAction(
     }
 
     // Find user
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, email.toLowerCase()),
     });
 
@@ -459,13 +459,13 @@ export async function resendVerificationEmailAction(
     }
 
     // Delete old tokens
-    await db.delete(verificationToken).where(eq(verificationToken.identifier, existingUser.email));
+    await database.delete(verificationToken).where(eq(verificationToken.identifier, existingUser.email));
 
     // Generate new token
     const token = crypto.randomUUID();
     const expires = new Date(Date.now() + appConfig.security.tokenExpiry.emailVerification);
 
-    await db.insert(verificationToken).values({
+    await database.insert(verificationToken).values({
       identifier: existingUser.email,
       token,
       expires,
@@ -508,7 +508,7 @@ export async function updateProfileAction(
     const validatedData = updateProfileSchema.parse(data);
 
     // Update user
-    const [updatedUser] = await db
+    const [updatedUser] = await database
       .update(user)
       .set({
         ...validatedData,

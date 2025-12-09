@@ -4,9 +4,9 @@
 // COMICS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "app-config";
-import { db } from "db/client";
-import { comic, comicToGenre } from "db/schema";
+import { database } from "database";
+import { comic, comicToGenre } from "database/schema";
+import { appConfig } from "appConfig";
 import { and, desc, eq, like, sql } from "drizzle-orm";
 import {
   comicFilterSchema,
@@ -32,7 +32,7 @@ export async function createComic(
   try {
     const validated = createComicSchema.parse(input);
 
-    const [newComic] = await db
+    const [newComic] = await database
       .insert(comic)
       .values({
         ...validated,
@@ -82,7 +82,7 @@ export async function updateComic(
       updateData.rating = String(validated.rating);
     }
 
-    const [updatedComic] = await db
+    const [updatedComic] = await database
       .update(comic)
       .set(updateData)
       .where(eq(comic.id, id))
@@ -116,7 +116,7 @@ export async function updateComic(
 
 export async function deleteComic(id: number): Promise<ActionResult<void>> {
   try {
-    const existingComic = await db.query.comic.findFirst({
+    const existingComic = await database.query.comic.findFirst({
       where: eq(comic.id, id),
     });
 
@@ -125,7 +125,7 @@ export async function deleteComic(id: number): Promise<ActionResult<void>> {
     }
 
     // Delete comic (cascade will handle related records)
-    await db.delete(comic).where(eq(comic.id, id));
+    await database.delete(comic).where(eq(comic.id, id));
 
     revalidatePath("/admin/comics");
     revalidatePath("/");
@@ -150,7 +150,7 @@ export async function deleteComic(id: number): Promise<ActionResult<void>> {
 
 export async function getComicById(id: number) {
   try {
-    const result = await db.query.comic.findFirst({
+    const result = await database.query.comic.findFirst({
       where: eq(comic.id, id),
       with: {
         author: true,
@@ -164,7 +164,7 @@ export async function getComicById(id: number) {
     }
 
     // Increment view count
-    await db
+    await database
       .update(comic)
       .set({ views: sql`${comic.views} + 1` })
       .where(eq(comic.id, id));
@@ -231,7 +231,7 @@ export async function listComics(input?: ComicFilterInput) {
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
     // Get total count
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(comic)
       .where(whereClause);
@@ -239,7 +239,7 @@ export async function listComics(input?: ComicFilterInput) {
     const total = countResult?.count || 0;
 
     // Get comics with relations
-    const results = await db.query.comic.findMany({
+    const results = await database.query.comic.findMany({
       where: whereClause,
       with: {
         author: true,
@@ -296,11 +296,11 @@ export async function assignGenresToComic(
 ): Promise<ActionResult<void>> {
   try {
     // Remove existing genres
-    await db.delete(comicToGenre).where(eq(comicToGenre.comicId, comicId));
+    await database.delete(comicToGenre).where(eq(comicToGenre.comicId, comicId));
 
     // Add new genres
     if (genreIds.length > 0) {
-      await db.insert(comicToGenre).values(
+      await database.insert(comicToGenre).values(
         genreIds.map((genreId) => ({
           comicId,
           genreId,
@@ -331,7 +331,7 @@ export async function assignGenresToComic(
 
 export async function getComicGenres(comicId: number) {
   try {
-    const genres = await db.query.comicToGenre.findMany({
+    const genres = await database.query.comicToGenre.findMany({
       where: eq(comicToGenre.comicId, comicId),
       with: {
         genre: true,
@@ -357,7 +357,7 @@ export async function getComicGenres(comicId: number) {
 
 export async function getPopularComics(limit = 10) {
   try {
-    const results = await db.query.comic.findMany({
+    const results = await database.query.comic.findMany({
       with: {
         author: true,
         artist: true,
@@ -383,7 +383,7 @@ export async function getPopularComics(limit = 10) {
 
 export async function getLatestComics(limit = 12) {
   try {
-    const results = await db.query.comic.findMany({
+    const results = await database.query.comic.findMany({
       with: {
         author: true,
         artist: true,

@@ -1,5 +1,5 @@
-import { getComic, getRecommendedComics } from "@/db/queries";
-import { formatDate, formatNumber } from "@/lib/utils";
+import { getComic, getRecommendedComics } from "database/queries";
+import { formatDate } from "utils";
 import { BookmarkButton } from "components/BookmarkButton";
 import { ComicCard } from "components/ComicCard";
 import { Badge } from "components/ui/badge";
@@ -56,7 +56,7 @@ async function ComicDetails({ comicId }: { comicId: number }) {
             </div>
             <div className="flex items-center gap-2">
               <Eye className="h-5 w-5" />
-              <span>{formatNumber(comic.views)} views</span>
+              <span>{Number(comic.views)} views</span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
@@ -120,7 +120,7 @@ async function ComicDetails({ comicId }: { comicId: number }) {
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Eye className="h-4 w-4" />
-                      <span>{formatNumber(chapter.views)}</span>
+                      <span>{Number(chapter.views)}</span>
                     </div>
                   </CardContent>
                 </Card>

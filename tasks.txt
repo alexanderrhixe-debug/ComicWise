@@ -1,7 +1,7 @@
 Read and understand the entire project.
 Tasks:
 create update or generate an Optimized ./vscode/* folder with all necessary settings extensions  configurations mcp tasks launch for the project. use next-js 16.0.7 best practices and any other recommended packages configuration and implementations .
-ensure all missing package  types and any needed package are installed.
+Install all missing packages and  types.
 create update or generate an Optimized custom type definitions for all packages wth stub types definition.
 create update or generate an Optimized  src/types/* folder to manage all custom types and interfaces needed for the project use next-js 16.0.7 best practices and any other recommended packages configuration and implementations.
 create update or generate an Optimized  src/app-config/* to manage all environment variables with proper typing and fallbacks where necessary using dotenv dotenv-safe convex or any other needed package ensure all usage of process.env comes from app-config and verify its  properly typed and handled with fallbacks where necessary use dotenv dotenv-safe convex or any other needed package update my env files accordingly.

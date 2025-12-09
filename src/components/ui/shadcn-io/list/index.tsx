@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "utils";
 import {
   DndContext,
   type DragEndEvent,
@@ -52,7 +52,7 @@ export const ListHeader = (props: ListHeaderProps) =>
   ) : (
     <div className={cn("flex shrink-0 items-center gap-2 bg-foreground/5 p-3", props.className)}>
       <div className="h-2 w-2 rounded-full" style={{ backgroundColor: props.color }} />
-      <p className="m-0 font-semibold text-sm">{props.name}</p>
+      <p className="m-0 text-sm font-semibold">{props.name}</p>
     </div>
   );
 
@@ -102,7 +102,7 @@ export const ListItem = ({ id, name, index, parent, children, className }: ListI
       {...attributes}
       ref={setNodeRef}
     >
-      {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
+      {children ?? <p className="m-0 text-sm font-medium">{name}</p>}
     </div>
   );
 };

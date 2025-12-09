@@ -10,7 +10,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
-import { appConfig } from "app-config";
+import { appConfig } from "appConfig";
 
 interface PasswordResetEmailProps {
   name: string;

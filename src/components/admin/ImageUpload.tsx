@@ -54,7 +54,7 @@ export function ImageUpload({
 
     // Check file type
     if (!ALLOWED_TYPES.includes(file.type)) {
-      return `Invalid file type. Allowed @/types: ${ALLOWED_TYPES.map((t) => t.split("/")[1]).join(", ")}`;
+      return `Invalid file type. Allowed types: ${ALLOWED_TYPES.map((t) => t.split("/")[1]).join(", ")}`;
     }
 
     // Additional image dimension validation could be added here

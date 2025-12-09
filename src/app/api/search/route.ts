@@ -8,7 +8,7 @@ import {
   getTrendingComics,
   searchComics,
   type AdvancedSearchFilters,
-} from "@/lib/search";
+} from "lib/search";
 import { NextRequest, NextResponse } from "next/server";
 
 // ═══════════════════════════════════════════════════

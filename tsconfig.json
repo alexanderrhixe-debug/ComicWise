@@ -74,23 +74,30 @@
     // Path Mapping (Optimized for Clean Imports)
     // ═══════════════════════════════════════════════════
     "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "paths": {
       "@/*": ["./src/*"],
-      "components/*": ["./src/components/*"],
-      "lib/*": ["./src/lib/*"],
-      "hooks/*": ["./src/hooks/*"],
-      "types": ["./src/types/index"],
-      "db/*": ["./src/db/*"],
-      "services/*": ["./src/services/*"],
-      "stores/*": ["./src/stores/*"],
-      "app-config": ["./src/app-config"],
-      "ui/*": ["./src/components/ui/*"],
-      "actions/*": ["./src/lib/actions/*"],
-      "utils": ["./src/lib/utils"],
-      "auth": ["./src/lib/auth"],
+      "src/*": ["./src/*"],
       "styles/*": ["./src/styles/*"],
       "assets/*": ["./src/assets/*"],
-      "config/*": ["./src/config/*"]
+      "components/*": ["./src/components/*"],
+      "layout/*": ["./src/components/layout/*"],
+      "ui/*": ["./src/components/ui/*"],
+      "lib/*": ["./src/lib/*"],
+      "actions/*": ["./src/lib/actions/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "database": ["./src/database"],
+      "database/": ["./src/database/"],
+      "database/*": ["./src/database/*"],
+      "stores/*": ["./src/stores/*"],
+      "services/*": ["./src/services/*"],
+      "emails/*": ["./src/components/emails/*"],
+      "types": ["./src/types/index"],
+      "types/*": ["./src/types/*"],
+      "auth": ["./src/lib/auth"],
+      "db": ["./src/database/db"],
+      "utils": ["./src/lib/utils"],
+      "appConfig": ["./src/app-config/index"]
     }
   },
   // ═══════════════════════════════════════════════════

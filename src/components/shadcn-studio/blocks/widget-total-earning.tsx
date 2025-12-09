@@ -1,16 +1,16 @@
 import { ChevronDownIcon, ChevronUpIcon, EllipsisVerticalIcon } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "ui/avatar";
+import { Button } from "ui/button";
+import { Card, CardContent, CardHeader } from "ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Progress } from "@/components/ui/progress";
+} from "ui/dropdown-menu";
+import { Progress } from "ui/progress";
 
 const listItems = ["Share", "Update", "Refresh"];
 
@@ -48,7 +48,7 @@ const TotalEarningCard = ({
             <Button
               variant="ghost"
               size="icon"
-              className="text-muted-foreground size-6 rounded-full"
+              className="size-6 rounded-full text-muted-foreground"
             >
               <EllipsisVerticalIcon />
               <span className="sr-only">Menu</span>
@@ -76,20 +76,20 @@ const TotalEarningCard = ({
               <span className="text-sm">{percentage}%</span>
             </span>
           </div>
-          <span className="text-muted-foreground text-sm">{comparisonText}</span>
+          <span className="text-sm text-muted-foreground">{comparisonText}</span>
         </div>
         <div className="flex flex-1 flex-col justify-evenly gap-4">
           {earningData.map((earning, index) => (
             <div key={index} className="flex items-center justify-between gap-2.5">
               <div className="flex items-center justify-between gap-2.5">
                 <Avatar className="size-11 rounded-sm">
-                  <AvatarFallback className="bg-primary/10 shrink-0 rounded-sm">
+                  <AvatarFallback className="shrink-0 rounded-sm bg-primary/10">
                     <img src={earning.img} alt={earning.platform} className="size-6" />
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col gap-1">
                   <span className="font-medium">{earning.platform}</span>
-                  <span className="text-muted-foreground text-sm">{earning.technologies}</span>
+                  <span className="text-sm text-muted-foreground">{earning.technologies}</span>
                 </div>
               </div>
               <div className="space-y-2">

@@ -2,10 +2,9 @@
 // FULL-TEXT SEARCH SERVICE - PostgreSQL FTS Implementation
 // ═══════════════════════════════════════════════════
 
-import { db } from "db/client";
-import { artist, author, comic, comicToGenre, type as comicType } from "db/schema";
+import { artist, author, comic, comicToGenre, type as comicType} from "database/schema";
 import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
-
+import { db } from "db";
 // ═══════════════════════════════════════════════════
 // TYPE DEFINITIONS
 // ═══════════════════════════════════════════════════
@@ -136,8 +135,7 @@ export async function fullTextSearch(
     // Execute search query
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const results = await db
-      .select({
+    const results = await db.select({
         id: comic.id,
         title: comic.title,
         description: comic.description,
@@ -173,8 +171,7 @@ export async function fullTextSearch(
       .offset(offset);
 
     // Get total count
-    const countResult = await db
-      .select({ count: sql<number>`count(*)::int` })
+    const countResult = await db.select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .where(whereClause);
 
@@ -200,7 +197,7 @@ export async function fullTextSearch(
 }
 
 /**
- * Simple search (fallback for basic queries)
+ * Simple search (fallback for basic database/queries)
  */
 export async function simpleSearch(
   searchQuery: string,
@@ -262,8 +259,7 @@ export async function simpleSearch(
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const results = await db
-      .select({
+    const results = await db.select({
         id: comic.id,
         title: comic.title,
         description: comic.description,
@@ -295,8 +291,7 @@ export async function simpleSearch(
       .offset(offset);
 
     // Get total count
-    const countResult = await db
-      .select({ count: sql<number>`count(*)::int` })
+    const countResult = await db.select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .where(whereClause);
 
@@ -328,7 +323,7 @@ export async function smartSearch(
   searchQuery: string,
   options: SearchOptions = {}
 ): Promise<SearchResult> {
-  // Use full-text search for complex queries, simple search for basic ones
+  // Use full-text search for complex database/queries, simple search for basic ones
   const useFullText = searchQuery.split(/\s+/).length > 1 || searchQuery.length > 3;
 
   return useFullText ? fullTextSearch(searchQuery, options) : simpleSearch(searchQuery, options);
@@ -348,15 +343,14 @@ export async function getSearchSuggestions(
 
     const searchPattern = `%${query.trim()}%`;
 
-    const results = await db
-      .select({
+    const results = await db.select({
         title: comic.title,
       })
       .from(comic)
       .where(ilike(comic.title, searchPattern))
       .limit(limit);
 
-    const suggestions = results.map((r) => r.title);
+    const suggestions = results.map((r: { title: any }) => r.title);
 
     return {
       success: true,
@@ -385,8 +379,7 @@ export async function searchByAuthor(
 
     const searchPattern = `%${authorName.trim()}%`;
 
-    const results = await db
-      .select({
+    const results = await db.select({
         id: comic.id,
         title: comic.title,
         description: comic.description,
@@ -405,8 +398,7 @@ export async function searchByAuthor(
       .limit(limit)
       .offset(offset);
 
-    const countResult = await db
-      .select({ count: sql<number>`count(*)::int` })
+    const countResult = await db.select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .innerJoin(author, eq(comic.authorId, author.id))
       .where(ilike(author.name, searchPattern));
@@ -444,8 +436,7 @@ export async function searchByGenre(
     const limit = options.limit || 20;
     const offset = (page - 1) * limit;
 
-    const results = await db
-      .select({
+    const results = await db.select({
         id: comic.id,
         title: comic.title,
         description: comic.description,
@@ -460,8 +451,7 @@ export async function searchByGenre(
       .limit(limit)
       .offset(offset);
 
-    const countResult = await db
-      .select({ count: sql<number>`count(*)::int` })
+    const countResult = await db.select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .innerJoin(comicToGenre, eq(comic.id, comicToGenre.comicId))
       .where(eq(comicToGenre.genreId, genreId));

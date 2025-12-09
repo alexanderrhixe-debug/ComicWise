@@ -7,15 +7,15 @@ import {
   createComicImages,
   deleteComicImage,
   updateComicImage,
-} from "@/db/mutations/comicImages";
-import { getComicImages } from "@/db/queries/comicImages";
-import { auth } from "@/lib/auth";
+} from "database/mutations/comicImages";
+import { getComicImages } from "database/queries/comicImages";
+import { auth } from "auth";
 import {
   batchCreateComicImagesSchema,
   batchDeleteSchema,
   batchUpdateComicImagesSchema,
   createComicImageSchema,
-} from "@/lib/validations/schemas";
+} from "lib/validations/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 // ═══════════════════════════════════════════════════

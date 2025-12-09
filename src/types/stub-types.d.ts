@@ -37,10 +37,12 @@ declare module "@react-email/components" {
   export const Link: ComponentType<EmailProps & { href: string }>;
   export const Hr: ComponentType<EmailProps>;
   export const Img: ComponentType<
-    EmailProps & { src: string; alt?: string; width?: number; height?: number }
+    EmailProps & { src: string; alt?: string; width?: number | string; height?: number | string }
   >;
   export const Preview: ComponentType<{ children: string }>;
-  export const Heading: ComponentType<EmailProps>;
+  export const Heading: ComponentType<EmailProps & { as?: any }>;
+  // helper render function commonly exported by @react-email/components
+  export function render(element: any): string;
 }
 
 // React Fast Marquee
@@ -298,6 +300,10 @@ declare module "input-otp" {
   }
 
   export const OTPInput: ComponentType<OTPInputProps>;
+  export type OTPInputContextType = { slots?: any[] };
+  // export a React Context to match usage with React.useContext
+  import type React from "react";
+  export const OTPInputContext: React.Context<OTPInputContextType | undefined>;
 }
 
 // React Resizable Panels
@@ -397,6 +403,9 @@ declare module "recharts" {
     children?: ReactNode;
     className?: string;
     style?: CSSProperties;
+    accessibilityLayer?: boolean;
+    barSize?: number;
+    maxBarSize?: number;
   }
 
   export const LineChart: ComponentType<ChartProps>;
@@ -434,11 +443,20 @@ declare module "recharts" {
   export const ErrorBar: ComponentType<any>;
   export const Funnel: ComponentType<any>;
   export const FunnelChart: ComponentType<any>;
+
+  // minimal props types used in project
+  export type LegendProps = any;
+}
+
+// Minimal Recharts primitive namespace shim used in the codebase
+declare namespace RechartsPrimitive {
+  export type LegendProps = any;
 }
 
 // React Dropzone
 declare module "react-dropzone" {
   import type { DragEvent, InputHTMLAttributes } from "react";
+  export type DropEvent = any;
 
   export interface FileRejection {
     file: File;
@@ -605,13 +623,16 @@ declare module "color" {
     red(value: number): Color;
     green(value: number): Color;
     blue(value: number): Color;
+    // convenience helpers often used in projects
+    object(): { r: number; g: number; b: number; a?: number };
+    array(): number[];
   }
 
   interface ColorConstructor {
     (obj?: string | number[] | Record<string, any> | Color): Color;
     rgb(r: number, g: number, b: number): Color;
     rgb(values: [number, number, number]): Color;
-    hsl(h: number, s: number, l: number): Color;
+    hsl(h: number, s: number, l: number, a?: number): Color;
     hsl(values: [number, number, number]): Color;
     hsv(h: number, s: number, v: number): Color;
     hsv(values: [number, number, number]): Color;

@@ -1,14 +1,14 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import { Input } from "ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+} from "ui/input-group";
+import { Tooltip, TooltipContent, TooltipTrigger } from "ui/tooltip";
+import { cn } from "utils";
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import {
@@ -77,7 +77,7 @@ export function PasswordInputStrengthChecker() {
   const deferredPassword = useDeferredValue(password);
   const strengthResult = useMemo(() => {
     if (!optionsLoaded || deferredPassword.length === 0) {
-      return { score: 0, feedback: { warning: undefined } } as const;
+      return { score: 0, feedatabaseack: { warning: undefined } } as const;
     }
 
     return zxcvbn(deferredPassword);
@@ -86,15 +86,19 @@ export function PasswordInputStrengthChecker() {
   useEffect(() => {
     Promise.all([import("@zxcvbn-ts/language-common"), import("@zxcvbn-ts/language-en")])
       .then(([common, english]) => {
-        zxcvbnOptions.setOptions({
-          translations: english.translations,
-          graphs: common.adjacencyGraphs,
-          maxLength: 50,
-          dictionary: {
-            ...common.dictionary,
-            ...english.dictionary,
-          },
-        });
+        // Guard for variations in language package exports
+        const setOpts = (zxcvbnOptions as any)?.setOptions;
+        if (typeof setOpts === "function") {
+          setOpts({
+            translations: (english as any).translations,
+            graphs: (common as any).adjacencyGraphs,
+            maxLength: 50,
+            dictionary: {
+              ...((common as any).dictionary || {}),
+              ...((english as any).dictionary || {}),
+            },
+          });
+        }
         setOptionsLoaded(true);
       })
       .catch(() => setErrorLoadingOptions(true));
@@ -150,13 +154,13 @@ export function PasswordInputStrengthChecker() {
         })}
       </div>
       <div className="flex justify-end text-sm text-muted-foreground">
-        {strengthResult.feedback.warning == null ? (
+        {strengthResult.feedatabaseack.warning == null ? (
           label
         ) : (
           <Tooltip>
             <TooltipTrigger className="underline underline-offset-1">{label}</TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={4} className="text-base">
-              {strengthResult.feedback.warning}
+              {strengthResult.feedatabaseack.warning}
             </TooltipContent>
           </Tooltip>
         )}

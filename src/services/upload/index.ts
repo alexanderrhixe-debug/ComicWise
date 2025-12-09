@@ -3,7 +3,7 @@
 // Next.js 16.0.7 Optimized
 // ═══════════════════════════════════════════════════
 
-import { env } from "app-config";
+import { env } from "appConfig";
 
 export interface UploadOptions {
   folder?: string;

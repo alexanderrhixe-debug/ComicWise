@@ -1,10 +1,10 @@
 "use server";
 
+import { database } from "database";
+import { passwordResetToken, user, verificationToken } from "database/schema";
 import { error } from "actions/utils";
-import { appConfig } from "app-config";
+import { appConfig } from "appConfig";
 import bcrypt from "bcryptjs";
-import { db } from "db/client";
-import { passwordResetToken, user, verificationToken } from "db/schema";
 import { eq } from "drizzle-orm";
 import { sendPasswordResetEmail, sendVerificationEmail, sendWelcomeEmail } from "lib/nodemailer";
 import { checkRateLimit } from "lib/ratelimit";
@@ -16,7 +16,7 @@ import {
 } from "lib/validator";
 import { z } from "zod";
 
-import type { ActionResponse } from "@/types";
+import type { ActionResponse } from "types";
 
 export async function registerWorkflow(formData: FormData): Promise<ActionResponse> {
   try {
@@ -33,7 +33,7 @@ export async function registerWorkflow(formData: FormData): Promise<ActionRespon
     }
 
     // Check if user exists
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, data.email),
     });
 
@@ -45,7 +45,7 @@ export async function registerWorkflow(formData: FormData): Promise<ActionRespon
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     // Create user
-    const [newUser] = await db
+    const [newUser] = await database
       .insert(user)
       .values({
         name: data.name,
@@ -63,7 +63,7 @@ export async function registerWorkflow(formData: FormData): Promise<ActionRespon
     const token = crypto.randomUUID();
     const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-    await db.insert(verificationToken).values({
+    await database.insert(verificationToken).values({
       identifier: data.email,
       token,
       expires,
@@ -94,7 +94,7 @@ export async function forgotPasswordWorkflow(formData: FormData): Promise<Action
       return error("Too many reset attempts. Please try again later.");
     }
 
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, data.email),
     });
 
@@ -108,9 +108,9 @@ export async function forgotPasswordWorkflow(formData: FormData): Promise<Action
     const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     // Delete existing tokens
-    await db.delete(passwordResetToken).where(eq(passwordResetToken.email, data.email));
+    await database.delete(passwordResetToken).where(eq(passwordResetToken.email, data.email));
 
-    await db.insert(passwordResetToken).values({
+    await database.insert(passwordResetToken).values({
       email: data.email,
       token,
       expires,
@@ -136,7 +136,7 @@ export async function resetPasswordWorkflow(formData: FormData): Promise<ActionR
       password: formData.get("password"),
     });
 
-    const resetToken = await db.query.passwordResetToken.findFirst({
+    const resetToken = await database.query.passwordResetToken.findFirst({
       where: eq(passwordResetToken.token, data.token),
     });
 
@@ -146,9 +146,9 @@ export async function resetPasswordWorkflow(formData: FormData): Promise<ActionR
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    await db.update(user).set({ password: hashedPassword }).where(eq(user.email, resetToken.email));
+    await database.update(user).set({ password: hashedPassword }).where(eq(user.email, resetToken.email));
 
-    await db.delete(passwordResetToken).where(eq(passwordResetToken.token, data.token));
+    await database.delete(passwordResetToken).where(eq(passwordResetToken.token, data.token));
 
     return { success: true };
   } catch (err) {
@@ -166,7 +166,7 @@ export async function verifyEmailWorkflow(formData: FormData): Promise<ActionRes
       token: formData.get("token"),
     });
 
-    const token = await db.query.verificationToken.findFirst({
+    const token = await database.query.verificationToken.findFirst({
       where: eq(verificationToken.token, data.token),
     });
 
@@ -174,7 +174,7 @@ export async function verifyEmailWorkflow(formData: FormData): Promise<ActionRes
       return error("Invalid or expired token");
     }
 
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, token.identifier),
     });
 
@@ -182,12 +182,12 @@ export async function verifyEmailWorkflow(formData: FormData): Promise<ActionRes
       return error("User not found");
     }
 
-    await db
+    await database
       .update(user)
       .set({ emailVerified: new Date() })
       .where(eq(user.email, token.identifier));
 
-    await db.delete(verificationToken).where(eq(verificationToken.token, data.token));
+    await database.delete(verificationToken).where(eq(verificationToken.token, data.token));
 
     // Send welcome email
     await sendWelcomeEmail(existingUser.email!, existingUser.name || "User");
@@ -210,7 +210,7 @@ export async function resendVerificationEmail(email: string): Promise<ActionResp
       return error("Too many requests. Please try again later.");
     }
 
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, email),
     });
 
@@ -223,13 +223,13 @@ export async function resendVerificationEmail(email: string): Promise<ActionResp
     }
 
     // Delete existing tokens
-    await db.delete(verificationToken).where(eq(verificationToken.identifier, email));
+    await database.delete(verificationToken).where(eq(verificationToken.identifier, email));
 
     // Create new token
     const token = crypto.randomUUID();
     const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-    await db.insert(verificationToken).values({
+    await database.insert(verificationToken).values({
       identifier: email,
       token,
       expires,

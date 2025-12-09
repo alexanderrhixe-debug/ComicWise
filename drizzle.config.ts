@@ -13,13 +13,17 @@ const getDatabaseUrl = (): string => {
   return url;
 };
 
-export default defineConfig({
-  schema: "./src/db/schema/index.ts",
-  out: "./src/db/drizzle",
+const cfg = {
+  schema: "./database/schema.ts",
+  out: "./database/drizzle",
   dialect: "postgresql",
-  dbCredentials: {
+  // drizzle-kit typings differ across versions; keep flexible here
+  // `databaseCredentials` is used at runtime but may not be in the d.ts
+  databaseCredentials: {
     url: getDatabaseUrl(),
   },
   verbose: true,
   strict: true,
-});
+} as any;
+
+export default defineConfig(cfg);

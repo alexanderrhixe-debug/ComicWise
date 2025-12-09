@@ -9,7 +9,7 @@
 // - Security headers
 // ═══════════════════════════════════════════════════
 
-import { auth } from "lib/auth";
+import { auth } from "auth";
 import { NextResponse } from "next/server";
 
 // ═══════════════════════════════════════════════════

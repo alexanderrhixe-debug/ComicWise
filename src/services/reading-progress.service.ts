@@ -1,7 +1,6 @@
 "use server";
 
-import { db } from "db/client";
-import { chapter, comic, readingProgress } from "db/schema";
+import { chapter, comic, database, readingProgress } from "database";
 import { and, desc, eq, lt, sql } from "drizzle-orm";
 import { cacheKeys, cacheService, cacheTTL } from "services/cache.service";
 
@@ -45,7 +44,7 @@ export class ReadingProgressService {
       const completedAt = progressPercent >= 95 ? new Date() : null;
 
       // Check if progress exists
-      const existing = await db
+      const existing = await database
         .select()
         .from(readingProgress)
         .where(
@@ -57,7 +56,7 @@ export class ReadingProgressService {
         .limit(1);
 
       if (existing.length > 0 && existing[0]) {
-        await db
+        await database
           .update(readingProgress)
           .set({
             pageNumber: data.pageNumber,
@@ -70,7 +69,7 @@ export class ReadingProgressService {
           })
           .where(eq(readingProgress.id, existing[0].id));
       } else {
-        await db.insert(readingProgress).values({
+        await database.insert(readingProgress).values({
           userId: data.userId,
           chapterId: data.chapterId,
           comicId: data.comicId,
@@ -96,7 +95,7 @@ export class ReadingProgressService {
    */
   async getProgress(userId: string, chapterId: number) {
     try {
-      const progress = await db
+      const progress = await database
         .select()
         .from(readingProgress)
         .where(and(eq(readingProgress.userId, userId), eq(readingProgress.chapterId, chapterId)))
@@ -117,7 +116,7 @@ export class ReadingProgressService {
       return await cacheService.getOrSet(
         cacheKeys.userReadingProgress(userId, comicId),
         async () => {
-          const progress = await db
+          const progress = await database
             .select()
             .from(readingProgress)
             .where(and(eq(readingProgress.userId, userId), eq(readingProgress.comicId, comicId)))
@@ -142,7 +141,7 @@ export class ReadingProgressService {
       return await cacheService.getOrSet(
         cacheKeys.userReadingHistory(userId),
         async () => {
-          const history = await db
+          const history = await database
             .select({
               id: readingProgress.id,
               chapterId: readingProgress.chapterId,
@@ -162,18 +161,31 @@ export class ReadingProgressService {
             .orderBy(desc(readingProgress.lastReadAt))
             .limit(limit);
 
-          return history.map((item) => ({
-            id: item.id,
-            chapterId: item.chapterId,
-            comicId: item.comicId,
-            comicTitle: item.comicTitle || "Unknown",
-            chapterTitle: item.chapterTitle || "Unknown",
-            chapterNumber: item.chapterNumber || 0,
-            pageNumber: item.pageNumber,
-            progressPercent: item.progressPercent,
-            lastReadAt: item.lastReadAt,
-            completedAt: item.completedAt,
-          }));
+          return history.map(
+            (item: {
+              id: any;
+              chapterId: any;
+              comicId: any;
+              comicTitle: any;
+              chapterTitle: any;
+              chapterNumber: any;
+              pageNumber: any;
+              progressPercent: any;
+              lastReadAt: any;
+              completedAt: any;
+            }) => ({
+              id: item.id,
+              chapterId: item.chapterId,
+              comicId: item.comicId,
+              comicTitle: item.comicTitle || "Unknown",
+              chapterTitle: item.chapterTitle || "Unknown",
+              chapterNumber: item.chapterNumber || 0,
+              pageNumber: item.pageNumber,
+              progressPercent: item.progressPercent,
+              lastReadAt: item.lastReadAt,
+              completedAt: item.completedAt,
+            })
+          );
         },
         { ttl: cacheTTL.SHORT }
       );
@@ -188,7 +200,7 @@ export class ReadingProgressService {
    */
   async getContinueReading(userId: string, limit = 10) {
     try {
-      return await db
+      return await database
         .select({
           id: readingProgress.id,
           chapterId: readingProgress.chapterId,
@@ -217,7 +229,7 @@ export class ReadingProgressService {
    */
   async getCompletedChapters(userId: string, limit = 20) {
     try {
-      return await db
+      return await database
         .select()
         .from(readingProgress)
         .where(
@@ -236,7 +248,7 @@ export class ReadingProgressService {
    */
   async deleteProgress(userId: string, progressId: number): Promise<boolean> {
     try {
-      const progress = await db
+      const progress = await database
         .select()
         .from(readingProgress)
         .where(eq(readingProgress.id, progressId))
@@ -246,7 +258,7 @@ export class ReadingProgressService {
         return false;
       }
 
-      await db.delete(readingProgress).where(eq(readingProgress.id, progressId));
+      await database.delete(readingProgress).where(eq(readingProgress.id, progressId));
 
       await cacheService.delete(cacheKeys.userReadingProgress(userId, progress[0].comicId));
       await cacheService.delete(cacheKeys.userReadingHistory(userId));
@@ -263,7 +275,7 @@ export class ReadingProgressService {
    */
   async clearComicProgress(userId: string, comicId: number): Promise<void> {
     try {
-      await db
+      await database
         .delete(readingProgress)
         .where(and(eq(readingProgress.userId, userId), eq(readingProgress.comicId, comicId)));
 
@@ -280,7 +292,7 @@ export class ReadingProgressService {
    */
   async getStats(userId: string): Promise<ReadingStats> {
     try {
-      const stats = await db
+      const stats = await database
         .select({
           totalComics: sql<number>`COUNT(DISTINCT ${readingProgress.comicId})`,
           totalChapters: sql<number>`COUNT(DISTINCT ${readingProgress.chapterId})`,

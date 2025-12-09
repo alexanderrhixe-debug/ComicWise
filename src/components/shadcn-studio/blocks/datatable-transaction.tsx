@@ -14,22 +14,22 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar";
+import { Badge } from "ui/badge";
+import { Button } from "ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from "@/components/ui/pagination";
+} from "ui/pagination";
 import {
   Table,
   TableBody,
@@ -37,9 +37,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "ui/table";
 
-import { usePagination } from "@/hooks/use-pagination";
+import { usePagination } from "hooks/use-pagination";
 
 export type Item = {
   id: string;
@@ -63,7 +63,7 @@ export const columns: ColumnDef<Item>[] = [
           <AvatarFallback className="text-xs">{row.original.avatarFallback}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col text-sm">
-          <span className="text-card-foreground font-medium">{row.getValue("name")}</span>
+          <span className="font-medium text-card-foreground">{row.getValue("name")}</span>
           <span className="text-muted-foreground">{row.original.email}</span>
         </div>
       </div>
@@ -87,7 +87,7 @@ export const columns: ColumnDef<Item>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <Badge className="bg-primary/10 text-primary rounded-sm px-1.5 capitalize">
+      <Badge className="rounded-sm bg-primary/10 px-1.5 text-primary capitalize">
         {row.getValue("status")}
       </Badge>
     ),
@@ -152,7 +152,7 @@ const TransactionDatatable = ({ data }: { data: Item[] }) => {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="text-muted-foreground h-14 first:pl-4">
+                    <TableHead key={header.id} className="h-14 text-muted-foreground first:pl-4">
                       {header.isPlaceholder
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
@@ -185,7 +185,7 @@ const TransactionDatatable = ({ data }: { data: Item[] }) => {
       </div>
 
       <div className="flex items-center justify-between gap-3 px-6 py-4 max-sm:flex-col md:max-lg:flex-col">
-        <p className="text-muted-foreground text-sm whitespace-nowrap" aria-live="polite">
+        <p className="text-sm whitespace-nowrap text-muted-foreground" aria-live="polite">
           Showing{" "}
           <span>
             {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{" "}

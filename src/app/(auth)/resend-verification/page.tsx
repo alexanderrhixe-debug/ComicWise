@@ -4,11 +4,6 @@
 // RESEND VERIFICATION PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { resendVerificationEmailAction } from "@/lib/actions/auth/index";
-import {
-  resendVerificationEmailSchema,
-  type ResendVerificationEmailInput,
-} from "@/lib/validations/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "components/ui/alert";
 import { Button } from "components/ui/button";
@@ -22,6 +17,11 @@ import {
 } from "components/ui/card";
 import { Input } from "components/ui/input";
 import { Label } from "components/ui/label";
+import { resendVerificationEmailAction } from "actions/auth/index";
+import {
+  resendVerificationEmailSchema,
+  type ResendVerificationEmailInput,
+} from "lib/validations/schemas";
 import { Loader2, Mail } from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";

@@ -1,13 +1,12 @@
-import { DataTable } from "@/components/admin/DataTable";
-import { Button } from "@/components/ui/button";
-import { db } from "@/db/client";
-import { artist, author, comic, type } from "@/db/schema";
+import { DataTable } from "components/admin/DataTable";
+import { Button } from "components/ui/button";
+import { artist, author, comic, database, type } from "database";
 import { eq } from "drizzle-orm";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
 export default async function AdminComicsPage() {
-  const comics = await db
+  const comics = await database
     .select({
       id: comic.id,
       title: comic.title,

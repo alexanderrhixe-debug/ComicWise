@@ -19,7 +19,7 @@ import {
   UsersIcon,
 } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -27,10 +27,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+} from "components/ui/breadcrumb";
+import { Button } from "components/ui/button";
+import { Card, CardContent } from "components/ui/card";
+import { Separator } from "components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -43,10 +43,10 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
+} from "components/ui/sidebar";
 
-import LanguageDropdown from "@/components/shadcn-studio/blocks/dropdown-language";
-import ProfileDropdown from "@/components/shadcn-studio/blocks/dropdown-profile";
+import LanguageDropdown from "components/shadcn-studio/blocks/dropdown-language";
+import ProfileDropdown from "components/shadcn-studio/blocks/dropdown-profile";
 
 const ApplicationShell = () => {
   return (
@@ -64,7 +64,7 @@ const ApplicationShell = () => {
                         <span>Dashboard</span>
                       </a>
                     </SidebarMenuButton>
-                    <SidebarMenuBadge className="bg-primary/10 rounded-full">5</SidebarMenuBadge>
+                    <SidebarMenuBadge className="rounded-full bg-primary/10">5</SidebarMenuBadge>
                   </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
@@ -104,7 +104,7 @@ const ApplicationShell = () => {
                         <span>Hashtag Performance</span>
                       </a>
                     </SidebarMenuButton>
-                    <SidebarMenuBadge className="bg-primary/10 rounded-full">3</SidebarMenuBadge>
+                    <SidebarMenuBadge className="rounded-full bg-primary/10">3</SidebarMenuBadge>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
@@ -191,7 +191,7 @@ const ApplicationShell = () => {
           </SidebarContent>
         </Sidebar>
         <div className="flex flex-1 flex-col">
-          <header className="bg-card sticky top-0 z-50 border-b">
+          <header className="sticky top-0 z-50 border-b bg-card">
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-2 sm:px-6">
               <div className="flex items-center gap-4">
                 <SidebarTrigger className="[&_svg]:!size-5" />
@@ -241,7 +241,7 @@ const ApplicationShell = () => {
             </Card>
           </main>
           <footer>
-            <div className="text-muted-foreground mx-auto flex size-full max-w-7xl items-center justify-between gap-3 px-4 py-3 max-sm:flex-col sm:gap-6 sm:px-6">
+            <div className="mx-auto flex size-full max-w-7xl items-center justify-between gap-3 px-4 py-3 text-muted-foreground max-sm:flex-col sm:gap-6 sm:px-6">
               <p className="text-sm text-balance max-sm:text-center">
                 {`©${new Date().getFullYear()}`}{" "}
                 <a href="#" className="text-primary">

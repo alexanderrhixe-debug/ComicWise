@@ -1,19 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { registerUser } from "@/lib/actions/users";
-import { signUpSchema } from "@/lib/validations/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
+import { Input } from "components/ui/input";
+import { registerUser } from "actions/users";
+import { signUpSchema } from "lib/validations/schemas";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

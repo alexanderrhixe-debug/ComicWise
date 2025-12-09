@@ -329,7 +329,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
     "editor.wordWrap": "on"
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "utils";
 import type { ControlledProps, UncontrolledProps } from "react-medium-image-zoom";
 import Zoom from "react-medium-image-zoom";
 export type ImageZoomProps = UncontrolledProps & {

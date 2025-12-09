@@ -8,13 +8,13 @@
 // This file maintains backward compatibility for legacy imports
 
 import { error } from "actions/utils";
-import { appConfig } from "app-config";
+import { appConfig } from "appConfig";
 import { signIn, signOut } from "auth";
 import { checkRateLimit } from "lib/ratelimit";
 import { loginSchema } from "lib/validator";
 import { z } from "zod";
 
-import type { ActionResponse } from "@/types";
+import type { ActionResponse } from "types";
 
 export async function signInWithCredentials(formData: FormData): Promise<ActionResponse> {
   try {

@@ -2,8 +2,8 @@
 // IMAGE UPLOAD API - ImageKit Integration
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "@/app-config";
-import { auth } from "@/lib/auth";
+import { appConfig } from "appConfig";
+import { auth } from "auth";
 import {
   fileToBuffer,
   generateUniqueFileName,
@@ -12,7 +12,7 @@ import {
   uploadComicCover,
   uploadImage,
   validateImageFile,
-} from "@/lib/imagekit";
+} from "lib/imagekit";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 

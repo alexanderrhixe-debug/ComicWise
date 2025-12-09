@@ -1,8 +1,8 @@
-import { getUserBookmarks } from "@/db/queries";
+import { getUserBookmarks } from "database/queries";
 import { ComicCard } from "components/ComicCard";
 import { Badge } from "components/ui/badge";
 import { Button } from "components/ui/button";
-import { auth } from "lib/auth";
+import { auth } from "auth";
 import { BookmarkX } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";

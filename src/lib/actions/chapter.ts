@@ -1,11 +1,11 @@
 "use server";
 
-import { auth } from "auth";
 import {
   createChapter as createChapterMutation,
   updateChapter as updateChapterMutation,
-} from "db/mutations";
-import { getChapterImages as getChapterImagesMutation } from "db/queries";
+} from "database/mutations";
+import { getChapterImages as getChapterImagesMutation } from "database/queries";
+import { auth } from "auth";
 import { createChapterSchema, updateChapterSchema } from "lib/validations/schemas";
 import { revalidatePath } from "next/cache";
 

@@ -1,3 +1,4 @@
+"use client";
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 import { useEffect, useRef, useState } from "react";
 
@@ -31,8 +32,8 @@ const DEFAULT_COLOR = "#ffffff";
 
 const hexToRgb = (hex: string): [number, number, number] => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return m
-    ? [parseInt(m[1], 16) / 255, parseInt(m[2], 16) / 255, parseInt(m[3], 16) / 255]
+  return m && m.length >= 4
+    ? [parseInt(m[1] ?? 'ff', 16) / 255, parseInt(m[2] ?? 'ff', 16) / 255, parseInt(m[3] ?? 'ff', 16) / 255]
     : [1, 1, 1];
 };
 
@@ -115,7 +116,9 @@ const LightRays: React.FC<LightRaysProps> = ({
     observerRef.current = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        setIsVisible(entry.isIntersecting);
+          if (entry) {
+            setIsVisible(entry.isIntersecting);
+          }
       },
       { threshold: 0.1 }
     );
@@ -445,6 +448,7 @@ void main() {
       window.addEventListener("mousemove", handleMouseMove);
       return () => window.removeEventListener("mousemove", handleMouseMove);
     }
+    return () => {};
   }, [followMouse]);
 
   return (

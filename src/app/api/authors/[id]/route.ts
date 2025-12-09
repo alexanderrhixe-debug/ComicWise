@@ -7,10 +7,10 @@ import {
   getGenericEntity,
   updateGenericEntity,
   zodToValidationResult,
-} from "@/app/api/lib/generic-crud";
-import { deleteAuthor, updateAuthor } from "@/db/mutations/authors";
-import { getAuthorById } from "@/db/queries/authors";
-import { authorIdSchema, updateAuthorSchema } from "@/lib/validations/schemas";
+} from "lib/generic-crud";
+import { deleteAuthor, updateAuthor } from "database/mutations/authors";
+import { getAuthorById } from "database/queries/authors";
+import { authorIdSchema, updateAuthorSchema } from "lib/validations/schemas";
 import { NextRequest } from "next/server";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

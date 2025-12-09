@@ -4,10 +4,10 @@ import { useState } from "react";
 
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "ui/button";
+import { Checkbox } from "ui/checkbox";
+import { Input } from "ui/input";
+import { Label } from "ui/label";
 
 const RegisterForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -47,7 +47,7 @@ const RegisterForm = () => {
             variant="ghost"
             size="icon"
             onClick={() => setIsPasswordVisible((prevState) => !prevState)}
-            className="text-muted-foreground focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
+            className="absolute inset-y-0 right-0 rounded-l-none text-muted-foreground hover:bg-transparent focus-visible:ring-ring/50"
           >
             {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
             <span className="sr-only">{isPasswordVisible ? "Hide password" : "Show password"}</span>
@@ -71,7 +71,7 @@ const RegisterForm = () => {
             variant="ghost"
             size="icon"
             onClick={() => setIsConfirmPasswordVisible((prevState) => !prevState)}
-            className="text-muted-foreground focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
+            className="absolute inset-y-0 right-0 rounded-l-none text-muted-foreground hover:bg-transparent focus-visible:ring-ring/50"
           >
             {isConfirmPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
             <span className="sr-only">

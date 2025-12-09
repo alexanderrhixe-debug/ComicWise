@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "ui/button";
 import {
   Command,
   CommandEmpty,
@@ -9,9 +9,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+} from "ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "ui/popover";
+import { cn } from "utils";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { ChevronsUpDownIcon, PlusIcon } from "lucide-react";
 import {
@@ -259,7 +259,7 @@ export const ComboboxCreateNew = ({ onCreateNew, children, className }: Combobox
   return (
     <button
       className={cn(
-        "relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "relative flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         className
       )}
       onClick={handleCreateNew}

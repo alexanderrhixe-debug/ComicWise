@@ -18,7 +18,7 @@ const navigationItems = [
   { title: "Chapters", href: "/admin/chapters", icon: FileText },
   { title: "Users", href: "/admin/users", icon: Users },
   { title: "Genres", href: "/admin/genres", icon: FolderOpen },
-  { title: "Types", href: "/admin/@/types", icon: Tag },
+  { title: "Types", href: "/admin/types", icon: Tag },
   { title: "Authors", href: "/admin/authors", icon: UserCircle },
   { title: "Artists", href: "/admin/artists", icon: Palette },
   { title: "Create Comic", href: "/admin/comics/new", icon: BookOpen },

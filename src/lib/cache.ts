@@ -1,23 +1,22 @@
 /* eslint-disable security/detect-object-injection */
-import { env } from "@/app-config/env";
-import Redis, { type RedisOptions } from "ioredis";
-
+import { env } from "appConfig";
+import Redis from "ioredis";
 /**
  * Redis Configuration
  * Supports both standalone and cluster modes
  */
-const getRedisConfig = (): RedisOptions => {
-  const baseConfig: RedisOptions = {
+const getRedisConfig = (): any => {
+  const baseConfig: any = {
     host: env.REDIS_HOST || "localhost",
     port: Number(env.REDIS_PORT) || 6379,
     password: env.REDIS_PASSWORD || undefined,
-    db: Number(env.REDIS_DB) || 0,
+    database: Number(env.REDIS_DB) || 0,
     maxRetriesPerRequest: 3,
-    retryStrategy(times) {
+    retryStrategy(times: number) {
       const delay = Math.min(times * 50, 2000);
       return delay;
     },
-    reconnectOnError(err) {
+    reconnectOnError(err: Error) {
       const targetErrors = ["READONLY", "ECONNRESET"];
       return targetErrors.some((target) => err.message.includes(target));
     },
@@ -477,7 +476,7 @@ export class RedisCache {
    */
   async flushAll(): Promise<boolean> {
     try {
-      await this.redis.flushdb();
+      await (this.redis as any).flushdatabase();
       console.warn("⚠️  Cache flushed");
       return true;
     } catch (error) {
@@ -499,11 +498,11 @@ export class RedisCache {
     try {
       const info = await this.redis.info("stats");
       const memory = await this.redis.info("memory");
-      const dbsize = await this.redis.dbsize();
+      const databasesize = await (this.redis as any).databasesize();
 
       // Parse stats from info string
       const stats = {
-        keys: dbsize,
+        keys: databasesize,
         memory: memory.match(/used_memory_human:([^\r\n]+)/)?.[1] || "N/A",
         hits: parseInt(info.match(/keyspace_hits:(\d+)/)?.[1] || "0"),
         misses: parseInt(info.match(/keyspace_misses:(\d+)/)?.[1] || "0"),

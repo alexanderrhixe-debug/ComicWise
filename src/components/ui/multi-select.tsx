@@ -1,7 +1,7 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "ui/badge";
+import { Button } from "ui/button";
 import {
   Command,
   CommandEmpty,
@@ -10,9 +10,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+} from "ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "ui/popover";
+import { cn } from "utils";
 import { CheckIcon, ChevronsUpDownIcon, XIcon } from "lucide-react";
 import {
   createContext,
@@ -245,6 +245,7 @@ export function MultiSelectContent({
   children: ReactNode;
 } & Omit<ComponentPropsWithoutRef<typeof Command>, "children">) {
   const canSearch = typeof search === "object" ? true : search;
+  const CommandInputAny = CommandInput as any;
 
   return (
     <>
@@ -255,11 +256,11 @@ export function MultiSelectContent({
       </div>
       <PopoverContent className="min-w-[var(--radix-popover-trigger-width)] p-0">
         <Command {...props}>
-          {canSearch ? (
-            <CommandInput
-              placeholder={typeof search === "object" ? search.placeholder : undefined}
-            />
-          ) : (
+            {canSearch ? (
+              <CommandInputAny
+                placeholder={(typeof search === "object" ? search.placeholder : undefined) as any}
+              />
+            ) : (
             <button autoFocus className="sr-only" />
           )}
           <CommandList>

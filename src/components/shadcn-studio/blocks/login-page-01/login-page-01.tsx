@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card";
+import { Separator } from "ui/separator";
 
-import AuthBackgroundShape from "@/assets/svg/auth-background-shape";
+import AuthBackgroundShape from "assets/svg/auth-background-shape";
 import LoginForm from "@/components/shadcn-studio/blocks/login-page-01/login-form";
 import Logo from "@/components/shadcn-studio/logo";
 
@@ -26,7 +26,7 @@ const Login = () => {
         </CardHeader>
 
         <CardContent>
-          <p className="text-muted-foreground mb-6">
+          <p className="mb-6 text-muted-foreground">
             Login with{" "}
             <a href="#" className="text-card-foreground hover:underline">
               Magic Link
@@ -47,7 +47,7 @@ const Login = () => {
           <div className="space-y-4">
             <LoginForm />
 
-            <p className="text-muted-foreground text-center">
+            <p className="text-center text-muted-foreground">
               New on our platform?{" "}
               <a href="#" className="text-card-foreground hover:underline">
                 Create an account

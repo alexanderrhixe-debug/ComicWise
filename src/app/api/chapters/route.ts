@@ -2,12 +2,12 @@
 // CHAPTERS API - Full CRUD with Filtering & Pagination
 // ═══════════════════════════════════════════════════
 
-import { createChapter } from "@/db/mutations/chapters";
-import { getUsersBookmarkedComic } from "@/db/queries/bookmarks";
-import { getAllChapters } from "@/db/queries/chapters";
-import { auth } from "@/lib/auth";
-import { sendNewChapterNotification } from "@/lib/email";
-import { chapterFilterSchema, createChapterSchema } from "@/lib/validations/schemas";
+import { createChapter } from "database/mutations/chapters";
+import { getUsersBookmarkedComic } from "database/queries/bookmarks";
+import { getAllChapters } from "database/queries/chapters";
+import { auth } from "auth";
+import { sendNewChapterNotification } from "lib/email";
+import { chapterFilterSchema, createChapterSchema } from "lib/validations/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 // ═══════════════════════════════════════════════════

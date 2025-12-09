@@ -9,7 +9,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "ui/dropdown-menu";
 
 type Props = {
   trigger: ReactNode;
@@ -27,31 +27,31 @@ const LanguageDropdown = ({ defaultOpen, align, trigger }: Props) => {
         <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
           <DropdownMenuRadioItem
             value="english"
-            className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+            className="pl-2 text-base data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground [&>span]:hidden"
           >
             English
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="german"
-            className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+            className="pl-2 text-base data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground [&>span]:hidden"
           >
             Deutsch
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="spanish"
-            className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+            className="pl-2 text-base data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground [&>span]:hidden"
           >
             Española
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="portuguese"
-            className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+            className="pl-2 text-base data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground [&>span]:hidden"
           >
             Português
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="korean"
-            className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+            className="pl-2 text-base data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground [&>span]:hidden"
           >
             한국인
           </DropdownMenuRadioItem>

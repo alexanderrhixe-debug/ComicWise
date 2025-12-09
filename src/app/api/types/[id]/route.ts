@@ -8,9 +8,9 @@ import {
   updateGenericEntity,
   zodToValidationResult,
 } from "@/app/api/lib/generic-crud";
-import { deleteType, updateType } from "@/db/mutations/types";
-import { getTypeById } from "@/db/queries/types";
-import { typeIdSchema, updateTypeSchema } from "@/lib/validations/schemas";
+import { deleteType, updateType } from "database/mutations/types";
+import { getTypeById } from "database/queries/types";
+import { typeIdSchema, updateTypeSchema } from "lib/validations/schemas";
 import { NextRequest } from "next/server";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

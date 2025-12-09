@@ -1,5 +1,5 @@
 import ComicForm from "@/app/admin/comics/comic-form";
-import { auth } from "@/lib/auth";
+import { auth } from "auth";
 import { redirect } from "next/navigation";
 
 import type { Metadata } from "next";

@@ -7,15 +7,15 @@ import {
   createChapterImages,
   deleteChapterImage,
   updateChapterImage,
-} from "@/db/mutations/chapterImages";
-import { getChapterImages } from "@/db/queries/chapterImages";
-import { auth } from "@/lib/auth";
+} from "database/mutations/chapterImages";
+import { getChapterImages } from "database/queries/chapterImages";
+import { auth } from "auth";
 import {
   batchCreateChapterImagesSchema,
   batchDeleteSchema,
   batchUpdateChapterImagesSchema,
   createChapterImageSchema,
-} from "@/lib/validations/schemas";
+} from "lib/validations/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 // ═══════════════════════════════════════════════════

@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "ui/button";
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "ui/card";
 
 type BlogCard = {
   img: string;
@@ -24,11 +24,11 @@ const Blog = ({ blogCards }: { blogCards: BlogCard }) => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 space-y-4 text-center sm:mb-16 lg:mb-24">
-          <p className="text-primary text-sm font-medium uppercase">Blog list</p>
+          <p className="text-sm font-medium text-primary uppercase">Blog list</p>
           <h2 className="text-2xl font-semibold md:text-3xl lg:text-4xl">
             Plan your upcoming journey.
           </h2>
-          <p className="text-muted-foreground text-xl">
+          <p className="text-xl text-muted-foreground">
             Explore new destinations, indulge in local cuisines, and immerse yourself in diverse
             cultures.
           </p>

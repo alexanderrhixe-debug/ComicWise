@@ -4,7 +4,7 @@
 // COMPREHENSIVE WORKFLOW SYSTEM (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "app-config";
+import { appConfig } from "appConfig";
 import emailService, { sendEmail } from "lib/email";
 import { checkRateLimit } from "lib/ratelimit";
 import { z } from "zod";
@@ -433,7 +433,7 @@ async function sendComicCreatedNotification(payload: WorkflowPayload) {
                 data.comicGenres
                   ? `
               <p style="text-align: center; margin-bottom: 15px;">
-                <span style="display: inline-block; padding: 4px 12px; background-color: #dbeafe; color: #1e40af; border-radius: 20px; font-size: 14px; margin: 2px;">${data.comicGenres}</span>
+                <span style="display: inline-block; padding: 4px 12px; background-color: #databaseeafe; color: #1e40af; border-radius: 20px; font-size: 14px; margin: 2px;">${data.comicGenres}</span>
               </p>
               `
                   : ""

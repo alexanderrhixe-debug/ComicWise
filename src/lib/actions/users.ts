@@ -1,12 +1,12 @@
 "use server";
 
-import type { ActionResponse } from "@/types";
+import * as mutations from "database/mutations";
+import * as queries from "database/queries";
+import type { ActionResponse } from "types";
 import { error } from "actions/utils";
-import { appConfig, checkRateLimit } from "app-config";
+import { appConfig, checkRateLimit } from "appConfig";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import * as mutations from "db/mutations";
-import * as queries from "db/queries";
 import { sendPasswordResetEmail, sendWelcomeEmail } from "lib/nodemailer";
 import { registerSchema } from "lib/validator";
 import { revalidatePath } from "next/cache";

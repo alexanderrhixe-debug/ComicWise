@@ -4,7 +4,6 @@
 // SIGN IN PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { signInSchema, type SignInInput } from "@/lib/validations/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "components/ui/alert";
 import { Button } from "components/ui/button";
@@ -19,6 +18,7 @@ import {
 import { Input } from "components/ui/input";
 import { Label } from "components/ui/label";
 import { PasswordInput } from "components/ui/password-input";
+import { signInSchema, type SignInInput } from "lib/validations/schemas";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";

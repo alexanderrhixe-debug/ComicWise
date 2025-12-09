@@ -4,11 +4,11 @@
 // AUTH SERVER ACTIONS (Next.js 16 + Rate Limiting + Emails)
 // ═══════════════════════════════════════════════════
 
-import { appConfig, checkRateLimit } from "app-config";
+import { database } from "database";
+import { passwordResetToken, user, verificationToken } from "database/schema";
+import { appConfig, checkRateLimit } from "appConfig";
 import { signIn, signOut } from "auth";
 import bcrypt from "bcryptjs";
-import { db } from "db/client";
-import { passwordResetToken, user, verificationToken } from "db/schema";
 import { eq } from "drizzle-orm";
 import {
   sendAccountUpdatedEmail,
@@ -81,7 +81,7 @@ export async function registerUserAction(input: SignUpInput): Promise<AuthAction
     }
 
     // Check if user already exists
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, email),
     });
 
@@ -96,7 +96,7 @@ export async function registerUserAction(input: SignUpInput): Promise<AuthAction
     const hashedPassword = await bcrypt.hash(password, appConfig.security.bcryptRounds);
 
     // Create user
-    const [newUser] = await db
+    const [newUser] = await database
       .insert(user)
       .values({
         name,
@@ -119,7 +119,7 @@ export async function registerUserAction(input: SignUpInput): Promise<AuthAction
       const token = crypto.randomUUID();
       const expires = new Date(Date.now() + appConfig.security.tokenExpiry.emailVerification);
 
-      await db.insert(verificationToken).values({
+      await database.insert(verificationToken).values({
         identifier: email,
         token,
         expires,
@@ -133,7 +133,7 @@ export async function registerUserAction(input: SignUpInput): Promise<AuthAction
       });
     } else {
       // If email verification is disabled, mark as verified
-      await db.update(user).set({ emailVerified: new Date() }).where(eq(user.id, newUser.id));
+      await database.update(user).set({ emailVerified: new Date() }).where(eq(user.id, newUser.id));
     }
 
     // Send welcome email (optional)
@@ -165,7 +165,7 @@ export async function verifyEmailAction(input: VerifyEmailInput): Promise<AuthAc
     const { token } = verifyEmailSchema.parse(input);
 
     // Find verification token
-    const tokenRecord = await db.query.verificationToken.findFirst({
+    const tokenRecord = await database.query.verificationToken.findFirst({
       where: eq(verificationToken.token, token),
     });
 
@@ -179,7 +179,7 @@ export async function verifyEmailAction(input: VerifyEmailInput): Promise<AuthAc
     // Check if token is expired
     if (new Date() > tokenRecord.expires) {
       // Delete expired token
-      await db.delete(verificationToken).where(eq(verificationToken.token, token));
+      await database.delete(verificationToken).where(eq(verificationToken.token, token));
 
       return {
         success: false,
@@ -188,13 +188,13 @@ export async function verifyEmailAction(input: VerifyEmailInput): Promise<AuthAc
     }
 
     // Update user email verification status
-    await db
+    await database
       .update(user)
       .set({ emailVerified: new Date() })
       .where(eq(user.email, tokenRecord.identifier));
 
     // Delete used token
-    await db.delete(verificationToken).where(eq(verificationToken.token, token));
+    await database.delete(verificationToken).where(eq(verificationToken.token, token));
 
     return {
       success: true,
@@ -230,7 +230,7 @@ export async function resendVerificationEmailAction(
     }
 
     // Check if user exists
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, email),
     });
 
@@ -250,13 +250,13 @@ export async function resendVerificationEmailAction(
     }
 
     // Delete any existing verification tokens for this email
-    await db.delete(verificationToken).where(eq(verificationToken.identifier, email));
+    await database.delete(verificationToken).where(eq(verificationToken.identifier, email));
 
     // Generate new verification token
     const token = crypto.randomUUID();
     const expires = new Date(Date.now() + appConfig.security.tokenExpiry.emailVerification);
 
-    await db.insert(verificationToken).values({
+    await database.insert(verificationToken).values({
       identifier: email,
       token,
       expires,
@@ -303,7 +303,7 @@ export async function forgotPasswordAction(
     }
 
     // Check if user exists
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, email),
     });
 
@@ -316,13 +316,13 @@ export async function forgotPasswordAction(
     }
 
     // Delete any existing reset tokens for this email
-    await db.delete(passwordResetToken).where(eq(passwordResetToken.email, email));
+    await database.delete(passwordResetToken).where(eq(passwordResetToken.email, email));
 
     // Generate reset token
     const token = crypto.randomUUID();
     const expires = new Date(Date.now() + appConfig.security.tokenExpiry.passwordReset);
 
-    await db.insert(passwordResetToken).values({
+    await database.insert(passwordResetToken).values({
       email,
       token,
       expires,
@@ -359,7 +359,7 @@ export async function resetPasswordAction(input: ResetPasswordInput): Promise<Au
     const { token, password } = resetPasswordSchema.parse(input);
 
     // Find reset token
-    const tokenRecord = await db.query.passwordResetToken.findFirst({
+    const tokenRecord = await database.query.passwordResetToken.findFirst({
       where: eq(passwordResetToken.token, token),
     });
 
@@ -373,7 +373,7 @@ export async function resetPasswordAction(input: ResetPasswordInput): Promise<Au
     // Check if token is expired
     if (new Date() > tokenRecord.expires) {
       // Delete expired token
-      await db.delete(passwordResetToken).where(eq(passwordResetToken.token, token));
+      await database.delete(passwordResetToken).where(eq(passwordResetToken.token, token));
 
       return {
         success: false,
@@ -382,7 +382,7 @@ export async function resetPasswordAction(input: ResetPasswordInput): Promise<Au
     }
 
     // Find user
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, tokenRecord.email),
     });
 
@@ -397,10 +397,10 @@ export async function resetPasswordAction(input: ResetPasswordInput): Promise<Au
     const hashedPassword = await bcrypt.hash(password, appConfig.security.bcryptRounds);
 
     // Update user password
-    await db.update(user).set({ password: hashedPassword }).where(eq(user.id, existingUser.id));
+    await database.update(user).set({ password: hashedPassword }).where(eq(user.id, existingUser.id));
 
     // Delete used token
-    await db.delete(passwordResetToken).where(eq(passwordResetToken.token, token));
+    await database.delete(passwordResetToken).where(eq(passwordResetToken.token, token));
 
     // Send account updated email
     if (appConfig.features.email) {

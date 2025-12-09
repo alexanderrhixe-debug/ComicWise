@@ -2,11 +2,11 @@
 
 import { Bar, BarChart } from "recharts";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader } from "ui/card";
+import { type ChartConfig, ChartContainer } from "ui/chart";
+import { Separator } from "ui/separator";
 
-import { cn } from "@/lib/utils";
+import { cn } from "utils";
 
 // Product reached data
 const productReachChartData = [
@@ -46,7 +46,7 @@ const ProductInsightsCard = ({ className }: { className?: string }) => {
       <CardHeader className="flex justify-between">
         <div className="flex flex-col gap-1">
           <span className="text-lg font-semibold">Product insight</span>
-          <span className="text-muted-foreground text-sm">Published on 12 MAY 2025 - 6:10 PM</span>
+          <span className="text-sm text-muted-foreground">Published on 12 MAY 2025 - 6:10 PM</span>
         </div>
         <img
           src="https://cdn.shadcnstudio.com/ss-assets/blocks/dashboard-application/widgets/image-7.png"

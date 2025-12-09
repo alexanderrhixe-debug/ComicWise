@@ -1,6 +1,6 @@
 /**
  * Redis Cache Service
- * Provides caching layer for database queries and API responses
+ * Provides caching layer for database database/queries and API responses
  */
 
 import { Redis } from "@upstash/redis";
@@ -91,7 +91,7 @@ export class CacheService {
    */
   async clear(): Promise<void> {
     try {
-      await redis.flushdb();
+      await (redis as any).flushdatabase();
     } catch (error) {
       console.error("Cache clear error:", error);
     }

@@ -4,9 +4,9 @@
 // AUTHORS & ARTISTS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "app-config";
-import { db } from "db/client";
-import { artist, author } from "db/schema";
+import { database } from "database";
+import { artist, author } from "database/schema";
+import { appConfig } from "appConfig";
 import { eq, like, sql } from "drizzle-orm";
 import {
   createArtistSchema,
@@ -36,7 +36,7 @@ export async function createAuthor(
   try {
     const validated = createAuthorSchema.parse(input);
 
-    const [newAuthor] = await db.insert(author).values(validated).returning();
+    const [newAuthor] = await database.insert(author).values(validated).returning();
 
     if (!newAuthor) {
       return { success: false, error: "Failed to create author" };
@@ -65,7 +65,7 @@ export async function updateAuthor(
   try {
     const validated = updateAuthorSchema.parse(input);
 
-    const [updatedAuthor] = await db
+    const [updatedAuthor] = await database
       .update(author)
       .set(validated)
       .where(eq(author.id, id))
@@ -94,7 +94,7 @@ export async function updateAuthor(
 
 export async function deleteAuthor(id: number): Promise<ActionResult<void>> {
   try {
-    const existingAuthor = await db.query.author.findFirst({
+    const existingAuthor = await database.query.author.findFirst({
       where: eq(author.id, id),
     });
 
@@ -102,7 +102,7 @@ export async function deleteAuthor(id: number): Promise<ActionResult<void>> {
       return { success: false, error: "Author not found" };
     }
 
-    await db.delete(author).where(eq(author.id, id));
+    await database.delete(author).where(eq(author.id, id));
 
     revalidatePath("/admin/authors");
 
@@ -122,7 +122,7 @@ export async function deleteAuthor(id: number): Promise<ActionResult<void>> {
 
 export async function getAuthorById(id: number) {
   try {
-    const result = await db.query.author.findFirst({
+    const result = await database.query.author.findFirst({
       where: eq(author.id, id),
     });
 
@@ -153,14 +153,14 @@ export async function listAuthors(input?: PaginationInput & { search?: string })
 
     const whereClause = search ? like(author.name, `%${search}%`) : undefined;
 
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(author)
       .where(whereClause);
 
     const total = countResult?.count || 0;
 
-    const results = await db.query.author.findMany({
+    const results = await database.query.author.findMany({
       where: whereClause,
       limit,
       offset,
@@ -190,7 +190,7 @@ export async function listAuthors(input?: PaginationInput & { search?: string })
 
 export async function getAllAuthors() {
   try {
-    const results = await db.query.author.findMany({
+    const results = await database.query.author.findMany({
       orderBy: (authors, { asc }) => [asc(authors.name)],
     });
 
@@ -214,7 +214,7 @@ export async function createArtist(
   try {
     const validated = createArtistSchema.parse(input);
 
-    const [newArtist] = await db.insert(artist).values(validated).returning();
+    const [newArtist] = await database.insert(artist).values(validated).returning();
 
     if (!newArtist) {
       return { success: false, error: "Failed to create artist" };
@@ -243,7 +243,7 @@ export async function updateArtist(
   try {
     const validated = updateArtistSchema.parse(input);
 
-    const [updatedArtist] = await db
+    const [updatedArtist] = await database
       .update(artist)
       .set(validated)
       .where(eq(artist.id, id))
@@ -272,7 +272,7 @@ export async function updateArtist(
 
 export async function deleteArtist(id: number): Promise<ActionResult<void>> {
   try {
-    const existingArtist = await db.query.artist.findFirst({
+    const existingArtist = await database.query.artist.findFirst({
       where: eq(artist.id, id),
     });
 
@@ -280,7 +280,7 @@ export async function deleteArtist(id: number): Promise<ActionResult<void>> {
       return { success: false, error: "Artist not found" };
     }
 
-    await db.delete(artist).where(eq(artist.id, id));
+    await database.delete(artist).where(eq(artist.id, id));
 
     revalidatePath("/admin/artists");
 
@@ -300,7 +300,7 @@ export async function deleteArtist(id: number): Promise<ActionResult<void>> {
 
 export async function getArtistById(id: number) {
   try {
-    const result = await db.query.artist.findFirst({
+    const result = await database.query.artist.findFirst({
       where: eq(artist.id, id),
     });
 
@@ -331,14 +331,14 @@ export async function listArtists(input?: PaginationInput & { search?: string })
 
     const whereClause = search ? like(artist.name, `%${search}%`) : undefined;
 
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(artist)
       .where(whereClause);
 
     const total = countResult?.count || 0;
 
-    const results = await db.query.artist.findMany({
+    const results = await database.query.artist.findMany({
       where: whereClause,
       limit,
       offset,
@@ -368,7 +368,7 @@ export async function listArtists(input?: PaginationInput & { search?: string })
 
 export async function getAllArtists() {
   try {
-    const results = await db.query.artist.findMany({
+    const results = await database.query.artist.findMany({
       orderBy: (artists, { asc }) => [asc(artists.name)],
     });
 

@@ -4,10 +4,10 @@
 // USERS MANAGEMENT SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "app-config";
+import { database } from "database";
+import { user } from "database/schema";
+import { appConfig } from "appConfig";
 import bcrypt from "bcryptjs";
-import { db } from "db/client";
-import { user } from "db/schema";
 import { eq, like, or, sql } from "drizzle-orm";
 import { sendAccountUpdatedEmail, sendWelcomeEmail } from "lib/email";
 import {
@@ -35,7 +35,7 @@ export async function createUserAdmin(
     const validated = createUserSchema.parse(input);
 
     // Check if user exists
-    const existing = await db.query.user.findFirst({
+    const existing = await database.query.user.findFirst({
       where: eq(user.email, validated.email.toLowerCase()),
     });
 
@@ -46,7 +46,7 @@ export async function createUserAdmin(
     // Hash password
     const hashedPassword = await bcrypt.hash(validated.password, appConfig.security.bcryptRounds);
 
-    const [newUser] = await db
+    const [newUser] = await database
       .insert(user)
       .values({
         ...validated,
@@ -95,7 +95,7 @@ export async function updateUserAdmin(
   try {
     const validated = updateUserSchema.parse(input);
 
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.id, userId),
     });
 
@@ -105,7 +105,7 @@ export async function updateUserAdmin(
 
     // Check email uniqueness if email is being changed
     if (validated.email && validated.email !== existingUser.email) {
-      const emailExists = await db.query.user.findFirst({
+      const emailExists = await database.query.user.findFirst({
         where: eq(user.email, validated.email.toLowerCase()),
       });
 
@@ -123,7 +123,7 @@ export async function updateUserAdmin(
       updateData.email = validated.email.toLowerCase();
     }
 
-    const [updatedUser] = await db
+    const [updatedUser] = await database
       .update(user)
       .set(updateData)
       .where(eq(user.id, userId))
@@ -165,7 +165,7 @@ export async function updateUserAdmin(
 
 export async function deleteUserAdmin(userId: string): Promise<ActionResult<void>> {
   try {
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.id, userId),
     });
 
@@ -177,7 +177,7 @@ export async function deleteUserAdmin(userId: string): Promise<ActionResult<void
     // Note: You'd need to pass current user ID to check this
     // For now, we'll allow it but recommend adding this check in the UI
 
-    await db.delete(user).where(eq(user.id, userId));
+    await database.delete(user).where(eq(user.id, userId));
 
     revalidatePath("/admin/users");
 
@@ -201,7 +201,7 @@ export async function deleteUserAdmin(userId: string): Promise<ActionResult<void
 
 export async function getUserById(userId: string) {
   try {
-    const result = await db.query.user.findFirst({
+    const result = await database.query.user.findFirst({
       where: eq(user.id, userId),
     });
 
@@ -254,7 +254,7 @@ export async function listUsers(input?: UserFilterInput) {
     const whereClause = conditions.length > 0 ? conditions[0] : undefined;
 
     // Get total count
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(user)
       .where(whereClause);
@@ -262,7 +262,7 @@ export async function listUsers(input?: UserFilterInput) {
     const total = countResult?.count || 0;
 
     // Get users (without passwords)
-    const results = await db
+    const results = await database
       .select({
         id: user.id,
         name: user.name,
@@ -321,7 +321,7 @@ export async function updateUserRole(
   role: "user" | "admin" | "moderator"
 ): Promise<ActionResult<void>> {
   try {
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.id, userId),
     });
 
@@ -329,7 +329,7 @@ export async function updateUserRole(
       return { success: false, error: "User not found" };
     }
 
-    await db.update(user).set({ role, updatedAt: new Date() }).where(eq(user.id, userId));
+    await database.update(user).set({ role, updatedAt: new Date() }).where(eq(user.id, userId));
 
     revalidatePath("/admin/users");
 
@@ -353,7 +353,7 @@ export async function updateUserRole(
 
 export async function verifyUserEmailAdmin(userId: string): Promise<ActionResult<void>> {
   try {
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.id, userId),
     });
 
@@ -365,7 +365,7 @@ export async function verifyUserEmailAdmin(userId: string): Promise<ActionResult
       return { success: false, error: "Email already verified" };
     }
 
-    await db
+    await database
       .update(user)
       .set({ emailVerified: new Date(), updatedAt: new Date() })
       .where(eq(user.id, userId));
@@ -392,7 +392,7 @@ export async function verifyUserEmailAdmin(userId: string): Promise<ActionResult
 
 export async function getUserStatistics() {
   try {
-    const [stats] = await db
+    const [stats] = await database
       .select({
         total: sql<number>`count(*)`,
         admins: sql<number>`count(*) FILTER (WHERE ${user.role} = 'admin')`,

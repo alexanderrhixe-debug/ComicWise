@@ -3,7 +3,7 @@
 // Next.js 16.0.7 + Local File System Storage
 // ═══════════════════════════════════════════════════
 
-import { env } from "app-config";
+import { env } from "appConfig";
 import crypto from "crypto";
 import fs from "fs/promises";
 import path from "path";

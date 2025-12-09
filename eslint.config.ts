@@ -224,8 +224,8 @@ const eslintConfig = defineConfig([
       "security/detect-object-injection": "warn",
 
       // Drizzle ORM Rules
-      "drizzle/enforce-delete-with-where": ["error", { drizzleObjectName: ["db"] }],
-      "drizzle/enforce-update-with-where": ["error", { drizzleObjectName: ["db"] }],
+      "drizzle/enforce-delete-with-where": ["error", { drizzleObjectName: ["database"] }],
+      "drizzle/enforce-update-with-where": ["error", { drizzleObjectName: ["database"] }],
 
       // Use only one severity variant per Better Tailwind CSS category
       "better-tailwindcss/no-conflicting-classes": "warn",

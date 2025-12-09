@@ -19,7 +19,7 @@ declare module "@upstash/redis" {
     ttl(key: string): Promise<number>;
     exists(...keys: string[]): Promise<number>;
     keys(pattern: string): Promise<string[]>;
-    flushdb(): Promise<"OK">;
+    flushdatabase(): Promise<"OK">;
   }
 }
 

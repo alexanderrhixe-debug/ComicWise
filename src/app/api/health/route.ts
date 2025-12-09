@@ -1,10 +1,10 @@
-import { db } from "@/db";
+import { database } from "database/";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
     // Check database connection
-    await db.execute("SELECT 1");
+    await database.execute("SELECT 1");
 
     return NextResponse.json(
       {

@@ -1,14 +1,14 @@
 "use server";
 
+import { database } from "database";
+import { passwordResetToken, user } from "database/schema";
 import { error } from "actions/utils";
 import { signIn } from "auth";
 import bcrypt from "bcryptjs";
-import { db } from "db/client";
-import { passwordResetToken, user } from "db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import type { ActionResponse } from "@/types";
+import type { ActionResponse } from "types";
 
 const registerSchema = z
   .object({
@@ -39,7 +39,7 @@ export async function registerUser(formData: FormData): Promise<ActionResponse> 
       password: formData.get("password"),
     });
 
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, data.email),
     });
 
@@ -49,7 +49,7 @@ export async function registerUser(formData: FormData): Promise<ActionResponse> 
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    await db.insert(user).values({
+    await database.insert(user).values({
       name: data.name,
       email: data.email,
       password: hashedPassword,
@@ -71,7 +71,7 @@ export async function requestPasswordReset(formData: FormData): Promise<ActionRe
       email: formData.get("email"),
     });
 
-    const existingUser = await db.query.user.findFirst({
+    const existingUser = await database.query.user.findFirst({
       where: eq(user.email, data.email),
     });
 
@@ -82,7 +82,7 @@ export async function requestPasswordReset(formData: FormData): Promise<ActionRe
     const token = crypto.randomUUID();
     const expires = new Date(Date.now() + 3600 * 1000); // 1 hour
 
-    await db.insert(passwordResetToken).values({
+    await database.insert(passwordResetToken).values({
       email: data.email,
       token,
       expires,
@@ -107,7 +107,7 @@ export async function resetPassword(formData: FormData): Promise<ActionResponse>
       password: formData.get("password"),
     });
 
-    const resetToken = await db.query.passwordResetToken.findFirst({
+    const resetToken = await database.query.passwordResetToken.findFirst({
       where: eq(passwordResetToken.token, data.token),
     });
 
@@ -117,9 +117,9 @@ export async function resetPassword(formData: FormData): Promise<ActionResponse>
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    await db.update(user).set({ password: hashedPassword }).where(eq(user.email, resetToken.email));
+    await database.update(user).set({ password: hashedPassword }).where(eq(user.email, resetToken.email));
 
-    await db.delete(passwordResetToken).where(eq(passwordResetToken.token, data.token));
+    await database.delete(passwordResetToken).where(eq(passwordResetToken.token, data.token));
 
     return { success: true };
   } catch (err) {

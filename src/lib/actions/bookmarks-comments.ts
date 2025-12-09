@@ -4,9 +4,9 @@
 // BOOKMARKS & COMMENTS SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "app-config";
-import { db } from "db/client";
-import { bookmark, comment } from "db/schema";
+import { database } from "database";
+import { bookmark, comment } from "database/schema";
+import { appConfig } from "appConfig";
 import { and, desc, eq, sql } from "drizzle-orm";
 import {
   createBookmarkSchema,
@@ -37,7 +37,7 @@ export async function createBookmark(
     const validated = createBookmarkSchema.parse(input);
 
     // Check if bookmark already exists
-    const existing = await db.query.bookmark.findFirst({
+    const existing = await database.query.bookmark.findFirst({
       where: and(eq(bookmark.userId, validated.userId), eq(bookmark.comicId, validated.comicId)),
     });
 
@@ -45,7 +45,7 @@ export async function createBookmark(
       return { success: false, error: "Comic already bookmarked" };
     }
 
-    const [newBookmark] = await db.insert(bookmark).values(validated).returning();
+    const [newBookmark] = await database.insert(bookmark).values(validated).returning();
 
     if (!newBookmark) {
       return { success: false, error: "Failed to create bookmark" };
@@ -76,7 +76,7 @@ export async function updateBookmark(
   try {
     const validated = updateBookmarkSchema.parse(input);
 
-    const [updatedBookmark] = await db
+    const [updatedBookmark] = await database
       .update(bookmark)
       .set({
         ...validated,
@@ -108,7 +108,7 @@ export async function updateBookmark(
 
 export async function deleteBookmark(userId: string, comicId: number): Promise<ActionResult<void>> {
   try {
-    const existing = await db.query.bookmark.findFirst({
+    const existing = await database.query.bookmark.findFirst({
       where: and(eq(bookmark.userId, userId), eq(bookmark.comicId, comicId)),
     });
 
@@ -116,7 +116,7 @@ export async function deleteBookmark(userId: string, comicId: number): Promise<A
       return { success: false, error: "Bookmark not found" };
     }
 
-    await db
+    await database
       .delete(bookmark)
       .where(and(eq(bookmark.userId, userId), eq(bookmark.comicId, comicId)));
 
@@ -144,14 +144,14 @@ export async function getUserBookmarks(userId: string, input?: PaginationInput) 
 
     const offset = (page - 1) * limit;
 
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(bookmark)
       .where(eq(bookmark.userId, userId));
 
     const total = countResult?.count || 0;
 
-    const results = await db.query.bookmark.findMany({
+    const results = await database.query.bookmark.findMany({
       where: eq(bookmark.userId, userId),
       with: {
         comic: {
@@ -189,7 +189,7 @@ export async function getUserBookmarks(userId: string, input?: PaginationInput) 
 
 export async function checkBookmarkExists(userId: string, comicId: number) {
   try {
-    const exists = await db.query.bookmark.findFirst({
+    const exists = await database.query.bookmark.findFirst({
       where: and(eq(bookmark.userId, userId), eq(bookmark.comicId, comicId)),
     });
 
@@ -216,7 +216,7 @@ export async function createComment(
     // Rate limiting
     // TODO: Implement actual rate limiting check
 
-    const [newComment] = await db.insert(comment).values(validated).returning();
+    const [newComment] = await database.insert(comment).values(validated).returning();
 
     if (!newComment) {
       return { success: false, error: "Failed to create comment" };
@@ -250,7 +250,7 @@ export async function updateComment(
     const validated = updateCommentSchema.parse(input);
 
     // Verify ownership
-    const existing = await db.query.comment.findFirst({
+    const existing = await database.query.comment.findFirst({
       where: eq(comment.id, id),
     });
 
@@ -262,7 +262,7 @@ export async function updateComment(
       return { success: false, error: "Unauthorized to edit this comment" };
     }
 
-    const [updatedComment] = await db
+    const [updatedComment] = await database
       .update(comment)
       .set({
         ...validated,
@@ -293,7 +293,7 @@ export async function updateComment(
 
 export async function deleteComment(id: number, userId: string): Promise<ActionResult<void>> {
   try {
-    const existing = await db.query.comment.findFirst({
+    const existing = await database.query.comment.findFirst({
       where: eq(comment.id, id),
     });
 
@@ -307,7 +307,7 @@ export async function deleteComment(id: number, userId: string): Promise<ActionR
       return { success: false, error: "Unauthorized to delete this comment" };
     }
 
-    await db.delete(comment).where(eq(comment.id, id));
+    await database.delete(comment).where(eq(comment.id, id));
 
     revalidatePath(`/read/${existing.chapterId}`);
 
@@ -332,14 +332,14 @@ export async function getCommentsByChapter(chapterId: number, input?: Pagination
 
     const offset = (page - 1) * limit;
 
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(comment)
       .where(eq(comment.chapterId, chapterId));
 
     const total = countResult?.count || 0;
 
-    const results = await db.query.comment.findMany({
+    const results = await database.query.comment.findMany({
       where: eq(comment.chapterId, chapterId),
       with: {
         user: {
@@ -384,14 +384,14 @@ export async function getUserComments(userId: string, input?: PaginationInput) {
 
     const offset = (page - 1) * limit;
 
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(comment)
       .where(eq(comment.userId, userId));
 
     const total = countResult?.count || 0;
 
-    const results = await db.query.comment.findMany({
+    const results = await database.query.comment.findMany({
       where: eq(comment.userId, userId),
       with: {
         chapter: {
@@ -432,7 +432,7 @@ export async function getUserComments(userId: string, input?: PaginationInput) {
 
 export async function deleteCommentAdmin(id: number): Promise<ActionResult<void>> {
   try {
-    const existing = await db.query.comment.findFirst({
+    const existing = await database.query.comment.findFirst({
       where: eq(comment.id, id),
     });
 
@@ -440,7 +440,7 @@ export async function deleteCommentAdmin(id: number): Promise<ActionResult<void>
       return { success: false, error: "Comment not found" };
     }
 
-    await db.delete(comment).where(eq(comment.id, id));
+    await database.delete(comment).where(eq(comment.id, id));
 
     revalidatePath(`/read/${existing.chapterId}`);
     revalidatePath("/admin/comments");
@@ -466,11 +466,11 @@ export async function listAllComments(input?: PaginationInput) {
 
     const offset = (page - 1) * limit;
 
-    const [countResult] = await db.select({ count: sql<number>`count(*)` }).from(comment);
+    const [countResult] = await database.select({ count: sql<number>`count(*)` }).from(comment);
 
     const total = countResult?.count || 0;
 
-    const results = await db.query.comment.findMany({
+    const results = await database.query.comment.findMany({
       with: {
         user: {
           columns: {

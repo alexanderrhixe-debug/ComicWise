@@ -78,7 +78,7 @@ async function generateCacheKey(
 /**
  * Cache middleware for API routes
  * Usage in API route:
- * ```@/typescript
+ * ```typescript
  * export const GET = withCache(
  *   async (request) => {
  *     const data = await fetchData();
@@ -188,7 +188,7 @@ export function withCache(
 /**
  * Invalidate cache for specific patterns
  * Usage:
- * ```@/typescript
+ * ```typescript
  * await invalidateCache({ prefix: "comics" });
  * await invalidateCache({ pattern: "api:comics:*" });
  * await invalidateCache({ tags: ["comic:123"] });

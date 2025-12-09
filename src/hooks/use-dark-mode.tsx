@@ -92,6 +92,9 @@ export function useDarkMode(options: DarkModeOptions = {}): DarkModeReturn {
       mediaQuery.addListener(handleChange);
       return () => mediaQuery.removeListener(handleChange);
     }
+
+    // Ensure we always return a cleanup function type for TS strictness
+    return () => {};
   }, [localStorageKey]);
 
   // Apply dark mode class to document

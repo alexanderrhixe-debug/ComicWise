@@ -4,9 +4,9 @@
 // GENRES & TYPES CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "app-config";
-import { db } from "db/client";
-import { type as comicType, genre } from "db/schema";
+import { database } from "database";
+import { type as comicType, genre } from "database/schema";
+import { appConfig } from "appConfig";
 import { eq, like, sql } from "drizzle-orm";
 import {
   createGenreSchema,
@@ -36,7 +36,7 @@ export async function createGenre(
   try {
     const validated = createGenreSchema.parse(input);
 
-    const [newGenre] = await db.insert(genre).values(validated).returning();
+    const [newGenre] = await database.insert(genre).values(validated).returning();
 
     if (!newGenre) {
       return { success: false, error: "Failed to create genre" };
@@ -65,7 +65,7 @@ export async function updateGenre(
   try {
     const validated = updateGenreSchema.parse(input);
 
-    const [updatedGenre] = await db
+    const [updatedGenre] = await database
       .update(genre)
       .set(validated)
       .where(eq(genre.id, id))
@@ -93,7 +93,7 @@ export async function updateGenre(
 
 export async function deleteGenre(id: number): Promise<ActionResult<void>> {
   try {
-    const existingGenre = await db.query.genre.findFirst({
+    const existingGenre = await database.query.genre.findFirst({
       where: eq(genre.id, id),
     });
 
@@ -101,7 +101,7 @@ export async function deleteGenre(id: number): Promise<ActionResult<void>> {
       return { success: false, error: "Genre not found" };
     }
 
-    await db.delete(genre).where(eq(genre.id, id));
+    await database.delete(genre).where(eq(genre.id, id));
 
     revalidatePath("/admin/genres");
 
@@ -121,7 +121,7 @@ export async function deleteGenre(id: number): Promise<ActionResult<void>> {
 
 export async function getGenreById(id: number) {
   try {
-    const result = await db.query.genre.findFirst({
+    const result = await database.query.genre.findFirst({
       where: eq(genre.id, id),
     });
 
@@ -152,14 +152,14 @@ export async function listGenres(input?: PaginationInput & { search?: string }) 
 
     const whereClause = search ? like(genre.name, `%${search}%`) : undefined;
 
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(genre)
       .where(whereClause);
 
     const total = countResult?.count || 0;
 
-    const results = await db.query.genre.findMany({
+    const results = await database.query.genre.findMany({
       where: whereClause,
       limit,
       offset,
@@ -189,7 +189,7 @@ export async function listGenres(input?: PaginationInput & { search?: string }) 
 
 export async function getAllGenres() {
   try {
-    const results = await db.query.genre.findMany({
+    const results = await database.query.genre.findMany({
       orderBy: (genres: { name: any }, { asc }: any) => [asc(genres.name)],
     });
 
@@ -213,7 +213,7 @@ export async function createType(
   try {
     const validated = createTypeSchema.parse(input);
 
-    const [newType] = await db.insert(comicType).values(validated).returning();
+    const [newType] = await database.insert(comicType).values(validated).returning();
 
     if (!newType) {
       return { success: false, error: "Failed to create type" };
@@ -242,7 +242,7 @@ export async function updateType(
   try {
     const validated = updateTypeSchema.parse(input);
 
-    const [updatedType] = await db
+    const [updatedType] = await database
       .update(comicType)
       .set(validated)
       .where(eq(comicType.id, id))
@@ -270,7 +270,7 @@ export async function updateType(
 
 export async function deleteType(id: number): Promise<ActionResult<void>> {
   try {
-    const existingType = await db.query.type.findFirst({
+    const existingType = await database.query.type.findFirst({
       where: eq(comicType.id, id),
     });
 
@@ -278,7 +278,7 @@ export async function deleteType(id: number): Promise<ActionResult<void>> {
       return { success: false, error: "Type not found" };
     }
 
-    await db.delete(comicType).where(eq(comicType.id, id));
+    await database.delete(comicType).where(eq(comicType.id, id));
 
     revalidatePath("/admin/types");
 
@@ -298,7 +298,7 @@ export async function deleteType(id: number): Promise<ActionResult<void>> {
 
 export async function getTypeById(id: number) {
   try {
-    const result = await db.query.type.findFirst({
+    const result = await database.query.type.findFirst({
       where: eq(comicType.id, id),
     });
 
@@ -329,14 +329,14 @@ export async function listTypes(input?: PaginationInput & { search?: string }) {
 
     const whereClause = search ? like(comicType.name, `%${search}%`) : undefined;
 
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(comicType)
       .where(whereClause);
 
     const total = countResult?.count || 0;
 
-    const results = await db.query.type.findMany({
+    const results = await database.query.type.findMany({
       where: whereClause,
       limit,
       offset,
@@ -366,7 +366,7 @@ export async function listTypes(input?: PaginationInput & { search?: string }) {
 
 export async function getAllTypes() {
   try {
-    const results = await db.query.type.findMany({
+    const results = await database.query.type.findMany({
       orderBy: (types: { name: any }, { asc }: any) => [asc(types.name)],
     });
 

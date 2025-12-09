@@ -3,7 +3,7 @@
 // Next.js 16.0.7 + Cloudinary Integration
 // ═══════════════════════════════════════════════════
 
-import { env } from "app-config";
+import { env } from "appConfig";
 import { v2 as cloudinary } from "cloudinary";
 
 import type { UploadOptions, UploadProvider, UploadResult } from "services/upload/index";
@@ -23,7 +23,7 @@ cloudinary.config({
   secure: true,
 });
 
-// Type assertion for cloudinary.url (SDK @/types incomplete)
+// Type assertion for cloudinary.url (SDK types incomplete)
 type CloudinaryUrlFn = (publicId: string, options: Record<string, unknown>) => string;
 const getCloudinaryUrl = (cloudinary as unknown as { url: CloudinaryUrlFn }).url.bind(cloudinary);
 

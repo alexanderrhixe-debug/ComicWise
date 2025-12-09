@@ -1,4 +1,4 @@
-import { getLatestComics, getPopularComics } from "@/db/queries";
+import { getLatestComics, getPopularComics } from "database/queries";
 import { ComicCard } from "components/ComicCard";
 import { Button } from "components/ui/button";
 import { Skeleton } from "components/ui/skeleton";

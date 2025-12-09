@@ -6,10 +6,10 @@ import {
   createGenericEntity,
   listGenericEntity,
   zodToValidationResult,
-} from "@/app/api/lib/generic-crud";
-import { createArtist } from "@/db/mutations/artists";
-import { getAllArtists } from "@/db/queries/artists";
-import { artistFilterSchema, createArtistSchema } from "@/lib/validations/schemas";
+} from "lib/generic-crud";
+import { createArtist } from "database/mutations/artists";
+import { getAllArtists } from "database/queries/artists";
+import { artistFilterSchema, createArtistSchema } from "lib/validations/schemas";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {

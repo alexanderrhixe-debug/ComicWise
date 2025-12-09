@@ -1,7 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar";
+import { Badge } from "ui/badge";
+import { Button } from "ui/button";
+import { cn } from "utils";
 import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -117,7 +117,7 @@ export type PillAvatarGroupProps = {
 export const PillAvatarGroup = ({ children, className, ...props }: PillAvatarGroupProps) => (
   <div
     className={cn(
-      "-space-x-1 flex items-center",
+      "flex items-center -space-x-1",
       "[&>*:not(:first-of-type)]:[mask-image:radial-gradient(circle_9px_at_-4px_50%,transparent_99%,white_100%)]",
       className
     )}

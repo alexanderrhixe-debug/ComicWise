@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "ui/button";
+import { cn } from "utils";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { addDays, format, isSameDay, isToday } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -201,13 +201,13 @@ export const MiniCalendarDay = ({ date, className, ...props }: MiniCalendarDayPr
     >
       <span
         className={cn(
-          "font-medium text-[10px] text-muted-foreground",
+          "text-[10px] font-medium text-muted-foreground",
           isSelected && "text-primary-foreground/70"
         )}
       >
         {month}
       </span>
-      <span className="font-semibold text-sm">{day}</span>
+      <span className="text-sm font-semibold">{day}</span>
     </Button>
   );
 };

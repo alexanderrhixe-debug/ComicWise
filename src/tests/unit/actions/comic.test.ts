@@ -2,19 +2,19 @@
 // COMIC ACTIONS - UNIT TESTS
 // ═══════════════════════════════════════════════════
 
+import * as mutations from "database/mutations";
+import * as queries from "database/queries";
 import { createComic, deleteComic, getComicById, getComics, updateComic } from "actions/comic";
 import * as authLib from "auth";
-import * as mutations from "db/mutations";
-import * as queries from "db/queries";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
-import type { ComicFilters } from "@/types";
+import type { ComicFilters } from "types";
 
 // Removed unused import
 // Mock dependencies
 vi.mock("auth");
-vi.mock("db/mutations");
-vi.mock("db/queries");
+vi.mock("mutations");
+vi.mock("queries");
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }));

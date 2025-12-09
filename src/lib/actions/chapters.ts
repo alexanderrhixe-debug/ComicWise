@@ -4,9 +4,9 @@
 // CHAPTERS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "app-config";
-import { db } from "db/client";
-import { chapter, chapterImage, comic } from "db/schema";
+import { database } from "database";
+import { chapter, chapterImage, comic } from "database/schema";
+import { appConfig } from "appConfig";
 import { and, desc, eq, sql } from "drizzle-orm";
 import {
   chapterFilterSchema,
@@ -33,7 +33,7 @@ export async function createChapter(
     const validated = createChapterSchema.parse(input);
 
     // Check if comic exists
-    const comicRecord = await db.query.comic.findFirst({
+    const comicRecord = await database.query.comic.findFirst({
       where: eq(comic.id, validated.comicId),
     });
 
@@ -41,7 +41,7 @@ export async function createChapter(
       return { success: false, error: "Comic not found" };
     }
 
-    const [newChapter] = await db
+    const [newChapter] = await database
       .insert(chapter)
       .values({
         ...validated,
@@ -87,7 +87,7 @@ export async function updateChapter(
   try {
     const validated = updateChapterSchema.parse(input);
 
-    const [updatedChapter] = await db
+    const [updatedChapter] = await database
       .update(chapter)
       .set({
         ...validated,
@@ -123,7 +123,7 @@ export async function updateChapter(
 
 export async function deleteChapter(id: number): Promise<ActionResult<void>> {
   try {
-    const existingChapter = await db.query.chapter.findFirst({
+    const existingChapter = await database.query.chapter.findFirst({
       where: eq(chapter.id, id),
     });
 
@@ -131,7 +131,7 @@ export async function deleteChapter(id: number): Promise<ActionResult<void>> {
       return { success: false, error: "Chapter not found" };
     }
 
-    await db.delete(chapter).where(eq(chapter.id, id));
+    await database.delete(chapter).where(eq(chapter.id, id));
 
     revalidatePath("/admin/chapters");
     revalidatePath(`/comics/${existingChapter.comicId}`);
@@ -156,7 +156,7 @@ export async function deleteChapter(id: number): Promise<ActionResult<void>> {
 
 export async function getChapterById(id: number) {
   try {
-    const result = await db.query.chapter.findFirst({
+    const result = await database.query.chapter.findFirst({
       where: eq(chapter.id, id),
       with: {
         comic: {
@@ -173,7 +173,7 @@ export async function getChapterById(id: number) {
     }
 
     // Increment view count
-    await db
+    await database
       .update(chapter)
       .set({ views: sql`${chapter.views} + 1` })
       .where(eq(chapter.id, id));
@@ -213,7 +213,7 @@ export async function listChapters(input?: ChapterFilterInput) {
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
     // Get total count
-    const [countResult] = await db
+    const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(chapter)
       .where(whereClause);
@@ -221,7 +221,7 @@ export async function listChapters(input?: ChapterFilterInput) {
     const total = countResult?.count || 0;
 
     // Get chapters
-    const results = await db.query.chapter.findMany({
+    const results = await database.query.chapter.findMany({
       where: whereClause,
       with: {
         comic: true,
@@ -268,7 +268,7 @@ export async function listChapters(input?: ChapterFilterInput) {
 
 export async function getChaptersByComic(comicId: number) {
   try {
-    const results = await db.query.chapter.findMany({
+    const results = await database.query.chapter.findMany({
       where: eq(chapter.comicId, comicId),
       orderBy: [desc(chapter.chapterNumber)],
     });
@@ -293,7 +293,7 @@ export async function addChapterImages(
 ): Promise<ActionResult<void>> {
   try {
     // Verify chapter exists
-    const chapterRecord = await db.query.chapter.findFirst({
+    const chapterRecord = await database.query.chapter.findFirst({
       where: eq(chapter.id, chapterId),
     });
 
@@ -302,11 +302,11 @@ export async function addChapterImages(
     }
 
     // Delete existing images
-    await db.delete(chapterImage).where(eq(chapterImage.chapterId, chapterId));
+    await database.delete(chapterImage).where(eq(chapterImage.chapterId, chapterId));
 
     // Insert new images
     if (images.length > 0) {
-      await db.insert(chapterImage).values(
+      await database.insert(chapterImage).values(
         images.map((img) => ({
           chapterId,
           imageUrl: img.imageUrl,
@@ -337,7 +337,7 @@ export async function addChapterImages(
 
 export async function getChapterImages(chapterId: number) {
   try {
-    const images = await db.query.chapterImage.findMany({
+    const images = await database.query.chapterImage.findMany({
       where: eq(chapterImage.chapterId, chapterId),
       orderBy: [desc(chapterImage.pageNumber)],
     });
@@ -358,7 +358,7 @@ export async function getChapterImages(chapterId: number) {
 
 export async function getLatestChapters(limit = 20) {
   try {
-    const results = await db.query.chapter.findMany({
+    const results = await database.query.chapter.findMany({
       with: {
         comic: {
           with: {
@@ -386,7 +386,7 @@ export async function getLatestChapters(limit = 20) {
 
 export async function getAdjacentChapters(chapterId: number) {
   try {
-    const currentChapter = await db.query.chapter.findFirst({
+    const currentChapter = await database.query.chapter.findFirst({
       where: eq(chapter.id, chapterId),
     });
 
@@ -395,7 +395,7 @@ export async function getAdjacentChapters(chapterId: number) {
     }
 
     // Get next chapter (higher chapter number)
-    const [nextChapter] = await db
+    const [nextChapter] = await database
       .select()
       .from(chapter)
       .where(
@@ -408,7 +408,7 @@ export async function getAdjacentChapters(chapterId: number) {
       .limit(1);
 
     // Get previous chapter (lower chapter number)
-    const [prevChapter] = await db
+    const [prevChapter] = await database
       .select()
       .from(chapter)
       .where(

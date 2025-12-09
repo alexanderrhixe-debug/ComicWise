@@ -1,12 +1,12 @@
-import { ComicCard } from "@/components/ComicCard";
-import { Filters } from "@/components/Filters";
-import { Pagination } from "@/components/Pagination";
-import { Skeleton } from "@/components/ui/skeleton";
-import { getAllComics } from "@/db/queries/comics";
-import { getAllGenres, getAllTypes } from "@/lib/actions/genres-types";
+import { getAllComics } from "database/queries/comics";
+import { ComicCard } from "components/ComicCard";
+import { Filters } from "components/Filters";
+import { Pagination } from "components/Pagination";
+import { Skeleton } from "components/ui/skeleton";
+import { getAllGenres, getAllTypes } from "actions/genres-types";
 import { Suspense } from "react";
 
-import type { ComicFilters } from "@/types/database";
+import type { ComicFilters } from "types/database";
 import type { Metadata } from "next";
 
 interface Type {

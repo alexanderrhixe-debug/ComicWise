@@ -3,10 +3,10 @@
 // ═══════════════════════════════════════════════════
 
 // Database Types
-export * from "@/types/database";
+export * from "./database";
 
 // Global Type Definitions
-export * from "@/types/global";
+export * from "./global";
 
 // Note: .d.ts files are automatically included by TypeScript
 // They don't need to be exported here

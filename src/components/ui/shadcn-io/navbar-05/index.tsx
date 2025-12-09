@@ -103,7 +103,7 @@ const InfoMenu = ({ onItemClick }: { onItemClick?: (item: string) => void }) => 
         Documentation
       </DropdownMenuItem>
       <DropdownMenuItem onClick={() => onItemClick?.("contact")}>Contact Support</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => onItemClick?.("feedback")}>Send Feedback</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => onItemClick?.("feedatabaseack")}>Send Feedatabaseack</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 );

@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════
 
 import { render } from "@react-email/components";
-import { appConfig } from "app-config";
+import { appConfig } from "appConfig";
 import AccountUpdatedEmail from "components/emails/AccountUpdatedEmail";
 import CommentNotificationEmail from "components/emails/CommentNotificationEmail";
 import NewChapterEmail from "components/emails/NewChapterEmail";
@@ -12,7 +12,7 @@ import VerificationEmail from "components/emails/VerificationEmail";
 import WelcomeEmail from "components/emails/WelcomeEmail";
 import nodemailer from "nodemailer";
 
-import type { SendEmailOptions } from "@/types";
+import type { SendEmailOptions } from "types";
 
 // ═══════════════════════════════════════════════════
 // NODEMAILER TRANSPORTER SETUP

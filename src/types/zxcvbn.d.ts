@@ -4,7 +4,7 @@ declare module "@zxcvbn-ts/core" {
     guesses: number;
     guesses_log10: number;
     calc_time: number;
-    feedback: {
+    feedatabaseack: {
       warning: string;
       suggestions: string[];
     };

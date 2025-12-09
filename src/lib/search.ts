@@ -2,11 +2,11 @@
 // ADVANCED SEARCH SERVICE - Full-Text Search with PostgreSQL
 // ═══════════════════════════════════════════════════
 
-import { db } from "db/client";
-import { artist, author, comic, comicToGenre, genre, type } from "db/schema";
+import { database } from "database";
+import { artist, author, comic, comicToGenre, genre, type } from "database/schema";
 import { and, asc, desc, eq, gte, inArray, lte, or, sql } from "drizzle-orm";
 
-import type { ComicFilters } from "@/types";
+import type { ComicFilters } from "types";
 
 // ═══════════════════════════════════════════════════
 // TYPES
@@ -98,7 +98,7 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
   } = filters;
 
   // Build the base query
-  let baseQuery = db
+  let baseQuery = database
     .select({
       id: comic.id,
       title: comic.title,
@@ -190,19 +190,19 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
     let genreComics;
 
     if (genreIds && genreIds.length > 0) {
-      genreComics = await db
+      genreComics = await database
         .selectDistinct({ comicId: comicToGenre.comicId })
         .from(comicToGenre)
         .where(inArray(comicToGenre.genreId, genreIds));
     } else if (genreNames && genreNames.length > 0) {
-      const genresResult = await db
+      const genresResult = await database
         .select({ id: genre.id })
         .from(genre)
         .where(or(...genreNames.map((name) => sql`LOWER(${genre.name}) = LOWER(${name})`)));
 
       const foundGenreIds = genresResult.map((g) => g.id);
       if (foundGenreIds.length > 0) {
-        genreComics = await db
+        genreComics = await database
           .selectDistinct({ comicId: comicToGenre.comicId })
           .from(comicToGenre)
           .where(inArray(comicToGenre.genreId, foundGenreIds));
@@ -327,7 +327,7 @@ function applySorting(query: any, sortBy: string, sortOrder: string, hasSearchQu
  * Get total count of search results
  */
 async function getSearchTotalCount(conditions: any[]): Promise<number> {
-  let countQuery = db
+  let countQuery = database
     .select({ count: sql<number>`count(DISTINCT ${comic.id})::int` })
     .from(comic)
     .leftJoin(author, eq(comic.authorId, author.id))
@@ -350,7 +350,7 @@ async function getComicGenres(comicIds: number[]): Promise<Record<number, string
     return {};
   }
 
-  const genresResult = await db
+  const genresResult = await database
     .select({
       comicId: comicToGenre.comicId,
       genreName: genre.name,
@@ -390,7 +390,7 @@ export async function getSearchSuggestions(
   const tsquery = buildSearchQuery(query, "websearch");
 
   // Get comic title suggestions
-  const comicSuggestions = await db
+  const comicSuggestions = await database
     .select({ title: comic.title })
     .from(comic)
     .where(sql`${comic.search_vector} @@ to_tsquery('english', ${tsquery})`)
@@ -398,7 +398,7 @@ export async function getSearchSuggestions(
     .limit(limit);
 
   // Get author suggestions
-  const authorSuggestions = await db
+  const authorSuggestions = await database
     .select({ name: author.name })
     .from(author)
     .where(sql`${author.search_vector} @@ to_tsquery('english', ${tsquery})`)
@@ -406,7 +406,7 @@ export async function getSearchSuggestions(
     .limit(limit);
 
   // Get artist suggestions
-  const artistSuggestions = await db
+  const artistSuggestions = await database
     .select({ name: artist.name })
     .from(artist)
     .where(sql`${artist.search_vector} @@ to_tsquery('english', ${tsquery})`)
@@ -426,7 +426,7 @@ export async function getSearchSuggestions(
 export async function getPopularSearches(limit: number = 10): Promise<string[]> {
   // This would typically come from a search analytics table
   // For now, return top-rated comics as suggestions
-  const topComics = await db
+  const topComics = await database
     .select({ title: comic.title })
     .from(comic)
     .orderBy(desc(comic.rating), desc(comic.views))
@@ -445,7 +445,7 @@ export async function getTrendingComics(
   const since = new Date();
   since.setDate(since.getDate() - days);
 
-  const results = await db
+  const results = await database
     .select({
       id: comic.id,
       title: comic.title,

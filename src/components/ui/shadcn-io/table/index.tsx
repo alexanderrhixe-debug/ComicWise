@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "ui/dropdown-menu";
 import {
   TableBody as TableBodyRaw,
   TableCell as TableCellRaw,
@@ -12,8 +12,8 @@ import {
   TableHead as TableHeadRaw,
   Table as TableRaw,
   TableRow as TableRowRaw,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+} from "ui/table";
+import { cn } from "utils";
 import type {
   Cell,
   Column,

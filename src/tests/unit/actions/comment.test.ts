@@ -2,16 +2,16 @@
 // COMMENT ACTIONS - UNIT TESTS
 // ═══════════════════════════════════════════════════
 
+import * as mutations from "database/mutations";
 import { createComment, deleteComment, updateComment } from "actions/comments";
-import * as mutations from "db/mutations";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
 // Mock dependencies
-vi.mock("db/mutations");
+vi.mock("mutations");
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }));
-vi.mock("app-config", () => ({
+vi.mock("appConfig", () => ({
   appConfig: {
     rateLimit: {
       default: {
@@ -23,7 +23,7 @@ vi.mock("app-config", () => ({
   checkRateLimit: vi.fn(),
 }));
 
-import { checkRateLimit } from "app-config";
+import { checkRateLimit } from "appConfig";
 
 describe("Comment Actions", () => {
   const mockUserId = "user-123";

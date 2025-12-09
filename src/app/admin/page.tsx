@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { db } from "@/db/client";
-import { bookmark, chapter, comic, comment, user } from "@/db/schema";
+import { Button } from "components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
+import { bookmark, chapter, comic, comment, database, user } from "database";
 import { desc, sql } from "drizzle-orm";
 import { BookMarked, BookOpen, BookPlus, Eye, FileText, Plus, UserPlus, Users } from "lucide-react";
 import Link from "next/link";
@@ -9,30 +8,30 @@ import Link from "next/link";
 export default async function AdminDashboard() {
   // Fetch statistics
   const [usersCount, comicsCount, chaptersCount, bookmarksCount, totalViews] = await Promise.all([
-    db
+    database
       .select({ count: sql<number>`count(*)::int` })
       .from(user)
       .then((r) => r[0]?.count || 0),
-    db
+    database
       .select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .then((r) => r[0]?.count || 0),
-    db
+    database
       .select({ count: sql<number>`count(*)::int` })
       .from(chapter)
       .then((r) => r[0]?.count || 0),
-    db
+    database
       .select({ count: sql<number>`count(*)::int` })
       .from(bookmark)
       .then((r) => r[0]?.count || 0),
-    db
+    database
       .select({ total: sql<number>`sum(views)::int` })
       .from(comic)
       .then((r) => r[0]?.total || 0),
   ]);
 
   // Fetch recent comics
-  const recentComics = await db
+  const recentComics = await database
     .select({
       id: comic.id,
       title: comic.title,
@@ -45,7 +44,7 @@ export default async function AdminDashboard() {
     .limit(5);
 
   // Fetch recent users
-  const recentUsers = await db
+  const recentUsers = await database
     .select({
       id: user.id,
       name: user.name,
@@ -58,7 +57,7 @@ export default async function AdminDashboard() {
     .limit(5);
 
   // Fetch recent chapters
-  const recentChapters = await db
+  const recentChapters = await database
     .select({
       id: chapter.id,
       title: chapter.title,
@@ -71,7 +70,7 @@ export default async function AdminDashboard() {
     .limit(5);
 
   // Fetch recent comments
-  const recentComments = await db
+  const recentComments = await database
     .select({
       id: comment.id,
       content: comment.content,

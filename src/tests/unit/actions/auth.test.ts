@@ -10,7 +10,7 @@ import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 // Mock dependencies
 vi.mock("auth");
 vi.mock("lib/ratelimit");
-vi.mock("app-config", () => ({
+vi.mock("appConfig", () => ({
   appConfig: {
     rateLimit: {
       auth: {

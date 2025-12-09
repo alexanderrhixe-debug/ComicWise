@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card";
+import { Separator } from "ui/separator";
 
-import AuthBackgroundShape from "@/assets/svg/auth-background-shape";
+import AuthBackgroundShape from "assets/svg/auth-background-shape";
 import RegisterForm from "@/components/shadcn-studio/blocks/register-01/register-form";
 import Logo from "@/components/shadcn-studio/logo";
 
@@ -30,7 +30,7 @@ const Register = () => {
           <div className="space-y-4">
             <RegisterForm />
 
-            <p className="text-muted-foreground text-center">
+            <p className="text-center text-muted-foreground">
               Already have an account?{" "}
               <a href="#" className="text-card-foreground hover:underline">
                 Sign in instead

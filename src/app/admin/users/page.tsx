@@ -1,9 +1,8 @@
-import { DataTable } from "@/components/admin/DataTable";
-import { db } from "@/db/client";
-import { user } from "@/db/schema";
+import { DataTable } from "components/admin/DataTable";
+import { database, user } from "database";
 
 export default async function AdminUsersPage() {
-  const users = await db.select().from(user);
+  const users = await database.select().from(user);
 
   const columns = [
     {

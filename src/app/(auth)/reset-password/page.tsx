@@ -4,8 +4,6 @@
 // RESET PASSWORD PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { resetPasswordAction } from "@/lib/actions/auth/index";
-import { resetPasswordSchema, type ResetPasswordInput } from "@/lib/validations/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "components/ui/alert";
 import { Button } from "components/ui/button";
@@ -19,6 +17,8 @@ import {
 } from "components/ui/card";
 import { Label } from "components/ui/label";
 import { PasswordInput } from "components/ui/password-input";
+import { resetPasswordAction } from "actions/auth/index";
+import { resetPasswordSchema, type ResetPasswordInput } from "lib/validations/schemas";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
