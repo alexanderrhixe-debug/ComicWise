@@ -159,7 +159,7 @@ export async function getComic(comicId: number): Promise<ComicWithDetails | null
     author: result[0].author,
     artist: result[0].artist,
     type: result[0].type,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     genres: genres as any[],
     chapters,
   };

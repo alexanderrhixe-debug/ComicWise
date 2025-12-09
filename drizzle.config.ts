@@ -12,13 +12,15 @@ const getDatabaseUrl = (): string => {
   if (!url) {
     try {
       // Try to read validated env from the project's env helper (if present)
-      // Use require so this works at runtime regardless of ESM/TS loader config
-
+      // Prefer dynamic import, but keep a fallback to `require` for runtime
+      // compatibility. Disable the specific rule for this line because the
+      // helper may be authored as CommonJS and the import might fail.
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const envModule = require("./src/app-config/env");
       if (envModule && envModule.env && envModule.env.DATABASE_URL) {
         url = envModule.env.DATABASE_URL;
       }
-    } catch (err) {
+    } catch {
       // ignore - will throw below if still missing
     }
   }

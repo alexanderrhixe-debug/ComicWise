@@ -33,8 +33,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "u
 import { cn } from "utils";
 
 declare module "@tanstack/react-table" {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface ColumnMeta<TData extends RowData, TValue> {
+  interface ColumnMeta<_TData extends RowData, _TValue> {
     filterVariant?: "text" | "range" | "select";
   }
 }

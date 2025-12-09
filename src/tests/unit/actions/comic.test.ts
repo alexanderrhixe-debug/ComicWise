@@ -284,7 +284,7 @@ describe("Comic Actions", () => {
     });
 
     it("should throw error when user is not authenticated", async () => {
-      ("Ongoing" as const, await expect(deleteComic(mockComicId)).rejects.toThrow("Unauthorized"));
+      await expect(deleteComic(mockComicId)).rejects.toThrow("Unauthorized");
       expect(mutations.deleteComic).not.toHaveBeenCalled();
     });
 

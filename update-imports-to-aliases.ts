@@ -41,7 +41,7 @@ const ignore: string[] = [
 
 async function main() {
   const files: string[] = await glob(fileGlob, { cwd: repoRoot, absolute: true, ignore });
-  let changed: number = 0;
+  let _changed: number = 0;
   for (const file of files) {
     let src: string = fs.readFileSync(file, "utf8");
     const original: string = src;
@@ -51,7 +51,7 @@ async function main() {
     });
     if (src !== original) {
       fs.writeFileSync(file, src, "utf8");
-      changed++;
+      _changed++;
       console.log(`✅ Updated imports/exports in ${relative(repoRoot, file)} to use path aliases.`);
     }
   }

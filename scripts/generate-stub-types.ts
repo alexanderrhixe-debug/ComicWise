@@ -20,12 +20,16 @@ async function hasBundledTypes(packageDir: string) {
   try {
     const pj = JSON.parse(await fs.readFile(pkgJsonPath, "utf8"));
     if (pj.types || pj.typings) return true;
-  } catch {}
+  } catch {
+    void 0;
+  }
   // quick scan for any .d.ts files at package root
   try {
     const files = await fs.readdir(packageDir);
     if (files.some((f) => f.endsWith(".d.ts"))) return true;
-  } catch {}
+  } catch {
+    void 0;
+  }
   return false;
 }
 

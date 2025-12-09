@@ -138,13 +138,13 @@ export function MultiSelectValue({
   const shouldWrap = overflowBehavior === "wrap" || (overflowBehavior === "wrap-when-open" && open);
 
   const checkOverflow = useCallback(() => {
-    if (valueRef.current == null) return;
+    if (!valueRef.current) return;
 
     const containerElement = valueRef.current;
     const overflowElement = overflowRef.current;
     const items = containerElement.querySelectorAll<HTMLElement>("[data-selected-item]");
 
-    if (overflowElement != null) overflowElement.style.display = "none";
+    if (overflowElement) overflowElement.style.display = "none";
     items.forEach((child) => child.style.removeProperty("display"));
     let amount = 0;
     for (let i = items.length - 1; i >= 0; i--) {
@@ -261,7 +261,7 @@ export function MultiSelectContent({
               placeholder={(typeof search === "object" ? search.placeholder : undefined) as any}
             />
           ) : (
-            <button autoFocus className="sr-only" />
+            <button className="sr-only" />
           )}
           <CommandList>
             {canSearch && (
@@ -318,7 +318,7 @@ export function MultiSelectSeparator(props: ComponentPropsWithoutRef<typeof Comm
 
 function useMultiSelectContext() {
   const context = useContext(MultiSelectContext);
-  if (context == null) {
+  if (!context) {
     throw new Error("useMultiSelectContext must be used within a MultiSelectContext");
   }
   return context;

@@ -26,8 +26,10 @@ export function useUnmount(fn: () => void): void {
 
   const fnRef = React.useRef(fn);
 
-  // Keep the function reference up to date
-  fnRef.current = fn;
+  React.useEffect(() => {
+    // Keep the function reference up to date — update reference after render
+    fnRef.current = fn;
+  }, [fn]);
 
   React.useEffect(() => {
     // Return the cleanup function that will be called on unmount
