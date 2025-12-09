@@ -4,11 +4,11 @@
 // AUTH SERVER ACTIONS (Next.js 16 + Rate Limiting + Emails)
 // ═══════════════════════════════════════════════════
 
-import { database } from "database";
-import { passwordResetToken, user, verificationToken } from "database/schema";
 import { appConfig, checkRateLimit } from "appConfig";
 import { signIn, signOut } from "auth";
 import bcrypt from "bcryptjs";
+import { database } from "database";
+import { passwordResetToken, user, verificationToken } from "database/schema";
 import { eq } from "drizzle-orm";
 import {
   sendAccountUpdatedEmail,
@@ -397,7 +397,10 @@ export async function resetPasswordAction(input: ResetPasswordInput): Promise<Au
     const hashedPassword = await bcrypt.hash(password, appConfig.security.bcryptRounds);
 
     // Update user password
-    await database.update(user).set({ password: hashedPassword }).where(eq(user.id, existingUser.id));
+    await database
+      .update(user)
+      .set({ password: hashedPassword })
+      .where(eq(user.id, existingUser.id));
 
     // Delete used token
     await database.delete(passwordResetToken).where(eq(passwordResetToken.token, token));

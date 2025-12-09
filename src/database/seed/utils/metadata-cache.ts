@@ -27,7 +27,11 @@ export class MetadataCache {
       return existing.id;
     }
 
-    const [created] = await database.insert(typeTable).values({ name }).onConflictDoNothing().returning();
+    const [created] = await database
+      .insert(typeTable)
+      .values({ name })
+      .onConflictDoNothing()
+      .returning();
 
     if (created) {
       this.typeCache.set(name, created.id);
@@ -135,7 +139,11 @@ export class MetadataCache {
       return existing.id;
     }
 
-    const [created] = await database.insert(genre).values({ name }).onConflictDoNothing().returning();
+    const [created] = await database
+      .insert(genre)
+      .values({ name })
+      .onConflictDoNothing()
+      .returning();
 
     if (created) {
       this.genreCache.set(name, created.id);

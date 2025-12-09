@@ -32,5 +32,8 @@ export async function deleteVerificationTokensByIdentifier(identifier: string) {
 
 export async function deleteExpiredVerificationTokens() {
   const now = new Date();
-  return await database.delete(verificationToken).where(lt(verificationToken.expires, now)).returning();
+  return await database
+    .delete(verificationToken)
+    .where(lt(verificationToken.expires, now))
+    .returning();
 }

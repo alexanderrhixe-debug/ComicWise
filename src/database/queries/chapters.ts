@@ -45,7 +45,11 @@ export async function getChapterImages(chapterId: number) {
 }
 
 export async function getNextChapter(currentChapterId: number) {
-  const current = await database.select().from(chapter).where(eq(chapter.id, currentChapterId)).limit(1);
+  const current = await database
+    .select()
+    .from(chapter)
+    .where(eq(chapter.id, currentChapterId))
+    .limit(1);
 
   if (!current[0]) return null;
 
@@ -65,7 +69,11 @@ export async function getNextChapter(currentChapterId: number) {
 }
 
 export async function getPreviousChapter(currentChapterId: number) {
-  const current = await database.select().from(chapter).where(eq(chapter.id, currentChapterId)).limit(1);
+  const current = await database
+    .select()
+    .from(chapter)
+    .where(eq(chapter.id, currentChapterId))
+    .limit(1);
 
   if (!current[0]) return null;
 

@@ -2,9 +2,9 @@
 // FULL-TEXT SEARCH SERVICE - PostgreSQL FTS Implementation
 // ═══════════════════════════════════════════════════
 
-import { artist, author, comic, comicToGenre, type as comicType} from "database/schema";
-import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { artist, author, comic, comicToGenre, type as comicType } from "database/schema";
 import { db } from "db";
+import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
 // ═══════════════════════════════════════════════════
 // TYPE DEFINITIONS
 // ═══════════════════════════════════════════════════
@@ -135,7 +135,8 @@ export async function fullTextSearch(
     // Execute search query
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const results = await db.select({
+    const results = await db
+      .select({
         id: comic.id,
         title: comic.title,
         description: comic.description,
@@ -171,7 +172,8 @@ export async function fullTextSearch(
       .offset(offset);
 
     // Get total count
-    const countResult = await db.select({ count: sql<number>`count(*)::int` })
+    const countResult = await db
+      .select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .where(whereClause);
 
@@ -259,7 +261,8 @@ export async function simpleSearch(
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const results = await db.select({
+    const results = await db
+      .select({
         id: comic.id,
         title: comic.title,
         description: comic.description,
@@ -291,7 +294,8 @@ export async function simpleSearch(
       .offset(offset);
 
     // Get total count
-    const countResult = await db.select({ count: sql<number>`count(*)::int` })
+    const countResult = await db
+      .select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .where(whereClause);
 
@@ -343,7 +347,8 @@ export async function getSearchSuggestions(
 
     const searchPattern = `%${query.trim()}%`;
 
-    const results = await db.select({
+    const results = await db
+      .select({
         title: comic.title,
       })
       .from(comic)
@@ -379,7 +384,8 @@ export async function searchByAuthor(
 
     const searchPattern = `%${authorName.trim()}%`;
 
-    const results = await db.select({
+    const results = await db
+      .select({
         id: comic.id,
         title: comic.title,
         description: comic.description,
@@ -398,7 +404,8 @@ export async function searchByAuthor(
       .limit(limit)
       .offset(offset);
 
-    const countResult = await db.select({ count: sql<number>`count(*)::int` })
+    const countResult = await db
+      .select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .innerJoin(author, eq(comic.authorId, author.id))
       .where(ilike(author.name, searchPattern));
@@ -436,7 +443,8 @@ export async function searchByGenre(
     const limit = options.limit || 20;
     const offset = (page - 1) * limit;
 
-    const results = await db.select({
+    const results = await db
+      .select({
         id: comic.id,
         title: comic.title,
         description: comic.description,
@@ -451,7 +459,8 @@ export async function searchByGenre(
       .limit(limit)
       .offset(offset);
 
-    const countResult = await db.select({ count: sql<number>`count(*)::int` })
+    const countResult = await db
+      .select({ count: sql<number>`count(*)::int` })
       .from(comic)
       .innerJoin(comicToGenre, eq(comic.id, comicToGenre.comicId))
       .where(eq(comicToGenre.genreId, genreId));

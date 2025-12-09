@@ -1,6 +1,90 @@
+// Typed cache wrapper to unify Upstash and ioredis usages
+import Redis from "ioredis";
+
+export type CacheValue = string | number | object | null;
+
+export interface CacheClient {
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string, ttlSeconds?: number): Promise<void>;
+  del(key: string): Promise<void>;
+  clear?(): Promise<void>;
+  // raw client exposed for advanced operations
+  raw?: any;
+}
+
+export function createCacheClient(rawClient: any): CacheClient {
+  // Upstash Redis client (REST) detection
+  if (rawClient && typeof rawClient.get === "function" && typeof rawClient.set === "function") {
+    return {
+      raw: rawClient,
+      async get(key: string) {
+        // Upstash returns a Promise<string | null>
+        return (await rawClient.get(key)) ?? null;
+      },
+      async set(key: string, value: string, ttlSeconds?: number) {
+        if (ttlSeconds) {
+          await rawClient.set(key, value, { ex: ttlSeconds });
+        } else {
+          await rawClient.set(key, value);
+        }
+      },
+      async del(key: string) {
+        // Upstash returns number of deleted keys
+        await rawClient.del(key);
+      },
+      async clear() {
+        // Upstash may not support flushall in managed env; try if available
+        if (typeof rawClient.flushdb === "function") {
+          await rawClient.flushdb();
+        }
+      },
+    };
+  }
+
+  // ioredis client detection
+  if (rawClient && typeof rawClient.call === "function" || rawClient instanceof (Redis as any)) {
+    const client: Redis = rawClient;
+    return {
+      raw: client,
+      async get(key: string) {
+        return (await client.get(key)) as string | null;
+      },
+      async set(key: string, value: string, ttlSeconds?: number) {
+        if (ttlSeconds) {
+          await client.set(key, value, "EX", ttlSeconds);
+        } else {
+          await client.set(key, value);
+        }
+      },
+      async del(key: string) {
+        await client.del(key);
+      },
+      async clear() {
+        await client.flushdb();
+      },
+    };
+  }
+
+  // Fallback in-memory simple map for environments without Redis
+  const store = new Map<string, string>();
+  return {
+    raw: null,
+    async get(key: string) {
+      return store.has(key) ? (store.get(key) as string) : null;
+    },
+    async set(key: string, value: string) {
+      store.set(key, value);
+    },
+    async del(key: string) {
+      store.delete(key);
+    },
+    async clear() {
+      store.clear();
+    },
+  };
+}
 /* eslint-disable security/detect-object-injection */
 import { env } from "appConfig";
-import Redis from "ioredis";
 /**
  * Redis Configuration
  * Supports both standalone and cluster modes

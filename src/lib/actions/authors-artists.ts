@@ -4,9 +4,9 @@
 // AUTHORS & ARTISTS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "appConfig";
 import { database } from "database";
 import { artist, author } from "database/schema";
-import { appConfig } from "appConfig";
 import { eq, like, sql } from "drizzle-orm";
 import {
   createArtistSchema,

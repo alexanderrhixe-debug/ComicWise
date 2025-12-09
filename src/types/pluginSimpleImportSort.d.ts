@@ -3,55 +3,54 @@
 export = eslint_plugin_simple_import_sort;
 
 declare const eslint_plugin_simple_import_sort: {
-    meta: {
-        name: string;
-        version: string;
-    };
-    rules: {
-        exports: {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                fixable: string;
-                messages: {
-                    sort: string;
-                };
-                schema: any[];
-                type: string;
-            };
+  meta: {
+    name: string;
+    version: string;
+  };
+  rules: {
+    exports: {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
         };
-        imports: {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                fixable: string;
-                messages: {
-                    sort: string;
-                };
-                schema: {
-                    additionalProperties: boolean;
-                    properties: {
-                        groups: {
-                            items: {
-                                items: {
-                                    type: string;
-                                };
-                                type: string;
-                            };
-                            type: string;
-                        };
-                    };
-                    type: string;
-                }[];
-                type: string;
-            };
+        fixable: string;
+        messages: {
+          sort: string;
         };
+        schema: any[];
+        type: string;
+      };
     };
+    imports: {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        fixable: string;
+        messages: {
+          sort: string;
+        };
+        schema: {
+          additionalProperties: boolean;
+          properties: {
+            groups: {
+              items: {
+                items: {
+                  type: string;
+                };
+                type: string;
+              };
+              type: string;
+            };
+          };
+          type: string;
+        }[];
+        type: string;
+      };
+    };
+  };
 };
-

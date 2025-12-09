@@ -1,16 +1,16 @@
-import { getComic, getRecommendedComics } from "database/queries";
-import { formatDate } from "utils";
 import { BookmarkButton } from "components/BookmarkButton";
 import { ComicCard } from "components/ComicCard";
 import { Badge } from "components/ui/badge";
 import { Button } from "components/ui/button";
 import { Card, CardContent } from "components/ui/card";
 import { Skeleton } from "components/ui/skeleton";
+import { getComic, getRecommendedComics } from "database/queries";
 import { BookOpen, Calendar, Eye, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { formatDate } from "utils";
 
 interface PageProps {
   params: Promise<{ id: string }>;

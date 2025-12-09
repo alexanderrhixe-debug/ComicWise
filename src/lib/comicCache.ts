@@ -1,6 +1,6 @@
 import { cache, CACHE_KEYS, CACHE_TTL, type CacheOptions } from "lib/cache";
 
-import type { Comic } from "types/database";
+import type { Comic } from "src/types/database";
 
 /**
  * Comic Caching Service

@@ -3,49 +3,47 @@
 export = eslint_plugin_zod;
 
 declare const eslint_plugin_zod: {
-    rules: {
-        "prefer-enum": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                fixable: string;
-                schema: {
-                    additionalProperties: boolean;
-                    properties: {
-                    };
-                    type: string;
-                }[];
-                type: string;
-            };
+  rules: {
+    "prefer-enum": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
         };
-        "require-strict": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                fixable: string;
-                schema: {
-                    additionalProperties: boolean;
-                    properties: {
-                        allowPassthrough: {
-                            default: boolean;
-                            type: string;
-                        };
-                    };
-                    type: string;
-                }[];
-                type: string;
-            };
+        fixable: string;
+        schema: {
+          additionalProperties: boolean;
+          properties: {};
+          type: string;
+        }[];
+        type: string;
+      };
+    };
+    "require-strict": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
         };
+        fixable: string;
+        schema: {
+          additionalProperties: boolean;
+          properties: {
+            allowPassthrough: {
+              default: boolean;
+              type: string;
+            };
+          };
+          type: string;
+        }[];
+        type: string;
+      };
     };
-    rulesConfig: {
-        "prefer-enum": number;
-        "require-strict": number;
-    };
+  };
+  rulesConfig: {
+    "prefer-enum": number;
+    "require-strict": number;
+  };
 };
-

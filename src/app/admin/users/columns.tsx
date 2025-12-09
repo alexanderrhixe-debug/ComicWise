@@ -15,8 +15,8 @@ import { MoreHorizontal, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
-import type { user } from "database/schema";
 import { deleteUser } from "actions/users";
+import type { user } from "database/schema";
 
 export type User = typeof user.$inferSelect;
 

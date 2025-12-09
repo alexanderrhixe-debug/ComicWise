@@ -3,2955 +3,2903 @@
 export = eslint_plugin_jsx_a11y;
 
 declare const eslint_plugin_jsx_a11y: {
-    configs: {
-        recommended: {
-            parserOptions: {
-                ecmaFeatures: {
-                    jsx: boolean;
-                };
-            };
-            plugins: string[];
-            rules: {
-                "jsx-a11y/alt-text": string;
-                "jsx-a11y/anchor-ambiguous-text": string;
-                "jsx-a11y/anchor-has-content": string;
-                "jsx-a11y/anchor-is-valid": string;
-                "jsx-a11y/aria-activedescendant-has-tabindex": string;
-                "jsx-a11y/aria-props": string;
-                "jsx-a11y/aria-proptypes": string;
-                "jsx-a11y/aria-role": string;
-                "jsx-a11y/aria-unsupported-elements": string;
-                "jsx-a11y/autocomplete-valid": string;
-                "jsx-a11y/click-events-have-key-events": string;
-                "jsx-a11y/control-has-associated-label": string[];
-                "jsx-a11y/heading-has-content": string;
-                "jsx-a11y/html-has-lang": string;
-                "jsx-a11y/iframe-has-title": string;
-                "jsx-a11y/img-redundant-alt": string;
-                "jsx-a11y/interactive-supports-focus": string[];
-                "jsx-a11y/label-has-associated-control": string;
-                "jsx-a11y/label-has-for": string;
-                "jsx-a11y/media-has-caption": string;
-                "jsx-a11y/mouse-events-have-key-events": string;
-                "jsx-a11y/no-access-key": string;
-                "jsx-a11y/no-autofocus": string;
-                "jsx-a11y/no-distracting-elements": string;
-                "jsx-a11y/no-interactive-element-to-noninteractive-role": string[];
-                "jsx-a11y/no-noninteractive-element-interactions": string[];
-                "jsx-a11y/no-noninteractive-element-to-interactive-role": string[];
-                "jsx-a11y/no-noninteractive-tabindex": string[];
-                "jsx-a11y/no-redundant-roles": string;
-                "jsx-a11y/no-static-element-interactions": string[];
-                "jsx-a11y/role-has-required-aria-props": string;
-                "jsx-a11y/role-supports-aria-props": string;
-                "jsx-a11y/scope": string;
-                "jsx-a11y/tabindex-no-positive": string;
-            };
+  configs: {
+    recommended: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: boolean;
         };
-        strict: {
-            parserOptions: {
-                ecmaFeatures: {
-                    jsx: boolean;
-                };
-            };
-            plugins: string[];
-            rules: {
-                "jsx-a11y/alt-text": string;
-                "jsx-a11y/anchor-has-content": string;
-                "jsx-a11y/anchor-is-valid": string;
-                "jsx-a11y/aria-activedescendant-has-tabindex": string;
-                "jsx-a11y/aria-props": string;
-                "jsx-a11y/aria-proptypes": string;
-                "jsx-a11y/aria-role": string;
-                "jsx-a11y/aria-unsupported-elements": string;
-                "jsx-a11y/autocomplete-valid": string;
-                "jsx-a11y/click-events-have-key-events": string;
-                "jsx-a11y/control-has-associated-label": string[];
-                "jsx-a11y/heading-has-content": string;
-                "jsx-a11y/html-has-lang": string;
-                "jsx-a11y/iframe-has-title": string;
-                "jsx-a11y/img-redundant-alt": string;
-                "jsx-a11y/interactive-supports-focus": string[];
-                "jsx-a11y/label-has-associated-control": string;
-                "jsx-a11y/label-has-for": string;
-                "jsx-a11y/media-has-caption": string;
-                "jsx-a11y/mouse-events-have-key-events": string;
-                "jsx-a11y/no-access-key": string;
-                "jsx-a11y/no-autofocus": string;
-                "jsx-a11y/no-distracting-elements": string;
-                "jsx-a11y/no-interactive-element-to-noninteractive-role": string;
-                "jsx-a11y/no-noninteractive-element-interactions": string[];
-                "jsx-a11y/no-noninteractive-element-to-interactive-role": string;
-                "jsx-a11y/no-noninteractive-tabindex": string;
-                "jsx-a11y/no-redundant-roles": string;
-                "jsx-a11y/no-static-element-interactions": string;
-                "jsx-a11y/role-has-required-aria-props": string;
-                "jsx-a11y/role-supports-aria-props": string;
-                "jsx-a11y/scope": string;
-                "jsx-a11y/tabindex-no-positive": string;
-            };
-        };
+      };
+      plugins: string[];
+      rules: {
+        "jsx-a11y/alt-text": string;
+        "jsx-a11y/anchor-ambiguous-text": string;
+        "jsx-a11y/anchor-has-content": string;
+        "jsx-a11y/anchor-is-valid": string;
+        "jsx-a11y/aria-activedescendant-has-tabindex": string;
+        "jsx-a11y/aria-props": string;
+        "jsx-a11y/aria-proptypes": string;
+        "jsx-a11y/aria-role": string;
+        "jsx-a11y/aria-unsupported-elements": string;
+        "jsx-a11y/autocomplete-valid": string;
+        "jsx-a11y/click-events-have-key-events": string;
+        "jsx-a11y/control-has-associated-label": string[];
+        "jsx-a11y/heading-has-content": string;
+        "jsx-a11y/html-has-lang": string;
+        "jsx-a11y/iframe-has-title": string;
+        "jsx-a11y/img-redundant-alt": string;
+        "jsx-a11y/interactive-supports-focus": string[];
+        "jsx-a11y/label-has-associated-control": string;
+        "jsx-a11y/label-has-for": string;
+        "jsx-a11y/media-has-caption": string;
+        "jsx-a11y/mouse-events-have-key-events": string;
+        "jsx-a11y/no-access-key": string;
+        "jsx-a11y/no-autofocus": string;
+        "jsx-a11y/no-distracting-elements": string;
+        "jsx-a11y/no-interactive-element-to-noninteractive-role": string[];
+        "jsx-a11y/no-noninteractive-element-interactions": string[];
+        "jsx-a11y/no-noninteractive-element-to-interactive-role": string[];
+        "jsx-a11y/no-noninteractive-tabindex": string[];
+        "jsx-a11y/no-redundant-roles": string;
+        "jsx-a11y/no-static-element-interactions": string[];
+        "jsx-a11y/role-has-required-aria-props": string;
+        "jsx-a11y/role-supports-aria-props": string;
+        "jsx-a11y/scope": string;
+        "jsx-a11y/tabindex-no-positive": string;
+      };
     };
-    flatConfigs: {
-        recommended: {
-            languageOptions: {
-                parserOptions: {
-                    ecmaFeatures: {
-                        jsx: boolean;
-                    };
-                };
-            };
+    strict: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: boolean;
+        };
+      };
+      plugins: string[];
+      rules: {
+        "jsx-a11y/alt-text": string;
+        "jsx-a11y/anchor-has-content": string;
+        "jsx-a11y/anchor-is-valid": string;
+        "jsx-a11y/aria-activedescendant-has-tabindex": string;
+        "jsx-a11y/aria-props": string;
+        "jsx-a11y/aria-proptypes": string;
+        "jsx-a11y/aria-role": string;
+        "jsx-a11y/aria-unsupported-elements": string;
+        "jsx-a11y/autocomplete-valid": string;
+        "jsx-a11y/click-events-have-key-events": string;
+        "jsx-a11y/control-has-associated-label": string[];
+        "jsx-a11y/heading-has-content": string;
+        "jsx-a11y/html-has-lang": string;
+        "jsx-a11y/iframe-has-title": string;
+        "jsx-a11y/img-redundant-alt": string;
+        "jsx-a11y/interactive-supports-focus": string[];
+        "jsx-a11y/label-has-associated-control": string;
+        "jsx-a11y/label-has-for": string;
+        "jsx-a11y/media-has-caption": string;
+        "jsx-a11y/mouse-events-have-key-events": string;
+        "jsx-a11y/no-access-key": string;
+        "jsx-a11y/no-autofocus": string;
+        "jsx-a11y/no-distracting-elements": string;
+        "jsx-a11y/no-interactive-element-to-noninteractive-role": string;
+        "jsx-a11y/no-noninteractive-element-interactions": string[];
+        "jsx-a11y/no-noninteractive-element-to-interactive-role": string;
+        "jsx-a11y/no-noninteractive-tabindex": string;
+        "jsx-a11y/no-redundant-roles": string;
+        "jsx-a11y/no-static-element-interactions": string;
+        "jsx-a11y/role-has-required-aria-props": string;
+        "jsx-a11y/role-supports-aria-props": string;
+        "jsx-a11y/scope": string;
+        "jsx-a11y/tabindex-no-positive": string;
+      };
+    };
+  };
+  flatConfigs: {
+    recommended: {
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: boolean;
+          };
+        };
+      };
+      name: string;
+      plugins: {
+        "jsx-a11y": {
+          meta: {
             name: string;
-            plugins: {
-                "jsx-a11y": {
-                    meta: {
-                        name: string;
-                        version: string;
-                    };
-                    rules: {
-                        "accessible-emoji": {
-                            create: any;
-                            meta: {
-                                deprecated: boolean;
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "alt-text": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        area: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        elements: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        img: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        "input[type=\"image\"]": {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        object: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "anchor-ambiguous-text": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        words: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "anchor-has-content": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "anchor-is-valid": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        aspects: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                enum: string[];
-                                                type: string;
-                                            };
-                                            minItems: number;
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        specialLink: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "aria-activedescendant-has-tabindex": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "aria-props": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "aria-proptypes": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                            validityCheck: any;
-                        };
-                        "aria-role": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        allowedInvalidRoles: {
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        ignoreNonDOM: {
-                                            default: boolean;
-                                            type: string;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "aria-unsupported-elements": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "autocomplete-valid": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        inputComponents: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "click-events-have-key-events": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "control-has-associated-label": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        controlComponents: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        depth: {
-                                            description: string;
-                                            minimum: number;
-                                            type: string;
-                                        };
-                                        ignoreElements: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        ignoreRoles: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        labelAttributes: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "heading-has-content": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "html-has-lang": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "iframe-has-title": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "img-redundant-alt": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        words: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "interactive-supports-focus": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        tabbable: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                enum: string[];
-                                                type: string;
-                                            };
-                                            minItems: number;
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "label-has-associated-control": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        assert: {
-                                            description: string;
-                                            enum: string[];
-                                            type: string;
-                                        };
-                                        controlComponents: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        depth: {
-                                            description: string;
-                                            minimum: number;
-                                            type: string;
-                                        };
-                                        labelAttributes: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        labelComponents: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "label-has-for": {
-                            create: any;
-                            meta: {
-                                deprecated: boolean;
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                replacedBy: string[];
-                                schema: {
-                                    properties: {
-                                        allowChildren: {
-                                            type: string;
-                                        };
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        required: {
-                                            oneOf: {
-                                                enum: string[];
-                                                type: string;
-                                            }[];
-                                        };
-                                    };
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        lang: {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "media-has-caption": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        audio: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        track: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        video: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "mouse-events-have-key-events": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        hoverInHandlers: {
-                                            additionalItems: boolean;
-                                            description: string;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        hoverOutHandlers: {
-                                            additionalItems: boolean;
-                                            description: string;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-access-key": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-aria-hidden-on-focusable": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-autofocus": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        ignoreNonDOM: {
-                                            default: boolean;
-                                            type: string;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-distracting-elements": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        elements: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                enum: string[];
-                                                type: string;
-                                            };
-                                            minItems: number;
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-interactive-element-to-noninteractive-role": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    additionalProperties: {
-                                        items: {
-                                            type: string;
-                                        };
-                                        type: string;
-                                        uniqueItems: boolean;
-                                    };
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-noninteractive-element-interactions": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        handlers: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-noninteractive-element-to-interactive-role": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    additionalProperties: {
-                                        items: {
-                                            type: string;
-                                        };
-                                        type: string;
-                                        uniqueItems: boolean;
-                                    };
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-noninteractive-tabindex": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        roles: {
-                                            additionalItems: boolean;
-                                            description: string;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        tags: {
-                                            additionalItems: boolean;
-                                            description: string;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-onchange": {
-                            create: any;
-                            meta: {
-                                deprecated: boolean;
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-redundant-roles": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    additionalProperties: {
-                                        items: {
-                                            type: string;
-                                        };
-                                        type: string;
-                                        uniqueItems: boolean;
-                                    };
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-static-element-interactions": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        handlers: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "prefer-tag-over-role": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "role-has-required-aria-props": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "role-supports-aria-props": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        scope: {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "tabindex-no-positive": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                    };
-                };
-            };
-            rules: {
-                "jsx-a11y/alt-text": string;
-                "jsx-a11y/anchor-ambiguous-text": string;
-                "jsx-a11y/anchor-has-content": string;
-                "jsx-a11y/anchor-is-valid": string;
-                "jsx-a11y/aria-activedescendant-has-tabindex": string;
-                "jsx-a11y/aria-props": string;
-                "jsx-a11y/aria-proptypes": string;
-                "jsx-a11y/aria-role": string;
-                "jsx-a11y/aria-unsupported-elements": string;
-                "jsx-a11y/autocomplete-valid": string;
-                "jsx-a11y/click-events-have-key-events": string;
-                "jsx-a11y/control-has-associated-label": string[];
-                "jsx-a11y/heading-has-content": string;
-                "jsx-a11y/html-has-lang": string;
-                "jsx-a11y/iframe-has-title": string;
-                "jsx-a11y/img-redundant-alt": string;
-                "jsx-a11y/interactive-supports-focus": string[];
-                "jsx-a11y/label-has-associated-control": string;
-                "jsx-a11y/label-has-for": string;
-                "jsx-a11y/media-has-caption": string;
-                "jsx-a11y/mouse-events-have-key-events": string;
-                "jsx-a11y/no-access-key": string;
-                "jsx-a11y/no-autofocus": string;
-                "jsx-a11y/no-distracting-elements": string;
-                "jsx-a11y/no-interactive-element-to-noninteractive-role": string[];
-                "jsx-a11y/no-noninteractive-element-interactions": string[];
-                "jsx-a11y/no-noninteractive-element-to-interactive-role": string[];
-                "jsx-a11y/no-noninteractive-tabindex": string[];
-                "jsx-a11y/no-redundant-roles": string;
-                "jsx-a11y/no-static-element-interactions": string[];
-                "jsx-a11y/role-has-required-aria-props": string;
-                "jsx-a11y/role-supports-aria-props": string;
-                "jsx-a11y/scope": string;
-                "jsx-a11y/tabindex-no-positive": string;
-            };
-        };
-        strict: {
-            languageOptions: {
-                parserOptions: {
-                    ecmaFeatures: {
-                        jsx: boolean;
-                    };
-                };
-            };
-            name: string;
-            plugins: {
-                "jsx-a11y": {
-                    meta: {
-                        name: string;
-                        version: string;
-                    };
-                    rules: {
-                        "accessible-emoji": {
-                            create: any;
-                            meta: {
-                                deprecated: boolean;
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "alt-text": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        area: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        elements: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        img: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        "input[type=\"image\"]": {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        object: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "anchor-ambiguous-text": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        words: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "anchor-has-content": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "anchor-is-valid": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        aspects: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                enum: string[];
-                                                type: string;
-                                            };
-                                            minItems: number;
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        specialLink: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "aria-activedescendant-has-tabindex": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "aria-props": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "aria-proptypes": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                            validityCheck: any;
-                        };
-                        "aria-role": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        allowedInvalidRoles: {
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        ignoreNonDOM: {
-                                            default: boolean;
-                                            type: string;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "aria-unsupported-elements": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "autocomplete-valid": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        inputComponents: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "click-events-have-key-events": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "control-has-associated-label": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        controlComponents: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        depth: {
-                                            description: string;
-                                            minimum: number;
-                                            type: string;
-                                        };
-                                        ignoreElements: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        ignoreRoles: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        labelAttributes: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "heading-has-content": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "html-has-lang": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "iframe-has-title": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "img-redundant-alt": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        words: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "interactive-supports-focus": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        tabbable: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                enum: string[];
-                                                type: string;
-                                            };
-                                            minItems: number;
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "label-has-associated-control": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        assert: {
-                                            description: string;
-                                            enum: string[];
-                                            type: string;
-                                        };
-                                        controlComponents: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        depth: {
-                                            description: string;
-                                            minimum: number;
-                                            type: string;
-                                        };
-                                        labelAttributes: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        labelComponents: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "label-has-for": {
-                            create: any;
-                            meta: {
-                                deprecated: boolean;
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                replacedBy: string[];
-                                schema: {
-                                    properties: {
-                                        allowChildren: {
-                                            type: string;
-                                        };
-                                        components: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        required: {
-                                            oneOf: {
-                                                enum: string[];
-                                                type: string;
-                                            }[];
-                                        };
-                                    };
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        lang: {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "media-has-caption": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        audio: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        track: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        video: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "mouse-events-have-key-events": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        hoverInHandlers: {
-                                            additionalItems: boolean;
-                                            description: string;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        hoverOutHandlers: {
-                                            additionalItems: boolean;
-                                            description: string;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-access-key": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-aria-hidden-on-focusable": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-autofocus": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        ignoreNonDOM: {
-                                            default: boolean;
-                                            type: string;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-distracting-elements": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        elements: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                enum: string[];
-                                                type: string;
-                                            };
-                                            minItems: number;
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-interactive-element-to-noninteractive-role": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    additionalProperties: {
-                                        items: {
-                                            type: string;
-                                        };
-                                        type: string;
-                                        uniqueItems: boolean;
-                                    };
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-noninteractive-element-interactions": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        handlers: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-noninteractive-element-to-interactive-role": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    additionalProperties: {
-                                        items: {
-                                            type: string;
-                                        };
-                                        type: string;
-                                        uniqueItems: boolean;
-                                    };
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-noninteractive-tabindex": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        roles: {
-                                            additionalItems: boolean;
-                                            description: string;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                        tags: {
-                                            additionalItems: boolean;
-                                            description: string;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-onchange": {
-                            create: any;
-                            meta: {
-                                deprecated: boolean;
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-redundant-roles": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    additionalProperties: {
-                                        items: {
-                                            type: string;
-                                        };
-                                        type: string;
-                                        uniqueItems: boolean;
-                                    };
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "no-static-element-interactions": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                        handlers: {
-                                            additionalItems: boolean;
-                                            items: {
-                                                type: string;
-                                            };
-                                            type: string;
-                                            uniqueItems: boolean;
-                                        };
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "prefer-tag-over-role": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "role-has-required-aria-props": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "role-supports-aria-props": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        scope: {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                        "tabindex-no-positive": {
-                            create: any;
-                            meta: {
-                                docs: {
-                                    description: string;
-                                    url: string;
-                                };
-                                schema: {
-                                    properties: {
-                                    };
-                                    required: any;
-                                    type: string;
-                                }[];
-                            };
-                        };
-                    };
-                };
-            };
-            rules: {
-                "jsx-a11y/alt-text": string;
-                "jsx-a11y/anchor-has-content": string;
-                "jsx-a11y/anchor-is-valid": string;
-                "jsx-a11y/aria-activedescendant-has-tabindex": string;
-                "jsx-a11y/aria-props": string;
-                "jsx-a11y/aria-proptypes": string;
-                "jsx-a11y/aria-role": string;
-                "jsx-a11y/aria-unsupported-elements": string;
-                "jsx-a11y/autocomplete-valid": string;
-                "jsx-a11y/click-events-have-key-events": string;
-                "jsx-a11y/control-has-associated-label": string[];
-                "jsx-a11y/heading-has-content": string;
-                "jsx-a11y/html-has-lang": string;
-                "jsx-a11y/iframe-has-title": string;
-                "jsx-a11y/img-redundant-alt": string;
-                "jsx-a11y/interactive-supports-focus": string[];
-                "jsx-a11y/label-has-associated-control": string;
-                "jsx-a11y/label-has-for": string;
-                "jsx-a11y/media-has-caption": string;
-                "jsx-a11y/mouse-events-have-key-events": string;
-                "jsx-a11y/no-access-key": string;
-                "jsx-a11y/no-autofocus": string;
-                "jsx-a11y/no-distracting-elements": string;
-                "jsx-a11y/no-interactive-element-to-noninteractive-role": string;
-                "jsx-a11y/no-noninteractive-element-interactions": string[];
-                "jsx-a11y/no-noninteractive-element-to-interactive-role": string;
-                "jsx-a11y/no-noninteractive-tabindex": string;
-                "jsx-a11y/no-redundant-roles": string;
-                "jsx-a11y/no-static-element-interactions": string;
-                "jsx-a11y/role-has-required-aria-props": string;
-                "jsx-a11y/role-supports-aria-props": string;
-                "jsx-a11y/scope": string;
-                "jsx-a11y/tabindex-no-positive": string;
-            };
-        };
-    };
-    meta: {
-        name: string;
-        version: string;
-    };
-    rules: {
-        "accessible-emoji": {
-            create: any;
-            meta: {
+            version: string;
+          };
+          rules: {
+            "accessible-emoji": {
+              create: any;
+              meta: {
                 deprecated: boolean;
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "alt-text": {
-            create: any;
-            meta: {
+            "alt-text": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        area: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        elements: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        img: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        "input[type=\"image\"]": {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        object: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    area: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                    elements: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    img: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    'input[type="image"]': {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    object: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "anchor-ambiguous-text": {
-            create: any;
-            meta: {
+            "anchor-ambiguous-text": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        words: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    words: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "anchor-has-content": {
-            create: any;
-            meta: {
+            "anchor-has-content": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        components: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "anchor-is-valid": {
-            create: any;
-            meta: {
+            "anchor-is-valid": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        aspects: {
-                            additionalItems: boolean;
-                            items: {
-                                enum: string[];
-                                type: string;
-                            };
-                            minItems: number;
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        components: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        specialLink: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    aspects: {
+                      additionalItems: boolean;
+                      items: {
+                        enum: string[];
+                        type: string;
+                      };
+                      minItems: number;
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    specialLink: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "aria-activedescendant-has-tabindex": {
-            create: any;
-            meta: {
+            "aria-activedescendant-has-tabindex": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "aria-props": {
-            create: any;
-            meta: {
+            "aria-props": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "aria-proptypes": {
-            create: any;
-            meta: {
+            "aria-proptypes": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
+              validityCheck: any;
             };
-            validityCheck: any;
-        };
-        "aria-role": {
-            create: any;
-            meta: {
+            "aria-role": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        allowedInvalidRoles: {
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        ignoreNonDOM: {
-                            default: boolean;
-                            type: string;
-                        };
+                  properties: {
+                    allowedInvalidRoles: {
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                    ignoreNonDOM: {
+                      default: boolean;
+                      type: string;
+                    };
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "aria-unsupported-elements": {
-            create: any;
-            meta: {
+            "aria-unsupported-elements": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "autocomplete-valid": {
-            create: any;
-            meta: {
+            "autocomplete-valid": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        inputComponents: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    inputComponents: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "click-events-have-key-events": {
-            create: any;
-            meta: {
+            "click-events-have-key-events": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "control-has-associated-label": {
-            create: any;
-            meta: {
+            "control-has-associated-label": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        controlComponents: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        depth: {
-                            description: string;
-                            minimum: number;
-                            type: string;
-                        };
-                        ignoreElements: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        ignoreRoles: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        labelAttributes: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    controlComponents: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                    depth: {
+                      description: string;
+                      minimum: number;
+                      type: string;
+                    };
+                    ignoreElements: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    ignoreRoles: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    labelAttributes: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "heading-has-content": {
-            create: any;
-            meta: {
+            "heading-has-content": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        components: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "html-has-lang": {
-            create: any;
-            meta: {
+            "html-has-lang": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "iframe-has-title": {
-            create: any;
-            meta: {
+            "iframe-has-title": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "img-redundant-alt": {
-            create: any;
-            meta: {
+            "img-redundant-alt": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        components: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        words: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                    words: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "interactive-supports-focus": {
-            create: any;
-            meta: {
+            "interactive-supports-focus": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        tabbable: {
-                            additionalItems: boolean;
-                            items: {
-                                enum: string[];
-                                type: string;
-                            };
-                            minItems: number;
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    tabbable: {
+                      additionalItems: boolean;
+                      items: {
+                        enum: string[];
+                        type: string;
+                      };
+                      minItems: number;
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    required: any;
-                    type: string;
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "label-has-associated-control": {
-            create: any;
-            meta: {
+            "label-has-associated-control": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        assert: {
-                            description: string;
-                            enum: string[];
-                            type: string;
-                        };
-                        controlComponents: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        depth: {
-                            description: string;
-                            minimum: number;
-                            type: string;
-                        };
-                        labelAttributes: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        labelComponents: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
+                  properties: {
+                    assert: {
+                      description: string;
+                      enum: string[];
+                      type: string;
                     };
-                    required: any;
-                    type: string;
+                    controlComponents: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    depth: {
+                      description: string;
+                      minimum: number;
+                      type: string;
+                    };
+                    labelAttributes: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    labelComponents: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "label-has-for": {
-            create: any;
-            meta: {
+            "label-has-for": {
+              create: any;
+              meta: {
                 deprecated: boolean;
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 replacedBy: string[];
                 schema: {
-                    properties: {
-                        allowChildren: {
-                            type: string;
-                        };
-                        components: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        required: {
-                            oneOf: {
-                                enum: string[];
-                                type: string;
-                            }[];
-                        };
+                  properties: {
+                    allowChildren: {
+                      type: string;
                     };
-                    type: string;
-                }[];
-            };
-        };
-        lang: {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
-        "media-has-caption": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                        audio: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        track: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        video: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
-        "mouse-events-have-key-events": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                        hoverInHandlers: {
-                            additionalItems: boolean;
-                            description: string;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        hoverOutHandlers: {
-                            additionalItems: boolean;
-                            description: string;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
-        "no-access-key": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
-        "no-aria-hidden-on-focusable": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
-        "no-autofocus": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                        ignoreNonDOM: {
-                            default: boolean;
-                            type: string;
-                        };
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
-        "no-distracting-elements": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                        elements: {
-                            additionalItems: boolean;
-                            items: {
-                                enum: string[];
-                                type: string;
-                            };
-                            minItems: number;
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
-        "no-interactive-element-to-noninteractive-role": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    additionalProperties: {
-                        items: {
-                            type: string;
-                        };
+                    components: {
+                      additionalItems: boolean;
+                      items: {
                         type: string;
-                        uniqueItems: boolean;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    type: string;
-                }[];
-            };
-        };
-        "no-noninteractive-element-interactions": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                        handlers: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
-        "no-noninteractive-element-to-interactive-role": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    additionalProperties: {
-                        items: {
-                            type: string;
-                        };
+                    required: {
+                      oneOf: {
+                        enum: string[];
                         type: string;
-                        uniqueItems: boolean;
+                      }[];
                     };
-                    type: string;
+                  };
+                  type: string;
                 }[];
+              };
             };
-        };
-        "no-noninteractive-tabindex": {
-            create: any;
-            meta: {
+            lang: {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        roles: {
-                            additionalItems: boolean;
-                            description: string;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                        tags: {
-                            additionalItems: boolean;
-                            description: string;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "no-onchange": {
-            create: any;
-            meta: {
+            "media-has-caption": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    audio: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    track: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    video: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "mouse-events-have-key-events": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    hoverInHandlers: {
+                      additionalItems: boolean;
+                      description: string;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    hoverOutHandlers: {
+                      additionalItems: boolean;
+                      description: string;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-access-key": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-aria-hidden-on-focusable": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-autofocus": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    ignoreNonDOM: {
+                      default: boolean;
+                      type: string;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-distracting-elements": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    elements: {
+                      additionalItems: boolean;
+                      items: {
+                        enum: string[];
+                        type: string;
+                      };
+                      minItems: number;
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-interactive-element-to-noninteractive-role": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  additionalProperties: {
+                    items: {
+                      type: string;
+                    };
+                    type: string;
+                    uniqueItems: boolean;
+                  };
+                  type: string;
+                }[];
+              };
+            };
+            "no-noninteractive-element-interactions": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    handlers: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-noninteractive-element-to-interactive-role": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  additionalProperties: {
+                    items: {
+                      type: string;
+                    };
+                    type: string;
+                    uniqueItems: boolean;
+                  };
+                  type: string;
+                }[];
+              };
+            };
+            "no-noninteractive-tabindex": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    roles: {
+                      additionalItems: boolean;
+                      description: string;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    tags: {
+                      additionalItems: boolean;
+                      description: string;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-onchange": {
+              create: any;
+              meta: {
                 deprecated: boolean;
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "no-redundant-roles": {
-            create: any;
-            meta: {
+            "no-redundant-roles": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    additionalProperties: {
-                        items: {
-                            type: string;
-                        };
+                  additionalProperties: {
+                    items: {
+                      type: string;
+                    };
+                    type: string;
+                    uniqueItems: boolean;
+                  };
+                  type: string;
+                }[];
+              };
+            };
+            "no-static-element-interactions": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    handlers: {
+                      additionalItems: boolean;
+                      items: {
                         type: string;
-                        uniqueItems: boolean;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
                     };
-                    type: string;
+                  };
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "no-static-element-interactions": {
-            create: any;
-            meta: {
+            "prefer-tag-over-role": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                        handlers: {
-                            additionalItems: boolean;
-                            items: {
-                                type: string;
-                            };
-                            type: string;
-                            uniqueItems: boolean;
-                        };
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "prefer-tag-over-role": {
-            create: any;
-            meta: {
+            "role-has-required-aria-props": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "role-has-required-aria-props": {
-            create: any;
-            meta: {
+            "role-supports-aria-props": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        "role-supports-aria-props": {
-            create: any;
-            meta: {
+            scope: {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
-        };
-        scope: {
-            create: any;
-            meta: {
+            "tabindex-no-positive": {
+              create: any;
+              meta: {
                 docs: {
-                    description: string;
-                    url: string;
+                  description: string;
+                  url: string;
                 };
                 schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
+                  properties: {};
+                  required: any;
+                  type: string;
                 }[];
+              };
             };
+          };
         };
-        "tabindex-no-positive": {
-            create: any;
-            meta: {
-                docs: {
-                    description: string;
-                    url: string;
-                };
-                schema: {
-                    properties: {
-                    };
-                    required: any;
-                    type: string;
-                }[];
-            };
-        };
+      };
+      rules: {
+        "jsx-a11y/alt-text": string;
+        "jsx-a11y/anchor-ambiguous-text": string;
+        "jsx-a11y/anchor-has-content": string;
+        "jsx-a11y/anchor-is-valid": string;
+        "jsx-a11y/aria-activedescendant-has-tabindex": string;
+        "jsx-a11y/aria-props": string;
+        "jsx-a11y/aria-proptypes": string;
+        "jsx-a11y/aria-role": string;
+        "jsx-a11y/aria-unsupported-elements": string;
+        "jsx-a11y/autocomplete-valid": string;
+        "jsx-a11y/click-events-have-key-events": string;
+        "jsx-a11y/control-has-associated-label": string[];
+        "jsx-a11y/heading-has-content": string;
+        "jsx-a11y/html-has-lang": string;
+        "jsx-a11y/iframe-has-title": string;
+        "jsx-a11y/img-redundant-alt": string;
+        "jsx-a11y/interactive-supports-focus": string[];
+        "jsx-a11y/label-has-associated-control": string;
+        "jsx-a11y/label-has-for": string;
+        "jsx-a11y/media-has-caption": string;
+        "jsx-a11y/mouse-events-have-key-events": string;
+        "jsx-a11y/no-access-key": string;
+        "jsx-a11y/no-autofocus": string;
+        "jsx-a11y/no-distracting-elements": string;
+        "jsx-a11y/no-interactive-element-to-noninteractive-role": string[];
+        "jsx-a11y/no-noninteractive-element-interactions": string[];
+        "jsx-a11y/no-noninteractive-element-to-interactive-role": string[];
+        "jsx-a11y/no-noninteractive-tabindex": string[];
+        "jsx-a11y/no-redundant-roles": string;
+        "jsx-a11y/no-static-element-interactions": string[];
+        "jsx-a11y/role-has-required-aria-props": string;
+        "jsx-a11y/role-supports-aria-props": string;
+        "jsx-a11y/scope": string;
+        "jsx-a11y/tabindex-no-positive": string;
+      };
     };
+    strict: {
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: boolean;
+          };
+        };
+      };
+      name: string;
+      plugins: {
+        "jsx-a11y": {
+          meta: {
+            name: string;
+            version: string;
+          };
+          rules: {
+            "accessible-emoji": {
+              create: any;
+              meta: {
+                deprecated: boolean;
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "alt-text": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    area: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    elements: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    img: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    'input[type="image"]': {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    object: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "anchor-ambiguous-text": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    words: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "anchor-has-content": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "anchor-is-valid": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    aspects: {
+                      additionalItems: boolean;
+                      items: {
+                        enum: string[];
+                        type: string;
+                      };
+                      minItems: number;
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    specialLink: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "aria-activedescendant-has-tabindex": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "aria-props": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "aria-proptypes": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+              validityCheck: any;
+            };
+            "aria-role": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    allowedInvalidRoles: {
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    ignoreNonDOM: {
+                      default: boolean;
+                      type: string;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "aria-unsupported-elements": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "autocomplete-valid": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    inputComponents: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "click-events-have-key-events": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "control-has-associated-label": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    controlComponents: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    depth: {
+                      description: string;
+                      minimum: number;
+                      type: string;
+                    };
+                    ignoreElements: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    ignoreRoles: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    labelAttributes: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "heading-has-content": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "html-has-lang": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "iframe-has-title": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "img-redundant-alt": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    words: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "interactive-supports-focus": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    tabbable: {
+                      additionalItems: boolean;
+                      items: {
+                        enum: string[];
+                        type: string;
+                      };
+                      minItems: number;
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "label-has-associated-control": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    assert: {
+                      description: string;
+                      enum: string[];
+                      type: string;
+                    };
+                    controlComponents: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    depth: {
+                      description: string;
+                      minimum: number;
+                      type: string;
+                    };
+                    labelAttributes: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    labelComponents: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "label-has-for": {
+              create: any;
+              meta: {
+                deprecated: boolean;
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                replacedBy: string[];
+                schema: {
+                  properties: {
+                    allowChildren: {
+                      type: string;
+                    };
+                    components: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    required: {
+                      oneOf: {
+                        enum: string[];
+                        type: string;
+                      }[];
+                    };
+                  };
+                  type: string;
+                }[];
+              };
+            };
+            lang: {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "media-has-caption": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    audio: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    track: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    video: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "mouse-events-have-key-events": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    hoverInHandlers: {
+                      additionalItems: boolean;
+                      description: string;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    hoverOutHandlers: {
+                      additionalItems: boolean;
+                      description: string;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-access-key": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-aria-hidden-on-focusable": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-autofocus": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    ignoreNonDOM: {
+                      default: boolean;
+                      type: string;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-distracting-elements": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    elements: {
+                      additionalItems: boolean;
+                      items: {
+                        enum: string[];
+                        type: string;
+                      };
+                      minItems: number;
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-interactive-element-to-noninteractive-role": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  additionalProperties: {
+                    items: {
+                      type: string;
+                    };
+                    type: string;
+                    uniqueItems: boolean;
+                  };
+                  type: string;
+                }[];
+              };
+            };
+            "no-noninteractive-element-interactions": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    handlers: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-noninteractive-element-to-interactive-role": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  additionalProperties: {
+                    items: {
+                      type: string;
+                    };
+                    type: string;
+                    uniqueItems: boolean;
+                  };
+                  type: string;
+                }[];
+              };
+            };
+            "no-noninteractive-tabindex": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    roles: {
+                      additionalItems: boolean;
+                      description: string;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                    tags: {
+                      additionalItems: boolean;
+                      description: string;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-onchange": {
+              create: any;
+              meta: {
+                deprecated: boolean;
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "no-redundant-roles": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  additionalProperties: {
+                    items: {
+                      type: string;
+                    };
+                    type: string;
+                    uniqueItems: boolean;
+                  };
+                  type: string;
+                }[];
+              };
+            };
+            "no-static-element-interactions": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {
+                    handlers: {
+                      additionalItems: boolean;
+                      items: {
+                        type: string;
+                      };
+                      type: string;
+                      uniqueItems: boolean;
+                    };
+                  };
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "prefer-tag-over-role": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "role-has-required-aria-props": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "role-supports-aria-props": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            scope: {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+            "tabindex-no-positive": {
+              create: any;
+              meta: {
+                docs: {
+                  description: string;
+                  url: string;
+                };
+                schema: {
+                  properties: {};
+                  required: any;
+                  type: string;
+                }[];
+              };
+            };
+          };
+        };
+      };
+      rules: {
+        "jsx-a11y/alt-text": string;
+        "jsx-a11y/anchor-has-content": string;
+        "jsx-a11y/anchor-is-valid": string;
+        "jsx-a11y/aria-activedescendant-has-tabindex": string;
+        "jsx-a11y/aria-props": string;
+        "jsx-a11y/aria-proptypes": string;
+        "jsx-a11y/aria-role": string;
+        "jsx-a11y/aria-unsupported-elements": string;
+        "jsx-a11y/autocomplete-valid": string;
+        "jsx-a11y/click-events-have-key-events": string;
+        "jsx-a11y/control-has-associated-label": string[];
+        "jsx-a11y/heading-has-content": string;
+        "jsx-a11y/html-has-lang": string;
+        "jsx-a11y/iframe-has-title": string;
+        "jsx-a11y/img-redundant-alt": string;
+        "jsx-a11y/interactive-supports-focus": string[];
+        "jsx-a11y/label-has-associated-control": string;
+        "jsx-a11y/label-has-for": string;
+        "jsx-a11y/media-has-caption": string;
+        "jsx-a11y/mouse-events-have-key-events": string;
+        "jsx-a11y/no-access-key": string;
+        "jsx-a11y/no-autofocus": string;
+        "jsx-a11y/no-distracting-elements": string;
+        "jsx-a11y/no-interactive-element-to-noninteractive-role": string;
+        "jsx-a11y/no-noninteractive-element-interactions": string[];
+        "jsx-a11y/no-noninteractive-element-to-interactive-role": string;
+        "jsx-a11y/no-noninteractive-tabindex": string;
+        "jsx-a11y/no-redundant-roles": string;
+        "jsx-a11y/no-static-element-interactions": string;
+        "jsx-a11y/role-has-required-aria-props": string;
+        "jsx-a11y/role-supports-aria-props": string;
+        "jsx-a11y/scope": string;
+        "jsx-a11y/tabindex-no-positive": string;
+      };
+    };
+  };
+  meta: {
+    name: string;
+    version: string;
+  };
+  rules: {
+    "accessible-emoji": {
+      create: any;
+      meta: {
+        deprecated: boolean;
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "alt-text": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            area: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            elements: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            img: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            'input[type="image"]': {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            object: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "anchor-ambiguous-text": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            words: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "anchor-has-content": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            components: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "anchor-is-valid": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            aspects: {
+              additionalItems: boolean;
+              items: {
+                enum: string[];
+                type: string;
+              };
+              minItems: number;
+              type: string;
+              uniqueItems: boolean;
+            };
+            components: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            specialLink: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "aria-activedescendant-has-tabindex": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "aria-props": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "aria-proptypes": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+      validityCheck: any;
+    };
+    "aria-role": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            allowedInvalidRoles: {
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            ignoreNonDOM: {
+              default: boolean;
+              type: string;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "aria-unsupported-elements": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "autocomplete-valid": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            inputComponents: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "click-events-have-key-events": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "control-has-associated-label": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            controlComponents: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            depth: {
+              description: string;
+              minimum: number;
+              type: string;
+            };
+            ignoreElements: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            ignoreRoles: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            labelAttributes: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "heading-has-content": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            components: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "html-has-lang": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "iframe-has-title": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "img-redundant-alt": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            components: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            words: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "interactive-supports-focus": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            tabbable: {
+              additionalItems: boolean;
+              items: {
+                enum: string[];
+                type: string;
+              };
+              minItems: number;
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "label-has-associated-control": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            assert: {
+              description: string;
+              enum: string[];
+              type: string;
+            };
+            controlComponents: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            depth: {
+              description: string;
+              minimum: number;
+              type: string;
+            };
+            labelAttributes: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            labelComponents: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "label-has-for": {
+      create: any;
+      meta: {
+        deprecated: boolean;
+        docs: {
+          description: string;
+          url: string;
+        };
+        replacedBy: string[];
+        schema: {
+          properties: {
+            allowChildren: {
+              type: string;
+            };
+            components: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            required: {
+              oneOf: {
+                enum: string[];
+                type: string;
+              }[];
+            };
+          };
+          type: string;
+        }[];
+      };
+    };
+    lang: {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "media-has-caption": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            audio: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            track: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            video: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "mouse-events-have-key-events": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            hoverInHandlers: {
+              additionalItems: boolean;
+              description: string;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            hoverOutHandlers: {
+              additionalItems: boolean;
+              description: string;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "no-access-key": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "no-aria-hidden-on-focusable": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "no-autofocus": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            ignoreNonDOM: {
+              default: boolean;
+              type: string;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "no-distracting-elements": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            elements: {
+              additionalItems: boolean;
+              items: {
+                enum: string[];
+                type: string;
+              };
+              minItems: number;
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "no-interactive-element-to-noninteractive-role": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          additionalProperties: {
+            items: {
+              type: string;
+            };
+            type: string;
+            uniqueItems: boolean;
+          };
+          type: string;
+        }[];
+      };
+    };
+    "no-noninteractive-element-interactions": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            handlers: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "no-noninteractive-element-to-interactive-role": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          additionalProperties: {
+            items: {
+              type: string;
+            };
+            type: string;
+            uniqueItems: boolean;
+          };
+          type: string;
+        }[];
+      };
+    };
+    "no-noninteractive-tabindex": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            roles: {
+              additionalItems: boolean;
+              description: string;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+            tags: {
+              additionalItems: boolean;
+              description: string;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "no-onchange": {
+      create: any;
+      meta: {
+        deprecated: boolean;
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "no-redundant-roles": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          additionalProperties: {
+            items: {
+              type: string;
+            };
+            type: string;
+            uniqueItems: boolean;
+          };
+          type: string;
+        }[];
+      };
+    };
+    "no-static-element-interactions": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {
+            handlers: {
+              additionalItems: boolean;
+              items: {
+                type: string;
+              };
+              type: string;
+              uniqueItems: boolean;
+            };
+          };
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "prefer-tag-over-role": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "role-has-required-aria-props": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "role-supports-aria-props": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    scope: {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+    "tabindex-no-positive": {
+      create: any;
+      meta: {
+        docs: {
+          description: string;
+          url: string;
+        };
+        schema: {
+          properties: {};
+          required: any;
+          type: string;
+        }[];
+      };
+    };
+  };
 };
-

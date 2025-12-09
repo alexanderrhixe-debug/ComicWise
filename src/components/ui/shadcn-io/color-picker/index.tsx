@@ -1,15 +1,5 @@
 "use client";
 
-import { Button } from "ui/button";
-import { Input } from "ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "ui/select";
-import { cn } from "utils";
 import Color from "color";
 import { PipetteIcon } from "lucide-react";
 import { Slider } from "radix-ui";
@@ -25,6 +15,10 @@ import {
   useRef,
   useState,
 } from "react";
+import { Button } from "ui/button";
+import { Input } from "ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select";
+import { cn } from "utils";
 
 interface ColorPickerContextValue {
   hue: number;
@@ -109,8 +103,13 @@ export const ColorPicker = ({
     if (onChange) {
       try {
         // allow alpha to be provided when constructing HSL
-        const c = (Color as any).hsl ? (Color as any).hsl(hue, saturation, lightness, alpha / 100) : Color.hsl(hue, saturation, lightness).alpha(alpha / 100);
-        const rgba = (c.rgb && typeof c.rgb === 'function' && typeof (c as any).array === 'function') ? (c.rgb().array() as number[]) : (c.rgb().array() as number[]);
+        const c = (Color as any).hsl
+          ? (Color as any).hsl(hue, saturation, lightness, alpha / 100)
+          : Color.hsl(hue, saturation, lightness).alpha(alpha / 100);
+        const rgba =
+          c.rgb && typeof c.rgb === "function" && typeof (c as any).array === "function"
+            ? (c.rgb().array() as number[])
+            : (c.rgb().array() as number[]);
         onChange([rgba[0] ?? 255, rgba[1] ?? 255, rgba[2] ?? 255, alpha / 100]);
       } catch (err) {
         // best-effort fallback

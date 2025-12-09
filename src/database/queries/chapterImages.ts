@@ -16,6 +16,9 @@ export async function getChapterImages(chapterId: number) {
 }
 
 export async function getChapterImageCount(chapterId: number) {
-  const images = await database.select().from(chapterImage).where(eq(chapterImage.chapterId, chapterId));
+  const images = await database
+    .select()
+    .from(chapterImage)
+    .where(eq(chapterImage.chapterId, chapterId));
   return images.length;
 }

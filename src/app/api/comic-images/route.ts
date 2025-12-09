@@ -2,6 +2,7 @@
 // COMIC IMAGES API - Manage Comic Gallery Images
 // ═══════════════════════════════════════════════════
 
+import { auth } from "auth";
 import {
   createComicImage,
   createComicImages,
@@ -9,7 +10,6 @@ import {
   updateComicImage,
 } from "database/mutations/comicImages";
 import { getComicImages } from "database/queries/comicImages";
-import { auth } from "auth";
 import {
   batchCreateComicImagesSchema,
   batchDeleteSchema,

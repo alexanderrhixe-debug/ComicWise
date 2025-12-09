@@ -25,7 +25,11 @@ export async function updateType(
   if (data.name !== undefined) cleanData.name = data.name;
   if (data.description !== undefined) cleanData.description = data.description || null;
 
-  const [updatedType] = await database.update(type).set(cleanData).where(eq(type.id, typeId)).returning();
+  const [updatedType] = await database
+    .update(type)
+    .set(cleanData)
+    .where(eq(type.id, typeId))
+    .returning();
   return updatedType;
 }
 

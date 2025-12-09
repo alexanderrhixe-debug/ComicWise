@@ -8,10 +8,10 @@ import {
   updateGenericEntity,
   zodToValidationResult,
 } from "lib/generic-crud";
-import { deleteGenre, updateGenre } from "database/mutations/genres";
-import { getGenreById } from "database/queries/genres";
 import { genreIdSchema, updateGenreSchema } from "lib/validations/schemas";
 import { NextRequest } from "next/server";
+import { deleteGenre, updateGenre } from "src/database/mutations/genres";
+import { getGenreById } from "src/database/queries/genres";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

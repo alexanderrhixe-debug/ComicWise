@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpAction } from "actions/auth/index";
 import { Alert, AlertDescription } from "components/ui/alert";
 import { Button } from "components/ui/button";
 import {
@@ -18,7 +19,6 @@ import {
 import { Input } from "components/ui/input";
 import { Label } from "components/ui/label";
 import { PasswordInput } from "components/ui/password-input";
-import { signUpAction } from "actions/auth/index";
 import { signUpSchema, type SignUpInput } from "lib/validations/schemas";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";

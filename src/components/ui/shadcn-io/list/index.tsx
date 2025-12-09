@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "utils";
 import {
   DndContext,
   type DragEndEvent,
@@ -10,6 +9,7 @@ import {
 } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import type { ReactNode } from "react";
+import { cn } from "utils";
 
 export type { DragEndEvent } from "@dnd-kit/core";
 

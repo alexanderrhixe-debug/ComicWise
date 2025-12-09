@@ -1,5 +1,6 @@
 "use client";
 
+import { createComic } from "actions/comics";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
 import { Input } from "components/ui/input";
@@ -12,7 +13,6 @@ import {
   SelectValue,
 } from "components/ui/select";
 import { Textarea } from "components/ui/textarea";
-import { createComic } from "actions/comics";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";

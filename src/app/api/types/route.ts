@@ -2,15 +2,11 @@
 // TYPES API - Full CRUD
 // ═══════════════════════════════════════════════════
 
-import {
-  createGenericEntity,
-  listGenericEntity,
-  zodToValidationResult,
-} from "lib/generic-crud";
-import { createType } from "database/mutations/types";
-import { getAllTypes } from "database/queries/types";
+import { createGenericEntity, listGenericEntity, zodToValidationResult } from "lib/generic-crud";
 import { createTypeSchema, typeFilterSchema } from "lib/validations/schemas";
 import { NextRequest } from "next/server";
+import { createType } from "src/database/mutations/types";
+import { getAllTypes } from "src/database/queries/types";
 
 export async function GET(request: NextRequest) {
   return listGenericEntity(request, {

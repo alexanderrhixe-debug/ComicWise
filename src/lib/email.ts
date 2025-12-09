@@ -12,7 +12,7 @@ import VerificationEmail from "components/emails/VerificationEmail";
 import WelcomeEmail from "components/emails/WelcomeEmail";
 import nodemailer from "nodemailer";
 
-import type { SendEmailOptions } from "types";
+import type { SendEmailOptions } from "src/types";
 
 // ═══════════════════════════════════════════════════
 // NODEMAILER TRANSPORTER SETUP

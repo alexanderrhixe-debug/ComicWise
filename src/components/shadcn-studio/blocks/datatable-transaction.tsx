@@ -24,22 +24,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "ui/dropdown-menu";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-} from "ui/pagination";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "ui/table";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "ui/pagination";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table";
 
-import { usePagination } from "hooks/use-pagination";
+import { usePagination } from "src/hooks/use-pagination";
 
 export type Item = {
   id: string;

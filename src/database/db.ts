@@ -9,8 +9,8 @@
 // - Connection caching for serverless environments
 // ═══════════════════════════════════════════════════
 
-import * as schema from "database/schema";
 import { env, isDevelopment } from "appConfig";
+import * as schema from "database/schema";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 

@@ -1,14 +1,14 @@
 "use server";
 
-import { database } from "database";
-import { passwordResetToken, user } from "database/schema";
 import { error } from "actions/utils";
 import { signIn } from "auth";
 import bcrypt from "bcryptjs";
+import { database } from "database";
+import { passwordResetToken, user } from "database/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import type { ActionResponse } from "types";
+import type { ActionResponse } from "src/types";
 
 const registerSchema = z
   .object({
@@ -117,7 +117,10 @@ export async function resetPassword(formData: FormData): Promise<ActionResponse>
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    await database.update(user).set({ password: hashedPassword }).where(eq(user.email, resetToken.email));
+    await database
+      .update(user)
+      .set({ password: hashedPassword })
+      .where(eq(user.email, resetToken.email));
 
     await database.delete(passwordResetToken).where(eq(passwordResetToken.token, data.token));
 

@@ -4,9 +4,9 @@
 // GENRES & TYPES CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "appConfig";
 import { database } from "database";
 import { type as comicType, genre } from "database/schema";
-import { appConfig } from "appConfig";
 import { eq, like, sql } from "drizzle-orm";
 import {
   createGenreSchema,

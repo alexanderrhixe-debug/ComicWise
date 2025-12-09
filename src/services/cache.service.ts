@@ -1,3 +1,33 @@
+import { createCacheClient } from "src/lib/cache";
+
+// Lazy loader for cache client to avoid forcing dependency at module import
+let clientInstance: ReturnType<typeof createCacheClient> | null = null;
+
+export function initCache(rawClient: any) {
+  clientInstance = createCacheClient(rawClient);
+  return clientInstance;
+}
+
+export const cache = {
+  async get(key: string) {
+    if (!clientInstance) return null;
+    return clientInstance.get(key);
+  },
+  async set(key: string, value: string, ttlSeconds?: number) {
+    if (!clientInstance) return;
+    return clientInstance.set(key, value, ttlSeconds);
+  },
+  async del(key: string) {
+    if (!clientInstance) return;
+    return clientInstance.del(key);
+  },
+  async clear() {
+    if (!clientInstance) return;
+    return clientInstance.clear?.();
+  },
+};
+
+export default cache;
 /**
  * Redis Cache Service
  * Provides caching layer for database database/queries and API responses

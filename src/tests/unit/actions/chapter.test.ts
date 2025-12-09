@@ -2,10 +2,10 @@
 // CHAPTER ACTIONS - UNIT TESTS
 // ═══════════════════════════════════════════════════
 
-import * as mutations from "database/mutations";
-import * as queries from "database/queries";
 import { createChapter, getChapterImages, updateChapter } from "actions/chapter";
 import * as authLib from "auth";
+import * as mutations from "src/database/mutations";
+import * as queries from "src/database/queries";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
 // Mock dependencies

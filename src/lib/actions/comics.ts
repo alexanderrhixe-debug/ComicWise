@@ -4,9 +4,9 @@
 // COMICS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "appConfig";
 import { database } from "database";
 import { comic, comicToGenre } from "database/schema";
-import { appConfig } from "appConfig";
 import { and, desc, eq, like, sql } from "drizzle-orm";
 import {
   comicFilterSchema,

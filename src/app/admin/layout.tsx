@@ -1,8 +1,8 @@
+import { auth } from "auth";
 import { Breadcrumbs } from "components/admin/Breadcrumbs";
 import { CommandMenu } from "components/admin/CommandMenu";
 import { AppSidebar } from "components/AppSidebar";
 import { SidebarInset, SidebarProvider } from "components/ui/sidebar";
-import { auth } from "auth";
 import { redirect } from "next/navigation";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

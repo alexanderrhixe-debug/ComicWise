@@ -1,11 +1,11 @@
 "use server";
 
-import * as mutations from "database/mutations";
 import { error } from "actions/utils";
 import { appConfig, checkRateLimit } from "appConfig";
+import * as mutations from "database/mutations";
 import { createAuthorSchema, updateAuthorSchema } from "lib/validator";
 import { revalidatePath } from "next/cache";
-import type { ActionResponse } from "types";
+import type { ActionResponse } from "src/types";
 import z from "zod";
 export async function createAuthor(formData: FormData): Promise<ActionResponse<{ id: number }>> {
   try {

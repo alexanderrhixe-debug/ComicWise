@@ -4,9 +4,9 @@ import { motion, type Transition } from "motion/react";
 import * as React from "react";
 import { Children } from "react";
 
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { TooltipContent, TooltipProvider, TooltipTrigger } from "ui/tooltip";
 import { cn } from "utils";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 // Define types based on components
 type TooltipContentProps = React.ComponentProps<typeof TooltipContent>;

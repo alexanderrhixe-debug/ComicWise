@@ -1,8 +1,8 @@
-import { db } from "db";
-import { account, authenticator, session, user, verificationToken } from "database/schema";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { env } from "appConfig";
 import bcrypt from "bcryptjs";
+import { account, authenticator, session, user, verificationToken } from "database/schema";
+import { db } from "db";
 import { eq } from "drizzle-orm";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";

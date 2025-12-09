@@ -1,9 +1,9 @@
 "use client";
 
-import { useBookmarkStore } from "stores/bookmark.store";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useBookmarkStore } from "stores/bookmark.store";
 import { Button } from "ui/button";
 
 interface BookmarkButtonProps {

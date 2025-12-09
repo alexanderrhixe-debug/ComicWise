@@ -42,7 +42,11 @@ export async function updateUser(
     ...(data.emailVerified !== undefined && { emailVerified: data.emailVerified }),
     updatedAt: new Date(),
   };
-  const [updatedUser] = await database.update(user).set(cleanData).where(eq(user.id, userId)).returning();
+  const [updatedUser] = await database
+    .update(user)
+    .set(cleanData)
+    .where(eq(user.id, userId))
+    .returning();
   return updatedUser;
 }
 

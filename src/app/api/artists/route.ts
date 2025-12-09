@@ -2,13 +2,9 @@
 // ARTISTS API - Full CRUD
 // ═══════════════════════════════════════════════════
 
-import {
-  createGenericEntity,
-  listGenericEntity,
-  zodToValidationResult,
-} from "lib/generic-crud";
 import { createArtist } from "database/mutations/artists";
 import { getAllArtists } from "database/queries/artists";
+import { createGenericEntity, listGenericEntity, zodToValidationResult } from "lib/generic-crud";
 import { artistFilterSchema, createArtistSchema } from "lib/validations/schemas";
 import { NextRequest } from "next/server";
 

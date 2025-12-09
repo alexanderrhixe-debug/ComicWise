@@ -4,10 +4,10 @@
 // USERS MANAGEMENT SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { database } from "database";
-import { user } from "database/schema";
 import { appConfig } from "appConfig";
 import bcrypt from "bcryptjs";
+import { database } from "database";
+import { user } from "database/schema";
 import { eq, like, or, sql } from "drizzle-orm";
 import { sendAccountUpdatedEmail, sendWelcomeEmail } from "lib/email";
 import {

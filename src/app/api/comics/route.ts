@@ -2,13 +2,13 @@
 // COMICS API - Full CRUD with Filtering & Pagination
 // ═══════════════════════════════════════════════════
 
-import { createComic } from "database/mutations/comics";
-import { getAllComics } from "database/queries/comics";
 import { auth } from "auth";
 import { comicFilterSchema, createComicSchema } from "lib/validations/schemas";
 import { NextRequest, NextResponse } from "next/server";
+import { createComic } from "src/database/mutations/comics";
+import { getAllComics } from "src/database/queries/comics";
 
-import type { ComicFilters } from "types";
+import type { ComicFilters } from "src/types";
 
 // ═══════════════════════════════════════════════════
 // GET - List Comics with Filtering & Pagination

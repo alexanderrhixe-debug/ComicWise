@@ -2,6 +2,7 @@
 // CHAPTER IMAGES API - Manage Chapter Page Images
 // ═══════════════════════════════════════════════════
 
+import { auth } from "auth";
 import {
   createChapterImage,
   createChapterImages,
@@ -9,7 +10,6 @@ import {
   updateChapterImage,
 } from "database/mutations/chapterImages";
 import { getChapterImages } from "database/queries/chapterImages";
-import { auth } from "auth";
 import {
   batchCreateChapterImagesSchema,
   batchDeleteSchema,

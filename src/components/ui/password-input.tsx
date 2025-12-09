@@ -1,14 +1,5 @@
 "use client";
 
-import { Input } from "ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "ui/input-group";
-import { Tooltip, TooltipContent, TooltipTrigger } from "ui/tooltip";
-import { cn } from "utils";
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import {
@@ -22,6 +13,10 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
+import { Input } from "ui/input";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "ui/input-group";
+import { Tooltip, TooltipContent, TooltipTrigger } from "ui/tooltip";
+import { cn } from "utils";
 
 const PasswordInputContext = createContext<{ password: string } | null>(null);
 

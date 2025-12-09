@@ -14,7 +14,7 @@ import { checkRateLimit } from "lib/ratelimit";
 import { loginSchema } from "lib/validator";
 import { z } from "zod";
 
-import type { ActionResponse } from "types";
+import type { ActionResponse } from "src/types";
 
 export async function signInWithCredentials(formData: FormData): Promise<ActionResponse> {
   try {

@@ -28,7 +28,11 @@ interface UpdateChapterData {
 }
 
 export async function updateChapter(chapterId: number, data: UpdateChapterData) {
-  const [updated] = await database.update(chapter).set(data).where(eq(chapter.id, chapterId)).returning();
+  const [updated] = await database
+    .update(chapter)
+    .set(data)
+    .where(eq(chapter.id, chapterId))
+    .returning();
 
   return updated;
 }
@@ -76,7 +80,10 @@ export async function addChapterImages(chapterId: number, imageUrls: string[]) {
 }
 
 export async function deleteChapterImage(imageId: number) {
-  const [deleted] = await database.delete(chapterImage).where(eq(chapterImage.id, imageId)).returning();
+  const [deleted] = await database
+    .delete(chapterImage)
+    .where(eq(chapterImage.id, imageId))
+    .returning();
 
   return deleted;
 }

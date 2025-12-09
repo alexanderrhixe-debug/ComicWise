@@ -1,10 +1,10 @@
 "use server";
 
-import { database } from "database";
-import { passwordResetToken, user, verificationToken } from "database/schema";
 import { error } from "actions/utils";
 import { appConfig } from "appConfig";
 import bcrypt from "bcryptjs";
+import { database } from "database";
+import { passwordResetToken, user, verificationToken } from "database/schema";
 import { eq } from "drizzle-orm";
 import { sendPasswordResetEmail, sendVerificationEmail, sendWelcomeEmail } from "lib/nodemailer";
 import { checkRateLimit } from "lib/ratelimit";
@@ -16,7 +16,7 @@ import {
 } from "lib/validator";
 import { z } from "zod";
 
-import type { ActionResponse } from "types";
+import type { ActionResponse } from "src/types";
 
 export async function registerWorkflow(formData: FormData): Promise<ActionResponse> {
   try {
@@ -146,7 +146,10 @@ export async function resetPasswordWorkflow(formData: FormData): Promise<ActionR
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    await database.update(user).set({ password: hashedPassword }).where(eq(user.email, resetToken.email));
+    await database
+      .update(user)
+      .set({ password: hashedPassword })
+      .where(eq(user.email, resetToken.email));
 
     await database.delete(passwordResetToken).where(eq(passwordResetToken.token, data.token));
 

@@ -1,9 +1,9 @@
 "use server";
 
-import { chapter, comic, database, readingProgress } from "database";
-import { and, desc, eq, lt } from "drizzle-orm";
 import { auth } from "auth";
+import { and, desc, eq, lt } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { chapter, comic, database, readingProgress } from "src/database";
 
 export interface SaveProgressData {
   comicId: number;

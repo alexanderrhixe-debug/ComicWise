@@ -4,9 +4,9 @@
 // BOOKMARKS & COMMENTS SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "appConfig";
 import { database } from "database";
 import { bookmark, comment } from "database/schema";
-import { appConfig } from "appConfig";
 import { and, desc, eq, sql } from "drizzle-orm";
 import {
   createBookmarkSchema,

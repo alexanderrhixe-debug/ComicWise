@@ -13,12 +13,7 @@ import { Bar, BarChart, Label, Pie, PieChart } from "recharts";
 
 import { Avatar, AvatarFallback } from "ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "ui/card";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "ui/chart";
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "ui/chart";
 
 const salesPlanPercentage = 54;
 const totalBars = 24;

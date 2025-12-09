@@ -2,8 +2,8 @@
 export * from "./db";
 export * from "./schema";
 
-import * as schema from "./schema";
 import { db } from "./db";
+import * as schema from "./schema";
 
 // Provide a `database` named export (many files import { database, ... } )
 export const database = db;

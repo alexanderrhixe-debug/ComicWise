@@ -54,7 +54,10 @@ export async function updateComicImage(
 }
 
 export async function deleteComicImage(imageId: number) {
-  const [deletedImage] = await database.delete(comicImage).where(eq(comicImage.id, imageId)).returning();
+  const [deletedImage] = await database
+    .delete(comicImage)
+    .where(eq(comicImage.id, imageId))
+    .returning();
   return deletedImage;
 }
 

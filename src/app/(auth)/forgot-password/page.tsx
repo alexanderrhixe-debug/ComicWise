@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { forgotPasswordAction } from "actions/auth/index";
 import { Alert, AlertDescription } from "components/ui/alert";
 import { Button } from "components/ui/button";
 import {
@@ -17,7 +18,6 @@ import {
 } from "components/ui/card";
 import { Input } from "components/ui/input";
 import { Label } from "components/ui/label";
-import { forgotPasswordAction } from "actions/auth/index";
 import { forgotPasswordSchema, type ForgotPasswordInput } from "lib/validations/schemas";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";

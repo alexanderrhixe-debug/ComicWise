@@ -3,43 +3,41 @@
 export = eslint_plugin_prettier;
 
 declare const eslint_plugin_prettier: {
-    configs: {
-        recommended: {
-            extends: string[];
-            plugins: string[];
-            rules: {
-                "arrow-body-style": string;
-                "prefer-arrow-callback": string;
-                "prettier/prettier": string;
-            };
+  configs: {
+    recommended: {
+      extends: string[];
+      plugins: string[];
+      rules: {
+        "arrow-body-style": string;
+        "prefer-arrow-callback": string;
+        "prettier/prettier": string;
+      };
+    };
+  };
+  meta: {
+    name: string;
+    version: string;
+  };
+  rules: {
+    prettier: {
+      create: any;
+      meta: {
+        docs: {
+          url: string;
         };
-    };
-    meta: {
-        name: string;
-        version: string;
-    };
-    rules: {
-        prettier: {
-            create: any;
-            meta: {
-                docs: {
-                    url: string;
-                };
-                fixable: string;
-                messages: {
-                    delete: string;
-                    insert: string;
-                    replace: string;
-                };
-                schema: {
-                    additionalProperties: boolean;
-                    properties: {
-                    };
-                    type: string;
-                }[];
-                type: string;
-            };
+        fixable: string;
+        messages: {
+          delete: string;
+          insert: string;
+          replace: string;
         };
+        schema: {
+          additionalProperties: boolean;
+          properties: {};
+          type: string;
+        }[];
+        type: string;
+      };
     };
+  };
 };
-

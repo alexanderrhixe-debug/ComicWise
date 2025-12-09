@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { resendVerificationEmailAction } from "actions/auth/index";
 import { Alert, AlertDescription } from "components/ui/alert";
 import { Button } from "components/ui/button";
 import {
@@ -17,7 +18,6 @@ import {
 } from "components/ui/card";
 import { Input } from "components/ui/input";
 import { Label } from "components/ui/label";
-import { resendVerificationEmailAction } from "actions/auth/index";
 import {
   resendVerificationEmailSchema,
   type ResendVerificationEmailInput,

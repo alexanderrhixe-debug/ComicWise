@@ -4,11 +4,11 @@
 // COMPREHENSIVE AUTH ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { database } from "database";
-import { passwordResetToken, user, verificationToken } from "database/schema";
 import { appConfig } from "appConfig";
 import { signIn } from "auth";
 import bcrypt from "bcryptjs";
+import { database } from "database";
+import { passwordResetToken, user, verificationToken } from "database/schema";
 import { eq } from "drizzle-orm";
 import { checkRateLimit } from "lib/ratelimit";
 import {
@@ -254,7 +254,9 @@ export async function forgotPasswordAction(data: ForgotPasswordInput): Promise<A
     const expires = new Date(Date.now() + appConfig.security.tokenExpiry.passwordReset);
 
     // Delete any existing tokens for this email
-    await database.delete(passwordResetToken).where(eq(passwordResetToken.email, existingUser.email));
+    await database
+      .delete(passwordResetToken)
+      .where(eq(passwordResetToken.email, existingUser.email));
 
     // Create new token
     await database.insert(passwordResetToken).values({
@@ -333,7 +335,9 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
       .where(eq(user.id, existingUser.id));
 
     // Delete used token
-    await database.delete(passwordResetToken).where(eq(passwordResetToken.token, validatedData.token));
+    await database
+      .delete(passwordResetToken)
+      .where(eq(passwordResetToken.token, validatedData.token));
 
     // Send confirmation email (async, don't wait)
     executeWorkflow({
@@ -398,7 +402,9 @@ export async function verifyEmailAction(data: VerifyEmailInput): Promise<ActionR
       .where(eq(user.id, existingUser.id));
 
     // Delete used token
-    await database.delete(verificationToken).where(eq(verificationToken.token, validatedData.token));
+    await database
+      .delete(verificationToken)
+      .where(eq(verificationToken.token, validatedData.token));
 
     return {
       success: true,
@@ -459,7 +465,9 @@ export async function resendVerificationEmailAction(
     }
 
     // Delete old tokens
-    await database.delete(verificationToken).where(eq(verificationToken.identifier, existingUser.email));
+    await database
+      .delete(verificationToken)
+      .where(eq(verificationToken.identifier, existingUser.email));
 
     // Generate new token
     const token = crypto.randomUUID();

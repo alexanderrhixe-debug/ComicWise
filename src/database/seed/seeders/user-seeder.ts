@@ -2,12 +2,12 @@
  * User Seeder
  */
 
+import { appConfig } from "appConfig";
+import bcrypt from "bcryptjs";
 import { database } from "database";
 import { user } from "database/schema";
 import { ProgressTracker } from "database/seed/logger";
 import { BatchProcessor } from "database/seed/utils/batch-processor";
-import { appConfig } from "appConfig";
-import bcrypt from "bcryptjs";
 import { imageService } from "services/image.service";
 
 import type { SeedConfig } from "database/seed/config";

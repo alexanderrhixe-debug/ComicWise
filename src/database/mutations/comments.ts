@@ -34,6 +34,9 @@ export async function updateComment(
 }
 
 export async function deleteComment(commentId: number) {
-  const [deletedComment] = await database.delete(comment).where(eq(comment.id, commentId)).returning();
+  const [deletedComment] = await database
+    .delete(comment)
+    .where(eq(comment.id, commentId))
+    .returning();
   return deletedComment;
 }
