@@ -8,6 +8,7 @@ import { appConfig } from "appConfig";
 import { database } from "database";
 import { comic, comicToGenre } from "database/schema";
 import { and, desc, eq, like, sql } from "drizzle-orm";
+import slugify from "lib/utils/slugify";
 import {
   comicFilterSchema,
   createComicSchema,
@@ -32,10 +33,13 @@ export async function createComic(
   try {
     const validated = createComicSchema.parse(input);
 
+    const slug = (validated as any).slug ?? slugify(validated.title);
+
     const [newComic] = await database
       .insert(comic)
       .values({
         ...validated,
+        slug,
         views: 0,
         rating: validated.rating ? String(validated.rating) : "0",
       })
@@ -77,6 +81,10 @@ export async function updateComic(
       ...validated,
       updatedAt: new Date(),
     };
+
+    if ((validated as any).slug !== undefined) {
+      updateData.slug = (validated as any).slug;
+    }
 
     if (validated.rating !== undefined) {
       updateData.rating = String(validated.rating);

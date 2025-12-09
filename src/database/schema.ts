@@ -168,6 +168,7 @@ export const comic = pgTable(
   {
     id: serial("id").primaryKey(),
     title: text("title").unique().notNull(),
+    slug: text("slug").unique().notNull(),
     description: text("description").notNull(),
     coverImage: text("coverImage").notNull(),
     status: comicStatus("status").default("Ongoing").notNull(),
@@ -182,6 +183,7 @@ export const comic = pgTable(
     search_vector: text("search_vector"),
   },
   (table) => [
+    index("comic_slug_idx").on(table.slug),
     index("comic_title_idx").on(table.title),
     index("comic_status_idx").on(table.status),
     index("comic_rating_idx").on(table.rating),
@@ -197,6 +199,7 @@ export const chapter = pgTable(
   "chapter",
   {
     id: serial("id").primaryKey(),
+    slug: text("slug").notNull(),
     title: text("title").notNull(),
     chapterNumber: integer("chapter_number").notNull(),
     releaseDate: timestamp("release_date", { mode: "date" }).notNull(),
@@ -207,6 +210,7 @@ export const chapter = pgTable(
     createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   },
   (table) => [
+    index("chapter_slug_idx").on(table.slug),
     index("chapter_comic_id_idx").on(table.comicId),
     index("chapter_number_idx").on(table.chapterNumber),
     index("chapter_release_date_idx").on(table.releaseDate),

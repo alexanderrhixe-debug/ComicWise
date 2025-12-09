@@ -85,20 +85,20 @@ declare global {
 }
 
 // Database Types
-export * from "./nodemailer";
+export * from "src/types/nodemailer";
 
 // Global Type Definitions
-export * from "./react-email";
+export * from "src/types/react-email";
 // Database Types
-export * from "./stub-types";
+export * from "src/types/stub-types";
 
 // Global Type Definitions
-export * from "./upstash";
+export * from "src/types/upstash";
 // Global Type Definitions
-export * from "./zxcvbn";
+export * from "src/types/zxcvbn";
 // Global Type Definitions
-export * from "./cloudinary";
+export * from "src/types/cloudinary";
 // Global Type Definitions
-export * from "./imagekit";
+export * from "src/types/imagekit";
 
 export {};

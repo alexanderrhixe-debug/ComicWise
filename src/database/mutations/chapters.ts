@@ -7,13 +7,20 @@ interface CreateChapterData {
   chapterNumber: number;
   releaseDate: Date;
   comicId: number;
+  slug?: string;
 }
 
 export async function createChapter(data: CreateChapterData) {
+  const { slug: providedSlug, title } = data as { slug?: string; title: string };
+  const slugModule = await import("lib/utils/slugify");
+  const slugify = slugModule.default ?? slugModule.slugify;
+  const slug = providedSlug ?? slugify(title);
+
   const [newChapter] = await database
     .insert(chapter)
     .values({
       ...data,
+      slug,
       views: 0,
     })
     .returning();

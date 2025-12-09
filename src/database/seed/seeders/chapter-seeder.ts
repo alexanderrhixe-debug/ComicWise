@@ -50,6 +50,7 @@ export class ChapterSeeder {
 
     const chapterTitle = chapterData.chaptername || chapterData.title || "Untitled Chapter";
     const chapterNumber = extractChapterNumber(chapterTitle);
+    const chapterSlug = createSlug(chapterTitle);
 
     // Check if chapter exists
     const existing = await database.query.chapter.findFirst({
@@ -60,7 +61,6 @@ export class ChapterSeeder {
     const pageImages: string[] = [];
     if (!this.options.skipImageDownload && chapterData.images) {
       const comicSlug = await this.getComicSlug(comicId);
-      const chapterSlug = createSlug(chapterTitle);
 
       for (let i = 0; i < chapterData.images.length; i++) {
         // eslint-disable-next-line security/detect-object-injection
@@ -88,6 +88,7 @@ export class ChapterSeeder {
         .update(chapter)
         .set({
           title: chapterTitle,
+          slug: createSlug(chapterTitle),
           releaseDate: chapterReleaseDate,
         })
         .where(eq(chapter.id, existing.id));
@@ -99,6 +100,7 @@ export class ChapterSeeder {
         comicId,
         chapterNumber,
         title: chapterTitle,
+        slug: chapterSlug,
         releaseDate: chapterReleaseDate,
         views: 0,
       });

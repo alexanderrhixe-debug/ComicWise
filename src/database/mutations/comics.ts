@@ -12,15 +12,21 @@ interface CreateComicData {
   artistId?: number;
   typeId?: number;
   genreIds?: number[];
+  slug?: string;
 }
 
 export async function createComic(data: CreateComicData) {
   const { genreIds, ...comicData } = data;
+  const { slug: providedSlug, title } = comicData as { slug?: string; title: string };
+  const slugModule = await import("lib/utils/slugify");
+  const slugify = slugModule.default ?? slugModule.slugify;
+  const slug = providedSlug ?? slugify(title);
 
   const [newComic] = await database
     .insert(comic)
     .values({
       ...comicData,
+      slug,
       status: comicData.status || "Ongoing",
       rating: "0",
       views: 0,

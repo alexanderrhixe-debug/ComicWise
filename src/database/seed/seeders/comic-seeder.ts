@@ -111,6 +111,7 @@ export class ComicSeeder {
         .update(comic)
         .set({
           description: (comicData.description || existing.description).slice(0, 5000),
+          slug,
           coverImage,
           status: comicStatus,
           publicationDate: normalizeDate(
@@ -133,6 +134,7 @@ export class ComicSeeder {
       const [created] = await database
         .insert(comic)
         .values({
+          slug,
           title: comicData.title,
           description: (comicData.description || "").slice(0, 5000), // Limit description length
           coverImage,

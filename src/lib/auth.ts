@@ -1,12 +1,11 @@
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { env } from "appConfig";
 import bcrypt from "bcryptjs";
-import { account, authenticator, session, user, verificationToken } from "database/schema";
+import { user } from "database/schema";
 import { db } from "db";
 import { eq } from "drizzle-orm";
+import createDrizzleAdapter from "lib/authAdapter";
+import getOAuthProviders from "lib/authConfig";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import Google from "next-auth/providers/google";
 import { z } from "zod";
 
 const signInSchema = z
@@ -16,25 +15,22 @@ const signInSchema = z
   })
   .strict();
 
+const oauthProviders = getOAuthProviders();
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: DrizzleAdapter(db, {
-    usersTable: user,
-    accountsTable: account,
-    sessionsTable: session,
-    verificationTokensTable: verificationToken,
-    authenticatorsTable: authenticator,
-  }) as any, // Type assertion necessary due to version mismatch between @auth/core and DrizzleAdapter
+  adapter: createDrizzleAdapter(db) as any,
   session: {
     strategy: "jwt",
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
   pages: {
-    signIn: "/sign-in",
+    signIn: "/(auth)/sign-in",
     signOut: "/",
-    error: "/sign-in",
-    verifyRequest: "/verify-request",
+    error: "/(auth)/sign-in",
+    verifyRequest: "/(auth)/verify-request",
   },
   providers: [
+    // Credentials provider with DB-backed authorize
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
@@ -70,14 +66,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
       },
     }),
-    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
-      ? [
-          Google({
-            clientId: env.GOOGLE_CLIENT_ID,
-            clientSecret: env.GOOGLE_CLIENT_SECRET,
-          }),
-        ]
-      : []),
+    // Spread any OAuth providers (e.g. Google)
+    ...oauthProviders,
   ],
   callbacks: {
     async jwt({ token, user }) {

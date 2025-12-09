@@ -8,6 +8,7 @@ import { appConfig } from "appConfig";
 import { database } from "database";
 import { chapter, chapterImage, comic } from "database/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
+import slugify from "lib/utils/slugify";
 import {
   chapterFilterSchema,
   createChapterSchema,
@@ -41,10 +42,13 @@ export async function createChapter(
       return { success: false, error: "Comic not found" };
     }
 
+    const slug = (validated as any).slug ?? slugify(validated.title);
+
     const [newChapter] = await database
       .insert(chapter)
       .values({
         ...validated,
+        slug,
         views: 0,
       })
       .returning();

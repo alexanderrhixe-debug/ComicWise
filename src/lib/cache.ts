@@ -42,7 +42,7 @@ export function createCacheClient(rawClient: any): CacheClient {
   }
 
   // ioredis client detection
-  if (rawClient && typeof rawClient.call === "function" || rawClient instanceof (Redis as any)) {
+  if ((rawClient && typeof rawClient.call === "function") || rawClient instanceof (Redis as any)) {
     const client: Redis = rawClient;
     return {
       raw: client,

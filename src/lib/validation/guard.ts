@@ -10,7 +10,11 @@ export function isRegExpMatch(match: RegExpExecArray | null | undefined, index =
   return !!(match && match.length > index && typeof match[index] === "string");
 }
 
-export function safeGet<T, K extends keyof T>(obj: T | null | undefined, key: K, fallback?: T[K]): T[K] | undefined {
+export function safeGet<T, K extends keyof T>(
+  obj: T | null | undefined,
+  key: K,
+  fallback?: T[K]
+): T[K] | undefined {
   if (!obj) return fallback;
   return obj[key] ?? fallback;
 }

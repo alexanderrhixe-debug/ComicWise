@@ -1,9 +1,11 @@
+import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "src/app-config/env";
+
+export * from "src/app-config/env";
 // ═══════════════════════════════════════════════════
 // APP CONFIGURATION (Next.js 16 Optimized)
 // ═══════════════════════════════════════════════════
 
-export * from "./env";
-import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "./env";
+// re-exported from env.ts
 
 // ═══════════════════════════════════════════════════
 // APPLICATION CONFIGURATION
@@ -169,6 +171,8 @@ export const appConfig = {
 // ═══════════════════════════════════════════════════
 
 export { env, getEnv, hasEnv, isDevelopment, isProduction, isTest };
+
+export default appConfig;
 
 // Re-export rate limiting utilities
 export { checkRateLimit, clearRateLimit, getRateLimitStatus } from "lib/ratelimit";
