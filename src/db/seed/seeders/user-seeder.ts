@@ -2,17 +2,16 @@
  * User Seeder
  */
 
+import { appConfig } from "app-config";
 import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm";
+import { db } from "db/client";
+import { user } from "db/schema";
+import { ProgressTracker } from "db/seed/logger";
+import { BatchProcessor } from "db/seed/utils/batch-processor";
+import { imageService } from "services/image.service";
 
-import { db } from "@/db/client";
-import { user } from "@/db/schema";
-import type { UserSeed } from "@/lib/validations/seed";
-import { imageService } from "@/services/image.service";
-
-import type { SeedConfig } from "@/db/seed/config";
-import { ProgressTracker } from "@/db/seed/logger";
-import { BatchProcessor } from "@/db/seed/utils/batch-processor";
+import type { SeedConfig } from "db/seed/config";
+import type { UserSeed } from "lib/validations/seed";
 
 export class UserSeeder {
   private options: SeedConfig["options"];
@@ -50,6 +49,8 @@ export class UserSeeder {
     let hashedPassword: string | null = null;
     if (userData.password) {
       hashedPassword = await bcrypt.hash(userData.password, 10);
+    } else if (appConfig.customPassword) {
+      hashedPassword = await bcrypt.hash(appConfig.customPassword, 10);
     }
 
     // Process image

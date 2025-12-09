@@ -26,12 +26,18 @@ export function extractChapterNumber(chapterName: string): number {
  * Normalize date string to Date object
  */
 export function normalizeDate(dateStr: string | Date | null | undefined): Date {
-  if (!dateStr) return new Date();
-  if (dateStr instanceof Date) return dateStr;
+  if (!dateStr) {
+    return new Date();
+  }
+  if (dateStr instanceof Date) {
+    return dateStr;
+  }
 
   // Try standard parsing
   const date = new Date(dateStr);
-  if (!isNaN(date.getTime())) return date;
+  if (!isNaN(date.getTime())) {
+    return date;
+  }
 
   // Handle "August 14th 2025" format
   const monthMap: Record<string, number> = {
@@ -70,7 +76,9 @@ export function deduplicateByKey<T>(items: T[], keyFn: (item: T) => string): T[]
   const seen = new Set<string>();
   return items.filter((item) => {
     const key = keyFn(item);
-    if (seen.has(key)) return false;
+    if (seen.has(key)) {
+      return false;
+    }
     seen.add(key);
     return true;
   });

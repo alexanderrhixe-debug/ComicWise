@@ -2,12 +2,11 @@
 // USER DETAIL API - Get, Update, Delete Single User
 // ═══════════════════════════════════════════════════
 
-import { NextRequest, NextResponse } from "next/server";
-
 import { deleteUser, updateUser } from "@/db/mutations/users";
 import { getUserById } from "@/db/queries/users";
 import { auth } from "@/lib/auth";
 import { updateUserSchema, userIdSchema } from "@/lib/validations/schemas";
+import { NextRequest, NextResponse } from "next/server";
 
 // ═══════════════════════════════════════════════════
 // GET - Get User by ID

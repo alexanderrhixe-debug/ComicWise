@@ -7,9 +7,8 @@
 import { Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
-
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "ui/button";
+import { cn } from "utils";
 
 interface ImageUploadProps {
   value?: string;
@@ -26,7 +25,7 @@ interface ImageUploadProps {
 }
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+// const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 
 export function ImageUpload({
   value,
@@ -55,7 +54,7 @@ export function ImageUpload({
 
     // Check file type
     if (!ALLOWED_TYPES.includes(file.type)) {
-      return `Invalid file type. Allowed types: ${ALLOWED_TYPES.map((t) => t.split("/")[1]).join(", ")}`;
+      return `Invalid file type. Allowed @/types: ${ALLOWED_TYPES.map((t) => t.split("/")[1]).join(", ")}`;
     }
 
     // Additional image dimension validation could be added here
@@ -64,7 +63,9 @@ export function ImageUpload({
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     // Reset states
     setError(null);
@@ -147,7 +148,10 @@ export function ImageUpload({
       onChange("");
     }
   };
-
+  if (success) {
+    console.log("Upload successful");
+    console.log(uploadProgress);
+  }
   return (
     <div className={cn("space-y-4", className)}>
       {value ? (
@@ -184,7 +188,15 @@ export function ImageUpload({
             `,
             disabled && "cursor-not-allowed opacity-50"
           )}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          aria-disabled={disabled}
           onClick={() => !disabled && fileInputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (!disabled && (e.key === "Enter" || e.key === " ")) {
+              fileInputRef.current?.click();
+            }
+          }}
         >
           {isUploading ? (
             <>

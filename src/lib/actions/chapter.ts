@@ -1,15 +1,15 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import type { z } from "zod";
-
+import { auth } from "auth";
 import {
   createChapter as createChapterMutation,
   updateChapter as updateChapterMutation,
-} from "@/db/mutations";
-import { getChapterImages as getChapterImagesMutation } from "@/db/queries";
-import { createChapterSchema, updateChapterSchema } from "@/lib/validations/schemas";
-import { auth } from "lib/auth";
+} from "db/mutations";
+import { getChapterImages as getChapterImagesMutation } from "db/queries";
+import { createChapterSchema, updateChapterSchema } from "lib/validations/schemas";
+import { revalidatePath } from "next/cache";
+
+import type { z } from "zod";
 
 export async function getChapterImages(chapterId: number) {
   return await getChapterImagesMutation(chapterId);

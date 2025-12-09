@@ -4,17 +4,17 @@
 // AUTH ACTIONS - LEGACY EXPORTS
 // ═══════════════════════════════════════════════════
 
-// NOTE: For new auth actions, import directly from "@/lib/actions/auth/index"
+// NOTE: For new auth actions, import directly from "actions/auth/index"
 // This file maintains backward compatibility for legacy imports
 
+import { error } from "actions/utils";
+import { appConfig } from "app-config";
+import { signIn, signOut } from "auth";
+import { checkRateLimit } from "lib/ratelimit";
+import { loginSchema } from "lib/validator";
 import { z } from "zod";
 
-import { error } from "@/lib/actions/utils";
-import { signIn, signOut } from "@/lib/auth";
-import { checkRateLimit } from "@/lib/ratelimit";
-import { loginSchema } from "@/lib/validator";
 import type { ActionResponse } from "@/types";
-import { appConfig } from "app-config";
 
 export async function signInWithCredentials(formData: FormData): Promise<ActionResponse> {
   try {

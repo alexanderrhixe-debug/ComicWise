@@ -3,14 +3,13 @@
 // Next.js 16.0.7 + Local File System Storage
 // ═══════════════════════════════════════════════════
 
+import { env } from "app-config";
 import crypto from "crypto";
 import fs from "fs/promises";
 import path from "path";
 import sharp from "sharp";
 
-import { env } from "@/app-config";
-
-import type { UploadOptions, UploadProvider, UploadResult } from "@/services/upload/index";
+import type { UploadOptions, UploadProvider, UploadResult } from "services/upload/index";
 
 export interface LocalTransformationOptions {
   width?: number;
@@ -61,9 +60,14 @@ export class LocalProvider implements UploadProvider {
       if (options.transformation) {
         let sharpInstance = sharp(buffer);
         const { width, height, quality, format } = options.transformation;
-        if (width || height) sharpInstance = sharpInstance.resize(width, height);
-        if (format) sharpInstance = sharpInstance.toFormat(format, { quality });
-        else if (quality) sharpInstance = sharpInstance.jpeg({ quality });
+        if (width || height) {
+          sharpInstance = sharpInstance.resize(width, height);
+        }
+        if (format) {
+          sharpInstance = sharpInstance.toFormat(format, { quality });
+        } else if (quality) {
+          sharpInstance = sharpInstance.jpeg({ quality });
+        }
         buffer = await sharpInstance.toBuffer();
       }
 

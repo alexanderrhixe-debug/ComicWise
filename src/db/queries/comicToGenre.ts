@@ -1,7 +1,6 @@
-import { eq } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { comicToGenre } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function getComicGenres(comicId: number) {
   return await db.query.comicToGenre.findMany({

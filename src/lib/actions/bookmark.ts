@@ -1,14 +1,13 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-
+import { auth } from "auth";
 import {
   addBookmark as addBookmarkMutation,
   removeBookmark as removeBookmarkMutation,
   updateReadingProgress as updateReadingProgressMutation,
-} from "@/db/mutations";
-import { getUserBookmarks } from "@/db/queries";
-import { auth } from "lib/auth";
+} from "db/mutations";
+import { getUserBookmarks } from "db/queries";
+import { revalidatePath } from "next/cache";
 
 export async function addBookmark(comicId: number, chapterId?: number) {
   const session = await auth();

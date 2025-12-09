@@ -1,29 +1,35 @@
 "use server";
 
+import { error } from "actions/utils";
+import { signIn } from "auth";
 import bcrypt from "bcryptjs";
+import { db } from "db/client";
+import { passwordResetToken, user } from "db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { db } from "@/db";
-import { passwordResetToken, user } from "@/db/schema";
-import { error } from "@/lib/actions/utils";
 import type { ActionResponse } from "@/types";
-import { signIn } from "lib/auth";
 
-const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+  })
+  .strict();
 
-const resetPasswordSchema = z.object({
-  email: z.string().email("Invalid email address"),
-});
+const resetPasswordSchema = z
+  .object({
+    email: z.string().email("Invalid email address"),
+  })
+  .strict();
 
-const newPasswordSchema = z.object({
-  token: z.string().min(1, "Token is required"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
+const newPasswordSchema = z
+  .object({
+    token: z.string().min(1, "Token is required"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+  })
+  .strict();
 
 export async function registerUser(formData: FormData): Promise<ActionResponse> {
   try {

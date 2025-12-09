@@ -1,25 +1,22 @@
 "use server";
 
-import crypto from "crypto";
-
-import bcrypt from "bcryptjs";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
-
-import * as mutations from "@/db/mutations";
-import * as queries from "@/db/queries";
-import { error } from "@/lib/actions/utils";
-import { sendPasswordResetEmail, sendWelcomeEmail } from "@/lib/nodemailer";
-import { registerSchema } from "@/lib/validator";
-import type { ActionResponse } from "@/types";
+import { error } from "actions/utils";
 import { appConfig, checkRateLimit } from "app-config";
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import * as mutations from "db/mutations";
+import * as queries from "db/queries";
+import { sendPasswordResetEmail, sendWelcomeEmail } from "lib/nodemailer";
+import { registerSchema } from "lib/validator";
 
-const updateUserAdminSchema = z.object({
-  name: z.string().min(2).optional(),
-  email: z.string().email().optional(),
-  role: z.enum(["user", "admin", "moderator"]).optional(),
-  image: z.string().url().optional().nullable(),
-});
+const updateUserAdminSchema = z
+  .object({
+    name: z.string().min(2).optional(),
+    email: z.string().email().optional(),
+    role: z.enum(["user", "admin", "moderator"]).optional(),
+    image: z.string().url().optional().nullable(),
+  })
+  .strict();
 
 export async function registerUser(formData: FormData): Promise<ActionResponse<{ id: string }>> {
   try {

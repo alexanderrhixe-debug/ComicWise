@@ -20,7 +20,7 @@ import type {
   session,
   user,
   verificationToken,
-} from "@/db/schema";
+} from "db/schema";
 
 // ═══════════════════════════════════════════════════
 // TABLE TYPES (Inferred from Drizzle Schema)
@@ -360,6 +360,6 @@ export interface DashboardStats {
 }
 
 // ═══════════════════════════════════════════════════
-// NOTE: All types are already exported via 'export type'
+// NOTE: All @/types are already exported via 'export type'
 // declarations above. No need for duplicate exports.
 // ═══════════════════════════════════════════════════

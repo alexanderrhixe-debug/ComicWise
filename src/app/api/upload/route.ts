@@ -2,9 +2,6 @@
 // IMAGE UPLOAD API - ImageKit Integration
 // ═══════════════════════════════════════════════════
 
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
 import { appConfig } from "@/app-config";
 import { auth } from "@/lib/auth";
 import {
@@ -16,17 +13,24 @@ import {
   uploadImage,
   validateImageFile,
 } from "@/lib/imagekit";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 // ═══════════════════════════════════════════════════
 // UPLOAD VALIDATION SCHEMA
 // ═══════════════════════════════════════════════════
 
-const uploadSchema = z.object({
-  file: z.instanceof(File),
-  type: z.enum(["comic-cover", "chapter-image", "avatar", "general"]).optional().default("general"),
-  entityId: z.string().optional(),
-  sequence: z.number().optional(),
-});
+const uploadSchema = z
+  .object({
+    file: z.instanceof(File),
+    type: z
+      .enum(["comic-cover", "chapter-image", "avatar", "general"])
+      .optional()
+      .default("general"),
+    entityId: z.string().optional(),
+    sequence: z.number().optional(),
+  })
+  .strict();
 
 // ═══════════════════════════════════════════════════
 // UPLOAD IMAGE API ROUTE

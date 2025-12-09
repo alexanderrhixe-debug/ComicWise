@@ -1,22 +1,22 @@
 "use server";
 
+import { error } from "actions/utils";
+import { appConfig } from "app-config";
 import bcrypt from "bcryptjs";
+import { db } from "db/client";
+import { passwordResetToken, user, verificationToken } from "db/schema";
 import { eq } from "drizzle-orm";
-import { z } from "zod";
-
-import { db } from "@/db";
-import { passwordResetToken, user, verificationToken } from "@/db/schema";
-import { error } from "@/lib/actions/utils";
-import { sendPasswordResetEmail, sendVerificationEmail, sendWelcomeEmail } from "@/lib/nodemailer";
-import { checkRateLimit } from "@/lib/ratelimit";
+import { sendPasswordResetEmail, sendVerificationEmail, sendWelcomeEmail } from "lib/nodemailer";
+import { checkRateLimit } from "lib/ratelimit";
 import {
   forgotPasswordSchema,
   registerSchema,
   resetPasswordSchema,
   verifyEmailSchema,
-} from "@/lib/validator";
+} from "lib/validator";
+import { z } from "zod";
+
 import type { ActionResponse } from "@/types";
-import { appConfig } from "app-config";
 
 export async function registerWorkflow(formData: FormData): Promise<ActionResponse> {
   try {

@@ -53,14 +53,26 @@ export function parseCLIArgs(args: string[]): SeedConfig {
     config.enabled = { users: false, comics: false, chapters: true };
   }
 
-  if (args.includes("--no-users")) config.enabled.users = false;
-  if (args.includes("--no-comics")) config.enabled.comics = false;
-  if (args.includes("--no-chapters")) config.enabled.chapters = false;
+  if (args.includes("--no-users")) {
+    config.enabled.users = false;
+  }
+  if (args.includes("--no-comics")) {
+    config.enabled.comics = false;
+  }
+  if (args.includes("--no-chapters")) {
+    config.enabled.chapters = false;
+  }
 
   // Option flags
-  if (args.includes("--skip-images")) config.options.skipImageDownload = true;
-  if (args.includes("--verbose") || args.includes("-v")) config.options.verbose = true;
-  if (args.includes("--dry-run")) config.options.dryRun = true;
+  if (args.includes("--skip-images")) {
+    config.options.skipImageDownload = true;
+  }
+  if (args.includes("--verbose") || args.includes("-v")) {
+    config.options.verbose = true;
+  }
+  if (args.includes("--dry-run")) {
+    config.options.dryRun = true;
+  }
 
   // Batch size
   const batchSizeIndex = args.indexOf("--batch-size");

@@ -4,11 +4,10 @@
 // COMICS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "app-config";
+import { db } from "db/client";
+import { comic, comicToGenre } from "db/schema";
 import { and, desc, eq, like, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-
-import { db } from "@/db";
-import { comic, comicToGenre } from "@/db/schema";
 import {
   comicFilterSchema,
   createComicSchema,
@@ -16,8 +15,8 @@ import {
   type ComicFilterInput,
   type CreateComicInput,
   type UpdateComicInput,
-} from "@/lib/validations/schemas";
-import { appConfig } from "app-config";
+} from "lib/validations/schemas";
+import { revalidatePath } from "next/cache";
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }

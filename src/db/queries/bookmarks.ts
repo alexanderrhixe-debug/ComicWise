@@ -1,7 +1,6 @@
-import { and, desc, eq } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { bookmark, chapter, comic, user } from "@/db/schema";
+import { and, desc, eq } from "drizzle-orm";
 
 export async function getUserBookmarks(userId: string) {
   const bookmarks = await db

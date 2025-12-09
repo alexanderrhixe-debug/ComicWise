@@ -2,18 +2,17 @@
  * Comic Seeder
  */
 
+import { db } from "db/client";
+import { comic, comicImage, comicToGenre } from "db/schema";
+import { ProgressTracker } from "db/seed/logger";
+import { BatchProcessor } from "db/seed/utils/batch-processor";
+import { createSlug, normalizeDate } from "db/seed/utils/helpers";
+import { MetadataCache } from "db/seed/utils/metadata-cache";
 import { eq } from "drizzle-orm";
 
-import { db } from "@/db/client";
-import { comic, comicImage, comicToGenre } from "@/db/schema";
 import type { ComicSeed } from "@/lib/validations/seed";
-import { imageService } from "@/services/image.service";
-
-import type { SeedConfig } from "@/db/seed/config";
-import { ProgressTracker } from "@/db/seed/logger";
-import { BatchProcessor } from "@/db/seed/utils/batch-processor";
-import { createSlug, normalizeDate } from "@/db/seed/utils/helpers";
-import { MetadataCache } from "@/db/seed/utils/metadata-cache";
+import type { SeedConfig } from "db/seed/config";
+import { imageService } from "services/image.service";
 
 export class ComicSeeder {
   private metadataCache: MetadataCache;
@@ -85,13 +84,17 @@ export class ComicSeeder {
           comicData.image_urls[0],
           `comics/${slug}`
         );
-        if (result) coverImage = result;
+        if (result) {
+          coverImage = result;
+        }
       } else if (comicData.images && comicData.images.length > 0) {
         const firstImage = comicData.images[0];
         const imageUrl = typeof firstImage === "string" ? firstImage : firstImage?.url || "";
         if (imageUrl) {
           const result = await imageService.processImageUrl(imageUrl, `comics/${slug}`);
-          if (result) coverImage = result;
+          if (result) {
+            coverImage = result;
+          }
         }
       }
     }
@@ -114,6 +117,7 @@ export class ComicSeeder {
             comicData.publicationDate || comicData.updated_at || comicData.updatedAt
           ),
           rating: comicData.rating?.toString() || existing.rating,
+          search_vector: existing.search_vector,
           authorId: authorId || existing.authorId,
           artistId: artistId || existing.artistId,
           typeId: typeId || existing.typeId,
@@ -138,6 +142,7 @@ export class ComicSeeder {
           ),
           rating: comicData.rating?.toString() || "0",
           views: 0,
+          search_vector: "",
           authorId,
           artistId,
           typeId,
@@ -180,7 +185,9 @@ export class ComicSeeder {
         // eslint-disable-next-line security/detect-object-injection
         const img = comicData.images[i];
         const imageUrl = typeof img === "string" ? img : img?.url || "";
-        if (imageUrl) imagesToProcess.push(imageUrl);
+        if (imageUrl) {
+          imagesToProcess.push(imageUrl);
+        }
       }
     }
 

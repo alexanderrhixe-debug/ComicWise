@@ -1,9 +1,10 @@
+/* eslint-disable security/detect-object-injection */
 /**
  * Batch Processor Utility
  * Provides efficient batch processing for large datasets
  */
 
-import { logger } from "@/db/seed/logger";
+import { logger } from "db/seed/logger";
 
 export interface BatchProcessorOptions {
   batchSize?: number;
@@ -30,13 +31,15 @@ export class BatchProcessor<T, R = void> {
    */
   async process(items: T[], processor: (item: T) => Promise<R>): Promise<R[]> {
     const results: R[] = [];
-    const batches = this.createBatches(items);
+    const batches: T[][] = this.createBatches(items);
 
     logger.info(`Processing ${items.length} items in ${batches.length} batches`);
 
     for (let i = 0; i < batches.length; i++) {
-      const batch = batches[i];
-      if (!batch) continue;
+      const batch: T[] | undefined = batches[i];
+      if (!batch) {
+        continue;
+      }
       logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} items)`);
 
       const batchResults = await this.processBatch(batch, processor);
@@ -62,7 +65,9 @@ export class BatchProcessor<T, R = void> {
 
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
-      if (!batch) continue;
+      if (!batch) {
+        continue;
+      }
       logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} items)`);
 
       try {
@@ -90,7 +95,9 @@ export class BatchProcessor<T, R = void> {
 
       for (let i = 0; i < chunkResults.length; i++) {
         const result = chunkResults[i];
-        if (!result) continue;
+        if (!result) {
+          continue;
+        }
 
         if (result.status === "fulfilled") {
           results.push(result.value);

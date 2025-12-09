@@ -15,7 +15,7 @@ const getDatabaseUrl = (): string => {
 
 export default defineConfig({
   schema: "./src/db/schema/index.ts",
-  out: "./drizzle",
+  out: "./src/db/drizzle",
   dialect: "postgresql",
   dbCredentials: {
     url: getDatabaseUrl(),

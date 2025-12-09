@@ -2,17 +2,16 @@
  * Chapter Seeder
  */
 
+import { db } from "db/client";
+import { chapter, comic } from "db/schema";
+import { ProgressTracker } from "db/seed/logger";
+import { BatchProcessor } from "db/seed/utils/batch-processor";
+import { createSlug, extractChapterNumber, normalizeDate } from "db/seed/utils/helpers";
 import { and, eq } from "drizzle-orm";
 
-import { db } from "@/db/client";
-import { chapter, comic } from "@/db/schema";
 import type { ChapterSeed } from "@/lib/validations/seed";
-import { imageService } from "@/services/image.service";
-
-import type { SeedConfig } from "@/db/seed/config";
-import { ProgressTracker } from "@/db/seed/logger";
-import { BatchProcessor } from "@/db/seed/utils/batch-processor";
-import { createSlug, extractChapterNumber, normalizeDate } from "@/db/seed/utils/helpers";
+import type { SeedConfig } from "db/seed/config";
+import { imageService } from "services/image.service";
 
 export class ChapterSeeder {
   private options: SeedConfig["options"];
@@ -72,7 +71,9 @@ export class ChapterSeeder {
             imageUrl,
             `comics/${comicSlug}/${chapterSlug}`
           );
-          if (result) pageImages.push(result);
+          if (result) {
+            pageImages.push(result);
+          }
         }
       }
     }

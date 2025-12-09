@@ -2,10 +2,10 @@
 // ADVANCED SEARCH SERVICE - Full-Text Search with PostgreSQL
 // ═══════════════════════════════════════════════════
 
+import { db } from "db/client";
+import { artist, author, comic, comicToGenre, genre, type } from "db/schema";
 import { and, asc, desc, eq, gte, inArray, lte, or, sql } from "drizzle-orm";
 
-import { db } from "@/db/client";
-import { artist, author, comic, comicToGenre, genre, type } from "@/db/schema";
 import type { ComicFilters } from "@/types";
 
 // ═══════════════════════════════════════════════════
@@ -27,7 +27,7 @@ export interface AdvancedSearchFilters extends ComicFilters {
   maxViews?: number;
 
   // Sorting
-  sortBy?: "relevance" | "rating" | "views" | "latest" | "title" | "popularity";
+  sortBy?: "title" | "rating" | "views" | "publicationDate" | "createdAt" | "latest";
   sortOrder?: "asc" | "desc";
 
   // Pagination
@@ -241,7 +241,7 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
   const genresMap = await getComicGenres(comicIds);
 
   // Combine results with genres
-  const enrichedResults: SearchResult[] = results.map((result) => ({
+  const enrichedResults: any[] = results.map((result) => ({
     ...result,
     genres: genresMap && genresMap[result.id] ? genresMap[result.id] : [],
   }));
@@ -346,7 +346,9 @@ async function getSearchTotalCount(conditions: any[]): Promise<number> {
  * Fetch genres for multiple comics
  */
 async function getComicGenres(comicIds: number[]): Promise<Record<number, string[]>> {
-  if (comicIds.length === 0) return {};
+  if (comicIds.length === 0) {
+    return {};
+  }
 
   const genresResult = await db
     .select({
@@ -363,7 +365,7 @@ async function getComicGenres(comicIds: number[]): Promise<Record<number, string
       genresMap[row.comicId] = [];
     }
     if (row.genreName) {
-      genresMap[row.comicId].push(row.genreName);
+      genresMap[row.comicId]!.push(row.genreName);
     }
   }
 
@@ -474,5 +476,5 @@ export async function getTrendingComics(
   return results.map((result) => ({
     ...result,
     genres: genresMap && genresMap[result.id] ? genresMap[result.id] : [],
-  }));
+  })) as any as SearchResult[];
 }

@@ -1,7 +1,6 @@
-import { and, asc, desc, eq, gt, lt } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { chapter, chapterImage, comic } from "@/db/schema";
+import { and, asc, desc, eq, gt, lt } from "drizzle-orm";
 
 export async function getChaptersByComicId(comicId: number) {
   return await db

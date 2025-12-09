@@ -1,13 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -21,12 +13,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
-const artistSchema = z.object({
-  name: z.string().min(1, "Name is required").max(200),
-  bio: z.string().optional(),
-  profileImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-});
+const artistSchema = z
+  .object({
+    name: z.string().min(1, "Name is required").max(200),
+    bio: z.string().optional(),
+    profileImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  })
+  .strict();
 
 type ArtistFormValues = z.infer<typeof artistSchema>;
 

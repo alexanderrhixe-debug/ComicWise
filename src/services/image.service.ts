@@ -139,7 +139,9 @@ export class ImageService {
     url: string | null | undefined,
     subDirectory: string = "uploads"
   ): Promise<string | null> {
-    if (!url) return null;
+    if (!url) {
+      return null;
+    }
 
     // If it's already a local path, return as-is
     if (url.startsWith("/")) {

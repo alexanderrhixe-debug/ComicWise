@@ -2,17 +2,15 @@
 // ARTISTS API - Full CRUD
 // ═══════════════════════════════════════════════════
 
-import { NextRequest } from "next/server";
-
-import { createArtist } from "@/db/mutations/artists";
-import { getAllArtists } from "@/db/queries/artists";
-import { artistFilterSchema, createArtistSchema } from "@/lib/validations/schemas";
-
 import {
   createGenericEntity,
   listGenericEntity,
   zodToValidationResult,
 } from "@/app/api/lib/generic-crud";
+import { createArtist } from "@/db/mutations/artists";
+import { getAllArtists } from "@/db/queries/artists";
+import { artistFilterSchema, createArtistSchema } from "@/lib/validations/schemas";
+import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   return listGenericEntity(request, {

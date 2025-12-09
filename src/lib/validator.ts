@@ -1,11 +1,10 @@
 // ═══════════════════════════════════════════════════
 // RE-EXPORT ALL VALIDATION SCHEMAS
 // ═══════════════════════════════════════════════════
-export * from "@/lib/validations";
+export * from "lib/validations";
 
+import { userSchema } from "lib/validations";
 import { z } from "zod";
-
-import { userSchema } from "@/lib/validations";
 
 // ═══════════════════════════════════════════════════
 // SEED DATA VALIDATION SCHEMAS
@@ -19,75 +18,91 @@ export const seedUserSchema = userSchema.extend({
   updatedAt: z.coerce.date().optional(),
 });
 
-export const seedComicSchema = z.object({
-  url: z.string().url().optional(),
-  title: z.string().min(1),
-  slug: z.string().min(1).optional(),
-  images: z.array(z.object({ url: z.string().url() })).optional(),
-  description: z.string().min(1),
-  rating: z.string().optional(),
-  status: z.string().optional(),
-  publicationDate: z.string().or(z.coerce.date()).optional(),
-  updatedAt: z.string().optional(),
-  serialization: z.string().optional(),
-  coverImage: z.string().optional(),
-  type: z.object({ name: z.string() }).optional(),
-  artist: z.object({ name: z.string() }).optional(),
-  author: z.object({ name: z.string() }).optional(),
-  genres: z.array(z.object({ name: z.string() })).optional(),
-});
+export const seedComicSchema = z
+  .object({
+    url: z.string().url().optional(),
+    title: z.string().min(1),
+    slug: z.string().min(1).optional(),
+    images: z.array(z.object({ url: z.string().url() }).strict()).optional(),
+    description: z.string().min(1),
+    rating: z.string().optional(),
+    status: z.string().optional(),
+    publicationDate: z.string().or(z.coerce.date()).optional(),
+    updatedAt: z.string().optional(),
+    serialization: z.string().optional(),
+    coverImage: z.string().optional(),
+    type: z.object({ name: z.string() }).optional(),
+    artist: z.object({ name: z.string() }).optional(),
+    author: z.object({ name: z.string() }).optional(),
+    genres: z.array(z.object({ name: z.string() }).strict()).optional(),
+  })
+  .strict();
 
-export const seedChapterSchema = z.object({
-  url: z.string().url().optional(),
-  name: z.string(),
-  title: z.string().optional(),
-  chapterNumber: z.number().optional(),
-  comic: z.object({
-    title: z.string(),
-    slug: z.string().optional(),
-  }),
-  releaseDate: z.string().or(z.coerce.date()).optional(),
-  updatedAt: z.string().optional(),
-  images: z.array(z.object({ url: z.string().url() })).optional(),
-});
+export const seedChapterSchema = z
+  .object({
+    url: z.string().url().optional(),
+    name: z.string(),
+    title: z.string().optional(),
+    chapterNumber: z.number().optional(),
+    comic: z
+      .object({
+        title: z.string(),
+        slug: z.string().optional(),
+      })
+      .strict(),
+    releaseDate: z.string().or(z.coerce.date()).optional(),
+    updatedAt: z.string().optional(),
+    images: z.array(z.object({ url: z.string().url() }).strict()).optional(),
+  })
+  .strict();
 
-export const seedDataSchema = z.object({
-  users: z.array(seedUserSchema).optional(),
-  comics: z.array(seedComicSchema).optional(),
-  chapters: z.array(seedChapterSchema).optional(),
-  data: z.record(z.string(), z.any()).optional(),
-});
+export const seedDataSchema = z
+  .object({
+    users: z.array(seedUserSchema).optional(),
+    comics: z.array(seedComicSchema).optional(),
+    chapters: z.array(seedChapterSchema).optional(),
+    data: z.record(z.string(), z.any()).optional(),
+  })
+  .strict();
 
 // ═══════════════════════════════════════════════════
 // EMAIL VALIDATION SCHEMAS
 // ═══════════════════════════════════════════════════
 
-export const emailSchema = z.object({
-  to: z.string().email("Invalid email address"),
-  subject: z.string().min(1, "Subject is required"),
-  body: z.string().min(1, "Body is required"),
-});
+export const emailSchema = z
+  .object({
+    to: z.string().email("Invalid email address"),
+    subject: z.string().min(1, "Subject is required"),
+    body: z.string().min(1, "Body is required"),
+  })
+  .strict();
 
-export const verificationEmailSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  name: z.string().min(1, "Name is required"),
-  token: z.string().min(1, "Token is required"),
-});
+export const verificationEmailSchema = z
+  .object({
+    email: z.string().email("Invalid email address"),
+    name: z.string().min(1, "Name is required"),
+    token: z.string().min(1, "Token is required"),
+  })
+  .strict();
 
-export const resetPasswordEmailSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  name: z.string().min(1, "Name is required"),
-  token: z.string().min(1, "Token is required"),
-});
+export const resetPasswordEmailSchema = z
+  .object({
+    email: z.string().email("Invalid email address"),
+    name: z.string().min(1, "Name is required"),
+    token: z.string().min(1, "Token is required"),
+  })
+  .strict();
 
 // ═══════════════════════════════════════════════════
 // WORKFLOW SCHEMAS
 // ═══════════════════════════════════════════════════
 
-export const workflowSchema = z.object({
-  action: z.enum(["register", "forgot-password", "verify-email", "reset-password"]),
-  data: z.record(z.string(), z.any()),
-});
+export const workflowSchema = z
+  .object({
+    action: z.enum(["register", "forgot-password", "verify-email", "reset-password"]),
+    data: z.record(z.string(), z.any()),
+  })
+  .strict();
 
 // ═══════════════════════════════════════════════════
 // TYPE EXPORTS FOR SEED DATA

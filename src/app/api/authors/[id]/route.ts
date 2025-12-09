@@ -2,18 +2,16 @@
 // AUTHOR DETAIL API
 // ═══════════════════════════════════════════════════
 
-import { NextRequest } from "next/server";
-
-import { deleteAuthor, updateAuthor } from "@/db/mutations/authors";
-import { getAuthorById } from "@/db/queries/authors";
-import { authorIdSchema, updateAuthorSchema } from "@/lib/validations/schemas";
-
 import {
   deleteGenericEntity,
   getGenericEntity,
   updateGenericEntity,
   zodToValidationResult,
 } from "@/app/api/lib/generic-crud";
+import { deleteAuthor, updateAuthor } from "@/db/mutations/authors";
+import { getAuthorById } from "@/db/queries/authors";
+import { authorIdSchema, updateAuthorSchema } from "@/lib/validations/schemas";
+import { NextRequest } from "next/server";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -39,8 +37,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 export async function PUT(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return deleteGenericEntity(id, {
-    deleteFn: deleteAuthor,
-    validateFn: authorIdSchema.safeParse.bind(authorIdSchema),
+    deleteFn: async (authorId: number) => {
+      const result = await deleteAuthor(authorId);
+      // Return true if deleted, false otherwise
+      return !!result;
+    },
+    validateFn: zodToValidationResult(authorIdSchema),
     entityName: "author",
   });
 }

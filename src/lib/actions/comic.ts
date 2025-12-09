@@ -1,17 +1,16 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import type { z } from "zod";
-
+import { auth } from "auth";
 import {
   createComic as createComicMutation,
   deleteComic as deleteComicMutation,
   updateComic as updateComicMutation,
-} from "@/db/mutations";
-import { getAllComics, getComic } from "@/db/queries";
-import { createComicSchema, updateComicSchema } from "@/lib/validations/schemas";
+} from "db/mutations";
+import { getAllComics, getComic } from "db/queries";
+import { createComicSchema, updateComicSchema } from "lib/validations/schemas";
+
 import type { ComicFilters } from "@/types";
-import { auth } from "lib/auth";
+import type { z } from "zod";
 
 export async function getComics(filters?: ComicFilters) {
   return await getAllComics(filters);

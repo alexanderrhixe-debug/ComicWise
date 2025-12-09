@@ -2,17 +2,16 @@
 // BOOKMARK ACTIONS - UNIT TESTS
 // ═══════════════════════════════════════════════════
 
+import { addBookmark, getBookmarks, removeBookmark, updateProgress } from "actions/bookmark";
+import * as authLib from "auth";
+import * as mutations from "db/mutations";
+import * as queries from "db/queries";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
-import * as mutations from "@/db/mutations";
-import * as queries from "@/db/queries";
-import { addBookmark, getBookmarks, removeBookmark, updateProgress } from "@/lib/actions/bookmark";
-import * as authLib from "@/lib/auth";
-
 // Mock dependencies
-vi.mock("@/lib/auth");
-vi.mock("@/db/mutations");
-vi.mock("@/db/queries");
+vi.mock("auth");
+vi.mock("db/mutations");
+vi.mock("db/queries");
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }));

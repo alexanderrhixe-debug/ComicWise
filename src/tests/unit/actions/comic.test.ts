@@ -2,25 +2,19 @@
 // COMIC ACTIONS - UNIT TESTS
 // ═══════════════════════════════════════════════════
 
+import { createComic, deleteComic, getComicById, getComics, updateComic } from "actions/comic";
+import * as authLib from "auth";
+import * as mutations from "db/mutations";
+import * as queries from "db/queries";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
-import * as mutations from "@/db/mutations";
-import * as queries from "@/db/queries";
-import {
-  createComic,
-  deleteComic,
-  getComicById,
-  getComics,
-  updateComic,
-} from "@/lib/actions/comic";
-import * as authLib from "@/lib/auth";
 import type { ComicFilters } from "@/types";
 
 // Removed unused import
 // Mock dependencies
-vi.mock("@/lib/auth");
-vi.mock("@/db/mutations");
-vi.mock("@/db/queries");
+vi.mock("auth");
+vi.mock("db/mutations");
+vi.mock("db/queries");
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }));
@@ -290,8 +284,7 @@ describe("Comic Actions", () => {
     });
 
     it("should throw error when user is not authenticated", async () => {
-      status: ("Ongoing" as const,
-        await expect(deleteComic(mockComicId)).rejects.toThrow("Unauthorized"));
+      ("Ongoing" as const, await expect(deleteComic(mockComicId)).rejects.toThrow("Unauthorized"));
       expect(mutations.deleteComic).not.toHaveBeenCalled();
     });
 

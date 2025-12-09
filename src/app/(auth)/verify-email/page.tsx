@@ -4,11 +4,6 @@
 // VERIFY EMAIL PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { CheckCircle2, Loader2, XCircle } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-
 import { verifyEmailAction } from "@/lib/actions/auth/index";
 import { Button } from "components/ui/button";
 import {
@@ -19,6 +14,10 @@ import {
   CardHeader,
   CardTitle,
 } from "components/ui/card";
+import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 function VerifyEmailContent() {
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");

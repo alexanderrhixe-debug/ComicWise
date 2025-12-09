@@ -4,11 +4,10 @@
 // BOOKMARKS & COMMENTS SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "app-config";
+import { db } from "db/client";
+import { bookmark, comment } from "db/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-
-import { db } from "@/db";
-import { bookmark, comment } from "@/db/schema";
 import {
   createBookmarkSchema,
   createCommentSchema,
@@ -20,8 +19,8 @@ import {
   type PaginationInput,
   type UpdateBookmarkInput,
   type UpdateCommentInput,
-} from "@/lib/validations/schemas";
-import { appConfig } from "app-config";
+} from "lib/validations/schemas";
+import { revalidatePath } from "next/cache";
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }

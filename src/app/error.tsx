@@ -1,10 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
-
-import { Button } from "@/components/ui/button";
 
 interface ErrorBoundaryProps {
   error: Error & { digest?: string };

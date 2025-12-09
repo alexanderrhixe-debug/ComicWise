@@ -2,14 +2,13 @@
 // CHAPTERS API - Full CRUD with Filtering & Pagination
 // ═══════════════════════════════════════════════════
 
-import { NextRequest, NextResponse } from "next/server";
-
 import { createChapter } from "@/db/mutations/chapters";
 import { getUsersBookmarkedComic } from "@/db/queries/bookmarks";
 import { getAllChapters } from "@/db/queries/chapters";
 import { auth } from "@/lib/auth";
 import { sendNewChapterNotification } from "@/lib/email";
 import { chapterFilterSchema, createChapterSchema } from "@/lib/validations/schemas";
+import { NextRequest, NextResponse } from "next/server";
 
 // ═══════════════════════════════════════════════════
 // GET - List Chapters with Filtering & Pagination

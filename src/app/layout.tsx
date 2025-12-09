@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
 
 import { Providers } from "@/app/Providers";
+import localFont from "next/font/local";
 import "styles/globals.css";
 // Primary Font: IBM Plex Sans (Variable)
 const ibmPlexSans = localFont({

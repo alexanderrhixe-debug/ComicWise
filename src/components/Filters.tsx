@@ -3,11 +3,10 @@
 import { SlidersHorizontal, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-
-import { Badge } from "components/ui/badge";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
-import { Label } from "components/ui/label";
+import { Badge } from "ui/badge";
+import { Button } from "ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "ui/card";
+import { Label } from "ui/label";
 
 interface Type {
   id: number;
@@ -57,10 +56,18 @@ export function Filters({ types, genres }: FiltersProps) {
   const applyFilters = () => {
     const params = new URLSearchParams();
 
-    if (selectedType) params.set("type", selectedType.toString());
-    if (selectedGenres.length > 0) params.set("genres", selectedGenres.join(","));
-    if (selectedStatus) params.set("status", selectedStatus);
-    if (sortBy) params.set("sort", sortBy);
+    if (selectedType) {
+      params.set("type", selectedType.toString());
+    }
+    if (selectedGenres.length > 0) {
+      params.set("genres", selectedGenres.join(","));
+    }
+    if (selectedStatus) {
+      params.set("status", selectedStatus);
+    }
+    if (sortBy) {
+      params.set("sort", sortBy);
+    }
 
     router.push(`/comics?${params.toString()}`);
   };

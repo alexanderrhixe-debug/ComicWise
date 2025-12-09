@@ -2,12 +2,11 @@
 // CHAPTER DETAIL API - Get, Update, Delete Single Chapter
 // ═══════════════════════════════════════════════════
 
-import { NextRequest, NextResponse } from "next/server";
-
 import { deleteChapter, updateChapter } from "@/db/mutations/chapters";
 import { getChapter } from "@/db/queries/chapters";
 import { auth } from "@/lib/auth";
 import { chapterIdSchema, updateChapterSchema } from "@/lib/validations/schemas";
+import { NextRequest, NextResponse } from "next/server";
 
 // ═══════════════════════════════════════════════════
 // GET - Get Chapter by ID

@@ -4,12 +4,13 @@
 // COMPREHENSIVE AUTH ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "app-config";
+import { signIn } from "auth";
 import bcrypt from "bcryptjs";
+import { db } from "db/client";
+import { passwordResetToken, user, verificationToken } from "db/schema";
 import { eq } from "drizzle-orm";
-
-import { db } from "@/db";
-import { passwordResetToken, user, verificationToken } from "@/db/schema";
-import { checkRateLimit } from "@/lib/ratelimit";
+import { checkRateLimit } from "lib/ratelimit";
 import {
   forgotPasswordSchema,
   resetPasswordSchema,
@@ -23,10 +24,8 @@ import {
   type SignUpInput,
   type UpdateProfileInput,
   type VerifyEmailInput,
-} from "@/lib/validations/schemas";
-import { executeWorkflow } from "@/lib/workflow";
-import { appConfig } from "app-config";
-import { signIn } from "lib/auth";
+} from "lib/validations/schemas";
+import { executeWorkflow } from "lib/workflow";
 
 // ═══════════════════════════════════════════════════
 // TYPES

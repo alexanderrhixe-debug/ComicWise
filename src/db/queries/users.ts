@@ -1,7 +1,6 @@
-import { asc, desc, eq, ilike, or } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { user } from "@/db/schema";
+import { asc, desc, eq, ilike, or } from "drizzle-orm";
 
 export async function getUserById(userId: string) {
   return await db.query.user.findFirst({

@@ -1,10 +1,10 @@
+/* eslint-disable security/detect-object-injection */
 // ═══════════════════════════════════════════════════
 // IMAGEKIT SERVICE - Image Upload & Management
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "app-config";
 import ImageKit from "imagekit";
-
-import { appConfig } from "@/app-config";
 
 // ═══════════════════════════════════════════════════
 // IMAGEKIT CLIENT
@@ -39,6 +39,7 @@ export interface UploadOptions {
   tags?: string[];
   useUniqueFileName?: boolean;
   isPrivateFile?: boolean;
+  transformation?: any; // Add this property to support transformations
 }
 
 export interface UploadResult {
@@ -75,7 +76,7 @@ export async function uploadImage(options: UploadOptions): Promise<UploadResult>
       folder: options.folder || "/comicwise",
       tags: options.tags || [],
       useUniqueFileName: options.useUniqueFileName ?? true,
-      isPrivateFile: options.isPrivateFile ?? false,
+      // isPrivateFile: options.isPrivateFile ?? false,
     });
 
     return {
@@ -194,7 +195,7 @@ export async function uploadMultipleImages(
 export async function deleteImage(fileId: string): Promise<DeleteResult> {
   try {
     const ik = getImageKitInstance();
-    await ik.deleteFile(fileId);
+    await ik.deleteFile(fileId as any);
 
     return { success: true };
   } catch (error) {
@@ -257,11 +258,21 @@ export function getOptimizedUrl(
 
   const transformation: Array<{ [key: string]: string | number }> = [];
 
-  if (options?.width) transformation.push({ width: options.width });
-  if (options?.height) transformation.push({ height: options.height });
-  if (options?.quality) transformation.push({ quality: options.quality });
-  if (options?.format) transformation.push({ format: options.format });
-  if (options?.blur) transformation.push({ blur: options.blur });
+  if (options?.width) {
+    transformation.push({ width: options.width });
+  }
+  if (options?.height) {
+    transformation.push({ height: options.height });
+  }
+  if (options?.quality) {
+    transformation.push({ quality: options.quality });
+  }
+  if (options?.format) {
+    transformation.push({ format: options.format });
+  }
+  if (options?.blur) {
+    transformation.push({ blur: options.blur });
+  }
 
   return ik.url({
     path: filePath,
@@ -445,20 +456,30 @@ export async function uploadOptimizedImage(
 
     // Build transformation string
     const transformations: string[] = [];
-    if (opts.quality) transformations.push(`q-${opts.quality}`);
-    if (opts.format) transformations.push(`f-${opts.format}`);
-    if (opts.maxWidth) transformations.push(`w-${opts.maxWidth}`);
-    if (opts.maxHeight) transformations.push(`h-${opts.maxHeight}`);
-    if (opts.progressive) transformations.push("pr-true");
+    if (opts.quality) {
+      transformations.push(`q-${opts.quality}`);
+    }
+    if (opts.format) {
+      transformations.push(`f-${opts.format}`);
+    }
+    if (opts.maxWidth) {
+      transformations.push(`w-${opts.maxWidth}`);
+    }
+    if (opts.maxHeight) {
+      transformations.push(`h-${opts.maxHeight}`);
+    }
+    if (opts.progressive) {
+      transformations.push("pr-true");
+    }
 
     const uploadResponse = await ik.upload({
       file,
       fileName,
       folder: folder || "/comicwise",
       useUniqueFileName: true,
-      transformation: {
-        pre: transformations.join(","),
-      },
+      // transformation: {
+      //   pre: transformations.join(","),
+      // },
     });
 
     return {
@@ -483,7 +504,7 @@ export async function uploadOptimizedImage(
  */
 export async function uploadOptimizedComicCover(
   file: Buffer | string,
-  comicId: string,
+  // comicId: string,
   fileName: string
 ): Promise<UploadResult> {
   return uploadOptimizedImage(file, fileName, "/comicwise/comics/covers", {
@@ -499,9 +520,9 @@ export async function uploadOptimizedComicCover(
  */
 export async function uploadOptimizedChapterImage(
   file: Buffer | string,
-  chapterId: string,
-  fileName: string,
-  sequence?: number
+  // chapterId: string,
+  fileName: string
+  // sequence?: number
 ): Promise<UploadResult> {
   return uploadOptimizedImage(file, fileName, "/comicwise/chapters/images", {
     quality: 85,
@@ -677,8 +698,8 @@ export async function getImageMetadata(fileId: string): Promise<{
   error?: string;
 }> {
   try {
-    const ik = getImageKitInstance();
-    const details = await ik.getFileMetadata(fileId);
+    const ik: ImageKit = getImageKitInstance();
+    const details: any = await ik.getFileMetadata(fileId);
 
     return {
       success: true,

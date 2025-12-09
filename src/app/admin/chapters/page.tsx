@@ -1,11 +1,10 @@
-import { eq } from "drizzle-orm";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-
 import { DataTable } from "@/components/admin/DataTable";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db/client";
 import { chapter, comic } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 
 export default async function ChaptersPage() {
   const chapters = await db

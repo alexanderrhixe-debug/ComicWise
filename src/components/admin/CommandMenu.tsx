@@ -3,7 +3,6 @@
 import { BookOpen, FileText, FolderOpen, Palette, Tag, UserCircle, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-
 import {
   CommandDialog,
   CommandEmpty,
@@ -11,7 +10,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "ui/command";
 
 const navigationItems = [
   { title: "Dashboard", href: "/admin", icon: FileText },
@@ -19,7 +18,7 @@ const navigationItems = [
   { title: "Chapters", href: "/admin/chapters", icon: FileText },
   { title: "Users", href: "/admin/users", icon: Users },
   { title: "Genres", href: "/admin/genres", icon: FolderOpen },
-  { title: "Types", href: "/admin/types", icon: Tag },
+  { title: "Types", href: "/admin/@/types", icon: Tag },
   { title: "Authors", href: "/admin/authors", icon: UserCircle },
   { title: "Artists", href: "/admin/artists", icon: Palette },
   { title: "Create Comic", href: "/admin/comics/new", icon: BookOpen },

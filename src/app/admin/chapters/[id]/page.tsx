@@ -1,12 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -26,14 +19,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
-const chapterSchema = z.object({
-  comicId: z.number().min(1, "Comic is required"),
-  chapterNumber: z.number().min(0, "Chapter number must be positive"),
-  title: z.string().min(1, "Title is required").max(500),
-  content: z.string().optional(),
-  releaseDate: z.string().optional(),
-});
+const chapterSchema = z
+  .object({
+    comicId: z.number().min(1, "Comic is required"),
+    chapterNumber: z.number().min(0, "Chapter number must be positive"),
+    title: z.string().min(1, "Title is required").max(500),
+    content: z.string().optional(),
+    releaseDate: z.string().optional(),
+  })
+  .strict();
 
 type ChapterFormValues = z.infer<typeof chapterSchema>;
 

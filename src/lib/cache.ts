@@ -1,6 +1,6 @@
-import Redis, { type RedisOptions } from "ioredis";
-
+/* eslint-disable security/detect-object-injection */
 import { env } from "@/app-config/env";
+import Redis, { type RedisOptions } from "ioredis";
 
 /**
  * Redis Configuration
@@ -27,7 +27,7 @@ const getRedisConfig = (): RedisOptions => {
   };
 
   // Add TLS for production
-  if (env.NODE_ENV === "production" && env.REDIS_TLS_ENABLED === "true") {
+  if (env.NODE_ENV === "production" && String(env.REDIS_TLS_ENABLED) === "true") {
     baseConfig.tls = {
       rejectUnauthorized: false,
     };
@@ -149,7 +149,9 @@ export class RedisCache {
   async get<T>(key: string): Promise<T | null> {
     try {
       const value = await this.redis.get(key);
-      if (!value) return null;
+      if (!value) {
+        return null;
+      }
       return JSON.parse(value) as T;
     } catch (error) {
       console.error(`Cache GET error for key ${key}:`, error);
@@ -201,7 +203,9 @@ export class RedisCache {
    */
   async deleteMany(keys: string[]): Promise<boolean> {
     try {
-      if (keys.length === 0) return true;
+      if (keys.length === 0) {
+        return true;
+      }
       await this.redis.del(...keys);
       return true;
     } catch (error) {
@@ -254,7 +258,9 @@ export class RedisCache {
   async deletePattern(pattern: string): Promise<number> {
     try {
       const keys = await this.redis.keys(pattern);
-      if (keys.length === 0) return 0;
+      if (keys.length === 0) {
+        return 0;
+      }
       await this.redis.del(...keys);
       return keys.length;
     } catch (error) {
@@ -376,8 +382,8 @@ export class RedisCache {
 
       for (let i = 0; i < results.length; i += 2) {
         items.push({
-          member: results[i],
-          score: parseFloat(results[i + 1]),
+          member: results[i]!,
+          score: parseFloat(results[i + 1]!),
         });
       }
 
@@ -449,7 +455,9 @@ export class RedisCache {
       const tagKey = `tag:${tag}`;
       const keys = await this.redis.smembers(tagKey);
 
-      if (keys.length === 0) return 0;
+      if (keys.length === 0) {
+        return 0;
+      }
 
       // Delete all keys with this tag
       await this.redis.del(...keys);

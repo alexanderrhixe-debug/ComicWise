@@ -3,13 +3,12 @@
 // Next.js 16.0.7 + ImageKit Integration
 // ═══════════════════════════════════════════════════
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line @@/typescript-eslint/ban-ts-comment
 // @ts-nocheck - ImageKit SDK has incomplete type definitions
+import { env } from "app-config";
 import ImageKit from "imagekit";
 
-import { env } from "@/app-config";
-
-import type { UploadOptions, UploadProvider, UploadResult } from "@/services/upload/index";
+import type { UploadOptions, UploadProvider, UploadResult } from "services/upload/index";
 
 // Validate ImageKit configuration
 if (!env.IMAGEKIT_PUBLIC_KEY || !env.IMAGEKIT_PRIVATE_KEY || !env.IMAGEKIT_URL_ENDPOINT) {
@@ -53,7 +52,7 @@ export class ImageKitProvider implements UploadProvider {
       }
 
       // Prepare transformation options
-      let transformation = options.transformation || undefined;
+      const transformation = options.transformation || undefined;
 
       // Upload to ImageKit
       const result = await imagekit.upload({
@@ -160,6 +159,7 @@ export class ImageKitProvider implements UploadProvider {
     const transformObj: { [key: string]: string } = {};
 
     for (const [key, value] of Object.entries(transformation)) {
+      // eslint-disable-next-line security/detect-object-injection
       transformObj[key] = String(value);
     }
 

@@ -2,8 +2,6 @@
 // VALIDATION SCHEMA TESTS - Comprehensive Zod Schema Testing
 // ═══════════════════════════════════════════════════
 
-import { describe, expect, it } from "vitest";
-
 import {
   createChapterSchema,
   createComicSchema,
@@ -15,7 +13,8 @@ import {
   updateComicSchema,
   updateProfileSchema,
   verifyEmailSchema,
-} from "@/lib/validations/schemas";
+} from "lib/validations/schemas";
+import { describe, expect, it } from "vitest";
 
 // ═══════════════════════════════════════════════════
 // AUTHENTICATION SCHEMAS

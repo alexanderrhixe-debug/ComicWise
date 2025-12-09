@@ -4,11 +4,10 @@
 // CHAPTERS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "app-config";
+import { db } from "db/client";
+import { chapter, chapterImage, comic } from "db/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-
-import { db } from "@/db";
-import { chapter, chapterImage, comic } from "@/db/schema";
 import {
   chapterFilterSchema,
   createChapterSchema,
@@ -16,8 +15,8 @@ import {
   type ChapterFilterInput,
   type CreateChapterInput,
   type UpdateChapterInput,
-} from "@/lib/validations/schemas";
-import { appConfig } from "app-config";
+} from "lib/validations/schemas";
+import { revalidatePath } from "next/cache";
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }

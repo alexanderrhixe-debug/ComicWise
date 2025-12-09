@@ -3,11 +3,10 @@
 // Next.js 16.0.7 + Cloudinary Integration
 // ═══════════════════════════════════════════════════
 
+import { env } from "app-config";
 import { v2 as cloudinary } from "cloudinary";
 
-import { env } from "@/app-config";
-
-import type { UploadOptions, UploadProvider, UploadResult } from "@/services/upload/index";
+import type { UploadOptions, UploadProvider, UploadResult } from "services/upload/index";
 
 // Validate Cloudinary configuration
 if (!env.CLOUDINARY_CLOUD_NAME || !env.CLOUDINARY_API_KEY || !env.CLOUDINARY_API_SECRET) {
@@ -24,7 +23,7 @@ cloudinary.config({
   secure: true,
 });
 
-// Type assertion for cloudinary.url (SDK types incomplete)
+// Type assertion for cloudinary.url (SDK @/types incomplete)
 type CloudinaryUrlFn = (publicId: string, options: Record<string, unknown>) => string;
 const getCloudinaryUrl = (cloudinary as unknown as { url: CloudinaryUrlFn }).url.bind(cloudinary);
 
@@ -61,10 +60,10 @@ export class CloudinaryProvider implements UploadProvider {
       const dataURI = `data:image/jpeg;base64,${base64}`;
 
       // Prepare transformation options
-      let transformation = options.transformation || {};
+      // const transformation = options.transformation || {};
       // Cloudinary expects an array of transformation objects
-      const transformationArr =
-        transformation && Object.keys(transformation).length > 0 ? [transformation] : [];
+      // const transformationArr =
+      //   transformation && Object.keys(transformation).length > 0 ? [transformation] : [];
 
       // Upload to Cloudinary
       const result = await cloudinary.uploader.upload(dataURI, {
@@ -72,7 +71,7 @@ export class CloudinaryProvider implements UploadProvider {
         public_id: options.filename,
         tags: options.tags || [],
         resource_type: "auto",
-        transformation: transformationArr,
+        // transformation: transformationArr,
       });
 
       // Generate thumbnail URL

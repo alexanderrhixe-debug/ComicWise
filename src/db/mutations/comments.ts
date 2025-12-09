@@ -1,7 +1,6 @@
-import { eq } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { comment } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function createComment(data: { content: string; userId: string; chapterId: number }) {
   const [newComment] = await db

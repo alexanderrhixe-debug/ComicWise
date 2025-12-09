@@ -1,7 +1,6 @@
-import { asc, eq } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { chapterImage } from "@/db/schema";
+import { asc, eq } from "drizzle-orm";
 
 export async function getChapterImageById(imageId: number) {
   return await db.query.chapterImage.findFirst({

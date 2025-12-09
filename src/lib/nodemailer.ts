@@ -1,7 +1,7 @@
-import type { MailOptions, Transporter } from "nodemailer";
+import { appConfig, env } from "app-config";
 import nodemailer from "nodemailer";
 
-import { appConfig, env } from "app-config";
+import type { MailOptions, Transporter } from "nodemailer";
 
 // ═══════════════════════════════════════════════════
 // TRANSPORTER CONFIGURATION

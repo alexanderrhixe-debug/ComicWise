@@ -3,10 +3,9 @@
  * Caches metadata entities to reduce database queries
  */
 
+import { db } from "db/client";
+import { artist, author, genre, type as typeTable } from "db/schema";
 import { eq } from "drizzle-orm";
-
-import { db } from "@/db/client";
-import { artist, author, genre, type as typeTable } from "@/db/schema";
 
 export class MetadataCache {
   private typeCache = new Map<string, number>();

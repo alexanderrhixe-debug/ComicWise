@@ -2,18 +2,16 @@
 // ARTIST DETAIL API
 // ═══════════════════════════════════════════════════
 
-import { NextRequest } from "next/server";
-
-import { deleteArtist, updateArtist } from "@/db/mutations/artists";
-import { getArtistById } from "@/db/queries/artists";
-import { artistIdSchema, updateArtistSchema } from "@/lib/validations/schemas";
-
 import {
   deleteGenericEntity,
   getGenericEntity,
   updateGenericEntity,
   zodToValidationResult,
 } from "@/app/api/lib/generic-crud";
+import { deleteArtist, updateArtist } from "@/db/mutations/artists";
+import { getArtistById } from "@/db/queries/artists";
+import { artistIdSchema, updateArtistSchema } from "@/lib/validations/schemas";
+import { NextRequest } from "next/server";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -39,7 +37,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 export async function PUT(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return deleteGenericEntity(id, {
-    deleteFn: deleteArtist,
+    deleteFn: async (artistId: number) => {
+      const result = await deleteArtist(artistId);
+      // Return true if deleted, false otherwise
+      return !!result;
+    },
     validateFn: zodToValidationResult(artistIdSchema),
     entityName: "artist",
   });

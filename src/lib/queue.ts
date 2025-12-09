@@ -1,8 +1,7 @@
 import { Queue, Worker, type Job } from "bullmq";
 import IORedis from "ioredis";
-
-import type { SendEmailParams } from "@/lib/email";
-import { sendEmail } from "@/lib/email";
+import type { SendEmailParams } from "lib/email";
+import { sendEmail } from "lib/email";
 
 // ═══════════════════════════════════════════════════
 // REDIS CONNECTION

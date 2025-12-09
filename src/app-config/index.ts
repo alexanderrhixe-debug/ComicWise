@@ -2,8 +2,8 @@
 // APP CONFIGURATION (Next.js 16 Optimized)
 // ═══════════════════════════════════════════════════
 
-export * from "@/app-config/env";
-import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "@/app-config/env";
+export * from "./env";
+import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "./env";
 
 // ═══════════════════════════════════════════════════
 // APPLICATION CONFIGURATION
@@ -161,6 +161,7 @@ export const appConfig = {
     rateLimiting: hasEnv("UPSTASH_REDIS_REST_URL"),
     imageUpload: hasEnv("IMAGEKIT_PUBLIC_KEY") || hasEnv("CLOUDINARY_CLOUD_NAME"),
   },
+  customPassword: env.CUSTOM_PASSWORD || "",
 } as const;
 
 // ═══════════════════════════════════════════════════
@@ -170,4 +171,4 @@ export const appConfig = {
 export { env, getEnv, hasEnv, isDevelopment, isProduction, isTest };
 
 // Re-export rate limiting utilities
-export { checkRateLimit, clearRateLimit, getRateLimitStatus } from "@/lib/ratelimit";
+export { checkRateLimit, clearRateLimit, getRateLimitStatus } from "lib/ratelimit";

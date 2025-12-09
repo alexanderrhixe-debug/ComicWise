@@ -1,8 +1,7 @@
-import { Plus } from "lucide-react";
-import Link from "next/link";
-
 import { DataTable } from "@/components/admin/DataTable";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 
 async function getTypes() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";

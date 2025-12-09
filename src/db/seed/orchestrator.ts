@@ -3,16 +3,15 @@
  * Coordinates the seeding process
  */
 
-import { chapterArraySchema, comicArraySchema, userArraySchema } from "@/lib/validations/seed";
-
-import type { SeedConfig } from "@/db/seed/config";
-import { logger } from "@/db/seed/logger";
-import { ChapterSeeder } from "@/db/seed/seeders/chapter-seeder";
-import { ComicSeeder } from "@/db/seed/seeders/comic-seeder";
-import { UserSeeder } from "@/db/seed/seeders/user-seeder";
-import { fileUtils } from "@/db/seed/utils/file-utils";
-import { deduplicateByKey, normalizeDate } from "@/db/seed/utils/helpers";
-import { MetadataCache } from "@/db/seed/utils/metadata-cache";
+import type { SeedConfig } from "db/seed/config";
+import { logger } from "db/seed/logger";
+import { ChapterSeeder } from "db/seed/seeders/chapter-seeder";
+import { ComicSeeder } from "db/seed/seeders/comic-seeder";
+import { UserSeeder } from "db/seed/seeders/user-seeder";
+import { fileUtils } from "db/seed/utils/file-utils";
+import { deduplicateByKey, normalizeDate } from "db/seed/utils/helpers";
+import { MetadataCache } from "db/seed/utils/metadata-cache";
+import { chapterArraySchema, comicArraySchema, userArraySchema } from "lib/validations/seed";
 
 export class SeedOrchestrator {
   private config: SeedConfig;
@@ -85,33 +84,28 @@ export class SeedOrchestrator {
 
       // Preprocess dates and status
 
-      const preprocessedComics = rawComics.map(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (comic: any) => {
-          // Normalize status to valid enum value or default to "Ongoing"
-          const validStatuses = ["Ongoing", "Hiatus", "Completed", "Dropped", "Coming Soon"];
-          let status = "Ongoing";
-          if (comic.status && typeof comic.status === "string") {
-            // Try to match status case-insensitively
-            const matchedStatus = validStatuses.find(
-              (s) => s.toLowerCase() === comic.status.toLowerCase()
-            );
-            if (matchedStatus) {
-              status = matchedStatus;
-            }
+      const preprocessedComics = rawComics.map((comic: any) => {
+        // Normalize status to valid enum value or default to "Ongoing"
+        const validStatuses = ["Ongoing", "Hiatus", "Completed", "Dropped", "Coming Soon"];
+        let status = "Ongoing";
+        if (comic.status && typeof comic.status === "string") {
+          // Try to match status case-insensitively
+          const matchedStatus = validStatuses.find(
+            (s) => s.toLowerCase() === comic.status.toLowerCase()
+          );
+          if (matchedStatus) {
+            status = matchedStatus;
           }
-
-          return {
-            ...comic,
-            status,
-            publicationDate: comic.publicationDate
-              ? normalizeDate(comic.publicationDate)
-              : undefined,
-            updatedAt: comic.updatedAt ? normalizeDate(comic.updatedAt) : undefined,
-            updated_at: comic.updated_at ? normalizeDate(comic.updated_at) : undefined,
-          };
         }
-      );
+
+        return {
+          ...comic,
+          status,
+          publicationDate: comic.publicationDate ? normalizeDate(comic.publicationDate) : undefined,
+          updatedAt: comic.updatedAt ? normalizeDate(comic.updatedAt) : undefined,
+          updated_at: comic.updated_at ? normalizeDate(comic.updated_at) : undefined,
+        };
+      });
 
       const comics = comicArraySchema.parse(preprocessedComics);
       const uniqueComics = deduplicateByKey(comics, (c) => c.title);

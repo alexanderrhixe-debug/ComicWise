@@ -3,15 +3,15 @@
 // ═══════════════════════════════════════════════════
 
 import { render } from "@react-email/components";
+import { appConfig } from "app-config";
+import AccountUpdatedEmail from "components/emails/AccountUpdatedEmail";
+import CommentNotificationEmail from "components/emails/CommentNotificationEmail";
+import NewChapterEmail from "components/emails/NewChapterEmail";
+import PasswordResetEmail from "components/emails/PasswordResetEmail";
+import VerificationEmail from "components/emails/VerificationEmail";
+import WelcomeEmail from "components/emails/WelcomeEmail";
 import nodemailer from "nodemailer";
 
-import { appConfig } from "@/app-config";
-import AccountUpdatedEmail from "@/components/emails/AccountUpdatedEmail";
-import CommentNotificationEmail from "@/components/emails/CommentNotificationEmail";
-import NewChapterEmail from "@/components/emails/NewChapterEmail";
-import PasswordResetEmail from "@/components/emails/PasswordResetEmail";
-import VerificationEmail from "@/components/emails/VerificationEmail";
-import WelcomeEmail from "@/components/emails/WelcomeEmail";
 import type { SendEmailOptions } from "@/types";
 
 // ═══════════════════════════════════════════════════

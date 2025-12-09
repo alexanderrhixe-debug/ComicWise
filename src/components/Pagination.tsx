@@ -2,8 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-
-import { Button } from "components/ui/button";
+import { Button } from "ui/button";
 
 interface PaginationProps {
   currentPage: number;
@@ -92,7 +91,9 @@ export function Pagination({ currentPage, totalPages, baseUrl = "/comics" }: Pag
     return pages;
   };
 
-  if (totalPages <= 1) return null;
+  if (totalPages <= 1) {
+    return null;
+  }
 
   return (
     <div className="flex items-center justify-center gap-2">

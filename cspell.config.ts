@@ -38,7 +38,7 @@ const config: CSpellSettings = {
   // ═══════════════════════════════════════════════════
   // Dictionaries
   // ═══════════════════════════════════════════════════
-  dictionaries: ["typescript", "node", "npm", "css", "html", "bash"],
+  dictionaries: ["typescript", "node", "npm", "css", "html", "bash", "project-words"],
 
   // ═══════════════════════════════════════════════════
   // Custom Words (Project-Specific)
@@ -155,6 +155,14 @@ const config: CSpellSettings = {
   // ═══════════════════════════════════════════════════
   // Language Settings
   // ═══════════════════════════════════════════════════
+  dictionaryDefinitions: [
+    {
+      name: "project-words",
+      path: "./project-words.txt",
+      description: "Words used in this project",
+      addWords: true,
+    },
+  ],
   languageSettings: [
     {
       languageId: "typescript,javascript,typescriptreact,javascriptreact",

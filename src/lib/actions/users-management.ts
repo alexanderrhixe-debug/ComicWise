@@ -4,13 +4,12 @@
 // USERS MANAGEMENT SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "app-config";
 import bcrypt from "bcryptjs";
+import { db } from "db/client";
+import { user } from "db/schema";
 import { eq, like, or, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-
-import { db } from "@/db";
-import { user } from "@/db/schema";
-import { sendAccountUpdatedEmail, sendWelcomeEmail } from "@/lib/email";
+import { sendAccountUpdatedEmail, sendWelcomeEmail } from "lib/email";
 import {
   createUserSchema,
   updateUserSchema,
@@ -18,8 +17,8 @@ import {
   type CreateUserInput,
   type UpdateUserInput,
   type UserFilterInput,
-} from "@/lib/validations/schemas";
-import { appConfig } from "app-config";
+} from "lib/validations/schemas";
+import { revalidatePath } from "next/cache";
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }

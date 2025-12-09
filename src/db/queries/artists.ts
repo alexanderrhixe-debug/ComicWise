@@ -1,7 +1,6 @@
-import { asc, desc, eq, ilike } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { artist } from "@/db/schema";
+import { asc, desc, eq, ilike } from "drizzle-orm";
 
 export async function getArtistById(artistId: number) {
   return await db.query.artist.findFirst({

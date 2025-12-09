@@ -1,5 +1,3 @@
-import { describe, expect, it } from "vitest";
-
 import {
   createBookmarkSchema,
   createChapterSchema,
@@ -13,7 +11,8 @@ import {
   updateComicSchema,
   updateCommentSchema,
   verifyEmailSchema,
-} from "@/lib/validations/schemas";
+} from "lib/validations/schemas";
+import { describe, expect, it } from "vitest";
 
 describe("Authentication Validation Schemas", () => {
   describe("signUpSchema", () => {

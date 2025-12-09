@@ -4,11 +4,10 @@
 // GENRES & TYPES CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
+import { appConfig } from "app-config";
+import { db } from "db/client";
+import { type as comicType, genre } from "db/schema";
 import { eq, like, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-
-import { db } from "@/db";
-import { type as comicType, genre } from "@/db/schema";
 import {
   createGenreSchema,
   createTypeSchema,
@@ -20,8 +19,8 @@ import {
   type PaginationInput,
   type UpdateGenreInput,
   type UpdateTypeInput,
-} from "@/lib/validations/schemas";
-import { appConfig } from "app-config";
+} from "lib/validations/schemas";
+import { revalidatePath } from "next/cache";
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }
@@ -164,7 +163,7 @@ export async function listGenres(input?: PaginationInput & { search?: string }) 
       where: whereClause,
       limit,
       offset,
-      orderBy: (genres, { asc }) => [asc(genres.name)],
+      orderBy: (genres: { name: any }, { asc }: any) => [asc(genres.name)],
     });
 
     return {
@@ -191,7 +190,7 @@ export async function listGenres(input?: PaginationInput & { search?: string }) 
 export async function getAllGenres() {
   try {
     const results = await db.query.genre.findMany({
-      orderBy: (genres, { asc }) => [asc(genres.name)],
+      orderBy: (genres: { name: any }, { asc }: any) => [asc(genres.name)],
     });
 
     return { success: true, data: results };
@@ -341,7 +340,7 @@ export async function listTypes(input?: PaginationInput & { search?: string }) {
       where: whereClause,
       limit,
       offset,
-      orderBy: (types, { asc }) => [asc(types.name)],
+      orderBy: (types: { name: any }, { asc }: any) => [asc(types.name)],
     });
 
     return {
@@ -368,7 +367,7 @@ export async function listTypes(input?: PaginationInput & { search?: string }) {
 export async function getAllTypes() {
   try {
     const results = await db.query.type.findMany({
-      orderBy: (types, { asc }) => [asc(types.name)],
+      orderBy: (types: { name: any }, { asc }: any) => [asc(types.name)],
     });
 
     return { success: true, data: results };

@@ -5,9 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-
-import { Button } from "components/ui/button";
-import { Skeleton } from "components/ui/skeleton";
+import { Button } from "ui/button";
+import { Skeleton } from "ui/skeleton";
 
 interface Chapter {
   id: number;
@@ -73,9 +72,15 @@ export function ChapterReader({ chapter, comic, images, prevChapter, nextChapter
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") handlePrevPage();
-      if (e.key === "ArrowRight") handleNextPage();
-      if (e.key === "f") toggleFullscreen();
+      if (e.key === "ArrowLeft") {
+        handlePrevPage();
+      }
+      if (e.key === "ArrowRight") {
+        handleNextPage();
+      }
+      if (e.key === "f") {
+        toggleFullscreen();
+      }
     };
 
     window.addEventListener("keydown", handleKeyPress);

@@ -1,21 +1,23 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
-
-import * as mutations from "@/db/mutations";
-import { error } from "@/lib/actions/utils";
-import type { ActionResponse } from "@/types";
+import { error } from "actions/utils";
 import { appConfig, checkRateLimit } from "app-config";
+import * as mutations from "db/mutations";
 
-const commentSchema = z.object({
-  content: z.string().min(1, "Comment cannot be empty").max(1000, "Comment too long"),
-  chapterId: z.coerce.number().int().positive(),
-});
+import type { ActionResponse } from "@/types";
 
-const updateCommentSchema = z.object({
-  content: z.string().min(1, "Comment cannot be empty").max(1000, "Comment too long"),
-});
+const commentSchema = z
+  .object({
+    content: z.string().min(1, "Comment cannot be empty").max(1000, "Comment too long"),
+    chapterId: z.coerce.number().int().positive(),
+  })
+  .strict();
+
+const updateCommentSchema = z
+  .object({
+    content: z.string().min(1, "Comment cannot be empty").max(1000, "Comment too long"),
+  })
+  .strict();
 
 export async function createComment(
   userId: string,

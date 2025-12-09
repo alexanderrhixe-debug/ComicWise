@@ -2,13 +2,12 @@
 // COMMENT ACTIONS - UNIT TESTS
 // ═══════════════════════════════════════════════════
 
+import { createComment, deleteComment, updateComment } from "actions/comments";
+import * as mutations from "db/mutations";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
-import * as mutations from "@/db/mutations";
-import { createComment, deleteComment, updateComment } from "@/lib/actions/comments";
-
 // Mock dependencies
-vi.mock("@/db/mutations");
+vi.mock("db/mutations");
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }));

@@ -1,7 +1,6 @@
-import { and, eq } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { authenticator } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
 
 // ═══════════════════════════════════════════════════
 // AUTHENTICATOR MUTATIONS

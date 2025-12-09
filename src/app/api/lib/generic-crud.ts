@@ -3,10 +3,10 @@
 // Shared Implementation for Similar Entities
 // ═══════════════════════════════════════════════════
 
-import { NextRequest, NextResponse } from "next/server";
-import type { ZodSchema } from "zod";
-
 import { auth } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+
+import type { ZodSchema } from "zod";
 
 type ValidationResult<T> =
   | { success: true; data: T }
@@ -25,7 +25,7 @@ export function zodToValidationResult<T>(
     }
     return {
       success: false,
-      error: { errors: result.error.errors },
+      error: { errors: result.error.issues },
     };
   };
 }

@@ -1,13 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
-
-import * as mutations from "@/db/mutations";
-import { error } from "@/lib/actions/utils";
-import { createAuthorSchema, updateAuthorSchema } from "@/lib/validator";
 import type { ActionResponse } from "@/types";
+import { error } from "actions/utils";
 import { appConfig, checkRateLimit } from "app-config";
+import * as mutations from "db/mutations";
+import { createAuthorSchema, updateAuthorSchema } from "lib/validator";
 
 export async function createAuthor(formData: FormData): Promise<ActionResponse<{ id: number }>> {
   try {

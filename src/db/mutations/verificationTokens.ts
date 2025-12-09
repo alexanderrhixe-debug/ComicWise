@@ -1,7 +1,6 @@
-import { and, eq, lt } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { verificationToken } from "@/db/schema";
+import { and, eq, lt } from "drizzle-orm";
 
 // ═══════════════════════════════════════════════════
 // VERIFICATION TOKEN MUTATIONS

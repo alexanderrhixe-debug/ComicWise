@@ -2,15 +2,14 @@
 // AUTH ACTIONS - UNIT TESTS
 // ═══════════════════════════════════════════════════
 
+import { handleSignOut, signInWithCredentials, signOutAction } from "actions/auth";
+import * as authLib from "auth";
+import * as ratelimitLib from "lib/ratelimit";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
-import { handleSignOut, signInWithCredentials, signOutAction } from "@/lib/actions/auth";
-import * as authLib from "@/lib/auth";
-import * as ratelimitLib from "@/lib/ratelimit";
-
 // Mock dependencies
-vi.mock("@/lib/auth");
-vi.mock("@/lib/ratelimit");
+vi.mock("auth");
+vi.mock("lib/ratelimit");
 vi.mock("app-config", () => ({
   appConfig: {
     rateLimit: {

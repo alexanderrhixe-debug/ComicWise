@@ -5,9 +5,8 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-
-import { Button } from "components/ui/button";
-import { Input } from "components/ui/input";
+import { Button } from "ui/button";
+import { Input } from "ui/input";
 import { cn } from "utils";
 
 export function AppNavbar() {
@@ -25,7 +24,9 @@ export function AppNavbar() {
   ];
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === href;
+    if (href === "/") {
+      return pathname === href;
+    }
     return pathname.startsWith(href);
   };
 
@@ -55,7 +56,9 @@ export function AppNavbar() {
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => {
-            if (link.protected && status !== "authenticated") return null;
+            if (link.protected && status !== "authenticated") {
+              return null;
+            }
             return (
               <Link
                 key={link.href}
@@ -162,7 +165,9 @@ export function AppNavbar() {
             {/* Mobile Nav Links */}
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => {
-                if (link.protected && status !== "authenticated") return null;
+                if (link.protected && status !== "authenticated") {
+                  return null;
+                }
                 return (
                   <Link
                     key={link.href}

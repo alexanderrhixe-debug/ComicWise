@@ -11,9 +11,8 @@ import {
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from "react";
-
-import { Badge } from "components/ui/badge";
-import { Button } from "components/ui/button";
+import { Badge } from "ui/badge";
+import { Button } from "ui/button";
 import {
   Command,
   CommandEmpty,
@@ -22,8 +21,8 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
+} from "ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "ui/popover";
 import { cn } from "utils";
 
 type MultiSelectContextType = {
@@ -68,7 +67,9 @@ export function MultiSelect({
 
   const onItemAdded = useCallback((value: string, label: ReactNode) => {
     setItems((prev) => {
-      if (prev.get(value) === label) return prev;
+      if (prev.get(value) === label) {
+        return prev;
+      }
       return new Map(prev).set(value, label);
     });
   }, []);
@@ -150,13 +151,17 @@ export function MultiSelectValue({
   const shouldWrap = overflowBehavior === "wrap" || (overflowBehavior === "wrap-when-open" && open);
 
   const checkOverflow = useCallback(() => {
-    if (valueRef.current == null) return;
+    if (valueRef.current == null) {
+      return;
+    }
 
     const containerElement = valueRef.current;
     const overflowElement = overflowRef.current;
     const items = containerElement.querySelectorAll<HTMLElement>("[data-selected-item]");
 
-    if (overflowElement != null) overflowElement.style.display = "none";
+    if (overflowElement != null) {
+      overflowElement.style.display = "none";
+    }
     items.forEach((child) => child.style.removeProperty("display"));
     let amount = 0;
     for (let i = items.length - 1; i >= 0; i--) {
@@ -347,7 +352,9 @@ function debounce<T extends (...args: never[]) => void>(
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
   return function (this: unknown, ...args: Parameters<T>) {
-    if (timeout) clearTimeout(timeout);
+    if (timeout) {
+      clearTimeout(timeout);
+    }
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }

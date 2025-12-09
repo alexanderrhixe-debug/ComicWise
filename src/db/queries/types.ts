@@ -1,7 +1,6 @@
-import { asc, desc, eq, ilike } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { type } from "@/db/schema";
+import { asc, desc, eq, ilike } from "drizzle-orm";
 
 export async function getTypeById(typeId: number) {
   return await db.query.type.findFirst({

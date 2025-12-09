@@ -9,13 +9,12 @@
 // - Connection caching for serverless environments
 // ═══════════════════════════════════════════════════
 
-import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { env, isDevelopment } from "app-config";
+import * as schema from "db/schema";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import { env, isDevelopment } from "app-config";
-
-import * as schema from "@/db/schema";
+import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 // ═══════════════════════════════════════════════════
 // VALIDATION

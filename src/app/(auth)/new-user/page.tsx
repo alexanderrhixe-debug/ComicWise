@@ -1,11 +1,10 @@
 "use client";
 
+import { Card, CardDescription, CardHeader, CardTitle } from "components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-
-import { Card, CardDescription, CardHeader, CardTitle } from "components/ui/card";
 
 export default function NewUserPage() {
   const router = useRouter();

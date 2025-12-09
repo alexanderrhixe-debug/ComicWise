@@ -52,6 +52,15 @@ declare module "imagekit" {
   }
 
   export default class ImageKit {
+    getAuthenticationParameters(): { token: string; expire: number; signature: string } {
+      throw new Error("Method not implemented.");
+    }
+    url(arg0: { path: string; transformation: { [key: string]: string | number }[] }): string {
+      throw new Error("Method not implemented.");
+    }
+    getFileMetadata(fileId: string) {
+      throw new Error("Method not implemented.");
+    }
     constructor(options: ImageKitOptions);
     upload(options: UploadOptions): Promise<UploadResponse>;
     deleteFile(options: DeleteFileOptions): Promise<void>;

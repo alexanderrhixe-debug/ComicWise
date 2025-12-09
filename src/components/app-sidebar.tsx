@@ -1,5 +1,6 @@
 "use client";
 
+import { ThemeToggle } from "components/admin/ThemeToggle";
 import {
   BookOpen,
   FileText,
@@ -12,8 +13,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-import { ThemeToggle } from "@/components/admin/ThemeToggle";
 import {
   Sidebar,
   SidebarContent,
@@ -25,7 +24,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "ui/sidebar";
 
 const menuItems = [
   {
@@ -66,7 +65,7 @@ const menuItems = [
   {
     title: "Types",
     icon: Tag,
-    href: "/admin/types",
+    href: "/admin/@/types",
   },
 ];
 

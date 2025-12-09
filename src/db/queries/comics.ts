@@ -1,7 +1,7 @@
-import { and, asc, desc, eq, gte, inArray, like, or, sql } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { artist, author, chapter, comic, comicToGenre, genre, type } from "@/db/schema";
+import { and, asc, desc, eq, gte, inArray, like, or, sql } from "drizzle-orm";
+
 import type { ComicFilters, ComicWithDetails } from "@/types";
 
 export async function getAllComics(filters: ComicFilters = {}) {

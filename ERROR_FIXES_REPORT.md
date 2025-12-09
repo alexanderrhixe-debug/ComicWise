@@ -130,7 +130,7 @@ style={{ "--color-bg": indicatorColor, "--color-border": indicatorColor }}
 **Code Changes**:
 
 ```typescript
-- <Skeleton className="aspect-[2/3] w-full" />
+- <Skeleton className="aspect-2/3 w-full" />
 + <Skeleton className="aspect-2/3 w-full" />
 ```
 
@@ -221,6 +221,7 @@ functionality
    ```
 
 4. **Build Verification**:
+
    ```bash
    pnpm build
    # Should complete successfully

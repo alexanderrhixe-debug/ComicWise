@@ -4,9 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm, type UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import type { z } from "zod";
-
-import { Button } from "@/components/ui/button";
+import { Button } from "ui/button";
 import {
   Form,
   FormControl,
@@ -15,17 +13,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+} from "ui/form";
+import { Input } from "ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select";
+import { Switch } from "ui/switch";
+import { Textarea } from "ui/textarea";
+
+import type { z } from "zod";
 
 export type FieldType =
   | "text"
@@ -38,7 +32,6 @@ export type FieldType =
   | "date"
   | "file";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface FormFieldConfig<T extends z.ZodType<any>> {
   name: keyof z.infer<T>;
   label: string;
@@ -50,7 +43,6 @@ export interface FormFieldConfig<T extends z.ZodType<any>> {
   required?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface BaseFormProps<T extends z.ZodType<any>> {
   schema: T;
   fields: FormFieldConfig<T>[];
@@ -61,7 +53,6 @@ interface BaseFormProps<T extends z.ZodType<any>> {
   className?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function BaseForm<T extends z.ZodType<any>>({
   schema,
   fields,
@@ -74,9 +65,8 @@ export function BaseForm<T extends z.ZodType<any>>({
   type FormValues = z.output<T>;
 
   const form = useForm<FormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(schema as any) as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     defaultValues: defaultValues as any,
   });
 
@@ -91,7 +81,6 @@ export function BaseForm<T extends z.ZodType<any>>({
   };
 
   const renderField = (field: FormFieldConfig<T>, formInstance: UseFormReturn<FormValues>) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldName = field.name as any;
 
     switch (field.type) {

@@ -1,8 +1,7 @@
-import { notFound } from "next/navigation";
-
 import { incrementChapterViews } from "@/db/mutations";
 import { getChapter, getNextChapter, getPreviousChapter } from "@/db/queries";
 import { ChapterReader } from "components/ChapterReader";
+import { notFound } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ id: string; chapterId: string }>;

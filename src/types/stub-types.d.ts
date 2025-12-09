@@ -534,14 +534,8 @@ declare module "glob" {
 
   export function glob(pattern: string | string[], options?: GlobOptions): Promise<string[]>;
   export function globSync(pattern: string | string[], options?: GlobOptions): string[];
-  export function globStream(
-    pattern: string | string[],
-    options?: GlobOptions
-  ): NodeJS.ReadableStream;
-  export function globStreamSync(
-    pattern: string | string[],
-    options?: GlobOptions
-  ): NodeJS.ReadableStream;
+  export function globStream(pattern: string | string[], options?: GlobOptions): ReadableStream;
+  export function globStreamSync(pattern: string | string[], options?: GlobOptions): ReadableStream;
   export function hasMagic(pattern: string, options?: GlobOptions): boolean;
   export class Glob {
     constructor(pattern: string, options?: GlobOptions);

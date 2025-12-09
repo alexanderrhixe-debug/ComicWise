@@ -16,12 +16,9 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "2mb",
       allowedOrigins: ["localhost:3000"],
     },
-
-    // ppr: true,
-    // reactCompiler: true,
   },
   // Disabled due to conflicts with dynamic route segment config
-  // cacheComponents: true,
+  cacheComponents: true,
   images: {
     remotePatterns: [
       {

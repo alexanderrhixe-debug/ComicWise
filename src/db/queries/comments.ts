@@ -1,7 +1,6 @@
-import { asc, desc, eq } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { comment } from "@/db/schema";
+import { asc, desc, eq } from "drizzle-orm";
 
 export async function getCommentById(commentId: number) {
   return await db.query.comment.findFirst({

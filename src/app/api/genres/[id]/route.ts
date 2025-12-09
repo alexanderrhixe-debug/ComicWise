@@ -2,18 +2,16 @@
 // GENRE DETAIL API
 // ═══════════════════════════════════════════════════
 
-import { NextRequest } from "next/server";
-
-import { deleteGenre, updateGenre } from "@/db/mutations/genres";
-import { getGenreById } from "@/db/queries/genres";
-import { genreIdSchema, updateGenreSchema } from "@/lib/validations/schemas";
-
 import {
   deleteGenericEntity,
   getGenericEntity,
   updateGenericEntity,
   zodToValidationResult,
 } from "@/app/api/lib/generic-crud";
+import { deleteGenre, updateGenre } from "@/db/mutations/genres";
+import { getGenreById } from "@/db/queries/genres";
+import { genreIdSchema, updateGenreSchema } from "@/lib/validations/schemas";
+import { NextRequest } from "next/server";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -39,8 +37,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 export async function PUT(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return deleteGenericEntity(id, {
-    deleteFn: deleteGenre,
-    validateFn: genreIdSchema.safeParse.bind(genreIdSchema),
+    deleteFn: async (genreId: number) => {
+      const result = await deleteGenre(genreId);
+      // Return true if deleted, false otherwise
+      return !!result;
+    },
+    validateFn: zodToValidationResult(genreIdSchema),
     entityName: "genre",
   });
 }

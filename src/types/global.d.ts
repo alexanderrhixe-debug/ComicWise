@@ -31,7 +31,7 @@ declare global {
     __ENV__?: Record<string, string>;
   }
 
-  // Node.js process types
+  // Node.js process @/types
   namespace NodeJS {
     interface ProcessEnv {
       // Database

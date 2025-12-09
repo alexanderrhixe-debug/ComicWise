@@ -29,6 +29,8 @@ export function formatDate(
  */
 export function formatNumber(num: number | string): string {
   const numValue = typeof num === "string" ? parseFloat(num) : num;
-  if (isNaN(numValue)) return "0";
+  if (isNaN(numValue)) {
+    return "0";
+  }
   return numValue.toLocaleString("en-US");
 }

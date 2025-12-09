@@ -2,7 +2,6 @@
 
 import { type ComponentProps, type ReactNode, useTransition } from "react";
 import { toast } from "sonner";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,9 +12,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "components/ui/alert-dialog";
-import { Button } from "components/ui/button";
-import { LoadingSwap } from "components/ui/loading-swap";
+} from "ui/alert-dialog";
+import { Button } from "ui/button";
+import { LoadingSwap } from "ui/loading-swap";
 
 export function ActionButton({
   action,
@@ -32,7 +31,9 @@ export function ActionButton({
   function performAction() {
     startTransition(async () => {
       const data = await action();
-      if (data.error) toast.error(data.message ?? "Error");
+      if (data.error) {
+        toast.error(data.message ?? "Error");
+      }
     });
   }
 

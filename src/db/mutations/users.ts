@@ -1,7 +1,6 @@
-import { eq } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { user } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function createUser(data: {
   email: string;

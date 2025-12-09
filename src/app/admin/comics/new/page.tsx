@@ -1,9 +1,8 @@
-import type { Metadata } from "next";
+import ComicForm from "@/app/admin/comics/comic-form";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
-
-import ComicForm from "@/app/admin/comics/comic-form";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Create Comic | Admin",

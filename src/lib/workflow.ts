@@ -4,12 +4,10 @@
 // COMPREHENSIVE WORKFLOW SYSTEM (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { z } from "zod";
-
 import { appConfig } from "app-config";
-
-import emailService, { sendEmail } from "@/lib/email";
-import { checkRateLimit } from "@/lib/ratelimit";
+import emailService, { sendEmail } from "lib/email";
+import { checkRateLimit } from "lib/ratelimit";
+import { z } from "zod";
 
 // ═══════════════════════════════════════════════════
 // WORKFLOW TYPES & SCHEMAS
@@ -41,30 +39,32 @@ export interface WorkflowPayload {
   metadata?: Record<string, unknown>;
 }
 
-const workflowPayloadSchema = z.object({
-  type: z.enum([
-    "user.welcome",
-    "user.verification",
-    "user.password-reset",
-    "user.account-updated",
-    "user.account-deleted",
-    "comic.created",
-    "comic.updated",
-    "comic.deleted",
-    "chapter.created",
-    "chapter.updated",
-    "chapter.deleted",
-    "bookmark.created",
-    "bookmark.reminder",
-    "comment.created",
-    "comment.reply",
-    "admin.notification",
-  ]),
-  data: z.record(z.string(), z.any()),
-  recipientEmail: z.string().email(),
-  recipientName: z.string().optional(),
-  metadata: z.record(z.string(), z.any()).optional(),
-});
+const workflowPayloadSchema = z
+  .object({
+    type: z.enum([
+      "user.welcome",
+      "user.verification",
+      "user.password-reset",
+      "user.account-updated",
+      "user.account-deleted",
+      "comic.created",
+      "comic.updated",
+      "comic.deleted",
+      "chapter.created",
+      "chapter.updated",
+      "chapter.deleted",
+      "bookmark.created",
+      "bookmark.reminder",
+      "comment.created",
+      "comment.reply",
+      "admin.notification",
+    ]),
+    data: z.record(z.string(), z.any()),
+    recipientEmail: z.string().email(),
+    recipientName: z.string().optional(),
+    metadata: z.record(z.string(), z.any()).optional(),
+  })
+  .strict();
 
 // ═══════════════════════════════════════════════════
 // WORKFLOW EXECUTION ENGINE

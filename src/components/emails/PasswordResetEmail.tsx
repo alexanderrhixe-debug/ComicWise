@@ -10,7 +10,6 @@ import {
   Section,
   Text,
 } from "@react-email/components";
-
 import { appConfig } from "app-config";
 
 interface PasswordResetEmailProps {

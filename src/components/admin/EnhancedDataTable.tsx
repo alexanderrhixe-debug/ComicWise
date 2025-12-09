@@ -15,24 +15,16 @@ import { Download, Filter, X } from "lucide-react";
 import Papa from "papaparse";
 import { useState } from "react";
 import { toast } from "sonner";
-
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "ui/button";
+import { Checkbox } from "ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+} from "ui/dropdown-menu";
+import { Input } from "ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table";
 
 interface EnhancedDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -79,7 +71,9 @@ export function EnhancedDataTable<TData, TValue>({
   const selectedRowCount = Object.keys(rowSelection).length;
 
   async function handleBulkDelete() {
-    if (!onBulkDelete) return;
+    if (!onBulkDelete) {
+      return;
+    }
 
     const selectedIds = table
       .getFilteredSelectedRowModel()

@@ -1,19 +1,20 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { env } from "app-config";
 import bcrypt from "bcryptjs";
+import { db } from "db/client";
+import { account, authenticator, session, user, verificationToken } from "db/schema";
 import { eq } from "drizzle-orm";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { z } from "zod";
 
-import { db } from "@/db";
-import { account, authenticator, session, user, verificationToken } from "@/db/schema";
-import { env } from "app-config";
-
-const signInSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+const signInSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(8),
+  })
+  .strict();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db, {
@@ -22,7 +23,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     sessionsTable: session,
     verificationTokensTable: verificationToken,
     authenticatorsTable: authenticator,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any, // Type assertion necessary due to version mismatch between @auth/core and DrizzleAdapter
   session: {
     strategy: "jwt",

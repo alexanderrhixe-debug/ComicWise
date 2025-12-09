@@ -1,7 +1,6 @@
-import { eq } from "drizzle-orm";
-
 import { db } from "@/db/client";
 import { comicImage } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function createComicImage(data: {
   comicId: number;

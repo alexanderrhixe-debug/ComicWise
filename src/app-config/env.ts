@@ -1,3 +1,4 @@
+/* eslint-disable zod/require-strict */
 import { z } from "zod";
 
 // ═══════════════════════════════════════════════════
@@ -87,6 +88,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   GITHUB_CLIENT_ID: z.string().optional(),
   GITHUB_CLIENT_SECRET: z.string().optional(),
+  CUSTOM_PASSWORD: z.string().optional(),
 });
 
 // ═══════════════════════════════════════════════════

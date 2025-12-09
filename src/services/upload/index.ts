@@ -3,7 +3,7 @@
 // Next.js 16.0.7 Optimized
 // ═══════════════════════════════════════════════════
 
-import { env } from "@/app-config";
+import { env } from "app-config";
 
 export interface UploadOptions {
   folder?: string;
@@ -20,6 +20,8 @@ export interface UploadResult {
   format?: string;
   size: number;
   thumbnail?: string;
+  success?: boolean;
+  error?: string;
 }
 
 export interface UploadProvider {
@@ -33,19 +35,18 @@ export interface UploadProvider {
 // ═══════════════════════════════════════════════════
 
 export async function getUploadProvider(): Promise<UploadProvider> {
-  const provider = env.UPLOAD_PROVIDER;
-
+  const provider: "imagekit" | "cloudinary" | "local" = env.UPLOAD_PROVIDER;
+  const { CloudinaryProvider } = await import("./providers/cloudinary");
+  const { ImageKitProvider } = await import("./providers/imagekit");
+  const { LocalProvider } = await import("./providers/local");
   switch (provider) {
     case "cloudinary":
-      const { CloudinaryProvider } = await import("./providers/cloudinary");
       return new CloudinaryProvider();
 
     case "imagekit":
-      const { ImageKitProvider } = await import("./providers/imagekit");
       return new ImageKitProvider();
 
     case "local":
-      const { LocalProvider } = await import("./providers/local");
       return new LocalProvider();
 
     default:
