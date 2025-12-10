@@ -168,11 +168,14 @@ export default function NewAuthorPage() {
                           >
                             {isUploading ? "Uploading..." : "Upload Image"}
                           </Button>
+                          <label htmlFor="profile-upload" className="sr-only">
+                            Upload author profile image
+                          </label>
                           <input
                             id="profile-upload"
                             type="file"
                             accept="image/*"
-                            className="hidden"
+                            className="sr-only"
                             onChange={handleImageUpload}
                             aria-label="Upload author profile image"
                             title="Upload author profile image"

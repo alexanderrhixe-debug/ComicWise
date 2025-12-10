@@ -128,7 +128,7 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
     .leftJoin(type, eq(comic.typeId, type.id))
     .$dynamic();
 
-  const conditions = [];
+  const conditions: unknown[] = [];
 
   // Full-text search condition
   if (searchQuery || search) {
@@ -223,7 +223,8 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
 
   // Apply conditions
   if (conditions.length > 0) {
-    baseQuery = baseQuery.where(and(...conditions));
+    // conditions may contain Drizzle SQL expressions; cast to any for the ORM call
+    baseQuery = baseQuery.where(and(...(conditions as any)));
   }
 
   // Apply sorting
@@ -240,10 +241,26 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
   const comicIds = results.map((r: { id: number }) => r.id);
   const genresMap = await getComicGenres(comicIds);
 
-  // Combine results with genres
-  const enrichedResults: any[] = results.map((result: any) => ({
-    ...result,
+  // Combine results with genres — map into the typed SearchResult shape
+  type RawRow = { id: number; [key: string]: unknown };
+  const enrichedResults: SearchResult[] = results.map((result: RawRow) => ({
+    id: result.id,
+    title: (result.title as string) || "",
+    description: (result.description as string) || "",
+    coverImage: (result.coverImage as string) || "",
+    status: (result.status as string) || "",
+    rating: (result.rating as string) || "",
+    views: typeof result.views === "number" ? (result.views as number) : Number(result.views) || 0,
+    authorName: (result.authorName as string) || null,
+    artistName: (result.artistName as string) || null,
+    typeName: (result.typeName as string) || null,
     genres: genresMap && genresMap[result.id] ? genresMap[result.id] : [],
+    relevanceScore: (result.relevanceScore as number) || undefined,
+    publicationDate: (result.publicationDate as unknown)
+      ? new Date(result.publicationDate as string)
+      : new Date(),
+    createdAt: (result.createdAt as unknown) ? new Date(result.createdAt as string) : new Date(),
+    updatedAt: (result.updatedAt as unknown) ? new Date(result.updatedAt as string) : new Date(),
   }));
 
   return {
@@ -326,7 +343,7 @@ function applySorting(query: any, sortBy: string, sortOrder: string, hasSearchQu
 /**
  * Get total count of search results
  */
-async function getSearchTotalCount(conditions: any[]): Promise<number> {
+async function getSearchTotalCount(conditions: unknown[]): Promise<number> {
   let countQuery = database
     .select({ count: sql<number>`count(DISTINCT ${comic.id})::int` })
     .from(comic)
@@ -335,7 +352,8 @@ async function getSearchTotalCount(conditions: any[]): Promise<number> {
     .$dynamic();
 
   if (conditions.length > 0) {
-    countQuery = countQuery.where(and(...conditions));
+    // conditions may contain Drizzle SQL expressions; cast to any for the ORM call
+    countQuery = countQuery.where(and(...(conditions as any)));
   }
 
   const result = await countQuery;
@@ -477,8 +495,20 @@ export async function getTrendingComics(
   const comicIds = results.map((r: { id: number }) => r.id);
   const genresMap = await getComicGenres(comicIds);
 
-  return results.map((result: any) => ({
-    ...result,
+  return results.map((result: { id: number; [key: string]: unknown }) => ({
+    id: result.id,
+    title: (result as any).title,
+    description: (result as any).description,
+    coverImage: (result as any).coverImage,
+    status: (result as any).status,
+    rating: (result as any).rating,
+    views: (result as any).views,
+    authorName: (result as any).authorName ?? null,
+    artistName: (result as any).artistName ?? null,
+    typeName: (result as any).typeName ?? null,
     genres: genresMap && genresMap[result.id] ? genresMap[result.id] : [],
-  })) as any as SearchResult[];
+    publicationDate: (result as any).publicationDate,
+    createdAt: (result as any).createdAt,
+    updatedAt: (result as any).updatedAt,
+  })) as SearchResult[];
 }

@@ -46,12 +46,16 @@ function ClientImageUploader({ targetInputId }: { targetInputId: string }) {
 
   return (
     <div className="flex items-center gap-4">
+      <label htmlFor="profile-upload-file" className="sr-only">
+        Upload author profile image
+      </label>
       <input
         id="profile-upload-file"
         type="file"
         accept="image/*"
-        className="hidden"
+        className="sr-only"
         onChange={handleUpload}
+        aria-label="Upload author profile image"
       />
       <Button
         type="button"

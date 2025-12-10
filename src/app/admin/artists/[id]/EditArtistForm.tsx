@@ -39,12 +39,16 @@ function ClientImageUploader({ targetInputId }: { targetInputId: string }) {
 
   return (
     <div className="flex items-center gap-4">
+      <label htmlFor="artist-profile-upload-file" className="sr-only">
+        Upload artist profile image
+      </label>
       <input
         id="artist-profile-upload-file"
         type="file"
         accept="image/*"
-        className="hidden"
+        className="sr-only"
         onChange={handleUpload}
+        aria-label="Upload artist profile image"
       />
       <Button
         type="button"
@@ -144,7 +148,7 @@ export default async function EditArtistForm({ params }: { params: { id: string 
                 <ClientImageUploader targetInputId="image" />
               </div>
               {artist.profileImage && (
-                <div className="relative h-32 w-32 overflow-hidden rounded-lg border mt-2">
+                <div className="relative mt-2 h-32 w-32 overflow-hidden rounded-lg border">
                   <Image
                     src={artist.profileImage}
                     alt="Profile preview"

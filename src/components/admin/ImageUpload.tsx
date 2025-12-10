@@ -224,7 +224,7 @@ export function ImageUpload({
         accept={accept}
         onChange={handleFileSelect}
         disabled={disabled || isUploading}
-        className="hidden"
+        className="sr-only"
         aria-label={`Upload ${label}`}
         title={`Upload ${label}`}
       />
