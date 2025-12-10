@@ -8,7 +8,7 @@ import { appConfig } from "appConfig";
 import bcrypt from "bcryptjs";
 import { database } from "database";
 import { user } from "database/schema";
-import { eq, like, or, sql } from "drizzle-orm";
+import { asc, desc, eq, like, or, sql } from "drizzle-orm";
 import { sendAccountUpdatedEmail, sendWelcomeEmail } from "lib/email";
 import {
   createUserSchema,
@@ -262,7 +262,7 @@ export async function listUsers(input?: UserFilterInput) {
     const total = countResult?.count || 0;
 
     // Get users (without passwords)
-    const results = await database
+    let usersQuery = database
       .select({
         id: user.id,
         name: user.name,
@@ -276,20 +276,22 @@ export async function listUsers(input?: UserFilterInput) {
       .from(user)
       .where(whereClause)
       .limit(limit)
-      .offset(offset)
-      .orderBy((users: any) => {
-        const order = sortOrder === "desc" ? sql`DESC` : sql`ASC`;
-        switch (sortBy) {
-          case "name":
-            return sql`${users.name} ${order}`;
-          case "email":
-            return sql`${users.email} ${order}`;
-          case "role":
-            return sql`${users.role} ${order}`;
-          default:
-            return sql`${users.createdAt} ${order}`;
-        }
-      });
+      .offset(offset);
+
+    // Apply ordering with typed columns (avoid implicit `any` in callback)
+    if (sortBy === "name") {
+      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.name) : asc(user.name));
+    } else if (sortBy === "email") {
+      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.email) : asc(user.email));
+    } else if (sortBy === "role") {
+      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.role) : asc(user.role));
+    } else {
+      usersQuery = usersQuery.orderBy(
+        sortOrder === "desc" ? desc(user.createdAt) : asc(user.createdAt)
+      );
+    }
+
+    const results = await usersQuery;
 
     return {
       success: true,

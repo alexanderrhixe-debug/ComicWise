@@ -4,9 +4,9 @@
 
 "use client";
 
+import { useImageUpload } from "hooks/useImageUpload";
 import { Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
 import { Button } from "ui/button";
 import { cn } from "utils";
 
@@ -24,9 +24,6 @@ interface ImageUploadProps {
   uploadType?: "comic" | "chapter" | "avatar" | "other";
 }
 
-const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
-// const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
-
 export function ImageUpload({
   value,
   onChange,
@@ -40,106 +37,12 @@ export function ImageUpload({
   type = "other",
   uploadType,
 }: ImageUploadProps) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const validateFile = (file: File): string | null => {
-    // Check file size
-    if (file.size > maxSize * 1024 * 1024) {
-      return `File size must be less than ${maxSize}MB (current: ${(file.size / 1024 / 1024).toFixed(2)}MB)`;
-    }
-
-    // Check file type
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      return `Invalid file type. Allowed types: ${ALLOWED_TYPES.map((t) => t.split("/")[1]).join(", ")}`;
-    }
-
-    // Additional image dimension validation could be added here
-    return null;
-  };
-
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) {
-      return;
-    }
-
-    // Reset states
-    setError(null);
-    setSuccess(false);
-    setUploadProgress(0);
-
-    // Validate file
-    const validationError = validateFile(file);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
-    try {
-      setIsUploading(true);
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("type", uploadType || type);
-
-      // Simulate progress for better UX (since fetch doesn't support upload progress natively)
-      const progressInterval = setInterval(() => {
-        setUploadProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
-          }
-          return prev + 10;
-        });
-      }, 200);
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      clearInterval(progressInterval);
-      setUploadProgress(100);
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: "Upload failed" }));
-        throw new Error(errorData.error || `Upload failed with status ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (!data.url) {
-        throw new Error("No URL returned from upload");
-      }
-
-      // Success state
-      setSuccess(true);
-
-      // Call both callbacks if provided
-      if (onChange) {
-        onChange(data.url);
-      }
-      if (onUploadComplete) {
-        onUploadComplete(data.url);
-      }
-
-      // Clear success message after 2 seconds
-      setTimeout(() => setSuccess(false), 2000);
-    } catch (err) {
-      console.error("Upload error:", err);
-      setError(err instanceof Error ? err.message : "Failed to upload image. Please try again.");
-      setUploadProgress(0);
-    } finally {
-      setIsUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
+  const { fileInputRef, isUploading, error, handleFileSelect } = useImageUpload({
+    maxSizeMB: maxSize,
+    uploadType: uploadType || type,
+    onChange,
+    onUploadComplete,
+  });
 
   const handleRemove = () => {
     if (onRemove) {
@@ -148,10 +51,6 @@ export function ImageUpload({
       onChange("");
     }
   };
-  if (success) {
-    console.log("Upload successful");
-    console.log(uploadProgress);
-  }
   return (
     <div className={cn("space-y-4", className)}>
       {value ? (
