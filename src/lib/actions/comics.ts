@@ -18,6 +18,10 @@ import {
   type UpdateComicInput,
 } from "lib/validations/schemas";
 import { revalidatePath } from "next/cache";
+import type { Genre } from "types/database-auto";
+
+type ParsedCreateComic = CreateComicInput & { slug?: string };
+type ParsedUpdateComic = UpdateComicInput & { slug?: string };
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }
@@ -31,9 +35,9 @@ export async function createComic(
   input: CreateComicInput
 ): Promise<ActionResult<typeof comic.$inferSelect>> {
   try {
-    const validated = createComicSchema.parse(input);
+    const validated = createComicSchema.parse(input) as ParsedCreateComic;
 
-    const slug = (validated as any).slug ?? slugify(validated.title);
+    const slug = validated.slug ?? slugify(validated.title);
 
     const [newComic] = await database
       .insert(comic)
@@ -75,15 +79,15 @@ export async function updateComic(
   input: UpdateComicInput
 ): Promise<ActionResult<typeof comic.$inferSelect>> {
   try {
-    const validated = updateComicSchema.parse(input);
+    const validated = updateComicSchema.parse(input) as ParsedUpdateComic;
 
     const updateData: Record<string, unknown> = {
       ...validated,
       updatedAt: new Date(),
     };
 
-    if ((validated as any).slug !== undefined) {
-      updateData.slug = (validated as any).slug;
+    if (validated.slug !== undefined) {
+      updateData.slug = validated.slug as string;
     }
 
     if (validated.rating !== undefined) {
@@ -348,7 +352,7 @@ export async function getComicGenres(comicId: number) {
 
     return {
       success: true,
-      data: genres.map((g: any) => g.genre),
+      data: genres.map((g: { genre: Genre }) => g.genre),
     };
   } catch (error) {
     console.error("Get comic genres error:", error);

@@ -1,155 +1,56 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "components/ui/select";
 import { Textarea } from "components/ui/textarea";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { deleteChapter, updateChapter } from "lib/actions/chapters";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-const chapterSchema = z
-  .object({
-    comicId: z.number().min(1, "Comic is required"),
-    chapterNumber: z.number().min(0, "Chapter number must be positive"),
-    title: z.string().min(1, "Title is required").max(500),
-    content: z.string().optional(),
-    releaseDate: z.string().optional(),
-  })
-  .strict();
+export default async function EditChapterForm({ params }: { params: { id: string } }) {
+  const id = Number(params.id);
 
-type ChapterFormValues = z.infer<typeof chapterSchema>;
+  // Fetch chapter and comics on the server
+  const [chapterRes, comicsRes] = await Promise.all([
+    fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/chapters/${id}`, { cache: "no-store" }),
+    fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/comics?limit=1000`, { cache: "no-store" }),
+  ]);
 
-interface Comic {
-  id: number;
-  title: string;
-}
+  if (!chapterRes.ok || !comicsRes.ok) {
+    redirect("/admin/chapters");
+  }
 
-interface Chapter {
-  id: number;
-  comicId: number;
-  chapterNumber: number;
-  title: string;
-  content: string | null;
-  releaseDate: string | null;
-}
+  const chapter = await chapterRes.json();
+  const comicsData = await comicsRes.json();
+  const comics = comicsData.comics || [];
 
-export default function EditChapterForm({ params }: { params: { id: string } }) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
-  const [comics, setComics] = useState<Comic[]>([]);
+  async function handleUpdate(formData: FormData) {
+    const payload = {
+      comicId: Number(formData.get("comicId")),
+      chapterNumber: Number(formData.get("chapterNumber")),
+      title: String(formData.get("title") ?? "").trim(),
+      content: formData.get("content") ? String(formData.get("content")) : undefined,
+      releaseDate: formData.get("releaseDate")
+        ? new Date(String(formData.get("releaseDate")))
+        : undefined,
+    };
 
-  const form = useForm<ChapterFormValues>({
-    resolver: zodResolver(chapterSchema),
-  });
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [chapterRes, comicsRes] = await Promise.all([
-          fetch(`/api/chapters/${params.id}`),
-          fetch("/api/comics?limit=1000"),
-        ]);
-
-        if (!chapterRes.ok) throw new Error("Failed to fetch chapter");
-        if (!comicsRes.ok) throw new Error("Failed to fetch comics");
-
-        const chapter: Chapter = await chapterRes.json();
-        const comicsData = await comicsRes.json();
-
-        setComics(comicsData.comics || []);
-        form.reset({
-          comicId: chapter.comicId,
-          chapterNumber: chapter.chapterNumber,
-          title: chapter.title,
-          content: chapter.content || "",
-          releaseDate: chapter.releaseDate
-            ? new Date(chapter.releaseDate).toISOString().split("T")[0]
-            : "",
-        });
-      } catch (error) {
-        toast.error(error instanceof Error ? error.message : "Failed to load chapter");
-        router.push("/admin/chapters");
-      } finally {
-        setIsFetching(false);
-      }
+    const result = await updateChapter(id, payload);
+    if (result.success) {
+      revalidatePath("/admin/chapters");
+      revalidatePath(`/comics/${payload.comicId}`);
+      redirect("/admin/chapters");
     }
 
-    fetchData();
-  }, [params.id, form, router]);
-
-  async function onSubmit(data: ChapterFormValues) {
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`/api/chapters/${params.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          releaseDate: data.releaseDate ? new Date(data.releaseDate) : undefined,
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to update chapter");
-      }
-
-      toast.success("Chapter updated successfully");
-      router.push("/admin/chapters");
-      router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to update chapter");
-    } finally {
-      setIsLoading(false);
-    }
+    throw new Error(result.error || "Failed to update chapter");
   }
 
   async function handleDelete() {
-    if (!confirm("Are you sure you want to delete this chapter? This action cannot be undone.")) {
-      return;
+    const result = await deleteChapter(id);
+    if (result.success) {
+      revalidatePath("/admin/chapters");
+      redirect("/admin/chapters");
     }
-
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`/api/chapters/${params.id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to delete chapter");
-      }
-
-      toast.success("Chapter deleted successfully");
-      router.push("/admin/chapters");
-      router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete chapter");
-      setIsLoading(false);
-    }
-  }
-
-  if (isFetching) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="text-muted-foreground">Loading chapter...</div>
-      </div>
-    );
+    throw new Error(result.error || "Failed to delete chapter");
   }
 
   return (
@@ -160,129 +61,101 @@ export default function EditChapterForm({ params }: { params: { id: string } }) 
           <CardDescription>Modify the details for this chapter</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
+          <form action={handleUpdate} className="space-y-6" method="post">
+            <div>
+              <label htmlFor="comicId" className="sr-only">
+                Comic
+              </label>
+              <select
+                id="comicId"
                 name="comicId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Comic *</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(parseInt(value))}
-                      defaultValue={field.value?.toString()}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a comic" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {comics.map((comic) => (
-                          <SelectItem key={comic.id} value={comic.id.toString()}>
-                            {comic.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                defaultValue={String(chapter.comicId)}
+                className="w-full rounded border px-3 py-2"
+              >
+                <option value="">Select a comic</option>
+                {comics.map((c: any) => (
+                  <option key={c.id} value={String(c.id)}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <FormField
-                  control={form.control}
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <label htmlFor="chapterNumber" className="sr-only">
+                  Chapter Number
+                </label>
+                <Input
+                  id="chapterNumber"
                   name="chapterNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Chapter Number *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min="0"
-                          step="0.1"
-                          {...field}
-                          onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="releaseDate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Release Date</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  type="number"
+                  defaultValue={String(chapter.chapterNumber)}
+                  min="0"
+                  step="0.1"
                 />
               </div>
 
-              <FormField
-                control={form.control}
+              <div>
+                <label htmlFor="releaseDate" className="sr-only">
+                  Release Date
+                </label>
+                <Input
+                  id="releaseDate"
+                  name="releaseDate"
+                  type="date"
+                  defaultValue={
+                    chapter.releaseDate
+                      ? new Date(chapter.releaseDate).toISOString().split("T")[0]
+                      : ""
+                  }
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="title" className="sr-only">
+                Title
+              </label>
+              <Input
+                id="title"
                 name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Chapter title" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                defaultValue={chapter.title ?? ""}
+                placeholder="Chapter title"
               />
+            </div>
 
-              <FormField
-                control={form.control}
+            <div>
+              <label htmlFor="content" className="sr-only">
+                Content
+              </label>
+              <Textarea
+                id="content"
                 name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Content/Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Chapter summary or description..."
-                        rows={4}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                defaultValue={chapter.content ?? ""}
+                placeholder="Chapter summary or description..."
+                rows={4}
               />
+            </div>
 
-              <div className="flex justify-between">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={isLoading}
-                >
+            <div className="flex justify-between">
+              <form action={async () => handleDelete()} method="post">
+                <Button type="submit" variant="destructive">
                   Delete Chapter
                 </Button>
-                <div className="flex gap-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => router.back()}
-                    disabled={isLoading}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? "Saving..." : "Save Changes"}
-                  </Button>
-                </div>
+              </form>
+              <div className="flex gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => (window as any).history.back()}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Save Changes</Button>
               </div>
-            </form>
-          </Form>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>

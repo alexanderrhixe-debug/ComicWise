@@ -5,7 +5,7 @@ Tasks:
 2 - Install all missing packages and  types.
 3 - create update or generate an Optimized custom type definitions for all packages with stub types definition.
 4 - create update or generate an Optimized  src/types/* folder to manage all custom types and interfaces needed for the project use next@16.1.0-canary.16 best practices.
-5 - create update or generate an Optimized  src/app-config/* to manage all environment variables with proper typing and fallbacks where necessary using dotenv dotenv-safe convex or any other needed package and ensure all usage of process.env comes from src/app-config/* and verify its  properly typed and handled with fallbacks where necessary.
+5 - create update or generate an Optimized  src/app-config/* to manage all environment variables with proper typing and fallbacks where necessary using dotenv dotenv-safe convex or any other needed package and ensure all usage of process.env comes from src/app-config/* and verify its  properly typed and handled with fallbacks where necessary update my .env.local and .env.example accordingly.
 6 - create update or generate an Optimized  tsconfig.json with custom paths alias  use next@16.1.0-canary.16 best practices.
 7 - create update or generate an Optimized  a script to update all imports and exports to use custom paths alias and  use next@16.1.0-canary.16 best practices.
 8 - create update or generate an Optimized  eslint.config.ts prettier.config.ts postcss.config.mjs next.config.ts use next@16.1.0-canary.16 best practices.

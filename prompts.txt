@@ -1,0 +1,44 @@
+You are a senior Next.js engineer. I have a Next 16.0.8 Canary monorepo-style project that needs a lot of setup and configuration.
+# ComicWise - Copilot Chat Prompts
+# Generated: 2025-12-10
+# Instructions: Copy each prompt into GitHub Copilot Chat to scaffold or modify files.
+
+---
+1) Project configuration & editor settings
+"Create or update `.vscode/settings.json`, `launch.json`, and `tasks.json` for a Next.js 16.1 project using pnpm. Include recommended extensions (ESLint, Prettier, Tailwind CSS IntelliSense, GitLens), workspace settings (format on save, editor.defaultFormatter set to Prettier, eslint validate for TypeScript/JavaScript), and tasks for `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm type-check`. Ensure Windows/PowerShell compatibility and cross-platform shell fallback." 
+
+2) Centralize environment and app-config typing
+"Add `src/app-config/index.ts` that loads environment using `dotenv-safe` (or `dotenv` with validation), validates variables using `zod` for `DATABASE_URL`, `NEXTAUTH_URL`, `SMTP_*`, `CLOUDINARY_URL`/`S3` config, and exports typed constants. Update  `.env.local` `.env.local.example` accordingly and add a `getEnv()` helper for runtime use." 
+
+3) Type system & custom types
+"Create `src/types` folder with per-package `.d.ts` stubs (cloudinary, imagekit, postgres, @auth/drizzle-adapter, next-auth v5 shims), and domain models: `Comic`, `Chapter`, `User`, `Author`, `Artist`. Export an index barrel file. Add `typeRoots` or include to `tsconfig` if needed." 
+
+4) Drizzle schema & DB setup
+"Inspect `src/database/schema.ts` and ensure `comics` and `chapters` include `slug` fields with unique indexes; add search indexes and proper foreign keys. Create/verify `src/database/db.ts` to initialize Drizzle with `postgres` client and export `db`, `client`, `Database` and `Schema` types." 
+
+5) Seeds + realistic data
+"Create `src/database/seed/index.ts` to import `comics*.json`, `users.json`, `chapters*.json` and seed the database via Drizzle. Use `faker` to fill missing fields. Provide CLI flags `--dry-run` and `--skip-images` and an idempotent mode." 
+
+6) Auth scaffolding (NextAuth v5 + Drizzle adapter)
+"Scaffold `src/lib/authConfig.ts`, `src/lib/authAdapter.ts`, `src/lib/auth.ts` and `proxy.ts` wiring NextAuth v5 (or @auth/core), the Drizzle adapter, and an email provider using Nodemailer. Include typed session helpers and sample templates." 
+
+7) Image upload & optimization
+"Create `src/lib/image.ts` with adapters for Cloudinary, ImageKit and AWS S3, offering `uploadImage`, `deleteImage`, and `getResponsiveSrcSet`. Use `sharp` for optional server-side transforms and read provider config from app-config." 
+
+8) Lint/Format/Config files
+"Create or update `eslint.config.ts`, `prettier.config.ts`, `postcss.config.mjs`, and `next.config.ts` consistent with Next 16 and Tailwind. Enable recommended ESLint rules, Prettier plugin for Tailwind and TypeScript parsing." 
+
+9) Components & routes scaffold
+"Scaffold `src/components` and `src/app/(root)` and `src/app/(auth)` routes using shadcn components. Create comics list page, comic details, chapter reader, and auth pages with forms validated by Zod and server actions." 
+
+10) CRUD admin pages
+"Generate admin CRUD scaffold for `Comics`, `Chapters`, `Users` using shadcn components, zod validation, server actions, and pagination. Provide example email hooks on create/update." 
+
+11) CI/CD, Docker, and scripts
+"Create production `Dockerfile` for Next.js 16 and `docker-compose.yml` + `docker-compose.dev.yml` including Postgres and Redis. Add `compose/` helper scripts and a `Makefile` with `dev`, `build`, `db:seed`, `test` targets." 
+
+12) Developer helpers & import fixer
+"Improve `scripts/update-imports-to-aliases.ts` using `ts-morph` to rewrite relative imports to path aliases and add `scripts/fix-all.sh` or Node script to run ESLint --fix, Prettier, and `tsc --noEmit`." 
+
+---
+End of prompts. Use these with GitHub Copilot Chat to scaffold code, or ask me to apply changes directly.

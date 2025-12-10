@@ -1,3 +1,4 @@
+import { env } from "appConfig";
 import { Queue, Worker, type Job } from "bullmq";
 import IORedis from "ioredis";
 import type { SendEmailParams } from "lib/email";
@@ -8,9 +9,9 @@ import { sendEmail } from "lib/email";
 // ═══════════════════════════════════════════════════
 
 const connection = new IORedis({
-  host: process.env.REDIS_HOST || "localhost",
-  port: Number(process.env.REDIS_PORT) || 6379,
-  password: process.env.REDIS_PASSWORD,
+  host: env.REDIS_HOST || "localhost",
+  port: Number(env.REDIS_PORT) || 6379,
+  password: env.REDIS_PASSWORD || undefined,
   maxRetriesPerRequest: null, // Required for BullMQ
 });
 

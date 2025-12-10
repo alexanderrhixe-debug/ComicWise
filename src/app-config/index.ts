@@ -1,12 +1,22 @@
-import dotenvSafe from "dotenv-safe";
-import path from "path";
 import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "src/app-config/env";
 
-// Load environment variables early. Uses `.env.example` (sample) and `.env` or `.env.local`.
-// `src/app-config/env.ts` performs validation and exports `env` and helpers.
-dotenvSafe.config({
-  example: path.resolve(process.cwd(), ".env.example"),
-});
+// Load environment variables early only on the server. We dynamically import
+// `dotenv-safe` and `path` at runtime so this module can be imported from
+// client code without bundling Node-only modules like `fs`.
+if (typeof window === "undefined") {
+  (async () => {
+    try {
+      const dotenvSafe = await import("dotenv-safe");
+      const path = await import("path");
+      dotenvSafe.config({
+        example: (path as typeof import("path")).resolve(process.cwd(), ".env.local"),
+      });
+    } catch (err) {
+      // If dotenv-safe isn't available in the runtime environment, skip config.
+      // This keeps client-side and constrained build environments from failing.
+    }
+  })();
+}
 // ═══════════════════════════════════════════════════
 // APP CONFIGURATION (Next.js 16 Optimized)
 // ═══════════════════════════════════════════════════

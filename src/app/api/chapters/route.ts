@@ -2,6 +2,7 @@
 // CHAPTERS API - Full CRUD with Filtering & Pagination
 // ═══════════════════════════════════════════════════
 
+import { env } from "appConfig";
 import { auth } from "auth";
 import { createChapter } from "database/mutations/chapters";
 import { getUsersBookmarkedComic } from "database/queries/bookmarks";
@@ -109,7 +110,7 @@ export async function POST(request: NextRequest) {
               comicTitle: body.comicTitle || "Comic",
               chapterTitle: newChapter.title,
               chapterNumber: newChapter.chapterNumber,
-              chapterUrl: `${process.env.NEXT_PUBLIC_APP_URL}/comics/${validation.data.comicId}/chapters/${newChapter.id}`,
+              chapterUrl: `${env.NEXT_PUBLIC_APP_URL}/comics/${validation.data.comicId}/chapters/${newChapter.id}`,
             })
           )
         ).catch((err) => console.error("Failed to send notifications:", err));

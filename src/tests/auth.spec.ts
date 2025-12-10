@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { env } from "appConfig";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const BASE_URL = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 // Test user credentials
 const TEST_USER = {

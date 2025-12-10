@@ -5,7 +5,9 @@ import type { Database } from "db";
 import { db } from "db";
 
 // Wrap drizzle db with the adapter that next-auth can use.
-export const adapter = DrizzleAdapter(db as any);
+// Use the `Database` type for static typing while allowing the
+// runtime `db` export to be permissive via ambient overrides.
+export const adapter = DrizzleAdapter(db as unknown as Database);
 
 export function createDrizzleAdapter(database: Database): Adapter {
   // Initialize the standard Drizzle adapter with your database instance and schema
@@ -21,7 +23,7 @@ export function createDrizzleAdapter(database: Database): Adapter {
     /**
      * Override the `createUser` method to include the custom field logic.
      */
-    async createUser(user: any) {
+    async createUser(user: Record<string, unknown>) {
       // Add custom logic here, e.g., generating a default username
       // If you need to persist custom fields, do so separately after creation
       if (!standardAdapter.createUser) {
@@ -35,7 +37,7 @@ export function createDrizzleAdapter(database: Database): Adapter {
     /**
      * Override the `updateUser` method if needed for custom fields.
      */
-    async updateUser(user: any) {
+    async updateUser(user: Record<string, unknown>) {
       // You can add logic to handle updates to the 'username' field here
       if (!standardAdapter.updateUser) {
         throw new Error("standardAdapter.updateUser is not available");

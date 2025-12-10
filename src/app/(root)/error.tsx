@@ -1,5 +1,6 @@
 "use client";
 
+import { isDevelopment } from "appConfig";
 import { Button } from "components/ui/button";
 import { AlertTriangle } from "lucide-react";
 import { useEffect } from "react";
@@ -34,7 +35,7 @@ export default function RootError({ error, reset }: ErrorBoundaryProps) {
           </Button>
         </div>
 
-        {process.env.NODE_ENV === "development" && (
+        {isDevelopment && (
           <details className="mt-6 rounded-lg border border-border bg-muted p-4 text-left">
             <summary className="cursor-pointer text-sm font-semibold">
               Development Error Details

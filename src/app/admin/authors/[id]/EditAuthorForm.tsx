@@ -1,177 +1,102 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "components/ui/form";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
+import { deleteAuthor, updateAuthor } from "lib/actions/authors";
+import { revalidatePath } from "next/cache";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { redirect } from "next/navigation";
 
-const authorSchema = z
-  .object({
-    name: z.string().min(1, "Name is required").max(200),
-    bio: z.string().optional(),
-    profileImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-  })
-  .strict();
+// Small client-only uploader that posts to /api/upload and writes the resulting URL
+// into the hidden input with id provided via `targetInputId`.
+function ClientImageUploader({ targetInputId }: { targetInputId: string }) {
+  "use client";
+  import("sonner").then((m) => m); // ensure toast available at runtime if used elsewhere
 
-type AuthorFormValues = z.infer<typeof authorSchema>;
-
-interface Author {
-  id: number;
-  name: string;
-  bio: string | null;
-  profileImage: string | null;
-}
-
-export default function EditAuthorForm({ params }: { params: { id: string } }) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
-
-  const form = useForm<AuthorFormValues>({
-    resolver: zodResolver(authorSchema),
-    defaultValues: {
-      name: "",
-      bio: "",
-      profileImage: "",
-    },
-  });
-
-  const profileImage = form.watch("profileImage");
-
-  useEffect(() => {
-    async function fetchAuthor() {
-      try {
-        const response = await fetch(`/api/authors/${params.id}`);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch author");
-        }
-
-        const data: Author = await response.json();
-        form.reset({
-          name: data.name,
-          bio: data.bio || "",
-          profileImage: data.profileImage || "",
-        });
-      } catch (error) {
-        toast.error(error instanceof Error ? error.message : "Failed to load author");
-        router.push("/admin/authors");
-      } finally {
-        setIsFetching(false);
-      }
-    }
-
-    fetchAuthor();
-  }, [params.id, form, router]);
-
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setIsUploading(true);
-
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("type", "avatar");
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("type", "avatar");
 
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      const el = document.getElementById(targetInputId) as HTMLInputElement | null;
+      if (el) el.value = data.url || "";
+      // show a simple alert as a fallback notification
+      try {
+        const { toast } = await import("sonner");
+        toast.success("Image uploaded");
+      } catch {
+        // ignore
       }
-
-      const data = await response.json();
-      form.setValue("profileImage", data.url);
-      toast.success("Image uploaded successfully");
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to upload image");
-    } finally {
-      setIsUploading(false);
+    } catch (err) {
+      try {
+        const { toast } = await import("sonner");
+        toast.error((err as Error).message || "Upload failed");
+      } catch {
+        alert((err as Error).message || "Upload failed");
+      }
     }
   }
 
-  async function onSubmit(data: AuthorFormValues) {
-    setIsLoading(true);
+  return (
+    <div className="flex items-center gap-4">
+      <input
+        id="profile-upload-file"
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleUpload}
+      />
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => document.getElementById("profile-upload-file")?.click()}
+      >
+        Upload Image
+      </Button>
+    </div>
+  );
+}
 
-    try {
-      const response = await fetch(`/api/authors/${params.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+export default async function EditAuthorForm({ params }: { params: { id: string } }) {
+  const id = Number(params.id);
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to update author");
-      }
+  // Fetch author data on the server to populate defaults
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/authors/${id}`, {
+    cache: "no-store",
+  });
 
-      toast.success("Author updated successfully");
-      router.push("/admin/authors");
-      router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to update author");
-    } finally {
-      setIsLoading(false);
+  if (!res.ok) {
+    // If author not found or API failed, redirect back to list
+    redirect("/admin/authors");
+  }
+
+  const author = await res.json();
+
+  async function handleUpdate(formData: FormData) {
+    // Delegate to shared server action
+    const result = await updateAuthor(id, formData);
+    if (result.success) {
+      revalidatePath("/admin/authors");
+      revalidatePath(`/admin/authors/${id}`);
+      redirect("/admin/authors");
     }
+    throw new Error(result.error || "Failed to update author");
   }
 
   async function handleDelete() {
-    if (
-      !confirm(
-        "Are you sure you want to delete this author? This will affect all comics by this author."
-      )
-    ) {
-      return;
+    const result = await deleteAuthor(id);
+    if (result.success) {
+      revalidatePath("/admin/authors");
+      redirect("/admin/authors");
     }
-
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`/api/authors/${params.id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to delete author");
-      }
-
-      toast.success("Author deleted successfully");
-      router.push("/admin/authors");
-      router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete author");
-      setIsLoading(false);
-    }
-  }
-
-  if (isFetching) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="text-muted-foreground">Loading author...</div>
-      </div>
-    );
+    throw new Error(result.error || "Failed to delete author");
   }
 
   return (
@@ -187,114 +112,81 @@ export default function EditAuthorForm({ params }: { params: { id: string } }) {
           <CardDescription>Modify the details for this author</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
+          <form action={handleUpdate} className="space-y-6" method="post">
+            <div className="space-y-2">
+              <label htmlFor="name" className="sr-only">
+                Name
+              </label>
+              <Input
+                id="name"
                 name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Author's full name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                defaultValue={author.name ?? ""}
+                placeholder="Author's full name"
+                required
               />
+            </div>
 
-              <FormField
-                control={form.control}
+            <div className="space-y-2">
+              <label htmlFor="bio" className="sr-only">
+                Biography
+              </label>
+              <Textarea
+                id="bio"
                 name="bio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Biography</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Brief biography of the author..."
-                        rows={5}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                defaultValue={author.bio ?? ""}
+                placeholder="Brief biography of the author..."
+                rows={5}
               />
+            </div>
 
-              <FormField
-                control={form.control}
-                name="profileImage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Profile Image</FormLabel>
-                    <FormControl>
-                      <div className="space-y-4">
-                        <Input type="url" placeholder="https://example.com/image.jpg" {...field} />
-                        <div className="flex items-center gap-4">
-                          <span className="text-sm text-muted-foreground">or</span>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => document.getElementById("profile-upload")?.click()}
-                            disabled={isUploading}
-                          >
-                            {isUploading ? "Uploading..." : "Upload Image"}
-                          </Button>
-                          <input
-                            id="profile-upload"
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={handleImageUpload}
-                            aria-label="Upload author profile image"
-                            title="Upload author profile image"
-                          />
-                        </div>
-                        {profileImage && (
-                          <div className="relative h-32 w-32 overflow-hidden rounded-lg border">
-                            <Image
-                              src={profileImage}
-                              alt="Profile preview"
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormDescription>
-                      Upload or provide URL for author's profile image
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+            <div className="space-y-2">
+              <label htmlFor="image" className="sr-only">
+                Profile Image
+              </label>
+              <Input
+                id="image"
+                name="image"
+                type="url"
+                defaultValue={author.profileImage ?? ""}
+                placeholder="https://example.com/image.jpg"
               />
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-muted-foreground">or</span>
+                <ClientImageUploader targetInputId="image" />
+              </div>
+              {author.profileImage && (
+                <div className="relative h-32 w-32 overflow-hidden rounded-lg border mt-2">
+                  <Image
+                    src={author.profileImage}
+                    alt="Profile preview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <p className="text-sm text-muted-foreground">
+                Upload or provide URL for author's profile image
+              </p>
+            </div>
 
-              <div className="flex justify-between">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={isLoading}
-                >
+            <div className="flex justify-between">
+              <form action={async () => handleDelete()} method="post">
+                <Button type="submit" variant="destructive">
                   Delete Author
                 </Button>
-                <div className="flex gap-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => router.back()}
-                    disabled={isLoading}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={isLoading || isUploading}>
-                    {isLoading ? "Saving..." : "Save Changes"}
-                  </Button>
-                </div>
+              </form>
+              <div className="flex gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => (window as any).history.back()}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Save Changes</Button>
               </div>
-            </form>
-          </Form>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>

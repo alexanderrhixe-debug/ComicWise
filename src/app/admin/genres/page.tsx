@@ -1,3 +1,4 @@
+import { env } from "appConfig";
 import { DataTable } from "components/admin/DataTable";
 import { Button } from "components/ui/button";
 import { Plus } from "lucide-react";
@@ -5,7 +6,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 async function getGenres() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const response = await fetch(`${baseUrl}/api/genres?limit=100`);
 
   if (!response.ok) {

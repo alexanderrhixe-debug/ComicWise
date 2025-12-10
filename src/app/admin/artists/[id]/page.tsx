@@ -1,8 +1,6 @@
-"use client";
-
 import EditArtistForm from "./EditArtistForm";
 
 export default function Page({ params }: { params: { id: string } }) {
-  // Simple client wrapper that delegates to the form component
+  // Server component: delegate to the server-rendered form (contains a small client uploader)
   return <EditArtistForm params={params} />;
 }

@@ -2,14 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Attach to Next (Dev)",
-      "type": "node",
-      "request": "attach",
-      "port": 9229,
-      "skipFiles": ["<node_internals>/**"],
-      "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/.next/**"]
+      "name": "Launch Next (pnpm dev)",
+      "type": "pwa-node",
+      "request": "launch",
+      "command": "pnpm",
+      "args": ["dev"],
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "console": "integratedTerminal",
+      "autoAttachChildProcesses": true,
+      "env": {}
     }
-  ],
-  "compounds": []
+  ]
 }

@@ -1,3 +1,4 @@
+import { env } from "appConfig";
 import { createCacheClient } from "src/lib/cache";
 
 // Lazy loader for cache client to avoid forcing dependency at module import
@@ -37,8 +38,8 @@ import { Redis } from "@upstash/redis";
 
 // Initialize Redis client
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  url: env.UPSTASH_REDIS_REST_URL || "",
+  token: env.UPSTASH_REDIS_REST_TOKEN || "",
 });
 
 export interface CacheOptions {

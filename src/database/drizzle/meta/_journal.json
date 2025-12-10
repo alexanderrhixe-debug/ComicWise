@@ -15,6 +15,13 @@
       "when": 1765280254742,
       "tag": "0001_thankful_crystal",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765386551451,
+      "tag": "0002_early_surge",
+      "breakpoints": true
     }
   ]
 }

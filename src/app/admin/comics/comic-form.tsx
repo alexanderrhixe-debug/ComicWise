@@ -1,5 +1,3 @@
-"use client";
-
 import { createComic } from "actions/comics";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
@@ -13,55 +11,41 @@ import {
   SelectValue,
 } from "components/ui/select";
 import { Textarea } from "components/ui/textarea";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import type { CreateComicInput } from "lib/validations/schemas";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export default function ComicForm() {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    coverImage: "",
-    status: "Ongoing" as const,
-    publicationDate: new Date().toISOString().split("T")[0],
-    rating: "0",
-    authorId: "",
-    artistId: "",
-    typeId: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    startTransition(async () => {
-      try {
-        // Prepare data for validation
-        const dataToValidate = {
-          ...formData,
-          rating: formData.rating ? parseFloat(formData.rating) : undefined,
-          authorId: formData.authorId ? parseInt(formData.authorId) : undefined,
-          artistId: formData.artistId ? parseInt(formData.artistId) : undefined,
-          typeId: formData.typeId ? parseInt(formData.typeId) : undefined,
-        };
-
-        const result = await createComic(dataToValidate as never);
-
-        if (result.success) {
-          toast.success(result.message || "Comic created successfully!");
-          router.push("/admin/comics");
-          router.refresh();
-        } else {
-          toast.error(result.error || "Failed to create comic");
-        }
-      } catch (error) {
-        toast.error("An unexpected error occurred");
-        console.error(error);
-      }
-    });
+async function handleCreate(formData: FormData) {
+  // Build payload from FormData and coerce types to match CreateComicInput
+  const payload: CreateComicInput = {
+    title: String(formData.get("title") ?? "").trim(),
+    description: String(formData.get("description") ?? "").trim(),
+    coverImage: String(formData.get("coverImage") ?? "").trim(),
+    status: String(formData.get("status") ?? "Ongoing") as CreateComicInput["status"],
+    publicationDate: formData.get("publicationDate")
+      ? new Date(String(formData.get("publicationDate")))
+      : new Date(),
+    rating: formData.get("rating") ? Number(formData.get("rating")) : undefined,
+    views: 0,
+    authorId: formData.get("authorId") ? Number(formData.get("authorId")) : undefined,
+    artistId: formData.get("artistId") ? Number(formData.get("artistId")) : undefined,
+    typeId: formData.get("typeId") ? Number(formData.get("typeId")) : undefined,
   };
 
+  const result = await createComic(payload);
+
+  if (result.success) {
+    // Revalidate admin comics list and home
+    revalidatePath("/admin/comics");
+    revalidatePath("/");
+    redirect("/admin/comics");
+  }
+
+  // On failure throw so framework surfaces error (could be improved)
+  throw new Error(result.error || "Failed to create comic");
+}
+
+export default function ComicForm() {
   return (
     <Card>
       <CardHeader>
@@ -69,17 +53,11 @@ export default function ComicForm() {
         <CardDescription>Fill in the details to create a new comic</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={handleCreate} className="space-y-6" method="post">
           {/* Title */}
           <div className="space-y-2">
             <Label htmlFor="title">Title *</Label>
-            <Input
-              id="title"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="Enter comic title"
-              required
-            />
+            <Input id="title" name="title" placeholder="Enter comic title" required />
           </div>
 
           {/* Description */}
@@ -87,8 +65,7 @@ export default function ComicForm() {
             <Label htmlFor="description">Description *</Label>
             <Textarea
               id="description"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              name="description"
               placeholder="Enter comic description"
               rows={4}
               required
@@ -100,9 +77,8 @@ export default function ComicForm() {
             <Label htmlFor="coverImage">Cover Image URL *</Label>
             <Input
               id="coverImage"
+              name="coverImage"
               type="url"
-              value={formData.coverImage}
-              onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
               placeholder="https://example.com/cover.jpg"
               required
             />
@@ -112,12 +88,7 @@ export default function ComicForm() {
           {/* Status */}
           <div className="space-y-2">
             <Label htmlFor="status">Status *</Label>
-            <Select
-              value={formData.status}
-              onValueChange={(value) =>
-                setFormData({ ...formData, status: value as typeof formData.status })
-              }
-            >
+            <Select defaultValue="Ongoing" name="status">
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
@@ -136,9 +107,9 @@ export default function ComicForm() {
             <Label htmlFor="publicationDate">Publication Date *</Label>
             <Input
               id="publicationDate"
+              name="publicationDate"
               type="date"
-              value={formData.publicationDate}
-              onChange={(e) => setFormData({ ...formData, publicationDate: e.target.value })}
+              defaultValue={new Date().toISOString().split("T")[0]}
               required
             />
           </div>
@@ -148,12 +119,12 @@ export default function ComicForm() {
             <Label htmlFor="rating">Rating (0-10)</Label>
             <Input
               id="rating"
+              name="rating"
               type="number"
               min="0"
               max="10"
               step="0.1"
-              value={formData.rating}
-              onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
+              defaultValue="0"
               placeholder="0"
             />
           </div>
@@ -162,50 +133,31 @@ export default function ComicForm() {
             {/* Author ID */}
             <div className="space-y-2">
               <Label htmlFor="authorId">Author ID</Label>
-              <Input
-                id="authorId"
-                type="number"
-                value={formData.authorId}
-                onChange={(e) => setFormData({ ...formData, authorId: e.target.value })}
-                placeholder="Enter author ID"
-              />
+              <Input id="authorId" name="authorId" type="number" placeholder="Enter author ID" />
             </div>
 
             {/* Artist ID */}
             <div className="space-y-2">
               <Label htmlFor="artistId">Artist ID</Label>
-              <Input
-                id="artistId"
-                type="number"
-                value={formData.artistId}
-                onChange={(e) => setFormData({ ...formData, artistId: e.target.value })}
-                placeholder="Enter artist ID"
-              />
+              <Input id="artistId" name="artistId" type="number" placeholder="Enter artist ID" />
             </div>
 
             {/* Type ID */}
             <div className="space-y-2">
               <Label htmlFor="typeId">Type ID</Label>
-              <Input
-                id="typeId"
-                type="number"
-                value={formData.typeId}
-                onChange={(e) => setFormData({ ...formData, typeId: e.target.value })}
-                placeholder="Enter type ID"
-              />
+              <Input id="typeId" name="typeId" type="number" placeholder="Enter type ID" />
             </div>
           </div>
 
           {/* Submit Button */}
           <div className="flex gap-4">
-            <Button type="submit" disabled={isPending}>
-              {isPending ? "Creating..." : "Create Comic"}
-            </Button>
+            <Button type="submit">Create Comic</Button>
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.back()}
-              disabled={isPending}
+              onClick={() => {
+                /* client-only navigation handled by surrounding page */
+              }}
             >
               Cancel
             </Button>

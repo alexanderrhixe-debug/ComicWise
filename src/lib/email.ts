@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════
 
 import { render } from "@react-email/components";
-import { appConfig } from "appConfig";
+import { appConfig, isDevelopment } from "appConfig";
 import AccountUpdatedEmail from "components/emails/AccountUpdatedEmail";
 import CommentNotificationEmail from "components/emails/CommentNotificationEmail";
 import NewChapterEmail from "components/emails/NewChapterEmail";
@@ -32,7 +32,7 @@ const transporter = nodemailer.createTransport({
 // Avoid verifying the transporter during static build/prerender to prevent
 // network calls at module initialization (which can fail in build environments).
 // Only verify in development to help catch config issues early.
-if (appConfig.email.enabled && process.env.NODE_ENV === "development") {
+if (appConfig.email.enabled && isDevelopment) {
   transporter
     .verify()
     .then(() => {

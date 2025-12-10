@@ -1,4 +1,5 @@
 {
+  "workbench.editor.enablePreview": false,
   // ═══════════════════════════════════════════════════
   // EDITOR CONFIGURATION (Next.js 16.0.7 + React 19 Optimized)
   // ═══════════════════════════════════════════════════

@@ -18,6 +18,7 @@ import {
   type UpdateChapterInput,
 } from "lib/validations/schemas";
 import { revalidatePath } from "next/cache";
+type ParsedCreateChapter = CreateChapterInput & { slug?: string };
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }
@@ -31,7 +32,7 @@ export async function createChapter(
   input: CreateChapterInput
 ): Promise<ActionResult<typeof chapter.$inferSelect>> {
   try {
-    const validated = createChapterSchema.parse(input);
+    const validated = createChapterSchema.parse(input) as ParsedCreateChapter;
 
     // Check if comic exists
     const comicRecord = await database.query.comic.findFirst({
@@ -42,7 +43,7 @@ export async function createChapter(
       return { success: false, error: "Comic not found" };
     }
 
-    const slug = (validated as any).slug ?? slugify(validated.title);
+    const slug = validated.slug ?? slugify(validated.title);
 
     const [newChapter] = await database
       .insert(chapter)

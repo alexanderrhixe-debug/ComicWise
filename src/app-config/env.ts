@@ -79,6 +79,7 @@ const envSchema = z.object({
   // Application Configuration
   // ═══════════════════════════════════════════════════
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  PORT: z.coerce.number().int().positive().optional(),
   NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
 
   // ═══════════════════════════════════════════════════
@@ -106,6 +107,7 @@ function validateEnv(): Env {
     // Parse with fallback support for legacy SMTP variables
     const parsedEnv = envSchema.parse({
       ...process.env,
+      PORT: process.env.PORT || "3000",
       EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST || process.env.SMTP_HOST || "smtp.gmail.com",
       EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT || process.env.SMTP_PORT || "587",
       EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER || process.env.SMTP_USER || "",
@@ -136,6 +138,7 @@ function validateEnv(): Env {
       // Return with defaults for non-critical vars
       return envSchema.parse({
         ...process.env,
+        PORT: process.env.PORT || "3000",
         DATABASE_URL: process.env.DATABASE_URL || "",
         NEXTAUTH_SECRET: process.env.AUTH_SECRET || "",
         NEXTAUTH_URL: process.env.AUTH_URL || "",

@@ -1,5 +1,6 @@
 "use client";
 
+import { isDevelopment } from "appConfig";
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -43,7 +44,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           </Button>
         </div>
 
-        {process.env.NODE_ENV === "development" && (
+        {isDevelopment && (
           <details className="mt-8 rounded-lg border border-border bg-muted p-4 text-left">
             <summary className="cursor-pointer font-semibold">Error Details</summary>
             <pre className="mt-2 overflow-auto text-xs">

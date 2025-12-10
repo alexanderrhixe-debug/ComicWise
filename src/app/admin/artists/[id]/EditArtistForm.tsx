@@ -1,177 +1,91 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "components/ui/form";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
+import { deleteArtist, updateArtist } from "lib/actions/artists";
+import { revalidatePath } from "next/cache";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { redirect } from "next/navigation";
 
-const artistSchema = z
-  .object({
-    name: z.string().min(1, "Name is required").max(200),
-    bio: z.string().optional(),
-    profileImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-  })
-  .strict();
-
-type ArtistFormValues = z.infer<typeof artistSchema>;
-
-interface Artist {
-  id: number;
-  name: string;
-  bio: string | null;
-  profileImage: string | null;
-}
-
-export default function EditArtistForm({ params }: { params: { id: string } }) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
-
-  const form = useForm<ArtistFormValues>({
-    resolver: zodResolver(artistSchema),
-    defaultValues: {
-      name: "",
-      bio: "",
-      profileImage: "",
-    },
-  });
-
-  const profileImage = form.watch("profileImage");
-
-  useEffect(() => {
-    async function fetchArtist() {
-      try {
-        const response = await fetch(`/api/artists/${params.id}`);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch artist");
-        }
-
-        const data: Artist = await response.json();
-        form.reset({
-          name: data.name,
-          bio: data.bio || "",
-          profileImage: data.profileImage || "",
-        });
-      } catch (error) {
-        toast.error(error instanceof Error ? error.message : "Failed to load artist");
-        router.push("/admin/artists");
-      } finally {
-        setIsFetching(false);
-      }
-    }
-
-    fetchArtist();
-  }, [params.id, form, router]);
-
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+function ClientImageUploader({ targetInputId }: { targetInputId: string }) {
+  "use client";
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    setIsUploading(true);
-
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("type", "avatar");
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("type", "avatar");
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      const el = document.getElementById(targetInputId) as HTMLInputElement | null;
+      if (el) el.value = data.url || "";
+      try {
+        const { toast } = await import("sonner");
+        toast.success("Image uploaded");
+      } catch {
+        // ignore
       }
-
-      const data = await response.json();
-      form.setValue("profileImage", data.url);
-      toast.success("Image uploaded successfully");
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to upload image");
-    } finally {
-      setIsUploading(false);
+    } catch (err) {
+      try {
+        const { toast } = await import("sonner");
+        toast.error((err as Error).message || "Upload failed");
+      } catch {
+        alert((err as Error).message || "Upload failed");
+      }
     }
   }
 
-  async function onSubmit(data: ArtistFormValues) {
-    setIsLoading(true);
+  return (
+    <div className="flex items-center gap-4">
+      <input
+        id="artist-profile-upload-file"
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleUpload}
+      />
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => document.getElementById("artist-profile-upload-file")?.click()}
+      >
+        Upload Image
+      </Button>
+    </div>
+  );
+}
 
-    try {
-      const response = await fetch(`/api/artists/${params.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+export default async function EditArtistForm({ params }: { params: { id: string } }) {
+  const id = Number(params.id);
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to update artist");
-      }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/artists/${id}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    redirect("/admin/artists");
+  }
 
-      toast.success("Artist updated successfully");
-      router.push("/admin/artists");
-      router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to update artist");
-    } finally {
-      setIsLoading(false);
+  const artist = await res.json();
+
+  async function handleUpdate(formData: FormData) {
+    const result = await updateArtist(id, formData);
+    if (result.success) {
+      revalidatePath("/admin/artists");
+      revalidatePath(`/admin/artists/${id}`);
+      redirect("/admin/artists");
     }
+    throw new Error(result.error || "Failed to update artist");
   }
 
   async function handleDelete() {
-    if (
-      !confirm(
-        "Are you sure you want to delete this artist? This will affect all comics by this artist."
-      )
-    ) {
-      return;
+    const result = await deleteArtist(id);
+    if (result.success) {
+      revalidatePath("/admin/artists");
+      redirect("/admin/artists");
     }
-
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`/api/artists/${params.id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to delete artist");
-      }
-
-      toast.success("Artist deleted successfully");
-      router.push("/admin/artists");
-      router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete artist");
-      setIsLoading(false);
-    }
-  }
-
-  if (isFetching) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="text-muted-foreground">Loading artist...</div>
-      </div>
-    );
+    throw new Error(result.error || "Failed to delete artist");
   }
 
   return (
@@ -187,114 +101,81 @@ export default function EditArtistForm({ params }: { params: { id: string } }) {
           <CardDescription>Modify the details for this artist</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
+          <form action={handleUpdate} className="space-y-6" method="post">
+            <div className="space-y-2">
+              <label htmlFor="name" className="sr-only">
+                Name
+              </label>
+              <Input
+                id="name"
                 name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Artist's full name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                defaultValue={artist.name ?? ""}
+                placeholder="Artist's full name"
+                required
               />
+            </div>
 
-              <FormField
-                control={form.control}
+            <div className="space-y-2">
+              <label htmlFor="bio" className="sr-only">
+                Biography
+              </label>
+              <Textarea
+                id="bio"
                 name="bio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Biography</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Brief biography of the artist..."
-                        rows={5}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                defaultValue={artist.bio ?? ""}
+                placeholder="Brief biography of the artist..."
+                rows={5}
               />
+            </div>
 
-              <FormField
-                control={form.control}
-                name="profileImage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Profile Image</FormLabel>
-                    <FormControl>
-                      <div className="space-y-4">
-                        <Input type="url" placeholder="https://example.com/image.jpg" {...field} />
-                        <div className="flex items-center gap-4">
-                          <span className="text-sm text-muted-foreground">or</span>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => document.getElementById("profile-upload")?.click()}
-                            disabled={isUploading}
-                          >
-                            {isUploading ? "Uploading..." : "Upload Image"}
-                          </Button>
-                          <input
-                            id="profile-upload"
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={handleImageUpload}
-                            aria-label="Upload artist profile image"
-                            title="Upload artist profile image"
-                          />
-                        </div>
-                        {profileImage && (
-                          <div className="relative h-32 w-32 overflow-hidden rounded-lg border">
-                            <Image
-                              src={profileImage}
-                              alt="Profile preview"
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormDescription>
-                      Upload or provide URL for artist's profile image
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+            <div className="space-y-2">
+              <label htmlFor="image" className="sr-only">
+                Profile Image
+              </label>
+              <Input
+                id="image"
+                name="image"
+                type="url"
+                defaultValue={artist.profileImage ?? ""}
+                placeholder="https://example.com/image.jpg"
               />
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-muted-foreground">or</span>
+                <ClientImageUploader targetInputId="image" />
+              </div>
+              {artist.profileImage && (
+                <div className="relative h-32 w-32 overflow-hidden rounded-lg border mt-2">
+                  <Image
+                    src={artist.profileImage}
+                    alt="Profile preview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <p className="text-sm text-muted-foreground">
+                Upload or provide URL for artist's profile image
+              </p>
+            </div>
 
-              <div className="flex justify-between">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={isLoading}
-                >
+            <div className="flex justify-between">
+              <form action={async () => handleDelete()} method="post">
+                <Button type="submit" variant="destructive">
                   Delete Artist
                 </Button>
-                <div className="flex gap-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => router.back()}
-                    disabled={isLoading}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={isLoading || isUploading}>
-                    {isLoading ? "Saving..." : "Save Changes"}
-                  </Button>
-                </div>
+              </form>
+              <div className="flex gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => (window as any).history.back()}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Save Changes</Button>
               </div>
-            </form>
-          </Form>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { isDevelopment } from "appConfig";
 import { Button } from "components/ui/button";
 import { AlertCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -47,7 +48,7 @@ export default function AdminError({ error, reset }: ErrorBoundaryProps) {
           </Button>
         </div>
 
-        {process.env.NODE_ENV === "development" && (
+        {isDevelopment && (
           <details className="mt-8 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-left">
             <summary className="cursor-pointer font-semibold text-destructive">
               Debug Information

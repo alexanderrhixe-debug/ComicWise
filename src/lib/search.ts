@@ -200,7 +200,7 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
         .from(genre)
         .where(or(...genreNames.map((name) => sql`LOWER(${genre.name}) = LOWER(${name})`)));
 
-      const foundGenreIds = genresResult.map((g) => g.id);
+      const foundGenreIds = genresResult.map((g: { id: number }) => g.id);
       if (foundGenreIds.length > 0) {
         genreComics = await database
           .selectDistinct({ comicId: comicToGenre.comicId })
@@ -210,7 +210,7 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
     }
 
     if (genreComics && genreComics.length > 0) {
-      const comicIds = genreComics.map((c) => c.comicId);
+      const comicIds = genreComics.map((c: { comicId: number }) => c.comicId);
       conditions.push(inArray(comic.id, comicIds));
     } else {
       // No comics match the genre filter
@@ -237,11 +237,11 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
   const total = await getSearchTotalCount(conditions);
 
   // Fetch genres for each comic
-  const comicIds = results.map((r) => r.id);
+  const comicIds = results.map((r: { id: number }) => r.id);
   const genresMap = await getComicGenres(comicIds);
 
   // Combine results with genres
-  const enrichedResults: any[] = results.map((result) => ({
+  const enrichedResults: any[] = results.map((result: any) => ({
     ...result,
     genres: genresMap && genresMap[result.id] ? genresMap[result.id] : [],
   }));
@@ -414,9 +414,13 @@ export async function getSearchSuggestions(
     .limit(limit);
 
   return {
-    comics: comicSuggestions.map((s) => s.title),
-    authors: authorSuggestions.map((s) => s.name).filter((n): n is string => n !== null),
-    artists: artistSuggestions.map((s) => s.name).filter((n): n is string => n !== null),
+    comics: comicSuggestions.map((s: { title: string }) => s.title),
+    authors: authorSuggestions
+      .map((s: { name: string | null }) => s.name)
+      .filter((n: string | null): n is string => n !== null),
+    artists: artistSuggestions
+      .map((s: { name: string | null }) => s.name)
+      .filter((n: string | null): n is string => n !== null),
   };
 }
 
@@ -432,7 +436,7 @@ export async function getPopularSearches(limit: number = 10): Promise<string[]> 
     .orderBy(desc(comic.rating), desc(comic.views))
     .limit(limit);
 
-  return topComics.map((c) => c.title);
+  return topComics.map((c: { title: string }) => c.title);
 }
 
 /**
@@ -470,10 +474,10 @@ export async function getTrendingComics(
     .limit(limit);
 
   // Fetch genres
-  const comicIds = results.map((r) => r.id);
+  const comicIds = results.map((r: { id: number }) => r.id);
   const genresMap = await getComicGenres(comicIds);
 
-  return results.map((result) => ({
+  return results.map((result: any) => ({
     ...result,
     genres: genresMap && genresMap[result.id] ? genresMap[result.id] : [],
   })) as any as SearchResult[];
