@@ -60,18 +60,19 @@ export function useDarkMode(options: DarkModeOptions = {}): DarkModeReturn {
 
   // Save to localStorage
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") return () => {};
 
     try {
       window.localStorage.setItem(localStorageKey, JSON.stringify(isDarkMode));
     } catch (error) {
       console.error(`Error setting localStorage key "${localStorageKey}":`, error);
     }
+    return () => {};
   }, [isDarkMode, localStorageKey]);
 
   // Listen for OS preference changes
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") return () => {};
 
     const mediaQuery = window.matchMedia(COLOR_SCHEME_QUERY);
 
@@ -99,7 +100,7 @@ export function useDarkMode(options: DarkModeOptions = {}): DarkModeReturn {
 
   // Apply dark mode class to document
   useEffect(() => {
-    if (typeof window === "undefined" || !applyDarkClass) return;
+    if (typeof window === "undefined" || !applyDarkClass) return () => {};
 
     const root = window.document.documentElement;
     if (isDarkMode) {
@@ -107,6 +108,7 @@ export function useDarkMode(options: DarkModeOptions = {}): DarkModeReturn {
     } else {
       root.classList.remove("dark");
     }
+    return () => {};
   }, [isDarkMode, applyDarkClass]);
 
   return {

@@ -31,9 +31,9 @@ export const seedComicSchema = z
     updatedAt: z.string().optional(),
     serialization: z.string().optional(),
     coverImage: z.string().optional(),
-    type: z.object({ name: z.string() }).optional(),
-    artist: z.object({ name: z.string() }).optional(),
-    author: z.object({ name: z.string() }).optional(),
+    type: z.object({ name: z.string() }).strict().optional(),
+    artist: z.object({ name: z.string() }).strict().optional(),
+    author: z.object({ name: z.string() }).strict().optional(),
     genres: z.array(z.object({ name: z.string() }).strict()).optional(),
   })
   .strict();

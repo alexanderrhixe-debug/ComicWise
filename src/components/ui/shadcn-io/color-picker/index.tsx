@@ -92,7 +92,7 @@ export const ColorPicker = ({
           setLightness(safe.lightness() ?? 0);
           setAlpha((safe.alpha() ?? 1) * 100);
         }
-      } catch (err) {
+      } catch {
         // ignore and keep defaults
       }
     }
@@ -111,7 +111,7 @@ export const ColorPicker = ({
             ? (c.rgb().array() as number[])
             : (c.rgb().array() as number[]);
         onChange([rgba[0] ?? 255, rgba[1] ?? 255, rgba[2] ?? 255, alpha / 100]);
-      } catch (err) {
+      } catch {
         // best-effort fallback
         onChange([0, 0, 0, alpha / 100]);
       }
@@ -305,7 +305,7 @@ export type ColorPickerOutputProps = ComponentProps<typeof SelectTrigger>;
 
 const formats = ["hex", "rgb", "css", "hsl"];
 
-export const ColorPickerOutput = ({ className, ...props }: ColorPickerOutputProps) => {
+export const ColorPickerOutput = ({ className: _className, ...props }: ColorPickerOutputProps) => {
   const { mode, setMode } = useColorPicker();
 
   return (

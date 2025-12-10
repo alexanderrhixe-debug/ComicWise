@@ -57,6 +57,42 @@
 - Redis caching support
 - Development and production configurations
 
+### Compose helper scripts
+
+The `compose/` folder contains convenient helper scripts for local development
+and CI usage.
+
+- `compose/build.sh` / `compose/build.ps1` — build production or development
+  images.
+- `compose/deploy.sh` / `compose/deploy.ps1` — run docker-compose to deploy
+  services.
+- `compose/dev.sh` — convenience script to bring up DB/Redis for local
+  development.
+- `compose/lint.sh` — run `pnpm lint`.
+- `compose/format.sh` — run code formatter (`pnpm format`).
+- `compose/test.sh` — run the test suite (`pnpm test`).
+- `compose/clean.sh` — tear down compose resources and prune Docker cache.
+- `compose/health-check.sh` — poll the app health endpoint during
+  CI/deployments.
+
+Usage examples:
+
+```bash
+# Build (production):
+./compose/build.sh production
+
+# Start development DB/Redis services:
+./compose/dev.sh
+
+# Run lint/format/tests locally via the helper scripts:
+./compose/lint.sh
+./compose/format.sh
+./compose/test.sh
+
+# Clean up Docker artifacts:
+./compose/clean.sh
+```
+
 ### ⚡ Performance & Security
 
 - Server-side rendering and static generation

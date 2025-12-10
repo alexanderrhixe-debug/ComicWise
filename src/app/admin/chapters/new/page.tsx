@@ -73,7 +73,7 @@ export default function NewChapterPage() {
         if (!response.ok) throw new Error("Failed to fetch comics");
         const data = await response.json();
         setComics(data.comics || []);
-      } catch (error) {
+      } catch {
         toast.error("Failed to load comics");
       }
     }

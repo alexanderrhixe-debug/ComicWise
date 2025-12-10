@@ -261,7 +261,7 @@ export function MultiSelectContent({
               placeholder={(typeof search === "object" ? search.placeholder : undefined) as any}
             />
           ) : (
-            <button className="sr-only" />
+            <button type="button" className="sr-only" aria-label="Open multi-select options" />
           )}
           <CommandList>
             {canSearch && (

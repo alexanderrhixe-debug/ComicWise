@@ -92,7 +92,7 @@ export function EnhancedDataTable<TData, TValue>({
       await onBulkDelete(selectedIds);
       toast.success(`Successfully deleted ${selectedIds.length} item(s)`);
       setRowSelection({});
-    } catch (_error) {
+    } catch {
       toast.error("Failed to delete items");
     } finally {
       setIsDeleting(false);

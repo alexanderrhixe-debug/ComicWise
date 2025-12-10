@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-object-injection */
 /**
  * Batch Processor Utility
  * Provides efficient batch processing for large datasets

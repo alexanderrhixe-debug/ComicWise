@@ -119,13 +119,5 @@
     "tests/**/*",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    "out",
-    "build",
-    "dist",
-    "coverage",
-    "src/components/ui/shadcn-io/image-zoom/index.tsx"
-  ]
+  "exclude": ["node_modules", ".next", "out", "build", "dist", "coverage"]
 }

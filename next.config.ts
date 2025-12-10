@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
@@ -28,8 +27,9 @@ const nextConfig: NextConfig = {
       allowedOrigins: ["localhost:3000"],
     },
   },
-  // Disabled due to conflicts with dynamic route segment config
-  cacheComponents: true,
+  // cacheComponents disabled to allow dynamic route segment config
+  // (force-dynamic) for admin area without Turbopack conflicts.
+  cacheComponents: false,
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "avatars.githubusercontent.com" },

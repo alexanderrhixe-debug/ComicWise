@@ -83,7 +83,7 @@ export function createCacheClient(rawClient: any): CacheClient {
     },
   };
 }
-/* eslint-disable security/detect-object-injection */
+
 import { env } from "appConfig";
 /**
  * Redis Configuration

@@ -14,15 +14,15 @@ export const cache = {
     return clientInstance.get(key);
   },
   async set(key: string, value: string, ttlSeconds?: number) {
-    if (!clientInstance) return;
+    if (!clientInstance) return Promise.resolve(null as any);
     return clientInstance.set(key, value, ttlSeconds);
   },
   async del(key: string) {
-    if (!clientInstance) return;
+    if (!clientInstance) return Promise.resolve(null as any);
     return clientInstance.del(key);
   },
   async clear() {
-    if (!clientInstance) return;
+    if (!clientInstance) return Promise.resolve(null as any);
     return clientInstance.clear?.();
   },
 };

@@ -15,8 +15,9 @@
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
     "build:debug": "next build --debug",
+    "build:debug:prerender": "next build --debug-prerender",
     "build:profile": "next build --profile",
-    "postbuild": "next-sitemap",
+    "postbuild": "pnpm dlx next-sitemap --config next-sitemap.config.cjs",
     "// Production Scripts": "",
     "start": "next start",
     "start:prod": "NODE_ENV=production next start -p 3000",
@@ -124,6 +125,7 @@
     "types:install": "echo 'Run pnpm install @types/...' as needed"
   },
   "dependencies": {
+    "@auth/core": "^0.34.3",
     "@auth/drizzle-adapter": "^1.11.1",
     "@aws-sdk/client-s3": "^3.947.0",
     "@dnd-kit/core": "^6.3.1",

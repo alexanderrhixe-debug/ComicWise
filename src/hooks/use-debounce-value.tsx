@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { DebouncedState } from "src/hooks/use-debounce-callback";
 import { useDebounceCallback } from "src/hooks/use-debounce-callback";
 
@@ -23,8 +23,10 @@ export function useDebounceValue<T>(
   delay: number,
   options?: UseDebounceValueOptions<T>
 ): [T, DebouncedState<(value: T) => void>] {
-  const eq = options?.equalityFn ?? ((left: T, right: T) => left === right);
-  const memoEq = useMemo(() => eq, [eq]);
+  const memoEq = useMemo(
+    () => options?.equalityFn ?? ((left: T, right: T) => left === right),
+    [options?.equalityFn]
+  );
   const unwrappedInitialValue = initialValue instanceof Function ? initialValue() : initialValue;
   const [debouncedValue, setDebouncedValue] = useState<T>(unwrappedInitialValue);
   const previousValueRef = useRef<T | undefined>(unwrappedInitialValue);

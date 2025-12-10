@@ -15,8 +15,8 @@ const envSchema = z.object({
   // ═══════════════════════════════════════════════════
   // Authentication (Next-Auth v5)
   // ═══════════════════════════════════════════════════
-  NEXTAUTH_SECRET: z.string().min(32, "NEXTAUTH_SECRET must be at least 32 characters"),
-  NEXTAUTH_URL: z.string().url("NEXTAUTH_URL must be a valid URL"),
+  AUTH_SECRET: z.string().min(32, "AUTH_SECRET must be at least 32 characters"),
+  AUTH_URL: z.string().url("AUTH_URL must be a valid URL"),
 
   // ═══════════════════════════════════════════════════
   // Upload Services
@@ -84,10 +84,10 @@ const envSchema = z.object({
   // ═══════════════════════════════════════════════════
   // OAuth Providers (Optional)
   // ═══════════════════════════════════════════════════
-  GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
-  GITHUB_CLIENT_ID: z.string().optional(),
-  GITHUB_CLIENT_SECRET: z.string().optional(),
+  AUTH_GOOGLE_CLIENT_ID: z.string().optional(),
+  AUTH_GOOGLE_CLIENT_SECRET: z.string().optional(),
+  AUTH_GITHUB_CLIENT_ID: z.string().optional(),
+  AUTH_GITHUB_CLIENT_SECRET: z.string().optional(),
   CUSTOM_PASSWORD: z.string().optional(),
 });
 
@@ -137,8 +137,8 @@ function validateEnv(): Env {
       return envSchema.parse({
         ...process.env,
         DATABASE_URL: process.env.DATABASE_URL || "",
-        NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || "",
-        NEXTAUTH_URL: process.env.NEXTAUTH_URL || "",
+        NEXTAUTH_SECRET: process.env.AUTH_SECRET || "",
+        NEXTAUTH_URL: process.env.AUTH_URL || "",
         EMAIL_SERVER_HOST:
           process.env.EMAIL_SERVER_HOST || process.env.SMTP_HOST || "smtp.gmail.com",
         EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT || process.env.SMTP_PORT || "587",
@@ -169,7 +169,6 @@ export const env = validateEnv();
  * Check if a specific environment variable is set
  */
 export function hasEnv(key: keyof Env): boolean {
-  // eslint-disable-next-line security/detect-object-injection
   return !!env[key];
 }
 
@@ -177,7 +176,6 @@ export function hasEnv(key: keyof Env): boolean {
  * Get environment variable with type safety
  */
 export function getEnv<K extends keyof Env>(key: K, defaultValue?: Env[K]): Env[K] {
-  // eslint-disable-next-line security/detect-object-injection
   return env[key] ?? (defaultValue as Env[K]);
 }
 

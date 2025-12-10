@@ -16,7 +16,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
+    const searchParams = new URL(request.url).searchParams;
 
     const filters = {
       comicId: searchParams.get("comicId") ? parseInt(searchParams.get("comicId")!) : undefined,

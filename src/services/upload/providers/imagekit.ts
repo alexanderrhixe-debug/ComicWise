@@ -159,7 +159,6 @@ export class ImageKitProvider implements UploadProvider {
     const transformObj: { [key: string]: string } = {};
 
     for (const [key, value] of Object.entries(transformation)) {
-      // eslint-disable-next-line security/detect-object-injection
       transformObj[key] = String(value);
     }
 

@@ -47,7 +47,7 @@ export async function getUsers(params?: {
   }
 
   // Apply sorting
-  // eslint-disable-next-line security/detect-object-injection
+
   const sortColumn = user[sortBy];
   query = query.orderBy(sortOrder === "asc" ? asc(sortColumn) : desc(sortColumn));
 

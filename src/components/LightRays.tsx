@@ -115,7 +115,7 @@ const LightRays: React.FC<LightRaysProps> = ({
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current) return () => {};
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -138,7 +138,7 @@ const LightRays: React.FC<LightRaysProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!isVisible || !containerRef.current) return;
+    if (!isVisible || !containerRef.current) return () => {};
 
     if (cleanupFunctionRef.current) {
       cleanupFunctionRef.current();
@@ -404,7 +404,7 @@ void main() {
   ]);
 
   useEffect(() => {
-    if (!uniformsRef.current || !containerRef.current || !rendererRef.current) return;
+    if (!uniformsRef.current || !containerRef.current || !rendererRef.current) return () => {};
 
     const u = uniformsRef.current;
     const renderer = rendererRef.current;
@@ -425,6 +425,7 @@ void main() {
     const { anchor, dir } = getAnchorAndDir(raysOrigin, wCSS * dpr, hCSS * dpr);
     u.rayPos.value = anchor;
     u.rayDir.value = dir;
+    return () => {};
   }, [
     raysColor,
     raysSpeed,

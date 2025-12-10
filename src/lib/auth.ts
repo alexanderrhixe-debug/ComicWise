@@ -24,10 +24,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
   pages: {
-    signIn: "/(auth)/sign-in",
-    signOut: "/",
-    error: "/(auth)/sign-in",
-    verifyRequest: "/(auth)/verify-request",
+    signIn: "/sign-in",
+    newUser: "/register",
+    signOut: "/sign-out",
+    error: "/error",
+    verifyRequest: "/verify-request",
   },
   providers: [
     // Credentials provider with DB-backed authorize
@@ -36,7 +37,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials: Partial<Record<"email" | "password", unknown>> | undefined) {
         try {
           const { email, password } = signInSchema.parse(credentials);
 

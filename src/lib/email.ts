@@ -29,7 +29,10 @@ const transporter = nodemailer.createTransport({
 });
 
 // Verify transporter configuration
-if (appConfig.email.enabled) {
+// Avoid verifying the transporter during static build/prerender to prevent
+// network calls at module initialization (which can fail in build environments).
+// Only verify in development to help catch config issues early.
+if (appConfig.email.enabled && process.env.NODE_ENV === "development") {
   transporter
     .verify()
     .then(() => {

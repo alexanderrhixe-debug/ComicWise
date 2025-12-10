@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 // Force dynamic rendering for current date display
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export default function DMCAPage() {
   return (

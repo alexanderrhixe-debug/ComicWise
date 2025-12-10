@@ -44,6 +44,7 @@ export const signUpSchema = z
       ),
     confirmPassword: z.string({ error: "Confirm password is required" }),
   })
+  .strict()
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
@@ -72,6 +73,7 @@ export const resetPasswordSchema = z
       ),
     confirmPassword: z.string({ error: "Confirm password is required" }),
   })
+  .strict()
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],

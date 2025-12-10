@@ -43,13 +43,13 @@ export const appConfig = {
   // Authentication Configuration
   // ═══════════════════════════════════════════════════
   auth: {
-    secret: env.NEXTAUTH_SECRET,
-    url: env.NEXTAUTH_URL,
+    secret: env.AUTH_SECRET,
+    url: env.AUTH_URL,
     sessionMaxAge: 30 * 24 * 60 * 60, // 30 days
     providers: {
       credentials: true,
-      google: hasEnv("GOOGLE_CLIENT_ID"),
-      github: hasEnv("GITHUB_CLIENT_ID"),
+      google: hasEnv("AUTH_GOOGLE_CLIENT_ID"),
+      github: hasEnv("AUTH_GITHUB_CLIENT_ID"),
     },
   },
 
@@ -158,7 +158,7 @@ export const appConfig = {
     ratings: true,
     email: !!(env.EMAIL_SERVER_USER && env.EMAIL_SERVER_PASSWORD),
     emailVerification: true,
-    oauth: hasEnv("GOOGLE_CLIENT_ID") || hasEnv("GITHUB_CLIENT_ID"),
+    oauth: hasEnv("AUTH_GOOGLE_CLIENT_ID") || hasEnv("AUTH_GITHUB_CLIENT_ID"),
     backgroundJobs: hasEnv("QSTASH_TOKEN"),
     rateLimiting: hasEnv("UPSTASH_REDIS_REST_URL"),
     imageUpload: hasEnv("IMAGEKIT_PUBLIC_KEY") || hasEnv("CLOUDINARY_CLOUD_NAME"),

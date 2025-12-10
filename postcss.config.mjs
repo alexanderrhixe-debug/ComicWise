@@ -39,17 +39,17 @@ const config = {
     ...(isProduction
       ? {
           cssnano: {
-            preset: [
-              "advanced",
-              {
-                discardComments: {
-                  removeAll: true,
-                },
-                reduceIdents: false,
-                zindex: false,
-                autoprefixer: false, // Already handled above
-              },
-            ],
+            // preset: [
+            //   "advanced",
+            //   {
+            //     discardComments: {
+            //       removeAll: true,
+            //     },
+            //     reduceIdents: false,
+            //     zindex: false,
+            //     autoprefixer: false, // Already handled above
+            //   },
+            // ],
           },
         }
       : {}),

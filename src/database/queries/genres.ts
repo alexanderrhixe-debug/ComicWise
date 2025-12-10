@@ -31,7 +31,7 @@ export async function getGenres(params?: {
   }
 
   // Apply sorting
-  // eslint-disable-next-line security/detect-object-injection
+
   const sortColumn = genre[sortBy];
   query = query.orderBy(sortOrder === "asc" ? asc(sortColumn) : desc(sortColumn));
 

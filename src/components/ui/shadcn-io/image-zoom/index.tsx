@@ -1,11 +1,11 @@
 "use client";
 
-import type { ControlledProps, UncontrolledProps } from "react-medium-image-zoom";
+import type { ZoomProps } from "react-medium-image-zoom";
 import Zoom from "react-medium-image-zoom";
 import { cn } from "utils";
-export type ImageZoomProps = UncontrolledProps & {
-  isZoomed?: ControlledProps["isZoomed"];
-  onZoomChange?: ControlledProps["onZoomChange"];
+export type ImageZoomProps = ZoomProps & {
+  isZoomed?: boolean;
+  onZoomChange?: ZoomProps["onZoomChange"];
   className?: string;
   backdropClassName?: string;
 };

@@ -5,9 +5,7 @@ import Link from "next/link";
 
 async function getGenres() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const response = await fetch(`${baseUrl}/api/genres?limit=100`, {
-    cache: "no-store",
-  });
+  const response = await fetch(`${baseUrl}/api/genres?limit=100`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch genres");

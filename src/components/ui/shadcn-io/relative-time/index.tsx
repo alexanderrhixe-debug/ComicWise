@@ -55,7 +55,7 @@ export const RelativeTime = ({
   onTimeChange,
   dateFormatOptions,
   timeFormatOptions,
-  className,
+  className: _className,
   ...props
 }: RelativeTimeProps) => {
   const [time, setTime] = useControllableState<Date>({
@@ -66,7 +66,7 @@ export const RelativeTime = ({
 
   useEffect(() => {
     if (controlledTime) {
-      return;
+      return () => {};
     }
 
     const interval = setInterval(() => {
@@ -84,7 +84,7 @@ export const RelativeTime = ({
         timeFormatOptions,
       }}
     >
-      <div className={cn("grid gap-2", className)} {...(props as any)} />
+      <div className={cn("grid gap-2", _className)} {...(props as any)} />
     </RelativeTimeContext.Provider>
   );
 };
@@ -133,7 +133,11 @@ export const RelativeTimeZoneDate = ({ className, ...props }: RelativeTimeZoneDa
   const { zone } = useContext(RelativeTimeZoneContext);
   const display = formatDate(time, zone, dateFormatOptions);
 
-  return <div {...(props as any)}>{display}</div>;
+  return (
+    <div className={className} {...(props as any)}>
+      {display}
+    </div>
+  );
 };
 
 export type RelativeTimeZoneLabelProps = HTMLAttributes<HTMLDivElement>;

@@ -184,7 +184,6 @@ export class ComicSeeder {
       imagesToProcess.push(...comicData.image_urls.slice(1));
     } else if (comicData.images && comicData.images.length > 1) {
       for (let i = 1; i < comicData.images.length; i++) {
-        // eslint-disable-next-line security/detect-object-injection
         const img = comicData.images[i];
         const imageUrl = typeof img === "string" ? img : img?.url || "";
         if (imageUrl) {
@@ -195,7 +194,6 @@ export class ComicSeeder {
 
     // Download images with concurrency control
     for (let i = 0; i < imagesToProcess.length; i++) {
-      // eslint-disable-next-line security/detect-object-injection
       const result = await imageService.processImageUrl(imagesToProcess[i], `comics/${slug}`);
       if (result) {
         await database

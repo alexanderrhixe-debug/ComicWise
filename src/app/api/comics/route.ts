@@ -16,7 +16,7 @@ import type { ComicFilters } from "src/types";
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
+    const searchParams = new URL(request.url).searchParams;
 
     const filters = {
       search: searchParams.get("search") || undefined,

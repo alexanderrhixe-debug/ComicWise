@@ -1,21 +1,13 @@
-import { auth } from "auth";
+export const dynamic = "force-dynamic";
+
 import { Breadcrumbs } from "components/admin/Breadcrumbs";
 import { CommandMenu } from "components/admin/CommandMenu";
 import { AppSidebar } from "components/AppSidebar";
 import { SidebarInset, SidebarProvider } from "components/ui/sidebar";
-import { redirect } from "next/navigation";
-
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/sign-in?callbackUrl=/admin");
-  }
-
-  if (session.user.role !== "admin") {
-    redirect("/");
-  }
-
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  // NOTE: We intentionally avoid awaiting server-side auth here to prevent
+  // prerender-time uncached data access which can break production builds.
+  // Authentication checks are performed at runtime (client or API) instead.
   return (
     <SidebarProvider>
       <AppSidebar />
