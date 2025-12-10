@@ -9,7 +9,7 @@ export default function ClientDate({ value }: { value?: string }) {
     const date = value ? new Date(value) : new Date();
     try {
       setDisplay(date.toLocaleDateString());
-    } catch (e) {
+    } catch {
       const iso = date.toISOString().split("T")[0] || date.toISOString();
       setDisplay(iso);
     }

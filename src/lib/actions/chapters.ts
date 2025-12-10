@@ -232,7 +232,7 @@ export async function listChapters(input?: ChapterFilterInput) {
       },
       limit,
       offset,
-      orderBy: (chapters, { desc: descOrder, asc }) => {
+      orderBy: (chapters: any, { desc: descOrder, asc }: any) => {
         const order = sortOrder === "desc" ? descOrder : asc;
         switch (sortBy) {
           case "releaseDate":

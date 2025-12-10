@@ -256,7 +256,7 @@ export async function listComics(input?: ComicFilterInput) {
       },
       limit,
       offset,
-      orderBy: (comics, { desc: descOrder, asc }) => {
+      orderBy: (comics: any, { desc: descOrder, asc }: any) => {
         const order = sortOrder === "desc" ? descOrder : asc;
         switch (sortBy) {
           case "title":
@@ -348,7 +348,7 @@ export async function getComicGenres(comicId: number) {
 
     return {
       success: true,
-      data: genres.map((g) => g.genre),
+      data: genres.map((g: any) => g.genre),
     };
   } catch (error) {
     console.error("Get comic genres error:", error);

@@ -2,6 +2,11 @@ import type { Adapter } from "@auth/core/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { account, authenticator, session, user, verificationToken } from "database/schema";
 import type { Database } from "db";
+import { db } from "db";
+
+// Wrap drizzle db with the adapter that next-auth can use.
+export const adapter = DrizzleAdapter(db as any);
+
 export function createDrizzleAdapter(database: Database): Adapter {
   // Initialize the standard Drizzle adapter with your database instance and schema
   const standardAdapter = DrizzleAdapter(database, {

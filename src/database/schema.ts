@@ -10,7 +10,42 @@ import {
   serial,
   text,
   timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 320 }).notNull(),
+  name: text("name"),
+  passwordHash: text("password_hash"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const comics = pgTable("comics", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 512 }).notNull(),
+  slug: varchar("slug", { length: 512 }).notNull(),
+  description: text("description"),
+  authorId: integer("author_id").references(() => users.id),
+  published: boolean("published").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const chapters = pgTable("chapters", {
+  id: serial("id").primaryKey(),
+  comicId: integer("comic_id")
+    .references(() => comics.id)
+    .notNull(),
+  title: varchar("title", { length: 512 }).notNull(),
+  slug: varchar("slug", { length: 512 }).notNull(),
+  content: text("content"),
+  number: integer("number").notNull(),
+  published: boolean("published").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
 
 // ═══════════════════════════════════════════════════
 // CUSTOM SQL TYPES FOR FULL-TEXT SEARCH

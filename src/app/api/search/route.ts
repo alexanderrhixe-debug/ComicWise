@@ -17,7 +17,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = new URL(request.url).searchParams;
+    // Use `request.nextUrl` instead of `request.url` to avoid forcing a
+    // prerender bailout. `request.nextUrl.searchParams` is safe to read
+    // during static prerendering and in app-route handlers.
+    const searchParams = request.nextUrl.searchParams;
     const action = searchParams.get("action");
 
     // Handle different search actions

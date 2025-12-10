@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
 
         // Send notifications asynchronously
         Promise.all(
-          bookmarkedUsers.map((user) =>
+          bookmarkedUsers.map((user: any) =>
             sendNewChapterNotification({
               to: user.email,
               userName: user.name || "Reader",

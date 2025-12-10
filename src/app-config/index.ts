@@ -1,6 +1,12 @@
+import dotenvSafe from "dotenv-safe";
+import path from "path";
 import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "src/app-config/env";
 
-export * from "src/app-config/env";
+// Load environment variables early. Uses `.env.example` (sample) and `.env` or `.env.local`.
+// `src/app-config/env.ts` performs validation and exports `env` and helpers.
+dotenvSafe.config({
+  example: path.resolve(process.cwd(), ".env.example"),
+});
 // ═══════════════════════════════════════════════════
 // APP CONFIGURATION (Next.js 16 Optimized)
 // ═══════════════════════════════════════════════════
@@ -11,7 +17,7 @@ export * from "src/app-config/env";
 // APPLICATION CONFIGURATION
 // ═══════════════════════════════════════════════════
 
-export const appConfig = {
+const appConfig = {
   // ═══════════════════════════════════════════════════
   // App Metadata
   // ═══════════════════════════════════════════════════
@@ -24,9 +30,9 @@ export const appConfig = {
   // Environment Flags
   // ═══════════════════════════════════════════════════
   env: {
-    isProduction,
-    isDevelopment,
-    isTest,
+    isProduction: isProduction,
+    isDevelopment: isDevelopment,
+    isTest: isTest,
     current: env.NODE_ENV,
   },
 
@@ -170,7 +176,7 @@ export const appConfig = {
 // HELPER EXPORTS
 // ═══════════════════════════════════════════════════
 
-export { env, getEnv, hasEnv, isDevelopment, isProduction, isTest };
+export { appConfig, env, getEnv, hasEnv, isDevelopment, isProduction, isTest };
 
 export default appConfig;
 

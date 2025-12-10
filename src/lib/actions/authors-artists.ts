@@ -164,7 +164,7 @@ export async function listAuthors(input?: PaginationInput & { search?: string })
       where: whereClause,
       limit,
       offset,
-      orderBy: (authors, { asc }) => [asc(authors.name)],
+      orderBy: (authors: any, { asc }: any) => [asc(authors.name)],
     });
 
     return {
@@ -191,7 +191,7 @@ export async function listAuthors(input?: PaginationInput & { search?: string })
 export async function getAllAuthors() {
   try {
     const results = await database.query.author.findMany({
-      orderBy: (authors, { asc }) => [asc(authors.name)],
+      orderBy: (authors: any, { asc }: any) => [asc(authors.name)],
     });
 
     return { success: true, data: results };
@@ -342,7 +342,7 @@ export async function listArtists(input?: PaginationInput & { search?: string })
       where: whereClause,
       limit,
       offset,
-      orderBy: (artists, { asc }) => [asc(artists.name)],
+      orderBy: (artists: any, { asc }: any) => [asc(artists.name)],
     });
 
     return {
@@ -369,7 +369,7 @@ export async function listArtists(input?: PaginationInput & { search?: string })
 export async function getAllArtists() {
   try {
     const results = await database.query.artist.findMany({
-      orderBy: (artists, { asc }) => [asc(artists.name)],
+      orderBy: (artists: any, { asc }: any) => [asc(artists.name)],
     });
 
     return { success: true, data: results };

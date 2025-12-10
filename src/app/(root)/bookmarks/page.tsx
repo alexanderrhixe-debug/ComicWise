@@ -48,7 +48,7 @@ export default async function BookmarksPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-        {bookmarks.map(({ bookmark, comic, chapter }) => {
+        {bookmarks.map(({ bookmark, comic, chapter }: any) => {
           if (!comic) return null;
 
           return (

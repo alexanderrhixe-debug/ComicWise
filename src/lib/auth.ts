@@ -3,10 +3,17 @@ import { user } from "database/schema";
 import { db } from "db";
 import { eq } from "drizzle-orm";
 import createDrizzleAdapter from "lib/authAdapter";
-import getOAuthProviders from "lib/authConfig";
+import getOAuthProviders, { authOptions } from "lib/authConfig";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
+
+// Helper to obtain typed auth options for use in app routes
+export function getAuthOptions(): any {
+  return authOptions as any;
+}
+
+export default getAuthOptions;
 
 const signInSchema = z
   .object({
@@ -71,14 +78,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     ...oauthProviders,
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user && user.id) {
         token.role = user.role;
         token.id = user.id;
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (session.user && token.id) {
         session.user.role = token.role as "user" | "admin" | "moderator";
         session.user.id = token.id;

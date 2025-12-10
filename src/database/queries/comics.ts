@@ -71,7 +71,7 @@ export async function getAllComics(filters: ComicFilters = {}) {
       .from(comicToGenre)
       .where(inArray(comicToGenre.genreId, genreIds));
 
-    const comicIds = comicsWithGenres.map((c) => c.comicId);
+    const comicIds = comicsWithGenres.map((c: any) => c.comicId);
     if (comicIds.length > 0) {
       conditions.push(inArray(comic.id, comicIds));
     }
@@ -152,7 +152,7 @@ export async function getComic(comicId: number): Promise<ComicWithDetails | null
     .leftJoin(genre, eq(comicToGenre.genreId, genre.id))
     .where(eq(comicToGenre.comicId, comicId));
 
-  const genres = genresResult.map((g) => g.genre).filter(Boolean);
+  const genres = genresResult.map((g: any) => g.genre).filter(Boolean);
 
   return {
     ...result[0].comic,

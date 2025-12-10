@@ -6,35 +6,35 @@
       "type": "shell",
       "command": "pnpm dev",
       "group": "build",
-      "problemMatcher": []
+      "presentation": { "reveal": "always" }
     },
     {
       "label": "build",
       "type": "shell",
       "command": "pnpm build",
       "group": "build",
-      "problemMatcher": []
+      "presentation": { "reveal": "always" }
     },
     {
       "label": "lint",
       "type": "shell",
       "command": "pnpm lint",
       "group": "test",
-      "problemMatcher": []
+      "presentation": { "reveal": "silent" }
     },
     {
       "label": "type-check",
       "type": "shell",
       "command": "pnpm type-check",
       "group": "test",
-      "problemMatcher": []
+      "presentation": { "reveal": "silent" }
     },
     {
       "label": "test",
       "type": "shell",
       "command": "pnpm test",
       "group": "test",
-      "problemMatcher": []
+      "presentation": { "reveal": "always" }
     }
   ]
 }

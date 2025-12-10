@@ -142,7 +142,7 @@ async function RecommendedComics({ comicId }: { comicId: number }) {
     <section className="mt-12">
       <h2 className="mb-6 text-2xl font-bold">You Might Also Like</h2>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {recommended.map((comic) => (
+        {recommended.map((comic: any) => (
           <ComicCard key={comic.id} comic={comic} authorName={null} typeName={comic.typeName} />
         ))}
       </div>

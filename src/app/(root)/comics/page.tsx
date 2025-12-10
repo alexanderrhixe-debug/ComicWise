@@ -61,7 +61,7 @@ async function ComicsGrid({
   return (
     <>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-        {comics.map((comic) => (
+        {comics.map((comic: any) => (
           <ComicCard
             key={comic.id}
             comic={comic}

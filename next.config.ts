@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
-    turbopackFileSystemCacheForBuild: false,
+    turbopackFileSystemCacheForBuild: true,
     typedEnv: true,
     staleTimes: {
       dynamic: 30,

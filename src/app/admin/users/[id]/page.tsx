@@ -1,11 +1,11 @@
 import { Suspense } from "react";
-import EditTypeForm from "./EditTypeForm";
+import EditUserForm from "./EditUserForm";
 
 export default function Page({ params }: { params: { id: string } }) {
   return (
     <Suspense fallback={<div className="text-muted-foreground">Loading editor...</div>}>
       {/* Render the client-side edit form inside a suspense boundary */}
-      <EditTypeForm params={params} />
+      <EditUserForm params={params} />
     </Suspense>
   );
 }

@@ -64,7 +64,7 @@ function matchRoute(pathname: string, routes: readonly string[]): boolean {
 // MIDDLEWARE HANDLER
 // ═══════════════════════════════════════════════════
 
-export default auth((req) => {
+export default auth((req: any) => {
   const { pathname } = req.nextUrl;
   const isAuthenticated = !!req.auth;
 

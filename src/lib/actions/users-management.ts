@@ -277,7 +277,7 @@ export async function listUsers(input?: UserFilterInput) {
       .where(whereClause)
       .limit(limit)
       .offset(offset)
-      .orderBy((users) => {
+      .orderBy((users: any) => {
         const order = sortOrder === "desc" ? sql`DESC` : sql`ASC`;
         switch (sortBy) {
           case "name":
