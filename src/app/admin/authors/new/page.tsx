@@ -14,6 +14,7 @@ import {
 } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
+import { useImageUpload } from "hooks/useImageUpload";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,7 +35,15 @@ type AuthorFormValues = z.infer<typeof authorSchema>;
 export default function NewAuthorPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const { fileInputRef, isUploading, handleFileSelect } = useImageUpload({
+    uploadType: "avatar",
+    onChange: (url: string) => {
+      form.setValue("profileImage", url);
+    },
+    onUploadComplete: () => {
+      toast.success("Image uploaded successfully");
+    },
+  });
 
   const form = useForm<AuthorFormValues>({
     resolver: zodResolver(authorSchema),
@@ -47,35 +56,7 @@ export default function NewAuthorPage() {
 
   const profileImage = form.watch("profileImage");
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsUploading(true);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("type", "avatar");
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
-      }
-
-      const data = await response.json();
-      form.setValue("profileImage", data.url);
-      toast.success("Image uploaded successfully");
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to upload image");
-    } finally {
-      setIsUploading(false);
-    }
-  }
+  // image upload handled by useImageUpload hook above
 
   async function onSubmit(data: AuthorFormValues) {
     setIsLoading(true);
@@ -163,7 +144,7 @@ export default function NewAuthorPage() {
                           <Button
                             type="button"
                             variant="outline"
-                            onClick={() => document.getElementById("profile-upload")?.click()}
+                            onClick={() => fileInputRef.current?.click()}
                             disabled={isUploading}
                           >
                             {isUploading ? "Uploading..." : "Upload Image"}
@@ -176,7 +157,8 @@ export default function NewAuthorPage() {
                             type="file"
                             accept="image/*"
                             className="sr-only"
-                            onChange={handleImageUpload}
+                            ref={fileInputRef}
+                            onChange={handleFileSelect}
                             aria-label="Upload author profile image"
                             title="Upload author profile image"
                           />

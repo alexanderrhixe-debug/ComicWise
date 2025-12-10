@@ -1,5 +1,12 @@
 {
   "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "eamodio.gitlens",
+    "ms-azuretools.vscode-docker",
+    "visualstudioexptteam.vscodeintellicode",
+    "orta.vscode-jest",
     // Essential Code Quality & Formatting
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",

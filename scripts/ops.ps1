@@ -78,7 +78,11 @@ switch ($Task) {
     Exec "pnpm build"
   }
 
-  'dev' | 'run' {
+  'dev' {
+    Write-Host "Starting dev server (pnpm dev)..." -ForegroundColor Green
+    Exec "pnpm dev"
+  }
+  'run' {
     Write-Host "Starting dev server (pnpm dev)..." -ForegroundColor Green
     Exec "pnpm dev"
   }

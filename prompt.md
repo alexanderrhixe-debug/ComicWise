@@ -1,3 +1,3 @@
-Read and understand the entire project Read and understand tasks.txt
-tasks.optimized.txt Generate an optimized prompts.txt to with all tasks as
-prompts using github copilot chat
+Read and understand the entire project Read and understand '_.txt Read and
+understand '_.md' and Generate an optimized setup.txt to with all tasks todos
+recommendations as prompts using github copilot chat or github copilot cli

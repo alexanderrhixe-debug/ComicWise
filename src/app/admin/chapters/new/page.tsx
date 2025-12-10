@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageUpload } from "components/admin/ImageUpload";
 import { Button } from "components/ui/button";
@@ -80,11 +79,6 @@ export default function NewChapterPage() {
     fetchComics();
   }, []);
 
-  const handleImageUpload = (url: string) => {
-    setUploadedImages((prev) => [...prev, url]);
-    form.setValue("imageUrls", [...uploadedImages, url]);
-  };
-
   const handleImageRemove = (url?: string) => {
     if (!url) return;
     setUploadedImages((prev) => prev.filter((img) => img !== url));
@@ -92,6 +86,14 @@ export default function NewChapterPage() {
       "imageUrls",
       uploadedImages.filter((img) => img !== url)
     );
+  };
+
+  const handleImageUpload = (url: string) => {
+    setUploadedImages((prev) => {
+      const next = [...prev, url];
+      form.setValue("imageUrls", next);
+      return next;
+    });
   };
 
   async function onSubmit(data: ChapterFormValues) {

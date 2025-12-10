@@ -4,7 +4,7 @@ import type { Provider } from "next-auth/providers";
 import EmailProvider from "next-auth/providers/email";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import { adapter } from "./authAdapter";
+import { adapter } from "src/lib/authAdapter";
 
 type MutableAuthOptions = {
   adapter?: unknown;

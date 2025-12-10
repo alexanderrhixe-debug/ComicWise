@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import EditTypeForm from "./EditTypeForm";
+import EditTypeForm from "src/app/admin/types/[id]/EditTypeForm";
 
 export default function Page({ params }: { params: { id: string } }) {
   return (
