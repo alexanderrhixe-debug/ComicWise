@@ -172,7 +172,10 @@ export interface PaginationMeta {
 
 export interface PaginatedResponse<T> {
   data: T[];
+  // Preferred name for pagination metadata
   meta: PaginationMeta;
+  // Backwards-compatible alias used across the codebase
+  pagination: PaginationMeta;
 }
 
 export interface ComicFilters {

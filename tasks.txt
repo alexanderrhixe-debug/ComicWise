@@ -27,4 +27,6 @@ Tasks:
 24 - create update or generate an Optimized both  Makefile and test-docker.sh to use next@16.0.8 best practices.
 25 - create update or generate an Optimized  README.md with all necessary information about the project including setup installation usage contribution license and any other information needed.
 26 - create update or generate an Optimized  LICENSE file use MIT license unless specified otherwise.
-27 - create update or generate an Optimized powershell and bash scripts for setup,cleanup,backup,deploy, restore,test build run dev lint format type-check fix-imports Refactor large components into smaller ones Extract repeated logic into custom hooks Improve component prop types Add JSDoc comments to complex functions Remove unused imports and variables Consolidate duplicate code
+27 - create update or generate an Optimized powershell and bash scripts for setup,cleanup,backup,deploy, restore,test build run dev lint format type-check fix-imports and any other scripts needed for the project in my scripts folder.
+28 - create update or generate an Optimized powershell and bash scripts for deployment with vercel and github pages install any required module app or package either with pnpm,npm,choco,winget or any other needed package manager in my scripts/deploy folder.
+
