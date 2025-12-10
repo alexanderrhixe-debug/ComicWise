@@ -1,6 +1,7 @@
 import ComicForm from "@/app/admin/comics/comic-form";
 import { auth } from "auth";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import type { Metadata } from "next";
 
@@ -9,13 +10,17 @@ export const metadata: Metadata = {
   description: "Add a new comic to the platform",
 };
 
-export default async function NewComicPage() {
+async function ProtectedComicForm() {
   const session = await auth();
 
   if (!session?.user || session.user.role !== "admin") {
     redirect("/");
   }
 
+  return <ComicForm />;
+}
+
+export default function NewComicPage() {
   return (
     <div className="container max-w-4xl space-y-6 py-6">
       <div>
@@ -23,7 +28,9 @@ export default async function NewComicPage() {
         <p className="text-muted-foreground">Add a new comic to the platform</p>
       </div>
 
-      <ComicForm />
+      <Suspense fallback={<div>Checking permissions...</div>}>
+        <ProtectedComicForm />
+      </Suspense>
     </div>
   );
 }

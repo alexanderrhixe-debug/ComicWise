@@ -1,7 +1,8 @@
 import { DataTable } from "components/admin/DataTable";
+import { Suspense } from "react";
 import { database, user } from "src/database";
 
-export default async function AdminUsersPage() {
+async function UsersTable() {
   const users = await database.select().from(user);
 
   const columns = [
@@ -27,14 +28,26 @@ export default async function AdminUsersPage() {
     },
   ];
 
+  return <DataTable columns={columns} data={users} />;
+}
+
+function UsersHeader() {
+  return (
+    <div>
+      <h1 className="text-3xl font-bold tracking-tight">Users Management</h1>
+      <p className="text-muted-foreground">Manage all users in the platform</p>
+    </div>
+  );
+}
+
+export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Users Management</h1>
-        <p className="text-muted-foreground">Manage all users in the platform</p>
-      </div>
+      <UsersHeader />
 
-      <DataTable columns={columns} data={users} />
+      <Suspense fallback={<div>Loading users...</div>}>
+        <UsersTable />
+      </Suspense>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { DataTable } from "components/admin/DataTable";
 import { Button } from "components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 async function getArtists() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -15,7 +16,24 @@ async function getArtists() {
   return data.artists || [];
 }
 
-export default async function ArtistsPage() {
+function ArtistsHeader() {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Artists</h1>
+        <p className="text-muted-foreground">Manage comic artists and illustrators</p>
+      </div>
+      <Button asChild>
+        <Link href="/admin/artists/new">
+          <Plus className="mr-2 h-4 w-4" />
+          Create Artist
+        </Link>
+      </Button>
+    </div>
+  );
+}
+
+async function ArtistsTable() {
   const artists = await getArtists();
 
   const columns = [
@@ -37,22 +55,17 @@ export default async function ArtistsPage() {
     },
   ];
 
+  return <DataTable columns={columns} data={artists} />;
+}
+
+export default function ArtistsPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Artists</h1>
-          <p className="text-muted-foreground">Manage comic artists and illustrators</p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/artists/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Create Artist
-          </Link>
-        </Button>
-      </div>
+      <ArtistsHeader />
 
-      <DataTable columns={columns} data={artists} />
+      <Suspense fallback={<div>Loading artists...</div>}>
+        <ArtistsTable />
+      </Suspense>
     </div>
   );
 }

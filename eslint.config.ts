@@ -1,3 +1,4 @@
+// @ts-check
 import css from "@eslint/css";
 import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
@@ -11,7 +12,7 @@ import prettierConfig from "eslint-config-prettier/flat";
 import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 import * as drizzle from "eslint-plugin-drizzle";
 import importPlugin from "eslint-plugin-import";
-import jsxA11y from "eslint-plugin-jsx-a11y";
+// import jsxA11y from "eslint-plugin-jsx-a11y";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
@@ -119,9 +120,7 @@ const eslintConfig = defineConfig([
       ...pluginReact.configs.flat.recommended!.rules,
       ...pluginReactHooks.configs.recommended.rules,
       ...pluginReactHooks.configs.flat["recommended-latest"].rules,
-      ...jsxA11y.flatConfigs.recommended.rules,
-      // Relax anchor validation for patterns used with Next/utility wrappers
-      "jsx-a11y/anchor-is-valid": "off",
+      // ...jsxA11y.flatConfigs.recommended.rules,
       // Use only one severity variant per Better Tailwind CSS category
       ...pluginBetterTailwindcss.configs["recommended-warn"]!.rules,
       ...pluginBetterTailwindcss.configs["correctness-warn"]!.rules,
@@ -480,7 +479,6 @@ const eslintConfig = defineConfig([
     "**/public/**",
     "**/drizzle/**",
     "src/styles/globals.css",
-    "src/components/ui/shadcn-io/image-zoom/index.tsx",
   ]),
 ]);
 

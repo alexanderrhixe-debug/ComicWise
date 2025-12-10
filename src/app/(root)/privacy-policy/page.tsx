@@ -1,3 +1,4 @@
+import ClientDate from "components/ClientDate";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
 
 import type { Metadata } from "next";
@@ -202,7 +203,7 @@ export default function PrivacyPolicyPage() {
               </p>
             </div>
             <p className="mt-4 text-sm text-muted-foreground">
-              Last updated: {new Date().toLocaleDateString()}
+              Last updated: <ClientDate />
             </p>
           </section>
         </CardContent>

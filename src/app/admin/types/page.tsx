@@ -2,6 +2,7 @@ import { DataTable } from "components/admin/DataTable";
 import { Button } from "components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 async function getTypes() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -15,7 +16,24 @@ async function getTypes() {
   return data.types || [];
 }
 
-export default async function TypesPage() {
+function TypesHeader() {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Types</h1>
+        <p className="text-muted-foreground">Manage comic types (Manga, Manhwa, Manhua, etc.)</p>
+      </div>
+      <Button asChild>
+        <Link href="/admin/types/new">
+          <Plus className="mr-2 h-4 w-4" />
+          Create Type
+        </Link>
+      </Button>
+    </div>
+  );
+}
+
+async function TypesTable() {
   const types = await getTypes();
 
   const columns = [
@@ -37,22 +55,19 @@ export default async function TypesPage() {
     },
   ];
 
+  return <DataTable columns={columns} data={types} />;
+}
+
+export default function TypesPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Types</h1>
-          <p className="text-muted-foreground">Manage comic types (Manga, Manhwa, Manhua, etc.)</p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/types/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Create Type
-          </Link>
-        </Button>
-      </div>
+      <TypesHeader />
 
-      <DataTable columns={columns} data={types} />
+      <Suspense fallback={<div>Loading types...</div>}>
+        {/* Async server component that fetches data inside Suspense */}
+        {}
+        <TypesTable />
+      </Suspense>
     </div>
   );
 }

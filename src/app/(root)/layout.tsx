@@ -1,4 +1,6 @@
 import { AppNavbar } from "components/AppNavbar";
+import CurrentYear from "components/CurrentYear";
+import React, { Suspense } from "react";
 
 export default function RootLayout({
   children,
@@ -7,11 +9,15 @@ export default function RootLayout({
 }>) {
   return (
     <div className="flex min-h-screen flex-col">
-      <AppNavbar />
+      <Suspense fallback={null}>
+        <AppNavbar />
+      </Suspense>
       <main className="flex-1">{children}</main>
       <footer className="border-t py-6 md:py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>© 2025 ComicWise. All rights reserved.</p>
+          <p>
+            © <CurrentYear /> ComicWise. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>

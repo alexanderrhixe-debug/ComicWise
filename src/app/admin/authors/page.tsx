@@ -2,6 +2,7 @@ import { DataTable } from "components/admin/DataTable";
 import { Button } from "components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 async function getAuthors() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -15,7 +16,24 @@ async function getAuthors() {
   return data.authors || [];
 }
 
-export default async function AuthorsPage() {
+function AuthorsHeader() {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Authors</h1>
+        <p className="text-muted-foreground">Manage comic authors and writers</p>
+      </div>
+      <Button asChild>
+        <Link href="/admin/authors/new">
+          <Plus className="mr-2 h-4 w-4" />
+          Create Author
+        </Link>
+      </Button>
+    </div>
+  );
+}
+
+async function AuthorsTable() {
   const authors = await getAuthors();
 
   const columns = [
@@ -37,22 +55,17 @@ export default async function AuthorsPage() {
     },
   ];
 
+  return <DataTable columns={columns} data={authors} />;
+}
+
+export default function AuthorsPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Authors</h1>
-          <p className="text-muted-foreground">Manage comic authors and writers</p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/authors/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Create Author
-          </Link>
-        </Button>
-      </div>
+      <AuthorsHeader />
 
-      <DataTable columns={columns} data={authors} />
+      <Suspense fallback={<div>Loading authors...</div>}>
+        <AuthorsTable />
+      </Suspense>
     </div>
   );
 }

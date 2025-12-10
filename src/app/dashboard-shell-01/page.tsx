@@ -48,6 +48,7 @@ import {
   SidebarTrigger,
 } from "components/ui/sidebar";
 
+import CurrentYear from "@/components/CurrentYear";
 import SalesMetricsCard from "components/shadcn-studio/blocks/chart-sales-metrics";
 import TransactionDatatable, {
   type Item,
@@ -578,7 +579,7 @@ const DashboardShell = () => {
           <footer>
             <div className="mx-auto flex size-full max-w-7xl items-center justify-between gap-3 px-4 py-3 text-muted-foreground max-sm:flex-col sm:gap-6 sm:px-6">
               <p className="text-sm text-balance max-sm:text-center">
-                {`©${new Date().getFullYear()}`}{" "}
+                ©<CurrentYear />{" "}
                 <a href="#" className="text-primary">
                   Shadcn/studio
                 </a>

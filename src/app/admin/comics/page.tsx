@@ -4,8 +4,9 @@ import { artist, author, comic, database, type } from "database";
 import { eq } from "drizzle-orm";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default async function AdminComicsPage() {
+async function ComicsTable() {
   const comics = await database
     .select({
       id: comic.id,
@@ -56,22 +57,34 @@ export default async function AdminComicsPage() {
     },
   ];
 
+  return <DataTable columns={columns} data={comics} />;
+}
+
+function ComicsHeader() {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Comics Management</h1>
+        <p className="text-muted-foreground">Manage all comics in the platform</p>
+      </div>
+      <Link href="/admin/comics/new">
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Comic
+        </Button>
+      </Link>
+    </div>
+  );
+}
+
+export default function AdminComicsPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Comics Management</h1>
-          <p className="text-muted-foreground">Manage all comics in the platform</p>
-        </div>
-        <Link href="/admin/comics/new">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Comic
-          </Button>
-        </Link>
-      </div>
+      <ComicsHeader />
 
-      <DataTable columns={columns} data={comics} />
+      <Suspense fallback={<div>Loading comics...</div>}>
+        <ComicsTable />
+      </Suspense>
     </div>
   );
 }

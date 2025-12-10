@@ -4,8 +4,9 @@ import { chapter, comic, database } from "database";
 import { eq } from "drizzle-orm";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default async function ChaptersPage() {
+async function ChaptersTable() {
   const chapters = await database
     .select({
       id: chapter.id,
@@ -47,22 +48,34 @@ export default async function ChaptersPage() {
     },
   ];
 
+  return <DataTable columns={columns} data={chapters} />;
+}
+
+function ChaptersHeader() {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Chapters</h1>
+        <p className="text-muted-foreground">Manage comic chapters and episodes</p>
+      </div>
+      <Button asChild>
+        <Link href="/admin/chapters/new">
+          <Plus className="mr-2 h-4 w-4" />
+          Create Chapter
+        </Link>
+      </Button>
+    </div>
+  );
+}
+
+export default function ChaptersPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Chapters</h1>
-          <p className="text-muted-foreground">Manage comic chapters and episodes</p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/chapters/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Create Chapter
-          </Link>
-        </Button>
-      </div>
+      <ChaptersHeader />
 
-      <DataTable columns={columns} data={chapters} />
+      <Suspense fallback={<div>Loading chapters...</div>}>
+        <ChaptersTable />
+      </Suspense>
     </div>
   );
 }

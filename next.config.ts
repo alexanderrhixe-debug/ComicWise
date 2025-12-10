@@ -4,7 +4,8 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
-    typedEnv: false,
+    turbopackFileSystemCacheForBuild: false,
+    typedEnv: true,
     staleTimes: {
       dynamic: 30,
       static: 180,
@@ -27,9 +28,9 @@ const nextConfig: NextConfig = {
       allowedOrigins: ["localhost:3000"],
     },
   },
-  // cacheComponents disabled to allow dynamic route segment config
-  // (force-dynamic) for admin area without Turbopack conflicts.
-  cacheComponents: false,
+  // Enable cacheComponents for better performance. Admin routes were
+  // refactored to avoid top-level uncached server data access.
+  cacheComponents: true,
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
@@ -54,7 +55,7 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
-  typedRoutes: false,
+  typedRoutes: true,
   typescript: {
     ignoreBuildErrors: false,
   },
