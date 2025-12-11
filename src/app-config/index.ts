@@ -9,7 +9,7 @@ if (typeof window === "undefined") {
       const dotenvSafe = await import("dotenv-safe");
       const path = await import("path");
       dotenvSafe.config({
-        example: (path as typeof import("path")).resolve(process.cwd(), ".env.local"),
+        example: (path as typeof import("path")).resolve(process.cwd(), ".env"),
       });
     } catch {
       // If dotenv-safe isn't available in the runtime environment, skip config.
