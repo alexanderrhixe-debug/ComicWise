@@ -1,24 +1,24 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { create } from "zustand"
+import { devtools, persist } from "zustand/middleware"
 
 interface UIState {
-  sidebarOpen: boolean;
-  toggleSidebar: () => void;
-  setSidebarOpen: (open: boolean) => void;
+  sidebarOpen: boolean
+  toggleSidebar: () => void
+  setSidebarOpen: (open: boolean) => void
 
-  theme: "light" | "dark" | "system";
-  setTheme: (theme: "light" | "dark" | "system") => void;
+  theme: "light" | "dark" | "system"
+  setTheme: (theme: "light" | "dark" | "system") => void
 
-  readingMode: "single" | "double" | "long-strip";
-  setReadingMode: (mode: "single" | "double" | "long-strip") => void;
+  readingMode: "single" | "double" | "long-strip"
+  setReadingMode: (mode: "single" | "double" | "long-strip") => void
 
-  activeModal: string | null;
-  openModal: (modalId: string) => void;
-  closeModal: () => void;
+  activeModal: string | null
+  openModal: (modalId: string) => void
+  closeModal: () => void
 
-  searchOpen: boolean;
-  toggleSearch: () => void;
-  setSearchOpen: (open: boolean) => void;
+  searchOpen: boolean
+  toggleSearch: () => void
+  setSearchOpen: (open: boolean) => void
 }
 export const useUIStore = create<UIState>()(
   devtools(
@@ -55,4 +55,4 @@ export const useUIStore = create<UIState>()(
     ),
     { name: "comicwise-ui" }
   )
-);
+)

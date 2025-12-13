@@ -1,4 +1,4 @@
-import type { SVGAttributes } from "react";
+import type { SVGAttributes } from "react"
 
 const AuthBackgroundShape = (props: SVGAttributes<SVGElement>) => {
   return (
@@ -27,7 +27,7 @@ const AuthBackgroundShape = (props: SVGAttributes<SVGElement>) => {
         strokeOpacity="0.2"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default AuthBackgroundShape;
+export default AuthBackgroundShape

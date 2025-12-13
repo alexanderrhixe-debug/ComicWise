@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Bar,
@@ -14,11 +14,11 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "ui/card";
+} from "recharts"
+import { Card, CardContent, CardHeader, CardTitle } from "ui/card"
 
 interface UserGrowthChartProps {
-  data: { month: string; users: number }[];
+  data: { month: string; users: number }[]
 }
 
 export function UserGrowthChart({ data }: UserGrowthChartProps) {
@@ -40,11 +40,11 @@ export function UserGrowthChart({ data }: UserGrowthChartProps) {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 interface TopComicsChartProps {
-  data: { title: string; views: number }[];
+  data: { title: string; views: number }[]
 }
 
 export function TopComicsChart({ data }: TopComicsChartProps) {
@@ -66,11 +66,11 @@ export function TopComicsChart({ data }: TopComicsChartProps) {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 interface GenreDistributionChartProps {
-  data: { name: string; value: number }[];
+  data: { name: string; value: number }[]
 }
 
 const COLORS = [
@@ -79,7 +79,7 @@ const COLORS = [
   "hsl(var(--chart-3))",
   "hsl(var(--chart-4))",
   "hsl(var(--chart-5))",
-];
+]
 
 export function GenreDistributionChart({ data }: GenreDistributionChartProps) {
   return (
@@ -111,11 +111,11 @@ export function GenreDistributionChart({ data }: GenreDistributionChartProps) {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 interface ChapterPublishingChartProps {
-  data: { date: string; chapters: number }[];
+  data: { date: string; chapters: number }[]
 }
 
 export function ChapterPublishingChart({ data }: ChapterPublishingChartProps) {
@@ -137,5 +137,5 @@ export function ChapterPublishingChart({ data }: ChapterPublishingChartProps) {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  );
+  )
 }

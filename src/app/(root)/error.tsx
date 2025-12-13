@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { isDevelopment } from "appConfig";
-import { Button } from "components/ui/button";
-import { AlertTriangle } from "lucide-react";
-import { useEffect } from "react";
+import { isDevelopment } from "appConfig"
+import { Button } from "components/ui/button"
+import { AlertTriangle } from "lucide-react"
+import { useEffect } from "react"
 
 interface ErrorBoundaryProps {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }
 
 export default function RootError({ error, reset }: ErrorBoundaryProps) {
   useEffect(() => {
-    console.error("Root layout error:", error);
-  }, [error]);
+    console.error("Root layout error:", error)
+  }, [error])
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4">
@@ -45,5 +45,5 @@ export default function RootError({ error, reset }: ErrorBoundaryProps) {
         )}
       </div>
     </div>
-  );
+  )
 }

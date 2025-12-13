@@ -2,18 +2,18 @@
 // IMAGEKIT SERVICE - Image Upload & Management
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "appConfig";
-import ImageKit from "imagekit";
+import { appConfig } from "appConfig"
+import ImageKit from "imagekit"
 
 // ═══════════════════════════════════════════════════
 // IMAGEKIT CLIENT
 // ═══════════════════════════════════════════════════
 
-let imagekit: ImageKit | null = null;
+let imagekit: ImageKit | null = null
 
 export function getImageKitInstance(): ImageKit {
   if (!appConfig.upload.imageKit.enabled) {
-    throw new Error("ImageKit is not configured. Please set IMAGEKIT environment variables.");
+    throw new Error("ImageKit is not configured. Please set IMAGEKIT environment variables.")
   }
 
   if (!imagekit) {
@@ -21,10 +21,10 @@ export function getImageKitInstance(): ImageKit {
       publicKey: appConfig.upload.imageKit.publicKey,
       privateKey: appConfig.upload.imageKit.privateKey,
       urlEndpoint: appConfig.upload.imageKit.urlEndpoint,
-    });
+    })
   }
 
-  return imagekit;
+  return imagekit
 }
 
 // ═══════════════════════════════════════════════════
@@ -32,31 +32,31 @@ export function getImageKitInstance(): ImageKit {
 // ═══════════════════════════════════════════════════
 
 export interface UploadOptions {
-  file: Buffer | string;
-  fileName: string;
-  folder?: string;
-  tags?: string[];
-  useUniqueFileName?: boolean;
-  isPrivateFile?: boolean;
-  transformation?: any; // Add this property to support transformations
+  file: Buffer | string
+  fileName: string
+  folder?: string
+  tags?: string[]
+  useUniqueFileName?: boolean
+  isPrivateFile?: boolean
+  transformation?: any // Add this property to support transformations
 }
 
 export interface UploadResult {
-  success: boolean;
-  url?: string;
-  fileId?: string;
-  name?: string;
-  size?: number;
-  thumbnailUrl?: string;
-  error?: string;
+  success: boolean
+  url?: string
+  fileId?: string
+  name?: string
+  size?: number
+  thumbnailUrl?: string
+  error?: string
 }
 
 export interface DeleteResult {
-  success: boolean;
-  error?: string;
+  success: boolean
+  error?: string
 }
 
-export type UploadType = "comic-cover" | "chapter-image" | "avatar" | "general";
+export type UploadType = "comic-cover" | "chapter-image" | "avatar" | "general"
 
 // ═══════════════════════════════════════════════════
 // UPLOAD FUNCTIONS
@@ -67,7 +67,7 @@ export type UploadType = "comic-cover" | "chapter-image" | "avatar" | "general";
  */
 export async function uploadImage(options: UploadOptions): Promise<UploadResult> {
   try {
-    const ik = getImageKitInstance();
+    const ik = getImageKitInstance()
 
     const uploadResponse = await ik.upload({
       file: options.file,
@@ -76,7 +76,7 @@ export async function uploadImage(options: UploadOptions): Promise<UploadResult>
       tags: options.tags || [],
       useUniqueFileName: options.useUniqueFileName ?? true,
       // isPrivateFile: options.isPrivateFile ?? false,
-    });
+    })
 
     return {
       success: true,
@@ -85,13 +85,13 @@ export async function uploadImage(options: UploadOptions): Promise<UploadResult>
       name: uploadResponse.name,
       size: uploadResponse.size,
       thumbnailUrl: uploadResponse.thumbnailUrl,
-    };
+    }
   } catch (error) {
-    console.error("ImageKit upload error:", error);
+    console.error("ImageKit upload error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown upload error",
-    };
+    }
   }
 }
 
@@ -109,7 +109,7 @@ export async function uploadComicCover(
     folder: "/comicwise/comics/covers",
     tags: ["comic", "cover", comicId],
     useUniqueFileName: true,
-  });
+  })
 }
 
 /**
@@ -121,9 +121,9 @@ export async function uploadChapterImage(
   fileName: string,
   sequence?: number
 ): Promise<UploadResult> {
-  const tags = ["chapter", "content", chapterId];
+  const tags = ["chapter", "content", chapterId]
   if (sequence !== undefined) {
-    tags.push(`seq-${sequence}`);
+    tags.push(`seq-${sequence}`)
   }
 
   return uploadImage({
@@ -132,7 +132,7 @@ export async function uploadChapterImage(
     folder: "/comicwise/chapters/images",
     tags,
     useUniqueFileName: true,
-  });
+  })
 }
 
 /**
@@ -149,7 +149,7 @@ export async function uploadAvatar(
     folder: "/comicwise/avatars",
     tags: ["avatar", "user", userId],
     useUniqueFileName: true,
-  });
+  })
 }
 
 /**
@@ -170,18 +170,18 @@ export async function uploadMultipleImages(
         useUniqueFileName: true,
       })
     )
-  );
+  )
 
   return results.map((result) => {
     if (result.status === "fulfilled") {
-      return result.value;
+      return result.value
     } else {
       return {
         success: false,
         error: result.reason instanceof Error ? result.reason.message : "Upload failed",
-      };
+      }
     }
-  });
+  })
 }
 
 // ═══════════════════════════════════════════════════
@@ -193,16 +193,16 @@ export async function uploadMultipleImages(
  */
 export async function deleteImage(fileId: string): Promise<DeleteResult> {
   try {
-    const ik = getImageKitInstance();
-    await ik.deleteFile(fileId as any);
+    const ik = getImageKitInstance()
+    await ik.deleteFile(fileId as any)
 
-    return { success: true };
+    return { success: true }
   } catch (error) {
-    console.error("ImageKit delete error:", error);
+    console.error("ImageKit delete error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown delete error",
-    };
+    }
   }
 }
 
@@ -210,18 +210,18 @@ export async function deleteImage(fileId: string): Promise<DeleteResult> {
  * Delete multiple images
  */
 export async function deleteMultipleImages(fileIds: string[]): Promise<DeleteResult[]> {
-  const results = await Promise.allSettled(fileIds.map((fileId) => deleteImage(fileId)));
+  const results = await Promise.allSettled(fileIds.map((fileId) => deleteImage(fileId)))
 
   return results.map((result) => {
     if (result.status === "fulfilled") {
-      return result.value;
+      return result.value
     } else {
       return {
         success: false,
         error: result.reason instanceof Error ? result.reason.message : "Delete failed",
-      };
+      }
     }
-  });
+  })
 }
 
 // ═══════════════════════════════════════════════════
@@ -232,12 +232,12 @@ export async function deleteMultipleImages(fileIds: string[]): Promise<DeleteRes
  * Generate authentication parameters for client-side uploads
  */
 export function getAuthenticationParameters(): {
-  token: string;
-  expire: number;
-  signature: string;
+  token: string
+  expire: number
+  signature: string
 } {
-  const ik = getImageKitInstance();
-  return ik.getAuthenticationParameters();
+  const ik = getImageKitInstance()
+  return ik.getAuthenticationParameters()
 }
 
 /**
@@ -246,37 +246,37 @@ export function getAuthenticationParameters(): {
 export function getOptimizedUrl(
   filePath: string,
   options?: {
-    width?: number;
-    height?: number;
-    quality?: number;
-    format?: "jpg" | "png" | "webp" | "avif";
-    blur?: number;
+    width?: number
+    height?: number
+    quality?: number
+    format?: "jpg" | "png" | "webp" | "avif"
+    blur?: number
   }
 ): string {
-  const ik = getImageKitInstance();
+  const ik = getImageKitInstance()
 
-  const transformation: Array<{ [key: string]: string | number }> = [];
+  const transformation: Array<{ [key: string]: string | number }> = []
 
   if (options?.width) {
-    transformation.push({ width: options.width });
+    transformation.push({ width: options.width })
   }
   if (options?.height) {
-    transformation.push({ height: options.height });
+    transformation.push({ height: options.height })
   }
   if (options?.quality) {
-    transformation.push({ quality: options.quality });
+    transformation.push({ quality: options.quality })
   }
   if (options?.format) {
-    transformation.push({ format: options.format });
+    transformation.push({ format: options.format })
   }
   if (options?.blur) {
-    transformation.push({ blur: options.blur });
+    transformation.push({ blur: options.blur })
   }
 
   return ik.url({
     path: filePath,
     transformation,
-  });
+  })
 }
 
 /**
@@ -290,24 +290,24 @@ export function getThumbnailUrl(
     small: { width: 150, height: 150 },
     medium: { width: 300, height: 300 },
     large: { width: 600, height: 600 },
-  };
+  }
 
   return getOptimizedUrl(filePath, {
     ...sizes[size],
     quality: 80,
     format: "webp",
-  });
+  })
 }
 
 /**
  * Generate responsive image URLs
  */
 export function getResponsiveUrls(filePath: string): {
-  thumbnail: string;
-  small: string;
-  medium: string;
-  large: string;
-  original: string;
+  thumbnail: string
+  small: string
+  medium: string
+  large: string
+  original: string
 } {
   return {
     thumbnail: getOptimizedUrl(filePath, { width: 150, height: 150, quality: 70, format: "webp" }),
@@ -315,7 +315,7 @@ export function getResponsiveUrls(filePath: string): {
     medium: getOptimizedUrl(filePath, { width: 800, quality: 80, format: "webp" }),
     large: getOptimizedUrl(filePath, { width: 1200, quality: 85, format: "webp" }),
     original: getOptimizedUrl(filePath, { quality: 90 }),
-  };
+  }
 }
 
 /**
@@ -323,23 +323,23 @@ export function getResponsiveUrls(filePath: string): {
  */
 export async function listFiles(folder: string = "/comicwise", limit: number = 50) {
   try {
-    const ik = getImageKitInstance();
+    const ik = getImageKitInstance()
     const result = await ik.listFiles({
       path: folder,
       limit,
-    });
+    })
 
     return {
       success: true,
       files: result,
-    };
+    }
   } catch (error) {
-    console.error("ImageKit list files error:", error);
+    console.error("ImageKit list files error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
       files: [],
-    };
+    }
   }
 }
 
@@ -348,19 +348,19 @@ export async function listFiles(folder: string = "/comicwise", limit: number = 5
  */
 export async function getFileDetails(fileId: string) {
   try {
-    const ik = getImageKitInstance();
-    const result = await ik.getFileDetails(fileId);
+    const ik = getImageKitInstance()
+    const result = await ik.getFileDetails(fileId)
 
     return {
       success: true,
       file: result,
-    };
+    }
   } catch (error) {
-    console.error("ImageKit get file details error:", error);
+    console.error("ImageKit get file details error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    }
   }
 }
 
@@ -373,49 +373,49 @@ export async function getFileDetails(fileId: string) {
  */
 export function validateImageFile(file: File): { valid: boolean; error?: string } {
   // Check file size (10MB max)
-  const maxSize = 10 * 1024 * 1024;
+  const maxSize = 10 * 1024 * 1024
   if (file.size > maxSize) {
-    return { valid: false, error: "File size exceeds 10MB limit" };
+    return { valid: false, error: "File size exceeds 10MB limit" }
   }
 
   // Check file type
-  const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
+  const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"]
   if (!allowedTypes.includes(file.type)) {
     return {
       valid: false,
       error: "Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed",
-    };
+    }
   }
 
-  return { valid: true };
+  return { valid: true }
 }
 
 /**
  * Convert File to Buffer
  */
 export async function fileToBuffer(file: File): Promise<Buffer> {
-  const arrayBuffer = await file.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+  const arrayBuffer = await file.arrayBuffer()
+  return Buffer.from(arrayBuffer)
 }
 
 /**
  * Generate unique filename
  */
 export function generateUniqueFileName(originalName: string, prefix?: string): string {
-  const timestamp = Date.now();
-  const randomString = Math.random().toString(36).substring(2, 10);
-  const extension = originalName.split(".").pop()?.toLowerCase() || "jpg";
+  const timestamp = Date.now()
+  const randomString = Math.random().toString(36).substring(2, 10)
+  const extension = originalName.split(".").pop()?.toLowerCase() || "jpg"
   const baseName = originalName
     .split(".")
     .slice(0, -1)
     .join(".")
-    .replace(/[^a-z0-9]/gi, "-");
+    .replace(/[^a-z0-9]/gi, "-")
 
   if (prefix) {
-    return `${prefix}-${baseName}-${timestamp}-${randomString}.${extension}`;
+    return `${prefix}-${baseName}-${timestamp}-${randomString}.${extension}`
   }
 
-  return `${baseName}-${timestamp}-${randomString}.${extension}`;
+  return `${baseName}-${timestamp}-${randomString}.${extension}`
 }
 
 // ═══════════════════════════════════════════════════
@@ -423,12 +423,12 @@ export function generateUniqueFileName(originalName: string, prefix?: string): s
 // ═══════════════════════════════════════════════════
 
 export interface OptimizationOptions {
-  quality?: number;
-  format?: "jpg" | "png" | "webp" | "avif";
-  maxWidth?: number;
-  maxHeight?: number;
-  progressive?: boolean;
-  lossless?: boolean;
+  quality?: number
+  format?: "jpg" | "png" | "webp" | "avif"
+  maxWidth?: number
+  maxHeight?: number
+  progressive?: boolean
+  lossless?: boolean
 }
 
 /**
@@ -441,7 +441,7 @@ export async function uploadOptimizedImage(
   options: OptimizationOptions = {}
 ): Promise<UploadResult> {
   try {
-    const ik = getImageKitInstance();
+    const ik = getImageKitInstance()
 
     // Default optimization settings
     const defaultOptions: OptimizationOptions = {
@@ -449,26 +449,26 @@ export async function uploadOptimizedImage(
       format: "webp",
       progressive: true,
       lossless: false,
-    };
+    }
 
-    const opts = { ...defaultOptions, ...options };
+    const opts = { ...defaultOptions, ...options }
 
     // Build transformation string
-    const transformations: string[] = [];
+    const transformations: string[] = []
     if (opts.quality) {
-      transformations.push(`q-${opts.quality}`);
+      transformations.push(`q-${opts.quality}`)
     }
     if (opts.format) {
-      transformations.push(`f-${opts.format}`);
+      transformations.push(`f-${opts.format}`)
     }
     if (opts.maxWidth) {
-      transformations.push(`w-${opts.maxWidth}`);
+      transformations.push(`w-${opts.maxWidth}`)
     }
     if (opts.maxHeight) {
-      transformations.push(`h-${opts.maxHeight}`);
+      transformations.push(`h-${opts.maxHeight}`)
     }
     if (opts.progressive) {
-      transformations.push("pr-true");
+      transformations.push("pr-true")
     }
 
     const uploadResponse = await ik.upload({
@@ -479,7 +479,7 @@ export async function uploadOptimizedImage(
       // transformation: {
       //   pre: transformations.join(","),
       // },
-    });
+    })
 
     return {
       success: true,
@@ -488,13 +488,13 @@ export async function uploadOptimizedImage(
       name: uploadResponse.name,
       size: uploadResponse.size,
       thumbnailUrl: uploadResponse.thumbnailUrl,
-    };
+    }
   } catch (error) {
-    console.error("ImageKit optimized upload error:", error);
+    console.error("ImageKit optimized upload error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown upload error",
-    };
+    }
   }
 }
 
@@ -511,7 +511,7 @@ export async function uploadOptimizedComicCover(
     format: "webp",
     maxWidth: 1000,
     progressive: true,
-  });
+  })
 }
 
 /**
@@ -528,35 +528,35 @@ export async function uploadOptimizedChapterImage(
     format: "webp",
     maxWidth: 1200,
     progressive: true,
-  });
+  })
 }
 
 /**
  * Bulk optimize existing images
  */
 export async function bulkOptimizeImages(fileIds: string[]): Promise<{
-  success: boolean;
-  optimized: number;
-  failed: number;
-  errors: string[];
+  success: boolean
+  optimized: number
+  failed: number
+  errors: string[]
 }> {
   const results = {
     success: true,
     optimized: 0,
     failed: 0,
     errors: [] as string[],
-  };
+  }
 
   for (const fileId of fileIds) {
     try {
-      const ik = getImageKitInstance();
+      const ik = getImageKitInstance()
 
       // Get file details
-      const fileDetails = await ik.getFileDetails(fileId);
+      const fileDetails = await ik.getFileDetails(fileId)
 
       // Download original
-      const response = await fetch(fileDetails.url);
-      const buffer = Buffer.from(await response.arrayBuffer());
+      const response = await fetch(fileDetails.url)
+      const buffer = Buffer.from(await response.arrayBuffer())
 
       // Re-upload with optimization
       const optimized = await uploadOptimizedImage(
@@ -564,26 +564,26 @@ export async function bulkOptimizeImages(fileIds: string[]): Promise<{
         fileDetails.name,
         fileDetails.filePath.split("/").slice(0, -1).join("/"),
         { quality: 85, format: "webp" }
-      );
+      )
 
       if (optimized.success) {
         // Delete old file
-        await deleteImage(fileId);
-        results.optimized++;
+        await deleteImage(fileId)
+        results.optimized++
       } else {
-        results.failed++;
-        results.errors.push(`Failed to optimize ${fileDetails.name}: ${optimized.error}`);
+        results.failed++
+        results.errors.push(`Failed to optimize ${fileDetails.name}: ${optimized.error}`)
       }
     } catch (error) {
-      results.failed++;
+      results.failed++
       results.errors.push(
         `Failed to process ${fileId}: ${error instanceof Error ? error.message : "Unknown error"}`
-      );
+      )
     }
   }
 
-  results.success = results.failed === 0;
-  return results;
+  results.success = results.failed === 0
+  return results
 }
 
 /**
@@ -595,10 +595,10 @@ export function generateSrcSet(
 ): string {
   return widths
     .map((width) => {
-      const url = getOptimizedUrl(filePath, { width, quality: 85, format: "webp" });
-      return `${url} ${width}w`;
+      const url = getOptimizedUrl(filePath, { width, quality: 85, format: "webp" })
+      return `${url} ${width}w`
     })
-    .join(", ");
+    .join(", ")
 }
 
 /**
@@ -608,21 +608,21 @@ export function generatePictureSources(
   filePath: string,
   widths: number[] = [400, 800, 1200]
 ): Array<{ type: string; srcset: string }> {
-  const formats: Array<"avif" | "webp" | "jpg"> = ["avif", "webp", "jpg"];
+  const formats: Array<"avif" | "webp" | "jpg"> = ["avif", "webp", "jpg"]
 
   return formats.map((format) => {
     const srcset = widths
       .map((width) => {
-        const url = getOptimizedUrl(filePath, { width, quality: 85, format });
-        return `${url} ${width}w`;
+        const url = getOptimizedUrl(filePath, { width, quality: 85, format })
+        return `${url} ${width}w`
       })
-      .join(", ");
+      .join(", ")
 
     return {
       type: `image/${format}`,
       srcset,
-    };
-  });
+    }
+  })
 }
 
 /**
@@ -636,32 +636,32 @@ export async function compressAndUpload(
 ): Promise<UploadResult> {
   try {
     // Start with quality 90
-    let quality = 90;
-    let compressedBuffer: Buffer;
+    let quality = 90
+    let compressedBuffer: Buffer
 
     // Convert file to buffer
-    const originalBuffer = await fileToBuffer(file);
+    const originalBuffer = await fileToBuffer(file)
 
     // If target size specified, iteratively compress
     if (targetSizeKB) {
-      compressedBuffer = originalBuffer;
+      compressedBuffer = originalBuffer
 
       while (compressedBuffer.length > targetSizeKB * 1024 && quality > 50) {
-        quality -= 10;
+        quality -= 10
 
         // Upload with compression and get result
         const testUpload = await uploadOptimizedImage(compressedBuffer, fileName, folder, {
           quality,
           format: "webp",
-        });
+        })
 
         if (testUpload.success && testUpload.size && testUpload.size <= targetSizeKB * 1024) {
-          return testUpload;
+          return testUpload
         }
 
         // If still too large, continue loop
         if (testUpload.fileId) {
-          await deleteImage(testUpload.fileId);
+          await deleteImage(testUpload.fileId)
         }
       }
     }
@@ -671,13 +671,13 @@ export async function compressAndUpload(
       quality,
       format: "webp",
       progressive: true,
-    });
+    })
   } catch (error) {
-    console.error("Compress and upload error:", error);
+    console.error("Compress and upload error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Compression failed",
-    };
+    }
   }
 }
 
@@ -685,20 +685,20 @@ export async function compressAndUpload(
  * Get image metadata
  */
 export async function getImageMetadata(fileId: string): Promise<{
-  success: boolean;
+  success: boolean
   metadata?: {
-    width: number;
-    height: number;
-    format: string;
-    size: number;
-    hasAlpha: boolean;
-    isAnimated?: boolean;
-  };
-  error?: string;
+    width: number
+    height: number
+    format: string
+    size: number
+    hasAlpha: boolean
+    isAnimated?: boolean
+  }
+  error?: string
 }> {
   try {
-    const ik: ImageKit = getImageKitInstance();
-    const details: any = await ik.getFileMetadata(fileId);
+    const ik: ImageKit = getImageKitInstance()
+    const details: any = await ik.getFileMetadata(fileId)
 
     return {
       success: true,
@@ -710,13 +710,13 @@ export async function getImageMetadata(fileId: string): Promise<{
         hasAlpha: details.hasAlpha,
         isAnimated: details.isAnimated,
       },
-    };
+    }
   } catch (error) {
-    console.error("Get metadata error:", error);
+    console.error("Get metadata error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get metadata",
-    };
+    }
   }
 }
 
@@ -724,7 +724,7 @@ export async function getImageMetadata(fileId: string): Promise<{
  * Smart crop for comic covers (auto-detect main subject)
  */
 export function getSmartCroppedUrl(filePath: string, width: number, height: number): string {
-  const ik = getImageKitInstance();
+  const ik = getImageKitInstance()
 
   return ik.url({
     path: filePath,
@@ -737,7 +737,7 @@ export function getSmartCroppedUrl(filePath: string, width: number, height: numb
         format: "webp",
       },
     ],
-  });
+  })
 }
 
 /**
@@ -750,5 +750,5 @@ export function getLazyLoadPlaceholder(filePath: string): string {
     quality: 20,
     blur: 10,
     format: "webp",
-  });
+  })
 }

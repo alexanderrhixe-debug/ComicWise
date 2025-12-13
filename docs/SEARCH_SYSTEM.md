@@ -99,13 +99,13 @@ LIMIT 5;
 **Basic Search**
 
 ```typescript
-import { searchComics } from "@/lib/search";
+import { searchComics } from "@/lib/search"
 
 const results = await searchComics({
   query: "naruto",
   page: 1,
   limit: 12,
-});
+})
 ```
 
 **Search Modes**
@@ -113,7 +113,7 @@ const results = await searchComics({
 - **websearch** (default): Natural language, OR by default
 
   ```typescript
-  query: "action adventure"; // Finds comics with "action" OR "adventure"
+  query: "action adventure" // Finds comics with "action" OR "adventure"
   ```
 
 - **phrase**: Exact phrase matching
@@ -144,7 +144,7 @@ const results = await searchComics({
   sortBy: "popularity",
   page: 1,
   limit: 20,
-});
+})
 ```
 
 **Available Filters**
@@ -181,9 +181,9 @@ const results = await searchComics({
 ### 3. Autocomplete / Suggestions
 
 ```typescript
-import { getSearchSuggestions } from "@/lib/search";
+import { getSearchSuggestions } from "@/lib/search"
 
-const suggestions = await getSearchSuggestions("nar", 5);
+const suggestions = await getSearchSuggestions("nar", 5)
 // Returns:
 // {
 //   comics: ["Naruto", "Naruto Shippuden"],
@@ -195,18 +195,18 @@ const suggestions = await getSearchSuggestions("nar", 5);
 ### 4. Trending Comics
 
 ```typescript
-import { getTrendingComics } from "@/lib/search";
+import { getTrendingComics } from "@/lib/search"
 
 // Get trending comics from last 7 days
-const trending = await getTrendingComics(7, 10);
+const trending = await getTrendingComics(7, 10)
 ```
 
 ### 5. Popular Searches
 
 ```typescript
-import { getPopularSearches } from "@/lib/search";
+import { getPopularSearches } from "@/lib/search"
 
-const popular = await getPopularSearches(10);
+const popular = await getPopularSearches(10)
 // Returns: ["One Piece", "Naruto", "Dragon Ball", ...]
 ```
 
@@ -572,17 +572,17 @@ REINDEX INDEX comic_search_vector_idx;
 
 ```typescript
 try {
-  const results = await searchComics({ query: userInput });
-  return results;
+  const results = await searchComics({ query: userInput })
+  return results
 } catch (error) {
   if (error instanceof Error) {
-    console.error("Search error:", error.message);
+    console.error("Search error:", error.message)
   }
   // Return empty results or show error to user
   return {
     results: [],
     pagination: { page: 1, limit: 12, total: 0, totalPages: 0 },
-  };
+  }
 }
 ```
 

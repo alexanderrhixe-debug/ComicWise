@@ -36,7 +36,7 @@ export const comic = pgTable(
     titleIdx: index("comic_title_idx").on(table.title),
     // ... more indexes
   })
-);
+)
 
 // After: Array syntax, searchVector in migration
 export const comic = pgTable(
@@ -49,7 +49,7 @@ export const comic = pgTable(
     index("comic_status_idx").on(table.status),
     // ... more indexes
   ]
-);
+)
 ```
 
 #### All Affected Tables
@@ -75,7 +75,7 @@ Created separate migration file for full-text search feature:
 **Usage Example**:
 
 ```typescript
-import { sql } from "drizzle-orm";
+import { sql } from "drizzle-orm"
 
 // Search comics by keyword
 const results = await db
@@ -84,7 +84,7 @@ const results = await db
   .where(sql`search_vector @@ plainto_tsquery('english', ${keyword})`)
   .orderBy(
     sql`ts_rank(search_vector, plainto_tsquery('english', ${keyword})) DESC`
-  );
+  )
 ```
 
 ---
@@ -108,10 +108,10 @@ Created `src/db/seed/utils/batch-processor.ts` with the following features:
 
 ```typescript
 interface BatchProcessorOptions {
-  batchSize?: number; // Items per batch (default: 100)
-  concurrency?: number; // Concurrent operations (default: 5)
-  onProgress?: (processed: number, total: number) => void;
-  onError?: (error: unknown, item: unknown) => void;
+  batchSize?: number // Items per batch (default: 100)
+  concurrency?: number // Concurrent operations (default: 5)
+  onProgress?: (processed: number, total: number) => void
+  onError?: (error: unknown, item: unknown) => void
 }
 ```
 
@@ -128,7 +128,7 @@ interface BatchProcessorOptions {
 this.batchProcessor = new BatchProcessor<ComicSeed, void>({
   batchSize: 50,
   concurrency: 3,
-});
+})
 ```
 
 #### Chapter Seeder
@@ -142,7 +142,7 @@ this.batchProcessor = new BatchProcessor<ComicSeed, void>({
 this.batchProcessor = new BatchProcessor<ChapterSeed, void>({
   batchSize: 100,
   concurrency: 5,
-});
+})
 ```
 
 #### User Seeder
@@ -155,7 +155,7 @@ this.batchProcessor = new BatchProcessor<ChapterSeed, void>({
 this.batchProcessor = new BatchProcessor<UserSeed, void>({
   batchSize: 50,
   concurrency: 5,
-});
+})
 ```
 
 ### Type Safety Improvements
@@ -293,7 +293,7 @@ pnpm db:seed --dry-run
      WHERE search_vector @@ query
      ORDER BY rank DESC
      LIMIT 10
-   `);
+   `)
    ```
 
 ### Future Enhancements

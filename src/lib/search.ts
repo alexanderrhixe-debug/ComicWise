@@ -2,11 +2,11 @@
 // ADVANCED SEARCH SERVICE - Full-Text Search with PostgreSQL
 // ═══════════════════════════════════════════════════
 
-import { and, asc, desc, eq, gte, inArray, lte, or, sql } from "drizzle-orm";
-import { database } from "src/database";
-import { artist, author, comic, comicToGenre, genre, type } from "src/database/schema";
+import { and, asc, desc, eq, gte, inArray, lte, or, sql } from "drizzle-orm"
+import { database } from "src/database"
+import { artist, author, comic, comicToGenre, genre, type } from "src/database/schema"
 
-import type { ComicFilters } from "src/types";
+import type { ComicFilters } from "src/types"
 
 // ═══════════════════════════════════════════════════
 // TYPES
@@ -14,58 +14,58 @@ import type { ComicFilters } from "src/types";
 
 export interface AdvancedSearchFilters extends ComicFilters {
   // Full-text search
-  query?: string;
-  searchMode?: "simple" | "phrase" | "websearch";
+  query?: string
+  searchMode?: "simple" | "phrase" | "websearch"
 
   // Advanced filters
-  authorName?: string;
-  artistName?: string;
-  genreNames?: string[];
-  publicationYearFrom?: number;
-  publicationYearTo?: number;
-  minViews?: number;
-  maxViews?: number;
+  authorName?: string
+  artistName?: string
+  genreNames?: string[]
+  publicationYearFrom?: number
+  publicationYearTo?: number
+  minViews?: number
+  maxViews?: number
 
   // Sorting
-  sortBy?: "title" | "rating" | "views" | "publicationDate" | "createdAt" | "latest";
-  sortOrder?: "asc" | "desc";
+  sortBy?: "title" | "rating" | "views" | "publicationDate" | "createdAt" | "latest"
+  sortOrder?: "asc" | "desc"
 
   // Pagination
-  page?: number;
-  limit?: number;
+  page?: number
+  limit?: number
 }
 
 export interface SearchResult {
-  id: number;
-  title: string;
-  description: string;
-  coverImage: string;
-  status: string;
-  rating: string;
-  views: number;
-  authorName: string | null;
-  artistName: string | null;
-  typeName: string | null;
-  genres: string[];
-  relevanceScore?: number;
-  publicationDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  id: number
+  title: string
+  description: string
+  coverImage: string
+  status: string
+  rating: string
+  views: number
+  authorName: string | null
+  artistName: string | null
+  typeName: string | null
+  genres: string[]
+  relevanceScore?: number
+  publicationDate: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface SearchResponse {
-  results: SearchResult[];
+  results: SearchResult[]
   pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
   facets?: {
-    statuses: { status: string; count: number }[];
-    genres: { genre: string; count: number }[];
-    types: { type: string; count: number }[];
-  };
+    statuses: { status: string; count: number }[]
+    genres: { genre: string; count: number }[]
+    types: { type: string; count: number }[]
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -95,7 +95,7 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
     sortOrder = "desc",
     page = 1,
     limit = 12,
-  } = filters;
+  } = filters
 
   // Build the base query
   let baseQuery = database
@@ -126,123 +126,123 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
     .leftJoin(author, eq(comic.authorId, author.id))
     .leftJoin(artist, eq(comic.artistId, artist.id))
     .leftJoin(type, eq(comic.typeId, type.id))
-    .$dynamic();
+    .$dynamic()
 
-  const conditions: unknown[] = [];
+  const conditions: unknown[] = []
 
   // Full-text search condition
   if (searchQuery || search) {
-    const tsquery = buildSearchQuery(searchQuery || search || "", searchMode);
+    const tsquery = buildSearchQuery(searchQuery || search || "", searchMode)
     conditions.push(
       or(
         sql`${comic.search_vector} @@ to_tsquery('english', ${tsquery})`,
         sql`${author.search_vector} @@ to_tsquery('english', ${tsquery})`,
         sql`${artist.search_vector} @@ to_tsquery('english', ${tsquery})`
       )
-    );
+    )
   }
 
   // Type filter
   if (typeId) {
-    conditions.push(eq(comic.typeId, typeId));
+    conditions.push(eq(comic.typeId, typeId))
   }
 
   // Status filter
   if (status) {
-    conditions.push(eq(comic.status, status));
+    conditions.push(eq(comic.status, status))
   }
 
   // Rating filter
   if (minRating) {
-    conditions.push(gte(comic.rating, minRating.toString()));
+    conditions.push(gte(comic.rating, minRating.toString()))
   }
 
   // Views filter
   if (minViews) {
-    conditions.push(gte(comic.views, minViews));
+    conditions.push(gte(comic.views, minViews))
   }
 
   if (maxViews) {
-    conditions.push(lte(comic.views, maxViews));
+    conditions.push(lte(comic.views, maxViews))
   }
 
   // Publication year filters
   if (publicationYearFrom) {
-    conditions.push(gte(comic.publicationDate, new Date(`${publicationYearFrom}-01-01`)));
+    conditions.push(gte(comic.publicationDate, new Date(`${publicationYearFrom}-01-01`)))
   }
 
   if (publicationYearTo) {
-    conditions.push(lte(comic.publicationDate, new Date(`${publicationYearTo}-12-31`)));
+    conditions.push(lte(comic.publicationDate, new Date(`${publicationYearTo}-12-31`)))
   }
 
   // Author name filter (case-insensitive)
   if (authorName) {
-    conditions.push(sql`LOWER(${author.name}) LIKE LOWER(${"%" + authorName + "%"})`);
+    conditions.push(sql`LOWER(${author.name}) LIKE LOWER(${"%" + authorName + "%"})`)
   }
 
   // Artist name filter (case-insensitive)
   if (artistName) {
-    conditions.push(sql`LOWER(${artist.name}) LIKE LOWER(${"%" + artistName + "%"})`);
+    conditions.push(sql`LOWER(${artist.name}) LIKE LOWER(${"%" + artistName + "%"})`)
   }
 
   // Genre filters
   if ((genreIds && genreIds.length > 0) || (genreNames && genreNames.length > 0)) {
-    let genreComics;
+    let genreComics
 
     if (genreIds && genreIds.length > 0) {
       genreComics = await database
         .selectDistinct({ comicId: comicToGenre.comicId })
         .from(comicToGenre)
-        .where(inArray(comicToGenre.genreId, genreIds));
+        .where(inArray(comicToGenre.genreId, genreIds))
     } else if (genreNames && genreNames.length > 0) {
       const genresResult = await database
         .select({ id: genre.id })
         .from(genre)
-        .where(or(...genreNames.map((name) => sql`LOWER(${genre.name}) = LOWER(${name})`)));
+        .where(or(...genreNames.map((name) => sql`LOWER(${genre.name}) = LOWER(${name})`)))
 
-      const foundGenreIds = genresResult.map((g: { id: number }) => g.id);
+      const foundGenreIds = genresResult.map((g: { id: number }) => g.id)
       if (foundGenreIds.length > 0) {
         genreComics = await database
           .selectDistinct({ comicId: comicToGenre.comicId })
           .from(comicToGenre)
-          .where(inArray(comicToGenre.genreId, foundGenreIds));
+          .where(inArray(comicToGenre.genreId, foundGenreIds))
       }
     }
 
     if (genreComics && genreComics.length > 0) {
-      const comicIds = genreComics.map((c: { comicId: number }) => c.comicId);
-      conditions.push(inArray(comic.id, comicIds));
+      const comicIds = genreComics.map((c: { comicId: number }) => c.comicId)
+      conditions.push(inArray(comic.id, comicIds))
     } else {
       // No comics match the genre filter
       return {
         results: [],
         pagination: { page, limit, total: 0, totalPages: 0 },
-      };
+      }
     }
   }
 
   // Apply conditions
   if (conditions.length > 0) {
     // conditions may contain Drizzle SQL expressions; cast to any for the ORM call
-    baseQuery = baseQuery.where(and(...(conditions as any)));
+    baseQuery = baseQuery.where(and(...(conditions as any)))
   }
 
   // Apply sorting
-  baseQuery = applySorting(baseQuery, sortBy, sortOrder, searchQuery || search);
+  baseQuery = applySorting(baseQuery, sortBy, sortOrder, searchQuery || search)
 
   // Apply pagination
-  const offset = (page - 1) * limit;
-  const results = await baseQuery.limit(limit).offset(offset);
+  const offset = (page - 1) * limit
+  const results = await baseQuery.limit(limit).offset(offset)
 
   // Get total count
-  const total = await getSearchTotalCount(conditions);
+  const total = await getSearchTotalCount(conditions)
 
   // Fetch genres for each comic
-  const comicIds = results.map((r: { id: number }) => r.id);
-  const genresMap = await getComicGenres(comicIds);
+  const comicIds = results.map((r: { id: number }) => r.id)
+  const genresMap = await getComicGenres(comicIds)
 
   // Combine results with genres — map into the typed SearchResult shape
-  type RawRow = { id: number; [key: string]: unknown };
+  type RawRow = { id: number; [key: string]: unknown }
   const enrichedResults: SearchResult[] = results.map((result: RawRow) => ({
     id: result.id,
     title: (result.title as string) || "",
@@ -261,7 +261,7 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
       : new Date(),
     createdAt: (result.createdAt as unknown) ? new Date(result.createdAt as string) : new Date(),
     updatedAt: (result.updatedAt as unknown) ? new Date(result.updatedAt as string) : new Date(),
-  }));
+  }))
 
   return {
     results: enrichedResults,
@@ -271,7 +271,7 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
       total,
       totalPages: Math.ceil(total / limit),
     },
-  };
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -282,16 +282,16 @@ export async function searchComics(filters: AdvancedSearchFilters = {}): Promise
  * Build tsquery string based on search mode
  */
 function buildSearchQuery(query: string, mode: string): string {
-  const cleanQuery = query.trim().replace(/[^\w\s]/g, " ");
+  const cleanQuery = query.trim().replace(/[^\w\s]/g, " ")
 
   switch (mode) {
     case "phrase":
       // Phrase search: "exact phrase"
-      return cleanQuery.split(" ").filter(Boolean).join(" <-> ");
+      return cleanQuery.split(" ").filter(Boolean).join(" <-> ")
 
     case "simple":
       // Simple search: word1 & word2 & word3
-      return cleanQuery.split(" ").filter(Boolean).join(" & ");
+      return cleanQuery.split(" ").filter(Boolean).join(" & ")
 
     case "websearch":
     default:
@@ -300,7 +300,7 @@ function buildSearchQuery(query: string, mode: string): string {
         .split(" ")
         .filter(Boolean)
         .map((word) => `${word}:*`)
-        .join(" | ");
+        .join(" | ")
   }
 }
 
@@ -308,23 +308,23 @@ function buildSearchQuery(query: string, mode: string): string {
  * Apply sorting to the query
  */
 function applySorting(query: any, sortBy: string, sortOrder: string, hasSearchQuery?: string) {
-  const isDesc = sortOrder === "desc";
+  const isDesc = sortOrder === "desc"
 
   switch (sortBy) {
     case "relevance":
       if (hasSearchQuery) {
-        return query.orderBy(isDesc ? desc(sql`relevance_score`) : asc(sql`relevance_score`));
+        return query.orderBy(isDesc ? desc(sql`relevance_score`) : asc(sql`relevance_score`))
       }
-      return query.orderBy(desc(comic.rating));
+      return query.orderBy(desc(comic.rating))
 
     case "rating":
-      return query.orderBy(isDesc ? desc(comic.rating) : asc(comic.rating));
+      return query.orderBy(isDesc ? desc(comic.rating) : asc(comic.rating))
 
     case "views":
-      return query.orderBy(isDesc ? desc(comic.views) : asc(comic.views));
+      return query.orderBy(isDesc ? desc(comic.views) : asc(comic.views))
 
     case "title":
-      return query.orderBy(isDesc ? desc(comic.title) : asc(comic.title));
+      return query.orderBy(isDesc ? desc(comic.title) : asc(comic.title))
 
     case "popularity":
       // Popularity = combination of views and rating
@@ -332,11 +332,11 @@ function applySorting(query: any, sortBy: string, sortOrder: string, hasSearchQu
         isDesc
           ? desc(sql`(${comic.views} * 0.7 + CAST(${comic.rating} AS INTEGER) * 100 * 0.3)`)
           : asc(sql`(${comic.views} * 0.7 + CAST(${comic.rating} AS INTEGER) * 100 * 0.3)`)
-      );
+      )
 
     case "latest":
     default:
-      return query.orderBy(isDesc ? desc(comic.createdAt) : asc(comic.createdAt));
+      return query.orderBy(isDesc ? desc(comic.createdAt) : asc(comic.createdAt))
   }
 }
 
@@ -349,15 +349,15 @@ async function getSearchTotalCount(conditions: unknown[]): Promise<number> {
     .from(comic)
     .leftJoin(author, eq(comic.authorId, author.id))
     .leftJoin(artist, eq(comic.artistId, artist.id))
-    .$dynamic();
+    .$dynamic()
 
   if (conditions.length > 0) {
     // conditions may contain Drizzle SQL expressions; cast to any for the ORM call
-    countQuery = countQuery.where(and(...(conditions as any)));
+    countQuery = countQuery.where(and(...(conditions as any)))
   }
 
-  const result = await countQuery;
-  return result[0]?.count || 0;
+  const result = await countQuery
+  return result[0]?.count || 0
 }
 
 /**
@@ -365,7 +365,7 @@ async function getSearchTotalCount(conditions: unknown[]): Promise<number> {
  */
 async function getComicGenres(comicIds: number[]): Promise<Record<number, string[]>> {
   if (comicIds.length === 0) {
-    return {};
+    return {}
   }
 
   const genresResult = await database
@@ -375,19 +375,19 @@ async function getComicGenres(comicIds: number[]): Promise<Record<number, string
     })
     .from(comicToGenre)
     .innerJoin(genre, eq(comicToGenre.genreId, genre.id))
-    .where(inArray(comicToGenre.comicId, comicIds));
+    .where(inArray(comicToGenre.comicId, comicIds))
 
-  const genresMap: Record<number, string[]> = {};
+  const genresMap: Record<number, string[]> = {}
   for (const row of genresResult) {
     if (!genresMap[row.comicId]) {
-      genresMap[row.comicId] = [];
+      genresMap[row.comicId] = []
     }
     if (row.genreName) {
-      genresMap[row.comicId]!.push(row.genreName);
+      genresMap[row.comicId]!.push(row.genreName)
     }
   }
 
-  return genresMap;
+  return genresMap
 }
 
 // ═══════════════════════════════════════════════════
@@ -402,10 +402,10 @@ export async function getSearchSuggestions(
   limit: number = 5
 ): Promise<{ comics: string[]; authors: string[]; artists: string[] }> {
   if (!query || query.length < 2) {
-    return { comics: [], authors: [], artists: [] };
+    return { comics: [], authors: [], artists: [] }
   }
 
-  const tsquery = buildSearchQuery(query, "websearch");
+  const tsquery = buildSearchQuery(query, "websearch")
 
   // Get comic title suggestions
   const comicSuggestions = await database
@@ -413,7 +413,7 @@ export async function getSearchSuggestions(
     .from(comic)
     .where(sql`${comic.search_vector} @@ to_tsquery('english', ${tsquery})`)
     .orderBy(desc(sql`ts_rank(${comic.search_vector}, to_tsquery('english', ${tsquery}))`))
-    .limit(limit);
+    .limit(limit)
 
   // Get author suggestions
   const authorSuggestions = await database
@@ -421,7 +421,7 @@ export async function getSearchSuggestions(
     .from(author)
     .where(sql`${author.search_vector} @@ to_tsquery('english', ${tsquery})`)
     .orderBy(desc(sql`ts_rank(${author.search_vector}, to_tsquery('english', ${tsquery}))`))
-    .limit(limit);
+    .limit(limit)
 
   // Get artist suggestions
   const artistSuggestions = await database
@@ -429,7 +429,7 @@ export async function getSearchSuggestions(
     .from(artist)
     .where(sql`${artist.search_vector} @@ to_tsquery('english', ${tsquery})`)
     .orderBy(desc(sql`ts_rank(${artist.search_vector}, to_tsquery('english', ${tsquery}))`))
-    .limit(limit);
+    .limit(limit)
 
   return {
     comics: comicSuggestions.map((s: { title: string }) => s.title),
@@ -439,7 +439,7 @@ export async function getSearchSuggestions(
     artists: artistSuggestions
       .map((s: { name: string | null }) => s.name)
       .filter((n: string | null): n is string => n !== null),
-  };
+  }
 }
 
 /**
@@ -452,9 +452,9 @@ export async function getPopularSearches(limit: number = 10): Promise<string[]> 
     .select({ title: comic.title })
     .from(comic)
     .orderBy(desc(comic.rating), desc(comic.views))
-    .limit(limit);
+    .limit(limit)
 
-  return topComics.map((c: { title: string }) => c.title);
+  return topComics.map((c: { title: string }) => c.title)
 }
 
 /**
@@ -464,8 +464,8 @@ export async function getTrendingComics(
   days: number = 7,
   limit: number = 10
 ): Promise<SearchResult[]> {
-  const since = new Date();
-  since.setDate(since.getDate() - days);
+  const since = new Date()
+  since.setDate(since.getDate() - days)
 
   const results = await database
     .select({
@@ -489,11 +489,11 @@ export async function getTrendingComics(
     .leftJoin(type, eq(comic.typeId, type.id))
     .where(gte(comic.updatedAt, since))
     .orderBy(desc(comic.views))
-    .limit(limit);
+    .limit(limit)
 
   // Fetch genres
-  const comicIds = results.map((r: { id: number }) => r.id);
-  const genresMap = await getComicGenres(comicIds);
+  const comicIds = results.map((r: { id: number }) => r.id)
+  const genresMap = await getComicGenres(comicIds)
 
   return results.map((result: { id: number; [key: string]: unknown }) => ({
     id: result.id,
@@ -510,5 +510,5 @@ export async function getTrendingComics(
     publicationDate: (result as any).publicationDate,
     createdAt: (result as any).createdAt,
     updatedAt: (result as any).updatedAt,
-  })) as SearchResult[];
+  })) as SearchResult[]
 }

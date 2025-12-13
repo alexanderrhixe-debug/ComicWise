@@ -2,7 +2,7 @@
 // ACTION UTILITIES (Next.js 16 Optimized)
 // ═══════════════════════════════════════════════════
 
-import type { ActionResponse } from "src/types";
+import type { ActionResponse } from "src/types"
 
 /**
  * Create a successful action response
@@ -12,7 +12,7 @@ export function success<T>(data: T, message?: string): ActionResponse<T> {
     success: true,
     data,
     message,
-  };
+  }
 }
 
 /**
@@ -22,7 +22,7 @@ export function error<T = never>(errorMessage: string): ActionResponse<T> {
   return {
     success: false,
     error: errorMessage,
-  };
+  }
 }
 
 /**
@@ -32,5 +32,5 @@ export function validationError<T = never>(message: string): ActionResponse<T> {
   return {
     success: false,
     error: message,
-  };
+  }
 }

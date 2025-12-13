@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react"
 
-import { Button } from "ui/button";
-import { Checkbox } from "ui/checkbox";
-import { Input } from "ui/input";
-import { Label } from "ui/label";
+import { Button } from "ui/button"
+import { Checkbox } from "ui/checkbox"
+import { Input } from "ui/input"
+import { Label } from "ui/label"
 
 const LoginForm = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
   return (
     <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
@@ -65,7 +65,7 @@ const LoginForm = () => {
         Sign in to Shadcn Studio
       </Button>
     </form>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

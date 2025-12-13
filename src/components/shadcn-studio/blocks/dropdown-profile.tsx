@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from "react"
 
 import {
   CirclePlusIcon,
@@ -8,9 +8,9 @@ import {
   SquarePenIcon,
   UserIcon,
   UsersIcon,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,13 +19,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "ui/dropdown-menu";
+} from "ui/dropdown-menu"
 
 type Props = {
-  trigger: ReactNode;
-  defaultOpen?: boolean;
-  align?: "start" | "center" | "end";
-};
+  trigger: ReactNode
+  defaultOpen?: boolean
+  align?: "start" | "center" | "end"
+}
 
 const ProfileDropdown = ({ trigger, defaultOpen, align = "end" }: Props) => {
   return (
@@ -91,7 +91,7 @@ const ProfileDropdown = ({ trigger, defaultOpen, align = "end" }: Props) => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}
 
-export default ProfileDropdown;
+export default ProfileDropdown

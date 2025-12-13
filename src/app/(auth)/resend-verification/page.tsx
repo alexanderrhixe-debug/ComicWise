@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
 // ═══════════════════════════════════════════════════
 // RESEND VERIFICATION PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { resendVerificationEmailAction } from "actions/auth/index";
-import { Alert, AlertDescription } from "components/ui/alert";
-import { Button } from "components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { resendVerificationEmailAction } from "actions/auth/index"
+import { Alert, AlertDescription } from "components/ui/alert"
+import { Button } from "components/ui/button"
 import {
   Card,
   CardContent,
@@ -15,23 +15,23 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Label } from "components/ui/label";
+} from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Label } from "components/ui/label"
 import {
   resendVerificationEmailSchema,
   type ResendVerificationEmailInput,
-} from "lib/validations/schemas";
-import { Loader2, Mail } from "lucide-react";
-import Link from "next/link";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+} from "lib/validations/schemas"
+import { Loader2, Mail } from "lucide-react"
+import Link from "next/link"
+import { useState, useTransition } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export default function ResendVerificationPage() {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const {
     register,
@@ -42,31 +42,31 @@ export default function ResendVerificationPage() {
     defaultValues: {
       email: "",
     },
-  });
+  })
 
   const onSubmit = async (data: ResendVerificationEmailInput) => {
-    setError(null);
+    setError(null)
 
     startTransition(async () => {
       try {
-        const result = await resendVerificationEmailAction(data);
+        const result = await resendVerificationEmailAction(data)
 
         if (!result.success) {
-          setError(result.error || "Failed to send verification email");
-          toast.error(result.error || "Failed to send verification email");
+          setError(result.error || "Failed to send verification email")
+          toast.error(result.error || "Failed to send verification email")
         } else {
-          setIsSubmitted(true);
-          toast.success("Verification email sent!");
+          setIsSubmitted(true)
+          toast.success("Verification email sent!")
         }
       } catch (err) {
-        console.error("Resend verification error:", err);
-        setError("An unexpected error occurred. Please try again.");
-        toast.error("Failed to send verification email");
+        console.error("Resend verification error:", err)
+        setError("An unexpected error occurred. Please try again.")
+        toast.error("Failed to send verification email")
       }
-    });
-  };
+    })
+  }
 
-  const isLoading = isSubmitting || isPending;
+  const isLoading = isSubmitting || isPending
 
   if (isSubmitted) {
     return (
@@ -97,7 +97,7 @@ export default function ResendVerificationPage() {
           </p>
         </CardFooter>
       </Card>
-    );
+    )
   }
 
   return (
@@ -144,5 +144,5 @@ export default function ResendVerificationPage() {
         </CardFooter>
       </form>
     </Card>
-  );
+  )
 }

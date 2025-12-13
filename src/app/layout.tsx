@@ -1,8 +1,8 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next"
 
-import { Providers } from "@/app/Providers";
-import localFont from "next/font/local";
-import "styles/globals.css";
+import { Providers } from "@/app/Providers"
+import localFont from "next/font/local"
+import "styles/globals.css"
 // Primary Font: IBM Plex Sans (Variable)
 const ibmPlexSans = localFont({
   src: [
@@ -18,7 +18,7 @@ const ibmPlexSans = localFont({
   variable: "--font-ibm-plex-sans",
   display: "swap",
   preload: true,
-});
+})
 
 // Display Font: Bebas Neue
 const bebasNeue = localFont({
@@ -31,7 +31,7 @@ const bebasNeue = localFont({
   ],
   variable: "--font-bebas-neue",
   display: "swap",
-});
+})
 
 // Alternative Sans: Schibsted Grotesk (Variable)
 const schibstedGrotesk = localFont({
@@ -47,7 +47,7 @@ const schibstedGrotesk = localFont({
   ],
   variable: "--font-schibsted-grotesk",
   display: "swap",
-});
+})
 
 // Monospace Font: Martian Mono (Variable)
 const martianMono = localFont({
@@ -58,7 +58,7 @@ const martianMono = localFont({
   ],
   variable: "--font-martian-mono",
   display: "swap",
-});
+})
 
 // Additional Fonts: Fira Sans (Full Family)
 const firaSans = localFont({
@@ -88,7 +88,7 @@ const firaSans = localFont({
   ],
   variable: "--font-fira-sans",
   display: "swap",
-});
+})
 
 // Monospace Alternative: Fira Mono
 const firaMono = localFont({
@@ -99,14 +99,14 @@ const firaMono = localFont({
   ],
   variable: "--font-fira-mono",
   display: "swap",
-});
+})
 
 export const metadata: Metadata = {
   title: "ComicWise - Modern Comic Reading Platform",
   description:
     "Read your favorite manga, manhwa, and manhua online. Track your reading progress and discover new comics.",
   keywords: ["comics", "manga", "manhwa", "manhua", "webtoon", "reading"],
-};
+}
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -118,12 +118,12 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
   viewportFit: "cover",
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -145,5 +145,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  );
+  )
 }

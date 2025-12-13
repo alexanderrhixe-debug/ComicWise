@@ -1,8 +1,8 @@
-import { env } from "appConfig";
-import { Queue, Worker, type Job } from "bullmq";
-import IORedis from "ioredis";
-import type { SendEmailParams } from "lib/email";
-import { sendEmail } from "lib/email";
+import { env } from "appConfig"
+import { Queue, Worker, type Job } from "bullmq"
+import IORedis from "ioredis"
+import type { SendEmailParams } from "lib/email"
+import { sendEmail } from "lib/email"
 
 // ═══════════════════════════════════════════════════
 // REDIS CONNECTION
@@ -13,7 +13,7 @@ const connection = new IORedis({
   port: Number(env.REDIS_PORT) || 6379,
   password: env.REDIS_PASSWORD || undefined,
   maxRetriesPerRequest: null, // Required for BullMQ
-});
+})
 
 // ═══════════════════════════════════════════════════
 // EMAIL QUEUE
@@ -35,7 +35,7 @@ export const emailQueue = new Queue("emails", {
       age: 7 * 24 * 3600, // Keep failed jobs for 7 days
     },
   },
-});
+})
 
 // ═══════════════════════════════════════════════════
 // EMAIL WORKER
@@ -44,44 +44,44 @@ export const emailQueue = new Queue("emails", {
 const emailWorker = new Worker(
   "emails",
   async (job: Job<SendEmailParams>) => {
-    const { to, subject, html, text } = job.data;
+    const { to, subject, html, text } = job.data
 
     try {
-      console.log(`[EmailWorker] Processing email job ${job.id} to ${to}`);
-      const result = await sendEmail({ to, subject, html, text });
+      console.log(`[EmailWorker] Processing email job ${job.id} to ${to}`)
+      const result = await sendEmail({ to, subject, html, text })
 
       if (!result.success) {
-        throw new Error(result.error || "Failed to send email");
+        throw new Error(result.error || "Failed to send email")
       }
 
-      console.log(`[EmailWorker] Successfully sent email ${job.id} to ${to}`);
-      return { success: true, messageId: result.messageId };
+      console.log(`[EmailWorker] Successfully sent email ${job.id} to ${to}`)
+      return { success: true, messageId: result.messageId }
     } catch (error) {
-      console.error(`[EmailWorker] Failed to send email ${job.id}:`, error);
-      throw error; // Re-throw to trigger retry
+      console.error(`[EmailWorker] Failed to send email ${job.id}:`, error)
+      throw error // Re-throw to trigger retry
     }
   },
   {
     connection,
     concurrency: 5, // Process up to 5 emails concurrently
   }
-);
+)
 
 // ═══════════════════════════════════════════════════
 // WORKER EVENT LISTENERS
 // ═══════════════════════════════════════════════════
 
 emailWorker.on("completed", (job) => {
-  console.log(`[EmailWorker] Job ${job.id} completed successfully`);
-});
+  console.log(`[EmailWorker] Job ${job.id} completed successfully`)
+})
 
 emailWorker.on("failed", (job, err) => {
-  console.error(`[EmailWorker] Job ${job?.id} failed:`, err.message);
-});
+  console.error(`[EmailWorker] Job ${job?.id} failed:`, err.message)
+})
 
 emailWorker.on("error", (err) => {
-  console.error("[EmailWorker] Worker error:", err);
-});
+  console.error("[EmailWorker] Worker error:", err)
+})
 
 // ═══════════════════════════════════════════════════
 // QUEUE HELPERS
@@ -94,13 +94,13 @@ export async function queueEmail(params: SendEmailParams, priority: number = 0) 
   try {
     const job = await emailQueue.add("send-email", params, {
       priority, // Lower number = higher priority (0 is highest)
-    });
+    })
 
-    console.log(`[EmailQueue] Added email job ${job.id} to queue`);
-    return { success: true, jobId: job.id };
+    console.log(`[EmailQueue] Added email job ${job.id} to queue`)
+    return { success: true, jobId: job.id }
   } catch (error) {
-    console.error("[EmailQueue] Failed to add email to queue:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+    console.error("[EmailQueue] Failed to add email to queue:", error)
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
 }
 
@@ -108,21 +108,21 @@ export async function queueEmail(params: SendEmailParams, priority: number = 0) 
  * Add a high-priority email to the queue (processes first)
  */
 export async function queueUrgentEmail(params: SendEmailParams) {
-  return queueEmail(params, 0);
+  return queueEmail(params, 0)
 }
 
 /**
  * Add a normal email to the queue
  */
 export async function queueNormalEmail(params: SendEmailParams) {
-  return queueEmail(params, 5);
+  return queueEmail(params, 5)
 }
 
 /**
  * Add a low-priority email to the queue (processes last)
  */
 export async function queueLowPriorityEmail(params: SendEmailParams) {
-  return queueEmail(params, 10);
+  return queueEmail(params, 10)
 }
 
 /**
@@ -136,7 +136,7 @@ export async function getQueueStats() {
       emailQueue.getCompletedCount(),
       emailQueue.getFailedCount(),
       emailQueue.getDelayedCount(),
-    ]);
+    ])
 
     return {
       waiting,
@@ -145,10 +145,10 @@ export async function getQueueStats() {
       failed,
       delayed,
       total: waiting + active + completed + failed + delayed,
-    };
+    }
   } catch (error) {
-    console.error("[EmailQueue] Failed to get queue stats:", error);
-    return null;
+    console.error("[EmailQueue] Failed to get queue stats:", error)
+    return null
   }
 }
 
@@ -157,12 +157,12 @@ export async function getQueueStats() {
  */
 export async function clearCompletedJobs() {
   try {
-    await emailQueue.clean(0, 1000, "completed");
-    console.log("[EmailQueue] Cleared completed jobs");
-    return { success: true };
+    await emailQueue.clean(0, 1000, "completed")
+    console.log("[EmailQueue] Cleared completed jobs")
+    return { success: true }
   } catch (error) {
-    console.error("[EmailQueue] Failed to clear completed jobs:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+    console.error("[EmailQueue] Failed to clear completed jobs:", error)
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
 }
 
@@ -171,12 +171,12 @@ export async function clearCompletedJobs() {
  */
 export async function clearFailedJobs() {
   try {
-    await emailQueue.clean(0, 1000, "failed");
-    console.log("[EmailQueue] Cleared failed jobs");
-    return { success: true };
+    await emailQueue.clean(0, 1000, "failed")
+    console.log("[EmailQueue] Cleared failed jobs")
+    return { success: true }
   } catch (error) {
-    console.error("[EmailQueue] Failed to clear failed jobs:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+    console.error("[EmailQueue] Failed to clear failed jobs:", error)
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
 }
 
@@ -185,12 +185,12 @@ export async function clearFailedJobs() {
  */
 export async function shutdownQueue() {
   try {
-    await emailWorker.close();
-    await emailQueue.close();
-    await connection.quit();
-    console.log("[EmailQueue] Graceful shutdown completed");
+    await emailWorker.close()
+    await emailQueue.close()
+    await connection.quit()
+    console.log("[EmailQueue] Graceful shutdown completed")
   } catch (error) {
-    console.error("[EmailQueue] Error during shutdown:", error);
+    console.error("[EmailQueue] Error during shutdown:", error)
   }
 }
 
@@ -198,5 +198,5 @@ export async function shutdownQueue() {
 // PROCESS EXIT HANDLERS
 // ═══════════════════════════════════════════════════
 
-process.on("SIGTERM", shutdownQueue);
-process.on("SIGINT", shutdownQueue);
+process.on("SIGTERM", shutdownQueue)
+process.on("SIGINT", shutdownQueue)

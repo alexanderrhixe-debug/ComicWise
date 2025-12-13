@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
-import { ChevronRight, Home } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Fragment } from "react";
+import { ChevronRight, Home } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Fragment } from "react"
 
 export function Breadcrumbs() {
-  const pathname = usePathname();
-  const segments = pathname.split("/").filter(Boolean);
+  const pathname = usePathname()
+  const segments = pathname.split("/").filter(Boolean)
 
   // Generate breadcrumb items
   const breadcrumbs = segments.map((segment, index) => {
-    const href = "/" + segments.slice(0, index + 1).join("/");
+    const href = "/" + segments.slice(0, index + 1).join("/")
     const label = segment
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+      .join(" ")
 
-    return { href, label };
-  });
+    return { href, label }
+  })
 
   return (
     <nav className="flex items-center space-x-1 text-sm text-muted-foreground">
@@ -26,7 +26,7 @@ export function Breadcrumbs() {
         <Home className="h-4 w-4" />
       </Link>
       {breadcrumbs.map((crumb, index) => {
-        const isLast = index === breadcrumbs.length - 1;
+        const isLast = index === breadcrumbs.length - 1
         return (
           <Fragment key={crumb.href}>
             <ChevronRight className="h-4 w-4" />
@@ -38,8 +38,8 @@ export function Breadcrumbs() {
               </Link>
             )}
           </Fragment>
-        );
+        )
       })}
     </nav>
-  );
+  )
 }

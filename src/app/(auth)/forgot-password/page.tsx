@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
 // ═══════════════════════════════════════════════════
 // FORGOT PASSWORD PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { forgotPasswordAction } from "actions/auth/index";
-import { Alert, AlertDescription } from "components/ui/alert";
-import { Button } from "components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { forgotPasswordAction } from "actions/auth/index"
+import { Alert, AlertDescription } from "components/ui/alert"
+import { Button } from "components/ui/button"
 import {
   Card,
   CardContent,
@@ -15,20 +15,20 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Label } from "components/ui/label";
-import { forgotPasswordSchema, type ForgotPasswordInput } from "lib/validations/schemas";
-import { CheckCircle2, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+} from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Label } from "components/ui/label"
+import { forgotPasswordSchema, type ForgotPasswordInput } from "lib/validations/schemas"
+import { CheckCircle2, Loader2 } from "lucide-react"
+import Link from "next/link"
+import { useState, useTransition } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export default function ForgotPasswordPage() {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const {
     register,
@@ -39,31 +39,31 @@ export default function ForgotPasswordPage() {
     defaultValues: {
       email: "",
     },
-  });
+  })
 
   const onSubmit = async (data: ForgotPasswordInput) => {
-    setError(null);
+    setError(null)
 
     startTransition(async () => {
       try {
-        const result = await forgotPasswordAction(data);
+        const result = await forgotPasswordAction(data)
 
         if (!result.success) {
-          setError(result.error || "Failed to send reset link");
-          toast.error(result.error || "Failed to send reset link");
+          setError(result.error || "Failed to send reset link")
+          toast.error(result.error || "Failed to send reset link")
         } else {
-          setIsSubmitted(true);
-          toast.success("Password reset link sent!");
+          setIsSubmitted(true)
+          toast.success("Password reset link sent!")
         }
       } catch (err) {
-        console.error("Forgot password error:", err);
-        setError("An unexpected error occurred. Please try again.");
-        toast.error("Failed to send reset link");
+        console.error("Forgot password error:", err)
+        setError("An unexpected error occurred. Please try again.")
+        toast.error("Failed to send reset link")
       }
-    });
-  };
+    })
+  }
 
-  const isLoading = isSubmitting || isPending;
+  const isLoading = isSubmitting || isPending
 
   if (isSubmitted) {
     return (
@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
           </Button>
         </CardFooter>
       </Card>
-    );
+    )
   }
 
   return (
@@ -138,5 +138,5 @@ export default function ForgotPasswordPage() {
         </CardFooter>
       </form>
     </Card>
-  );
+  )
 }

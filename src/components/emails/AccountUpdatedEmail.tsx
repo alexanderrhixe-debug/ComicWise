@@ -15,14 +15,14 @@ import {
   Preview,
   Section,
   Text,
-} from "@react-email/components";
+} from "@react-email/components"
 
 interface AccountUpdatedEmailProps {
-  userName: string;
-  userEmail: string;
-  changeType: "password" | "email" | "profile";
-  changeDetails?: string;
-  ipAddress?: string;
+  userName: string
+  userEmail: string
+  changeType: "password" | "email" | "profile"
+  changeDetails?: string
+  ipAddress?: string
 }
 
 export const AccountUpdatedEmail = ({
@@ -35,28 +35,28 @@ export const AccountUpdatedEmail = ({
   const getChangeTitle = () => {
     switch (changeType) {
       case "password":
-        return "Password Changed";
+        return "Password Changed"
       case "email":
-        return "Email Address Updated";
+        return "Email Address Updated"
       case "profile":
-        return "Profile Updated";
+        return "Profile Updated"
       default:
-        return "Account Updated";
+        return "Account Updated"
     }
-  };
+  }
 
   const getChangeMessage = () => {
     switch (changeType) {
       case "password":
-        return "Your password has been successfully changed. You can now use your new password to sign in to your account.";
+        return "Your password has been successfully changed. You can now use your new password to sign in to your account."
       case "email":
-        return "Your email address has been successfully updated. All future communications will be sent to your new email address.";
+        return "Your email address has been successfully updated. All future communications will be sent to your new email address."
       case "profile":
-        return "Your profile information has been successfully updated.";
+        return "Your profile information has been successfully updated."
       default:
-        return "Your account has been successfully updated.";
+        return "Your account has been successfully updated."
     }
-  };
+  }
 
   return (
     <Html>
@@ -159,10 +159,10 @@ export const AccountUpdatedEmail = ({
         </Container>
       </Body>
     </Html>
-  );
-};
+  )
+}
 
-export default AccountUpdatedEmail;
+export default AccountUpdatedEmail
 
 // ═══════════════════════════════════════════════════
 // STYLES
@@ -172,7 +172,7 @@ const main = {
   backgroundColor: "#f6f9fc",
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
+}
 
 const container = {
   backgroundColor: "#ffffff",
@@ -180,17 +180,17 @@ const container = {
   padding: "20px 0 48px",
   marginBottom: "64px",
   maxWidth: "600px",
-};
+}
 
 const header = {
   padding: "32px 40px",
   textAlign: "center" as const,
-};
+}
 
 const logo = {
   margin: "0 auto",
   marginBottom: "16px",
-};
+}
 
 const heading = {
   fontSize: "28px",
@@ -198,32 +198,32 @@ const heading = {
   fontWeight: "700",
   color: "#1a1a1a",
   margin: "0",
-};
+}
 
 const content = {
   padding: "0 40px",
-};
+}
 
 const paragraph = {
   fontSize: "16px",
   lineHeight: "26px",
   color: "#484848",
   margin: "16px 0",
-};
+}
 
 const detailsBox = {
   backgroundColor: "#f8fafc",
   borderRadius: "4px",
   padding: "16px",
   margin: "16px 0",
-};
+}
 
 const detailsText = {
   fontSize: "14px",
   lineHeight: "22px",
   color: "#484848",
   margin: "0",
-};
+}
 
 const infoBox = {
   backgroundColor: "#f0f9ff",
@@ -231,14 +231,14 @@ const infoBox = {
   borderRadius: "4px",
   padding: "16px",
   margin: "16px 0",
-};
+}
 
 const infoText = {
   fontSize: "13px",
   lineHeight: "20px",
   color: "#1e40af",
   margin: "0",
-};
+}
 
 const warningBox = {
   backgroundColor: "#fef2f2",
@@ -246,19 +246,19 @@ const warningBox = {
   borderRadius: "4px",
   padding: "16px",
   margin: "24px 0",
-};
+}
 
 const warningText = {
   fontSize: "14px",
   lineHeight: "22px",
   color: "#7f1d1d",
   margin: "0",
-};
+}
 
 const buttonContainer = {
   textAlign: "center" as const,
   margin: "24px 0",
-};
+}
 
 const button = {
   backgroundColor: "#5469d4",
@@ -270,21 +270,21 @@ const button = {
   textAlign: "center" as const,
   display: "inline-block",
   padding: "12px 32px",
-};
+}
 
 const link = {
   color: "#5469d4",
   textDecoration: "underline",
-};
+}
 
 const hr = {
   borderColor: "#e6ebf1",
   margin: "32px 0",
-};
+}
 
 const footer = {
   padding: "0 40px",
-};
+}
 
 const footerText = {
   fontSize: "12px",
@@ -292,9 +292,9 @@ const footerText = {
   color: "#8898aa",
   margin: "4px 0",
   textAlign: "center" as const,
-};
+}
 
 const footerLink = {
   color: "#8898aa",
   textDecoration: "underline",
-};
+}

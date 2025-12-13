@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   AlertDialog,
@@ -9,17 +9,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "ui/alert-dialog";
+} from "ui/alert-dialog"
 
 interface ConfirmDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  title?: string;
-  description?: string;
-  confirmText?: string;
-  cancelText?: string;
-  onConfirm: () => void;
-  variant?: "default" | "destructive";
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  title?: string
+  description?: string
+  confirmText?: string
+  cancelText?: string
+  onConfirm: () => void
+  variant?: "default" | "destructive"
 }
 
 export function ConfirmDialog({
@@ -54,36 +54,36 @@ export function ConfirmDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }
 
 // Hook for easier use
-import { useState } from "react";
+import { useState } from "react"
 
 export function useConfirmDialog() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   const [config, setConfig] = useState<{
-    title?: string;
-    description?: string;
-    confirmText?: string;
-    cancelText?: string;
-    variant?: "default" | "destructive";
-    onConfirm: () => void;
+    title?: string
+    description?: string
+    confirmText?: string
+    cancelText?: string
+    variant?: "default" | "destructive"
+    onConfirm: () => void
   }>({
     onConfirm: () => {},
-  });
+  })
 
   const confirm = (options: {
-    title?: string;
-    description?: string;
-    confirmText?: string;
-    cancelText?: string;
-    variant?: "default" | "destructive";
-    onConfirm: () => void;
+    title?: string
+    description?: string
+    confirmText?: string
+    cancelText?: string
+    variant?: "default" | "destructive"
+    onConfirm: () => void
   }) => {
-    setConfig(options);
-    setIsOpen(true);
-  };
+    setConfig(options)
+    setIsOpen(true)
+  }
 
   const ConfirmDialogComponent = () => (
     <ConfirmDialog
@@ -95,11 +95,11 @@ export function useConfirmDialog() {
       cancelText={config.cancelText}
       variant={config.variant}
       onConfirm={() => {
-        config.onConfirm();
-        setIsOpen(false);
+        config.onConfirm()
+        setIsOpen(false)
       }}
     />
-  );
+  )
 
-  return { confirm, ConfirmDialog: ConfirmDialogComponent };
+  return { confirm, ConfirmDialog: ConfirmDialogComponent }
 }

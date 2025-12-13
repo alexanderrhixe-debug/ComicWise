@@ -1,11 +1,11 @@
-import { AppNavbar } from "components/AppNavbar";
-import CurrentYear from "components/CurrentYear";
-import React, { Suspense } from "react";
+import { AppNavbar } from "components/AppNavbar"
+import CurrentYear from "components/CurrentYear"
+import React, { Suspense } from "react"
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <div className="flex min-h-screen flex-col">
@@ -21,5 +21,5 @@ export default function RootLayout({
         </div>
       </footer>
     </div>
-  );
+  )
 }

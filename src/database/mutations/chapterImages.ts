@@ -1,11 +1,11 @@
-import { database } from "database";
-import { chapterImage } from "database/schema";
-import { eq } from "drizzle-orm";
+import { database } from "database"
+import { chapterImage } from "database/schema"
+import { eq } from "drizzle-orm"
 
 export async function createChapterImage(data: {
-  chapterId: number;
-  imageUrl: string;
-  pageNumber: number;
+  chapterId: number
+  imageUrl: string
+  pageNumber: number
 }) {
   const [newImage] = await database
     .insert(chapterImage)
@@ -15,15 +15,15 @@ export async function createChapterImage(data: {
       pageNumber: data.pageNumber,
       createdAt: new Date(),
     })
-    .returning();
-  return newImage;
+    .returning()
+  return newImage
 }
 
 export async function createChapterImages(
   images: Array<{
-    chapterId: number;
-    imageUrl: string;
-    pageNumber: number;
+    chapterId: number
+    imageUrl: string
+    pageNumber: number
   }>
 ) {
   const newImages = await database
@@ -34,37 +34,37 @@ export async function createChapterImages(
         createdAt: new Date(),
       }))
     )
-    .returning();
-  return newImages;
+    .returning()
+  return newImages
 }
 
 export async function updateChapterImage(
   imageId: number,
   data: {
-    imageUrl?: string;
-    pageNumber?: number;
+    imageUrl?: string
+    pageNumber?: number
   }
 ) {
   const [updatedImage] = await database
     .update(chapterImage)
     .set(data)
     .where(eq(chapterImage.id, imageId))
-    .returning();
-  return updatedImage;
+    .returning()
+  return updatedImage
 }
 
 export async function deleteChapterImage(imageId: number) {
   const [deletedImage] = await database
     .delete(chapterImage)
     .where(eq(chapterImage.id, imageId))
-    .returning();
-  return deletedImage;
+    .returning()
+  return deletedImage
 }
 
 export async function deleteChapterImages(chapterId: number) {
   const deletedImages = await database
     .delete(chapterImage)
     .where(eq(chapterImage.chapterId, chapterId))
-    .returning();
-  return deletedImages;
+    .returning()
+  return deletedImages
 }

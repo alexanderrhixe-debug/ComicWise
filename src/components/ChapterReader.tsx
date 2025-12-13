@@ -1,93 +1,93 @@
-"use client";
+"use client"
 
-import { ChevronLeft, ChevronRight, Home, List, Maximize, Minimize } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { Button } from "ui/button";
-import { Skeleton } from "ui/skeleton";
+import { ChevronLeft, ChevronRight, Home, List, Maximize, Minimize } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useCallback, useEffect, useState } from "react"
+import { Button } from "ui/button"
+import { Skeleton } from "ui/skeleton"
 
 interface Chapter {
-  id: number;
-  title: string;
-  chapterNumber: number;
-  comicId: number;
+  id: number
+  title: string
+  chapterNumber: number
+  comicId: number
 }
 
 interface Comic {
-  id: number;
-  title: string;
+  id: number
+  title: string
 }
 
 interface ChapterImage {
-  id: number;
-  imageUrl: string;
-  pageNumber: number;
+  id: number
+  imageUrl: string
+  pageNumber: number
 }
 
 interface ReaderProps {
-  chapter: Chapter;
-  comic: Comic;
-  images: ChapterImage[];
-  prevChapter: Chapter | null;
-  nextChapter: Chapter | null;
+  chapter: Chapter
+  comic: Comic
+  images: ChapterImage[]
+  prevChapter: Chapter | null
+  nextChapter: Chapter | null
 }
 
 export function ChapterReader({ chapter, comic, images, prevChapter, nextChapter }: ReaderProps) {
-  const router = useRouter();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const totalPages = images.length;
+  const totalPages = images.length
 
   const handlePrevPage = useCallback(() => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setCurrentPage(currentPage - 1)
+      window.scrollTo({ top: 0, behavior: "smooth" })
     } else if (prevChapter) {
-      router.push(`/comics/${comic.id}/read/${prevChapter.id}`);
+      router.push(`/comics/${comic.id}/read/${prevChapter.id}`)
     }
-  }, [currentPage, prevChapter, router, comic.id]);
+  }, [currentPage, prevChapter, router, comic.id])
 
   const handleNextPage = useCallback(() => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setCurrentPage(currentPage + 1)
+      window.scrollTo({ top: 0, behavior: "smooth" })
     } else if (nextChapter) {
-      router.push(`/comics/${comic.id}/read/${nextChapter.id}`);
+      router.push(`/comics/${comic.id}/read/${nextChapter.id}`)
     }
-  }, [currentPage, totalPages, nextChapter, router, comic.id]);
+  }, [currentPage, totalPages, nextChapter, router, comic.id])
 
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-      setIsFullscreen(true);
+      document.documentElement.requestFullscreen()
+      setIsFullscreen(true)
     } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
+      document.exitFullscreen()
+      setIsFullscreen(false)
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") {
-        handlePrevPage();
+        handlePrevPage()
       }
       if (e.key === "ArrowRight") {
-        handleNextPage();
+        handleNextPage()
       }
       if (e.key === "f") {
-        toggleFullscreen();
+        toggleFullscreen()
       }
-    };
+    }
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [handlePrevPage, handleNextPage, toggleFullscreen]);
+    window.addEventListener("keydown", handleKeyPress)
+    return () => window.removeEventListener("keydown", handleKeyPress)
+  }, [handlePrevPage, handleNextPage, toggleFullscreen])
 
-  const currentImage = images[currentPage - 1];
+  const currentImage = images[currentPage - 1]
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -171,8 +171,8 @@ export function ChapterReader({ chapter, comic, images, prevChapter, nextChapter
               <button
                 key={image.id}
                 onClick={() => {
-                  setCurrentPage(index + 1);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  setCurrentPage(index + 1)
+                  window.scrollTo({ top: 0, behavior: "smooth" })
                 }}
                 className={`relative aspect-2/3 overflow-hidden rounded border-2 transition-all ${
                   currentPage === index + 1
@@ -209,5 +209,5 @@ export function ChapterReader({ chapter, comic, images, prevChapter, nextChapter
         </ul>
       </div>
     </div>
-  );
+  )
 }

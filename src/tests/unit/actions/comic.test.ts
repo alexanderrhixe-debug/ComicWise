@@ -2,27 +2,27 @@
 // COMIC ACTIONS - UNIT TESTS
 // ═══════════════════════════════════════════════════
 
-import { createComic, deleteComic, getComicById, getComics, updateComic } from "actions/comic";
-import * as authLib from "auth";
-import * as mutations from "src/database/mutations";
-import * as queries from "src/database/queries";
-import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
+import { createComic, deleteComic, getComicById, getComics, updateComic } from "actions/comic"
+import * as authLib from "auth"
+import * as mutations from "src/database/mutations"
+import * as queries from "src/database/queries"
+import { beforeEach, describe, expect, it, vi, type Mock } from "vitest"
 
-import type { ComicFilters } from "src/types";
+import type { ComicFilters } from "src/types"
 
 // Removed unused import
 // Mock dependencies
-vi.mock("auth");
-vi.mock("mutations");
-vi.mock("queries");
+vi.mock("auth")
+vi.mock("mutations")
+vi.mock("queries")
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
-}));
+}))
 
 describe("Comic Actions", () => {
-  const mockUserId = "user-123";
-  const mockAdminId = "admin-123";
-  const mockComicId = 1;
+  const mockUserId = "user-123"
+  const mockAdminId = "admin-123"
+  const mockComicId = 1
 
   const mockComic = {
     id: mockComicId,
@@ -39,13 +39,13 @@ describe("Comic Actions", () => {
     artistName: null,
     typeName: null,
     genres: [],
-  };
+  }
 
-  const mockComics = [mockComic];
+  const mockComics = [mockComic]
 
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
   // ═══════════════════════════════════════════════════
   // GET COMICS TESTS
@@ -53,41 +53,41 @@ describe("Comic Actions", () => {
 
   describe("getComics", () => {
     it("should successfully retrieve all comics without filters", async () => {
-      (queries.getAllComics as Mock).mockResolvedValue(mockComics);
+      ;(queries.getAllComics as Mock).mockResolvedValue(mockComics)
 
-      const result = await getComics();
+      const result = await getComics()
 
-      expect(queries.getAllComics).toHaveBeenCalledWith(undefined);
-      expect(result).toEqual(mockComics);
-    });
+      expect(queries.getAllComics).toHaveBeenCalledWith(undefined)
+      expect(result).toEqual(mockComics)
+    })
 
     it("should successfully retrieve comics with filters", async () => {
       const filters: ComicFilters = {
         status: "Ongoing" as const,
         search: "test",
-      };
-      (queries.getAllComics as Mock).mockResolvedValue(mockComics);
+      }
+      ;(queries.getAllComics as Mock).mockResolvedValue(mockComics)
 
-      const result = await getComics(filters);
+      const result = await getComics(filters)
 
-      expect(queries.getAllComics).toHaveBeenCalledWith(filters);
-      expect(result).toEqual(mockComics);
-    });
+      expect(queries.getAllComics).toHaveBeenCalledWith(filters)
+      expect(result).toEqual(mockComics)
+    })
 
     it("should return empty array when no comics exist", async () => {
-      (queries.getAllComics as Mock).mockResolvedValue([]);
+      ;(queries.getAllComics as Mock).mockResolvedValue([])
 
-      const result = await getComics();
+      const result = await getComics()
 
-      expect(result).toEqual([]);
-    });
+      expect(result).toEqual([])
+    })
 
     it("should handle database errors gracefully", async () => {
-      (queries.getAllComics as Mock).mockRejectedValue(new Error("Database error"));
+      ;(queries.getAllComics as Mock).mockRejectedValue(new Error("Database error"))
 
-      await expect(getComics()).rejects.toThrow("Database error");
-    });
-  });
+      await expect(getComics()).rejects.toThrow("Database error")
+    })
+  })
 
   // ═══════════════════════════════════════════════════
   // GET COMIC BY ID TESTS
@@ -95,28 +95,28 @@ describe("Comic Actions", () => {
 
   describe("getComicById", () => {
     it("should successfully retrieve a comic by ID", async () => {
-      (queries.getComic as Mock).mockResolvedValue(mockComic);
+      ;(queries.getComic as Mock).mockResolvedValue(mockComic)
 
-      const result = await getComicById(mockComicId);
+      const result = await getComicById(mockComicId)
 
-      expect(queries.getComic).toHaveBeenCalledWith(mockComicId);
-      expect(result).toEqual(mockComic);
-    });
+      expect(queries.getComic).toHaveBeenCalledWith(mockComicId)
+      expect(result).toEqual(mockComic)
+    })
 
     it("should return null when comic does not exist", async () => {
-      (queries.getComic as Mock).mockResolvedValue(null);
+      ;(queries.getComic as Mock).mockResolvedValue(null)
 
-      const result = await getComicById(999);
+      const result = await getComicById(999)
 
-      expect(result).toBeNull();
-    });
+      expect(result).toBeNull()
+    })
 
     it("should handle database errors gracefully", async () => {
-      (queries.getComic as Mock).mockRejectedValue(new Error("Database error"));
+      ;(queries.getComic as Mock).mockRejectedValue(new Error("Database error"))
 
-      await expect(getComicById(mockComicId)).rejects.toThrow("Database error");
-    });
-  });
+      await expect(getComicById(mockComicId)).rejects.toThrow("Database error")
+    })
+  })
 
   // ═══════════════════════════════════════════════════
   // CREATE COMIC TESTS
@@ -130,62 +130,62 @@ describe("Comic Actions", () => {
       status: "Ongoing" as const,
       publicationDate: new Date(),
       views: 0,
-    };
+    }
 
     it("should successfully create a comic as admin", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.createComic as Mock).mockResolvedValue(mockComic);
+      })
+      ;(mutations.createComic as Mock).mockResolvedValue(mockComic)
 
-      const result = await createComic(comicData);
+      const result = await createComic(comicData)
 
-      expect(authLib.auth).toHaveBeenCalledOnce();
-      expect(mutations.createComic).toHaveBeenCalledWith(comicData);
-      expect(result).toEqual(mockComic);
-    });
+      expect(authLib.auth).toHaveBeenCalledOnce()
+      expect(mutations.createComic).toHaveBeenCalledWith(comicData)
+      expect(result).toEqual(mockComic)
+    })
 
     it("should throw error when user is not authenticated", async () => {
-      (authLib.auth as Mock).mockResolvedValue(null);
+      ;(authLib.auth as Mock).mockResolvedValue(null)
 
-      await expect(createComic(comicData)).rejects.toThrow("Unauthorized");
-      expect(mutations.createComic).not.toHaveBeenCalled();
-    });
+      await expect(createComic(comicData)).rejects.toThrow("Unauthorized")
+      expect(mutations.createComic).not.toHaveBeenCalled()
+    })
 
     it("should throw error when user is not admin", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockUserId, role: "user" },
-      });
+      })
 
-      await expect(createComic(comicData)).rejects.toThrow("Unauthorized - Admin only");
-      expect(mutations.createComic).not.toHaveBeenCalled();
-    });
+      await expect(createComic(comicData)).rejects.toThrow("Unauthorized - Admin only")
+      expect(mutations.createComic).not.toHaveBeenCalled()
+    })
 
     it("should throw error when user has no role", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockUserId },
-      });
+      })
 
-      await expect(createComic(comicData)).rejects.toThrow("Unauthorized - Admin only");
-      expect(mutations.createComic).not.toHaveBeenCalled();
-    });
+      await expect(createComic(comicData)).rejects.toThrow("Unauthorized - Admin only")
+      expect(mutations.createComic).not.toHaveBeenCalled()
+    })
 
     it("should handle database errors gracefully", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.createComic as Mock).mockRejectedValue(new Error("Database error"));
+      })
+      ;(mutations.createComic as Mock).mockRejectedValue(new Error("Database error"))
 
-      await expect(createComic(comicData)).rejects.toThrow("Database error");
-    });
+      await expect(createComic(comicData)).rejects.toThrow("Database error")
+    })
 
     it("should handle validation errors", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.createComic as Mock).mockRejectedValue(
+      })
+      ;(mutations.createComic as Mock).mockRejectedValue(
         new Error("Validation error: Title is required")
-      );
+      )
 
       // Provide required fields but with invalid data to trigger validation error
       const invalidComicData = {
@@ -195,10 +195,10 @@ describe("Comic Actions", () => {
         status: "Ongoing" as const,
         publicationDate: new Date(),
         views: 0,
-      };
-      await expect(createComic(invalidComicData)).rejects.toThrow("Validation error");
-    });
-  });
+      }
+      await expect(createComic(invalidComicData)).rejects.toThrow("Validation error")
+    })
+  })
 
   // ═══════════════════════════════════════════════════
   // UPDATE COMIC TESTS
@@ -210,61 +210,61 @@ describe("Comic Actions", () => {
       description: "Updated description",
       publicationDate: new Date(),
       views: 0,
-    };
+    }
 
     it("should successfully update a comic as admin", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.updateComic as Mock).mockResolvedValue({
+      })
+      ;(mutations.updateComic as Mock).mockResolvedValue({
         ...mockComic,
         ...updateData,
-      });
+      })
 
-      const result = await updateComic(mockComicId, updateData);
+      const result = await updateComic(mockComicId, updateData)
 
-      expect(authLib.auth).toHaveBeenCalledOnce();
-      expect(mutations.updateComic).toHaveBeenCalledWith(mockComicId, updateData);
-      expect(result?.title).toBe(updateData.title);
-      expect(result?.description).toBe(updateData.description);
-    });
+      expect(authLib.auth).toHaveBeenCalledOnce()
+      expect(mutations.updateComic).toHaveBeenCalledWith(mockComicId, updateData)
+      expect(result?.title).toBe(updateData.title)
+      expect(result?.description).toBe(updateData.description)
+    })
 
     it("should throw error when user is not authenticated", async () => {
-      (authLib.auth as Mock).mockResolvedValue(null);
+      ;(authLib.auth as Mock).mockResolvedValue(null)
 
-      await expect(updateComic(mockComicId, updateData)).rejects.toThrow("Unauthorized");
-      expect(mutations.updateComic).not.toHaveBeenCalled();
-    });
+      await expect(updateComic(mockComicId, updateData)).rejects.toThrow("Unauthorized")
+      expect(mutations.updateComic).not.toHaveBeenCalled()
+    })
 
     it("should throw error when user is not admin", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockUserId, role: "user" },
-      });
+      })
 
       await expect(updateComic(mockComicId, updateData)).rejects.toThrow(
         "Unauthorized - Admin only"
-      );
-      expect(mutations.updateComic).not.toHaveBeenCalled();
-    });
+      )
+      expect(mutations.updateComic).not.toHaveBeenCalled()
+    })
 
     it("should handle database errors gracefully", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.updateComic as Mock).mockRejectedValue(new Error("Database error"));
+      })
+      ;(mutations.updateComic as Mock).mockRejectedValue(new Error("Database error"))
 
-      await expect(updateComic(mockComicId, updateData)).rejects.toThrow("Database error");
-    });
+      await expect(updateComic(mockComicId, updateData)).rejects.toThrow("Database error")
+    })
 
     it("should handle non-existent comic updates", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.updateComic as Mock).mockRejectedValue(new Error("Comic not found"));
+      })
+      ;(mutations.updateComic as Mock).mockRejectedValue(new Error("Comic not found"))
 
-      await expect(updateComic(999, updateData)).rejects.toThrow("Comic not found");
-    });
-  });
+      await expect(updateComic(999, updateData)).rejects.toThrow("Comic not found")
+    })
+  })
 
   // ═══════════════════════════════════════════════════
   // DELETE COMIC TESTS
@@ -272,60 +272,60 @@ describe("Comic Actions", () => {
 
   describe("deleteComic", () => {
     it("should successfully delete a comic as admin", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.deleteComic as Mock).mockResolvedValue(undefined);
+      })
+      ;(mutations.deleteComic as Mock).mockResolvedValue(undefined)
 
-      const result = await deleteComic(mockComicId);
+      const result = await deleteComic(mockComicId)
 
-      expect(authLib.auth).toHaveBeenCalledOnce();
-      expect(result).toEqual({ success: true });
-    });
+      expect(authLib.auth).toHaveBeenCalledOnce()
+      expect(result).toEqual({ success: true })
+    })
 
     it("should throw error when user is not authenticated", async () => {
-      await expect(deleteComic(mockComicId)).rejects.toThrow("Unauthorized");
-      expect(mutations.deleteComic).not.toHaveBeenCalled();
-    });
+      await expect(deleteComic(mockComicId)).rejects.toThrow("Unauthorized")
+      expect(mutations.deleteComic).not.toHaveBeenCalled()
+    })
 
     it("should throw error when user is not admin", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockUserId, role: "user" },
-      });
+      })
 
-      await expect(deleteComic(mockComicId)).rejects.toThrow("Unauthorized - Admin only");
-      expect(mutations.deleteComic).not.toHaveBeenCalled();
-    });
+      await expect(deleteComic(mockComicId)).rejects.toThrow("Unauthorized - Admin only")
+      expect(mutations.deleteComic).not.toHaveBeenCalled()
+    })
 
     it("should handle database errors gracefully", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.deleteComic as Mock).mockRejectedValue(new Error("Database error"));
+      })
+      ;(mutations.deleteComic as Mock).mockRejectedValue(new Error("Database error"))
 
-      await expect(deleteComic(mockComicId)).rejects.toThrow("Database error");
-    });
+      await expect(deleteComic(mockComicId)).rejects.toThrow("Database error")
+    })
 
     it("should handle non-existent comic deletions", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.deleteComic as Mock).mockRejectedValue(new Error("Comic not found"));
+      })
+      ;(mutations.deleteComic as Mock).mockRejectedValue(new Error("Comic not found"))
 
-      await expect(deleteComic(999)).rejects.toThrow("Comic not found");
-    });
+      await expect(deleteComic(999)).rejects.toThrow("Comic not found")
+    })
 
     it("should handle cascade deletion conflicts", async () => {
-      (authLib.auth as Mock).mockResolvedValue({
+      ;(authLib.auth as Mock).mockResolvedValue({
         user: { id: mockAdminId, role: "admin" },
-      });
-      (mutations.deleteComic as Mock).mockRejectedValue(
+      })
+      ;(mutations.deleteComic as Mock).mockRejectedValue(
         new Error("Cannot delete comic with existing chapters")
-      );
+      )
 
       await expect(deleteComic(mockComicId)).rejects.toThrow(
         "Cannot delete comic with existing chapters"
-      );
-    });
-  });
-});
+      )
+    })
+  })
+})

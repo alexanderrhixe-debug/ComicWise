@@ -1,26 +1,26 @@
-import { database } from "database";
-import { user } from "database/schema";
-import { asc, desc, eq, ilike, or } from "drizzle-orm";
+import { database } from "database"
+import { user } from "database/schema"
+import { asc, desc, eq, ilike, or } from "drizzle-orm"
 
 export async function getUserById(userId: string) {
   return await database.query.user.findFirst({
     where: eq(user.id, userId),
-  });
+  })
 }
 
 export async function getUserByEmail(email: string) {
   return await database.query.user.findFirst({
     where: eq(user.email, email),
-  });
+  })
 }
 
 export async function getUsers(params?: {
-  limit?: number;
-  offset?: number;
-  sortBy?: "name" | "email" | "createdAt";
-  sortOrder?: "asc" | "desc";
-  search?: string;
-  role?: "user" | "admin" | "moderator";
+  limit?: number
+  offset?: number
+  sortBy?: "name" | "email" | "createdAt"
+  sortOrder?: "asc" | "desc"
+  search?: string
+  role?: "user" | "admin" | "moderator"
 }) {
   const {
     limit = 10,
@@ -29,67 +29,67 @@ export async function getUsers(params?: {
     sortOrder = "desc",
     search,
     role,
-  } = params || {};
+  } = params || {}
 
-  let query = database.select().from(user).$dynamic();
+  let query = database.select().from(user).$dynamic()
 
   // Apply filters
-  const conditions = [];
+  const conditions = []
   if (search) {
-    conditions.push(or(ilike(user.name, `%${search}%`), ilike(user.email, `%${search}%`)));
+    conditions.push(or(ilike(user.name, `%${search}%`), ilike(user.email, `%${search}%`)))
   }
   if (role) {
-    conditions.push(eq(user.role, role));
+    conditions.push(eq(user.role, role))
   }
 
   if (conditions.length > 0) {
-    query = query.where(or(...conditions));
+    query = query.where(or(...conditions))
   }
 
   // Apply sorting
 
-  const sortColumn = user[sortBy];
-  query = query.orderBy(sortOrder === "asc" ? asc(sortColumn) : desc(sortColumn));
+  const sortColumn = user[sortBy]
+  query = query.orderBy(sortOrder === "asc" ? asc(sortColumn) : desc(sortColumn))
 
   // Apply pagination
-  query = query.limit(limit).offset(offset);
+  query = query.limit(limit).offset(offset)
 
-  return await query;
+  return await query
 }
 
 export async function getUserCount(params?: {
-  search?: string;
-  role?: "user" | "admin" | "moderator";
+  search?: string
+  role?: "user" | "admin" | "moderator"
 }) {
-  const { search, role } = params || {};
+  const { search, role } = params || {}
 
-  let query = database.select().from(user).$dynamic();
+  let query = database.select().from(user).$dynamic()
 
-  const conditions = [];
+  const conditions = []
   if (search) {
-    conditions.push(or(ilike(user.name, `%${search}%`), ilike(user.email, `%${search}%`)));
+    conditions.push(or(ilike(user.name, `%${search}%`), ilike(user.email, `%${search}%`)))
   }
   if (role) {
-    conditions.push(eq(user.role, role));
+    conditions.push(eq(user.role, role))
   }
 
   if (conditions.length > 0) {
-    query = query.where(or(...conditions));
+    query = query.where(or(...conditions))
   }
 
-  const result = await query;
-  return result.length;
+  const result = await query
+  return result.length
 }
 
 // Wrapper function for API compatibility
 export async function getAllUsers(filters?: {
-  search?: string;
-  role?: "user" | "admin" | "moderator";
-  emailVerified?: boolean;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
+  search?: string
+  role?: "user" | "admin" | "moderator"
+  emailVerified?: boolean
+  page?: number
+  limit?: number
+  sortBy?: string
+  sortOrder?: "asc" | "desc"
 }) {
   const {
     search,
@@ -99,9 +99,9 @@ export async function getAllUsers(filters?: {
     limit = 12,
     sortBy = "createdAt",
     sortOrder = "desc",
-  } = filters || {};
+  } = filters || {}
 
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * limit
   const users = await getUsers({
     search,
     role,
@@ -109,9 +109,9 @@ export async function getAllUsers(filters?: {
     offset,
     sortBy: sortBy as any,
     sortOrder,
-  });
+  })
 
-  const total = await getUserCount({ search, role });
+  const total = await getUserCount({ search, role })
 
   return {
     users,
@@ -119,5 +119,5 @@ export async function getAllUsers(filters?: {
     limit,
     total,
     totalPages: Math.ceil(total / limit),
-  };
+  }
 }

@@ -1,29 +1,29 @@
-"use server";
+"use server"
 
-import { auth } from "auth";
-import { and, desc, eq, lt } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { chapter, comic, database, readingProgress } from "src/database";
+import { auth } from "auth"
+import { and, desc, eq, lt } from "drizzle-orm"
+import { revalidatePath } from "next/cache"
+import { chapter, comic, database, readingProgress } from "src/database"
 
 export interface SaveProgressData {
-  comicId: number;
-  chapterId: number;
-  pageNumber: number;
-  scrollPosition: number;
-  totalPages: number;
+  comicId: number
+  chapterId: number
+  pageNumber: number
+  scrollPosition: number
+  totalPages: number
 }
 
 export interface ReadingHistory {
-  id: number;
-  comicId: number;
-  comicTitle: string;
-  chapterId: number;
-  chapterTitle: string;
-  chapterNumber: number;
-  pageNumber: number;
-  progressPercent: number;
-  lastReadAt: Date;
-  completedAt: Date | null;
+  id: number
+  comicId: number
+  comicTitle: string
+  chapterId: number
+  chapterTitle: string
+  chapterNumber: number
+  pageNumber: number
+  progressPercent: number
+  lastReadAt: Date
+  completedAt: Date | null
 }
 
 /**
@@ -31,16 +31,16 @@ export interface ReadingHistory {
  */
 export async function saveReadingProgress(data: SaveProgressData) {
   try {
-    const session = await auth();
+    const session = await auth()
     if (!session?.user?.id) {
-      return { success: false, error: "Unauthorized" };
+      return { success: false, error: "Unauthorized" }
     }
 
     // Calculate progress percentage
-    const progressPercent = Math.round((data.pageNumber / data.totalPages) * 100);
+    const progressPercent = Math.round((data.pageNumber / data.totalPages) * 100)
 
     // Check if completed (>95% read)
-    const completedAt = progressPercent >= 95 ? new Date() : null;
+    const completedAt = progressPercent >= 95 ? new Date() : null
 
     // Check if progress exists
     const existing = await database
@@ -52,7 +52,7 @@ export async function saveReadingProgress(data: SaveProgressData) {
           eq(readingProgress.chapterId, data.chapterId)
         )
       )
-      .limit(1);
+      .limit(1)
 
     if (existing.length > 0 && existing[0]) {
       // Update existing progress
@@ -67,7 +67,7 @@ export async function saveReadingProgress(data: SaveProgressData) {
           lastReadAt: new Date(),
           updatedAt: new Date(),
         })
-        .where(eq(readingProgress.id, existing[0].id));
+        .where(eq(readingProgress.id, existing[0].id))
     } else {
       // Create new progress
       await database.insert(readingProgress).values({
@@ -80,17 +80,17 @@ export async function saveReadingProgress(data: SaveProgressData) {
         progressPercent,
         completedAt,
         lastReadAt: new Date(),
-      });
+      })
     }
 
-    revalidatePath("/comics/[id]", "page");
-    return { success: true };
+    revalidatePath("/comics/[id]", "page")
+    return { success: true }
   } catch (error) {
-    console.error("Failed to save reading progress:", error);
+    console.error("Failed to save reading progress:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to save progress",
-    };
+    }
   }
 }
 
@@ -99,9 +99,9 @@ export async function saveReadingProgress(data: SaveProgressData) {
  */
 export async function getReadingProgress(chapterId: number) {
   try {
-    const session = await auth();
+    const session = await auth()
     if (!session?.user?.id) {
-      return { success: false, error: "Unauthorized" };
+      return { success: false, error: "Unauthorized" }
     }
 
     const progress = await database
@@ -110,15 +110,15 @@ export async function getReadingProgress(chapterId: number) {
       .where(
         and(eq(readingProgress.userId, session.user.id), eq(readingProgress.chapterId, chapterId))
       )
-      .limit(1);
+      .limit(1)
 
-    return { success: true, data: progress[0] || null };
+    return { success: true, data: progress[0] || null }
   } catch (error) {
-    console.error("Failed to get reading progress:", error);
+    console.error("Failed to get reading progress:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get progress",
-    };
+    }
   }
 }
 
@@ -129,9 +129,9 @@ export async function getReadingHistory(
   limit = 20
 ): Promise<{ success: boolean; data?: ReadingHistory[]; error?: string }> {
   try {
-    const session = await auth();
+    const session = await auth()
     if (!session?.user?.id) {
-      return { success: false, error: "Unauthorized" };
+      return { success: false, error: "Unauthorized" }
     }
 
     const history = await database
@@ -152,7 +152,7 @@ export async function getReadingHistory(
       .leftJoin(chapter, eq(readingProgress.chapterId, chapter.id))
       .where(eq(readingProgress.userId, session.user.id))
       .orderBy(desc(readingProgress.lastReadAt))
-      .limit(limit);
+      .limit(limit)
 
     const formattedHistory: ReadingHistory[] = history.map((item: any) => ({
       id: item.id,
@@ -165,15 +165,15 @@ export async function getReadingHistory(
       progressPercent: item.progressPercent,
       lastReadAt: item.lastReadAt,
       completedAt: item.completedAt,
-    }));
+    }))
 
-    return { success: true, data: formattedHistory };
+    return { success: true, data: formattedHistory }
   } catch (error) {
-    console.error("Failed to get reading history:", error);
+    console.error("Failed to get reading history:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get history",
-    };
+    }
   }
 }
 
@@ -182,9 +182,9 @@ export async function getReadingHistory(
  */
 export async function getContinueReading(limit = 10) {
   try {
-    const session = await auth();
+    const session = await auth()
     if (!session?.user?.id) {
-      return { success: false, error: "Unauthorized" };
+      return { success: false, error: "Unauthorized" }
     }
 
     // Get latest progress for each comic (not completed)
@@ -207,15 +207,15 @@ export async function getContinueReading(limit = 10) {
         and(eq(readingProgress.userId, session.user.id), lt(readingProgress.progressPercent, 100))
       )
       .orderBy(desc(readingProgress.lastReadAt))
-      .limit(limit);
+      .limit(limit)
 
-    return { success: true, data: progress };
+    return { success: true, data: progress }
   } catch (error) {
-    console.error("Failed to get continue reading list:", error);
+    console.error("Failed to get continue reading list:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get continue reading",
-    };
+    }
   }
 }
 
@@ -224,22 +224,22 @@ export async function getContinueReading(limit = 10) {
  */
 export async function deleteReadingProgress(progressId: number) {
   try {
-    const session = await auth();
+    const session = await auth()
     if (!session?.user?.id) {
-      return { success: false, error: "Unauthorized" };
+      return { success: false, error: "Unauthorized" }
     }
 
     await database
       .delete(readingProgress)
-      .where(and(eq(readingProgress.id, progressId), eq(readingProgress.userId, session.user.id)));
+      .where(and(eq(readingProgress.id, progressId), eq(readingProgress.userId, session.user.id)))
 
-    revalidatePath("/profile/history");
-    return { success: true };
+    revalidatePath("/profile/history")
+    return { success: true }
   } catch (error) {
-    console.error("Failed to delete reading progress:", error);
+    console.error("Failed to delete reading progress:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to delete progress",
-    };
+    }
   }
 }

@@ -1,20 +1,20 @@
 // Minimal types for `input-otp` used by the app
 declare module "input-otp" {
-  import * as React from "react";
+  import * as React from "react"
 
   export interface OTPInputContextType {
-    value: string;
-    onChange?: (v: string) => void;
-    slots?: any;
+    value: string
+    onChange?: (v: string) => void
+    slots?: any
   }
 
-  export const OTPInputContext: React.Context<OTPInputContextType>;
+  export const OTPInputContext: React.Context<OTPInputContextType>
 
   export interface OTPProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    length?: number;
+    length?: number
   }
 
-  export const OTPInput: React.FC<OTPProps>;
+  export const OTPInput: React.FC<OTPProps>
 
-  export default OTPInput;
+  export default OTPInput
 }

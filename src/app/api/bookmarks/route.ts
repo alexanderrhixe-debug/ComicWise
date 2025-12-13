@@ -2,16 +2,16 @@
 // BOOKMARKS API - Full CRUD
 // ═══════════════════════════════════════════════════
 
-import { auth } from "auth";
+import { auth } from "auth"
 import {
   addBookmark,
   removeBookmark,
   updateBookmarkNotes,
   updateReadingProgress,
-} from "database/mutations/bookmarks";
-import { getUserBookmarks } from "database/queries/bookmarks";
-import { createBookmarkSchema, updateBookmarkSchema } from "lib/validations/schemas";
-import { NextRequest, NextResponse } from "next/server";
+} from "database/mutations/bookmarks"
+import { getUserBookmarks } from "database/queries/bookmarks"
+import { createBookmarkSchema, updateBookmarkSchema } from "lib/validations/schemas"
+import { NextRequest, NextResponse } from "next/server"
 
 // ═══════════════════════════════════════════════════
 // GET - List User Bookmarks
@@ -19,27 +19,27 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(_request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const bookmarks = await getUserBookmarks(session.user.id);
+    const bookmarks = await getUserBookmarks(session.user.id)
 
     return NextResponse.json({
       success: true,
       data: bookmarks,
-    });
+    })
   } catch (error) {
-    console.error("Get bookmarks error:", error);
+    console.error("Get bookmarks error:", error)
     return NextResponse.json(
       {
         error: "Failed to fetch bookmarks",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -49,31 +49,31 @@ export async function GET(_request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json();
+    const body = await request.json()
 
     const validation = createBookmarkSchema.safeParse({
       ...body,
       userId: session.user.id,
-    });
+    })
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid input", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
     const bookmark = await addBookmark(
       session.user.id,
       validation.data.comicId,
       validation.data.lastReadChapterId
-    );
+    )
 
     return NextResponse.json(
       {
@@ -82,16 +82,16 @@ export async function POST(request: NextRequest) {
         message: "Bookmark added successfully",
       },
       { status: 201 }
-    );
+    )
   } catch (error) {
-    console.error("Create bookmark error:", error);
+    console.error("Create bookmark error:", error)
     return NextResponse.json(
       {
         error: "Failed to create bookmark",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -101,57 +101,57 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json();
-    const { comicId, lastReadChapterId, notes } = body;
+    const body = await request.json()
+    const { comicId, lastReadChapterId, notes } = body
 
     if (!comicId) {
-      return NextResponse.json({ error: "Comic ID is required" }, { status: 400 });
+      return NextResponse.json({ error: "Comic ID is required" }, { status: 400 })
     }
 
     const validation = updateBookmarkSchema.safeParse({
       lastReadChapterId,
       notes,
-    });
+    })
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid input", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
-    let updatedBookmark;
+    let updatedBookmark
 
     if (validation.data.lastReadChapterId !== undefined) {
       updatedBookmark = await updateReadingProgress(
         session.user.id,
         comicId,
         validation.data.lastReadChapterId
-      );
+      )
     } else if (validation.data.notes !== undefined) {
-      updatedBookmark = await updateBookmarkNotes(session.user.id, comicId, validation.data.notes);
+      updatedBookmark = await updateBookmarkNotes(session.user.id, comicId, validation.data.notes)
     }
 
     return NextResponse.json({
       success: true,
       data: updatedBookmark,
       message: "Bookmark updated successfully",
-    });
+    })
   } catch (error) {
-    console.error("Update bookmark error:", error);
+    console.error("Update bookmark error:", error)
     return NextResponse.json(
       {
         error: "Failed to update bookmark",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -161,37 +161,37 @@ export async function PATCH(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const searchParams = new URL(request.url).searchParams;
-    const comicId = searchParams.get("comicId");
+    const searchParams = new URL(request.url).searchParams
+    const comicId = searchParams.get("comicId")
 
     if (!comicId) {
-      return NextResponse.json({ error: "Comic ID is required" }, { status: 400 });
+      return NextResponse.json({ error: "Comic ID is required" }, { status: 400 })
     }
 
-    const deletedBookmark = await removeBookmark(session.user.id, parseInt(comicId));
+    const deletedBookmark = await removeBookmark(session.user.id, parseInt(comicId))
 
     if (!deletedBookmark) {
-      return NextResponse.json({ error: "Bookmark not found" }, { status: 404 });
+      return NextResponse.json({ error: "Bookmark not found" }, { status: 404 })
     }
 
     return NextResponse.json({
       success: true,
       message: "Bookmark removed successfully",
-    });
+    })
   } catch (error) {
-    console.error("Delete bookmark error:", error);
+    console.error("Delete bookmark error:", error)
     return NextResponse.json(
       {
         error: "Failed to delete bookmark",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }

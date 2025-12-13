@@ -1,27 +1,27 @@
 // Central place for custom type declarations and stubs
 declare module "*.svg" {
-  import * as React from "react";
-  const ReactComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
+  import * as React from "react"
+  const ReactComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+  export default ReactComponent
 }
 
-declare module "*.png";
-declare module "*.jpg";
-declare module "*.jpeg";
-declare module "*.webp";
+declare module "*.png"
+declare module "*.jpg"
+declare module "*.jpeg"
+declare module "*.webp"
 
 // Allow importing raw text for fixtures
 declare module "*.txt" {
-  const content: string;
-  export default content;
+  const content: string
+  export default content
 }
 
 // App-specific global types
 declare global {
-  type Nullable<T> = T | null | undefined;
+  type Nullable<T> = T | null | undefined
 }
 
-export {};
+export {}
 // AUTO-GENERATED index for local stub types
 /// <reference path="./simplewebauthn__server.d.ts" />
 /// <reference path="./tailwindcss__postcss.d.ts" />
@@ -45,4 +45,4 @@ export {};
 /// <reference path="./tailwindcss.d.ts" />
 /// <reference path="./tsx.d.ts" />
 /// <reference path="./tw-animate-css.d.ts" />
-export {};
+export {}

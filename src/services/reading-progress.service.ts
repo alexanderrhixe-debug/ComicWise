@@ -1,37 +1,37 @@
-"use server";
+"use server"
 
-import { chapter, comic, database, readingProgress } from "database";
-import { and, desc, eq, lt, sql } from "drizzle-orm";
-import { cacheKeys, cacheService, cacheTTL } from "services/cache.service";
+import { chapter, comic, database, readingProgress } from "database"
+import { and, desc, eq, lt, sql } from "drizzle-orm"
+import { cacheKeys, cacheService, cacheTTL } from "services/cache.service"
 
 export interface ReadingProgressData {
-  userId: string;
-  chapterId: number;
-  comicId: number;
-  pageNumber: number;
-  scrollPosition: number;
-  totalPages: number;
+  userId: string
+  chapterId: number
+  comicId: number
+  pageNumber: number
+  scrollPosition: number
+  totalPages: number
 }
 
 export interface ReadingHistory {
-  id: number;
-  chapterId: number;
-  comicId: number;
-  comicTitle: string;
-  chapterTitle: string;
-  chapterNumber: number;
-  pageNumber: number;
-  progressPercent: number;
-  lastReadAt: Date;
-  completedAt: Date | null;
+  id: number
+  chapterId: number
+  comicId: number
+  comicTitle: string
+  chapterTitle: string
+  chapterNumber: number
+  pageNumber: number
+  progressPercent: number
+  lastReadAt: Date
+  completedAt: Date | null
 }
 
 export interface ReadingStats {
-  totalComics: number;
-  totalChapters: number;
-  completedChapters: number;
-  totalPages: number;
-  pagesRead: number;
+  totalComics: number
+  totalChapters: number
+  completedChapters: number
+  totalPages: number
+  pagesRead: number
 }
 
 export class ReadingProgressService {
@@ -40,8 +40,8 @@ export class ReadingProgressService {
    */
   async saveProgress(data: ReadingProgressData): Promise<void> {
     try {
-      const progressPercent = Math.round((data.pageNumber / data.totalPages) * 100);
-      const completedAt = progressPercent >= 95 ? new Date() : null;
+      const progressPercent = Math.round((data.pageNumber / data.totalPages) * 100)
+      const completedAt = progressPercent >= 95 ? new Date() : null
 
       // Check if progress exists
       const existing = await database
@@ -53,7 +53,7 @@ export class ReadingProgressService {
             eq(readingProgress.chapterId, data.chapterId)
           )
         )
-        .limit(1);
+        .limit(1)
 
       if (existing.length > 0 && existing[0]) {
         await database
@@ -67,7 +67,7 @@ export class ReadingProgressService {
             lastReadAt: new Date(),
             updatedAt: new Date(),
           })
-          .where(eq(readingProgress.id, existing[0].id));
+          .where(eq(readingProgress.id, existing[0].id))
       } else {
         await database.insert(readingProgress).values({
           userId: data.userId,
@@ -79,14 +79,14 @@ export class ReadingProgressService {
           progressPercent,
           completedAt,
           lastReadAt: new Date(),
-        });
+        })
       }
 
-      await cacheService.delete(cacheKeys.userReadingProgress(data.userId, data.comicId));
-      await cacheService.delete(cacheKeys.userReadingHistory(data.userId));
+      await cacheService.delete(cacheKeys.userReadingProgress(data.userId, data.comicId))
+      await cacheService.delete(cacheKeys.userReadingHistory(data.userId))
     } catch (error) {
-      console.error("Failed to save reading progress:", error);
-      throw error;
+      console.error("Failed to save reading progress:", error)
+      throw error
     }
   }
 
@@ -99,12 +99,12 @@ export class ReadingProgressService {
         .select()
         .from(readingProgress)
         .where(and(eq(readingProgress.userId, userId), eq(readingProgress.chapterId, chapterId)))
-        .limit(1);
+        .limit(1)
 
-      return progress[0] || null;
+      return progress[0] || null
     } catch (error) {
-      console.error("Failed to get reading progress:", error);
-      return null;
+      console.error("Failed to get reading progress:", error)
+      return null
     }
   }
 
@@ -121,15 +121,15 @@ export class ReadingProgressService {
             .from(readingProgress)
             .where(and(eq(readingProgress.userId, userId), eq(readingProgress.comicId, comicId)))
             .orderBy(desc(readingProgress.lastReadAt))
-            .limit(1);
+            .limit(1)
 
-          return progress[0] || null;
+          return progress[0] || null
         },
         { ttl: cacheTTL.SHORT }
-      );
+      )
     } catch (error) {
-      console.error("Failed to get comic progress:", error);
-      return null;
+      console.error("Failed to get comic progress:", error)
+      return null
     }
   }
 
@@ -159,20 +159,20 @@ export class ReadingProgressService {
             .leftJoin(chapter, eq(readingProgress.chapterId, chapter.id))
             .where(eq(readingProgress.userId, userId))
             .orderBy(desc(readingProgress.lastReadAt))
-            .limit(limit);
+            .limit(limit)
 
           return history.map(
             (item: {
-              id: any;
-              chapterId: any;
-              comicId: any;
-              comicTitle: any;
-              chapterTitle: any;
-              chapterNumber: any;
-              pageNumber: any;
-              progressPercent: any;
-              lastReadAt: any;
-              completedAt: any;
+              id: any
+              chapterId: any
+              comicId: any
+              comicTitle: any
+              chapterTitle: any
+              chapterNumber: any
+              pageNumber: any
+              progressPercent: any
+              lastReadAt: any
+              completedAt: any
             }) => ({
               id: item.id,
               chapterId: item.chapterId,
@@ -185,13 +185,13 @@ export class ReadingProgressService {
               lastReadAt: item.lastReadAt,
               completedAt: item.completedAt,
             })
-          );
+          )
         },
         { ttl: cacheTTL.SHORT }
-      );
+      )
     } catch (error) {
-      console.error("Failed to get reading history:", error);
-      return [];
+      console.error("Failed to get reading history:", error)
+      return []
     }
   }
 
@@ -217,10 +217,10 @@ export class ReadingProgressService {
         .leftJoin(chapter, eq(readingProgress.chapterId, chapter.id))
         .where(and(eq(readingProgress.userId, userId), lt(readingProgress.progressPercent, 100)))
         .orderBy(desc(readingProgress.lastReadAt))
-        .limit(limit);
+        .limit(limit)
     } catch (error) {
-      console.error("Failed to get continue reading:", error);
-      return [];
+      console.error("Failed to get continue reading:", error)
+      return []
     }
   }
 
@@ -236,10 +236,10 @@ export class ReadingProgressService {
           and(eq(readingProgress.userId, userId), sql`${readingProgress.completedAt} IS NOT NULL`)
         )
         .orderBy(desc(readingProgress.completedAt))
-        .limit(limit);
+        .limit(limit)
     } catch (error) {
-      console.error("Failed to get completed chapters:", error);
-      return [];
+      console.error("Failed to get completed chapters:", error)
+      return []
     }
   }
 
@@ -252,21 +252,21 @@ export class ReadingProgressService {
         .select()
         .from(readingProgress)
         .where(eq(readingProgress.id, progressId))
-        .limit(1);
+        .limit(1)
 
       if (progress.length === 0 || !progress[0] || progress[0].userId !== userId) {
-        return false;
+        return false
       }
 
-      await database.delete(readingProgress).where(eq(readingProgress.id, progressId));
+      await database.delete(readingProgress).where(eq(readingProgress.id, progressId))
 
-      await cacheService.delete(cacheKeys.userReadingProgress(userId, progress[0].comicId));
-      await cacheService.delete(cacheKeys.userReadingHistory(userId));
+      await cacheService.delete(cacheKeys.userReadingProgress(userId, progress[0].comicId))
+      await cacheService.delete(cacheKeys.userReadingHistory(userId))
 
-      return true;
+      return true
     } catch (error) {
-      console.error("Failed to delete reading progress:", error);
-      return false;
+      console.error("Failed to delete reading progress:", error)
+      return false
     }
   }
 
@@ -277,13 +277,13 @@ export class ReadingProgressService {
     try {
       await database
         .delete(readingProgress)
-        .where(and(eq(readingProgress.userId, userId), eq(readingProgress.comicId, comicId)));
+        .where(and(eq(readingProgress.userId, userId), eq(readingProgress.comicId, comicId)))
 
-      await cacheService.delete(cacheKeys.userReadingProgress(userId, comicId));
-      await cacheService.delete(cacheKeys.userReadingHistory(userId));
+      await cacheService.delete(cacheKeys.userReadingProgress(userId, comicId))
+      await cacheService.delete(cacheKeys.userReadingHistory(userId))
     } catch (error) {
-      console.error("Failed to clear comic progress:", error);
-      throw error;
+      console.error("Failed to clear comic progress:", error)
+      throw error
     }
   }
 
@@ -301,7 +301,7 @@ export class ReadingProgressService {
           pagesRead: sql<number>`SUM(${readingProgress.pageNumber})`,
         })
         .from(readingProgress)
-        .where(eq(readingProgress.userId, userId));
+        .where(eq(readingProgress.userId, userId))
 
       return {
         totalComics: stats[0]?.totalComics || 0,
@@ -309,23 +309,23 @@ export class ReadingProgressService {
         completedChapters: stats[0]?.completedChapters || 0,
         totalPages: stats[0]?.totalPages || 0,
         pagesRead: stats[0]?.pagesRead || 0,
-      };
+      }
     } catch (error) {
-      console.error("Failed to get reading stats:", error);
+      console.error("Failed to get reading stats:", error)
       return {
         totalComics: 0,
         totalChapters: 0,
         completedChapters: 0,
         totalPages: 0,
         pagesRead: 0,
-      };
+      }
     }
   }
 }
 
 // Export async wrappers for server actions
-const readingProgressService = new ReadingProgressService();
+const readingProgressService = new ReadingProgressService()
 
 export const getReadingStats = async (userId: string) => {
-  return readingProgressService.getStats(userId);
-};
+  return readingProgressService.getStats(userId)
+}

@@ -1,26 +1,26 @@
-"use client";
+"use client"
 
-import { Card, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Loader2 } from "lucide-react";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Card, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Loader2 } from "lucide-react"
+import { signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function SignOutPage() {
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     const handleSignOut = async () => {
       try {
-        await signOut({ callbackUrl: "/sign-in", redirect: true });
+        await signOut({ callbackUrl: "/sign-in", redirect: true })
       } catch (error) {
-        console.error("Sign out error:", error);
-        router.push("/sign-in");
+        console.error("Sign out error:", error)
+        router.push("/sign-in")
       }
-    };
+    }
 
-    handleSignOut();
-  }, [router]);
+    handleSignOut()
+  }, [router])
 
   return (
     <Card>
@@ -32,5 +32,5 @@ export default function SignOutPage() {
         <CardDescription>Please wait while we sign you out...</CardDescription>
       </CardHeader>
     </Card>
-  );
+  )
 }

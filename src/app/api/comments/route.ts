@@ -2,12 +2,12 @@
 // COMMENTS API - Full CRUD with Email Notifications
 // ═══════════════════════════════════════════════════
 
-import { auth } from "auth";
-import { sendCommentNotificationEmail } from "lib/email";
-import { createCommentSchema } from "lib/validations/schemas";
-import { NextRequest, NextResponse } from "next/server";
-import { createComment } from "src/database/mutations/comments";
-import { getCommentsByChapter } from "src/database/queries/comments";
+import { auth } from "auth"
+import { sendCommentNotificationEmail } from "lib/email"
+import { createCommentSchema } from "lib/validations/schemas"
+import { NextRequest, NextResponse } from "next/server"
+import { createComment } from "src/database/mutations/comments"
+import { getCommentsByChapter } from "src/database/queries/comments"
 
 // ═══════════════════════════════════════════════════
 // GET - List Comments with Filtering
@@ -15,23 +15,23 @@ import { getCommentsByChapter } from "src/database/queries/comments";
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = new URL(request.url).searchParams;
+    const searchParams = new URL(request.url).searchParams
 
-    const chapterId = searchParams.get("chapterId");
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "20");
-    const sortOrder = (searchParams.get("sortOrder") as "asc" | "desc") || "desc";
+    const chapterId = searchParams.get("chapterId")
+    const page = parseInt(searchParams.get("page") || "1")
+    const limit = parseInt(searchParams.get("limit") || "20")
+    const sortOrder = (searchParams.get("sortOrder") as "asc" | "desc") || "desc"
 
     if (!chapterId) {
-      return NextResponse.json({ error: "Chapter ID is required" }, { status: 400 });
+      return NextResponse.json({ error: "Chapter ID is required" }, { status: 400 })
     }
 
-    const offset = (page - 1) * limit;
+    const offset = (page - 1) * limit
     const comments = await getCommentsByChapter(parseInt(chapterId), {
       limit,
       offset,
       sortOrder,
-    });
+    })
 
     return NextResponse.json({
       success: true,
@@ -40,16 +40,16 @@ export async function GET(request: NextRequest) {
         page,
         limit,
       },
-    });
+    })
   } catch (error) {
-    console.error("Get comments error:", error);
+    console.error("Get comments error:", error)
     return NextResponse.json(
       {
         error: "Failed to fetch comments",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -59,34 +59,34 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json();
+    const body = await request.json()
 
     const validation = createCommentSchema.safeParse({
       ...body,
       userId: session.user.id,
-    });
+    })
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid input", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
     const newComment = await createComment({
       content: validation.data.content,
       userId: session.user.id,
       chapterId: validation.data.chapterId,
-    });
+    })
 
     if (!newComment) {
-      return NextResponse.json({ error: "Failed to create comment" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to create comment" }, { status: 500 })
     }
 
     // Send email notification (optional - could be to comic author or other users)
@@ -106,9 +106,9 @@ export async function POST(request: NextRequest) {
               commentType: "new",
             })
           )
-        ).catch((err) => console.error("Failed to send comment notifications:", err));
+        ).catch((err) => console.error("Failed to send comment notifications:", err))
       } catch (emailError) {
-        console.error("Email notification error:", emailError);
+        console.error("Email notification error:", emailError)
       }
     }
 
@@ -119,15 +119,15 @@ export async function POST(request: NextRequest) {
         message: "Comment created successfully",
       },
       { status: 201 }
-    );
+    )
   } catch (error) {
-    console.error("Create comment error:", error);
+    console.error("Create comment error:", error)
     return NextResponse.json(
       {
         error: "Failed to create comment",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }

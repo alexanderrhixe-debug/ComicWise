@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 // ═══════════════════════════════════════════════════
 // USER VALIDATION SCHEMAS
@@ -18,9 +18,9 @@ export const userSeedSchema = z
     updatedAt: z.coerce.date().optional(),
     lastActivityDate: z.coerce.date().nullable().optional(),
   })
-  .strict();
+  .strict()
 
-export const userArraySchema = z.array(userSeedSchema);
+export const userArraySchema = z.array(userSeedSchema)
 
 // ═══════════════════════════════════════════════════
 // METADATA VALIDATION SCHEMAS
@@ -31,7 +31,7 @@ export const typeSeedSchema = z
     name: z.string().min(1),
     description: z.string().nullable().optional(),
   })
-  .strict();
+  .strict()
 
 export const authorSeedSchema = z
   .object({
@@ -39,7 +39,7 @@ export const authorSeedSchema = z
     bio: z.string().nullable().optional(),
     image: z.string().nullable().optional(),
   })
-  .strict();
+  .strict()
 
 export const artistSeedSchema = z
   .object({
@@ -47,14 +47,14 @@ export const artistSeedSchema = z
     bio: z.string().nullable().optional(),
     image: z.string().nullable().optional(),
   })
-  .strict();
+  .strict()
 
 export const genreSeedSchema = z
   .object({
     name: z.string().min(1),
     description: z.string().nullable().optional(),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // COMIC VALIDATION SCHEMAS
@@ -67,7 +67,7 @@ export const imageSchema = z
     checksum: z.string().optional(),
     status: z.string().optional(),
   })
-  .strict();
+  .strict()
 
 export const comicSeedSchema = z
   .object({
@@ -141,9 +141,9 @@ export const comicSeedSchema = z
     coverImage: z.string().optional(),
     spider: z.string().optional(),
   })
-  .strict();
+  .strict()
 
-export const comicArraySchema = z.array(comicSeedSchema);
+export const comicArraySchema = z.array(comicSeedSchema)
 
 // ═══════════════════════════════════════════════════
 // CHAPTER VALIDATION SCHEMAS
@@ -193,18 +193,18 @@ export const chapterSeedSchema = z
       )
       .optional(),
   })
-  .strict();
+  .strict()
 
-export const chapterArraySchema = z.array(chapterSeedSchema);
+export const chapterArraySchema = z.array(chapterSeedSchema)
 
 // ═══════════════════════════════════════════════════
 // TYPE GUARDS
 // ═══════════════════════════════════════════════════
 
-export type UserSeed = z.infer<typeof userSeedSchema>;
-export type ComicSeed = z.infer<typeof comicSeedSchema>;
-export type ChapterSeed = z.infer<typeof chapterSeedSchema>;
-export type TypeSeed = z.infer<typeof typeSeedSchema>;
-export type AuthorSeed = z.infer<typeof authorSeedSchema>;
-export type ArtistSeed = z.infer<typeof artistSeedSchema>;
-export type GenreSeed = z.infer<typeof genreSeedSchema>;
+export type UserSeed = z.infer<typeof userSeedSchema>
+export type ComicSeed = z.infer<typeof comicSeedSchema>
+export type ChapterSeed = z.infer<typeof chapterSeedSchema>
+export type TypeSeed = z.infer<typeof typeSeedSchema>
+export type AuthorSeed = z.infer<typeof authorSeedSchema>
+export type ArtistSeed = z.infer<typeof artistSeedSchema>
+export type GenreSeed = z.infer<typeof genreSeedSchema>

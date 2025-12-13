@@ -2,12 +2,12 @@
 // USERS API - Full CRUD with Filtering & Pagination
 // ═══════════════════════════════════════════════════
 
-import { auth } from "auth";
-import bcrypt from "bcryptjs";
-import { createUserSchema, userFilterSchema } from "lib/validations/schemas";
-import { NextRequest, NextResponse } from "next/server";
-import { createUser } from "src/database/mutations/users";
-import { getAllUsers } from "src/database/queries/users";
+import { auth } from "auth"
+import bcrypt from "bcryptjs"
+import { createUserSchema, userFilterSchema } from "lib/validations/schemas"
+import { NextRequest, NextResponse } from "next/server"
+import { createUser } from "src/database/mutations/users"
+import { getAllUsers } from "src/database/queries/users"
 
 // ═══════════════════════════════════════════════════
 // GET - List Users with Filtering & Pagination
@@ -15,13 +15,13 @@ import { getAllUsers } from "src/database/queries/users";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user || session.user.role !== "admin") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const searchParams = new URL(request.url).searchParams;
+    const searchParams = new URL(request.url).searchParams
 
     const filters = {
       search: searchParams.get("search") || undefined,
@@ -36,18 +36,18 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get("limit") ? parseInt(searchParams.get("limit")!) : 12,
       sortBy: searchParams.get("sortBy") || "createdAt",
       sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || "desc",
-    };
+    }
 
-    const validation = userFilterSchema.safeParse(filters);
+    const validation = userFilterSchema.safeParse(filters)
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid filters", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
-    const result = await getAllUsers(validation.data);
+    const result = await getAllUsers(validation.data)
 
     return NextResponse.json({
       success: true,
@@ -58,16 +58,16 @@ export async function GET(request: NextRequest) {
         total: result.total,
         totalPages: result.totalPages,
       },
-    });
+    })
   } catch (error) {
-    console.error("Get users error:", error);
+    console.error("Get users error:", error)
     return NextResponse.json(
       {
         error: "Failed to fetch users",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -77,25 +77,25 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user || session.user.role !== "admin") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json();
+    const body = await request.json()
 
-    const validation = createUserSchema.safeParse(body);
+    const validation = createUserSchema.safeParse(body)
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid input", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(validation.data.password, 10);
+    const hashedPassword = await bcrypt.hash(validation.data.password, 10)
 
     const newUser = await createUser({
       name: validation.data.name,
@@ -103,14 +103,14 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
       role: validation.data.role,
       image: validation.data.image,
-    });
+    })
 
     if (!newUser) {
-      return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to create user" }, { status: 500 })
     }
 
     // Remove password from response
-    const { password: _password, ...userWithoutPassword } = newUser;
+    const { password: _password, ...userWithoutPassword } = newUser
 
     return NextResponse.json(
       {
@@ -119,15 +119,15 @@ export async function POST(request: NextRequest) {
         message: "User created successfully",
       },
       { status: 201 }
-    );
+    )
   } catch (error) {
-    console.error("Create user error:", error);
+    console.error("Create user error:", error)
     return NextResponse.json(
       {
         error: "Failed to create user",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }

@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react"
 
-import { Button } from "ui/button";
-import { Checkbox } from "ui/checkbox";
-import { Input } from "ui/input";
-import { Label } from "ui/label";
+import { Button } from "ui/button"
+import { Checkbox } from "ui/checkbox"
+import { Input } from "ui/input"
+import { Label } from "ui/label"
 
 const RegisterForm = () => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false)
 
   return (
     <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
@@ -94,7 +94,7 @@ const RegisterForm = () => {
         Sign Up to Shadcn Studio
       </Button>
     </form>
-  );
-};
+  )
+}
 
-export default RegisterForm;
+export default RegisterForm

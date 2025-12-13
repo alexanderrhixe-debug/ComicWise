@@ -1,9 +1,9 @@
-import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from "lucide-react";
+import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from "lucide-react"
 
-import { Separator } from "ui/separator";
+import { Separator } from "ui/separator"
 
-import CurrentYear from "@/components/CurrentYear";
-import Logo from "@/components/shadcn-studio/logo";
+import CurrentYear from "@/components/CurrentYear"
+import Logo from "@/components/shadcn-studio/logo"
 
 const Footer = () => {
   return (
@@ -46,7 +46,7 @@ const Footer = () => {
         </p>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

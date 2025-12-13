@@ -2,7 +2,7 @@
 // CSPELL CONFIGURATION (Next.js 16 TypeScript Config)
 // ═══════════════════════════════════════════════════
 
-import type { CSpellSettings } from "cspell";
+import type { CSpellSettings } from "cspell"
 
 const config: CSpellSettings = {
   // ═══════════════════════════════════════════════════
@@ -169,6 +169,6 @@ const config: CSpellSettings = {
       ignoreRegExpList: ["/import\\s+.*?from\\s+['\"].*?['\"]/g", "/require\\(['\"].*?['\"]\\)/g"],
     },
   ],
-};
+}
 
-export default config;
+export default config

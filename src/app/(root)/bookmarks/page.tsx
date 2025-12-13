@@ -1,25 +1,25 @@
-import { auth } from "auth";
-import { ComicCard } from "components/ComicCard";
-import { Badge } from "components/ui/badge";
-import { Button } from "components/ui/button";
-import { getUserBookmarks } from "database/queries";
-import { BookmarkX } from "lucide-react";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { auth } from "auth"
+import { ComicCard } from "components/ComicCard"
+import { Badge } from "components/ui/badge"
+import { Button } from "components/ui/button"
+import { getUserBookmarks } from "database/queries"
+import { BookmarkX } from "lucide-react"
+import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export const metadata = {
   title: "My Bookmarks - ComicWise",
   description: "Your bookmarked comics and reading progress",
-};
+}
 
 export default async function BookmarksPage() {
-  const session = await auth();
+  const session = await auth()
 
   if (!session?.user?.id) {
-    redirect("/sign-in?callbackUrl=/bookmarks");
+    redirect("/sign-in?callbackUrl=/bookmarks")
   }
 
-  const bookmarks = await getUserBookmarks(session.user.id);
+  const bookmarks = await getUserBookmarks(session.user.id)
 
   if (bookmarks.length === 0) {
     return (
@@ -35,7 +35,7 @@ export default async function BookmarksPage() {
           </Link>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -49,7 +49,7 @@ export default async function BookmarksPage() {
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
         {bookmarks.map(({ bookmark, comic, chapter }: any) => {
-          if (!comic) return null;
+          if (!comic) return null
 
           return (
             <div key={bookmark.comicId} className="group relative">
@@ -64,9 +64,9 @@ export default async function BookmarksPage() {
                 </div>
               )}
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

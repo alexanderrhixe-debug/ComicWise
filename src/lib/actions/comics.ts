@@ -1,14 +1,14 @@
-"use server";
+"use server"
 
 // ═══════════════════════════════════════════════════
 // COMICS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "appConfig";
-import { database } from "database";
-import { comic, comicToGenre } from "database/schema";
-import { and, desc, eq, like, sql } from "drizzle-orm";
-import slugify from "lib/utils/slugify";
+import { appConfig } from "appConfig"
+import { database } from "database"
+import { comic, comicToGenre } from "database/schema"
+import { and, desc, eq, like, sql } from "drizzle-orm"
+import slugify from "lib/utils/slugify"
 import {
   comicFilterSchema,
   createComicSchema,
@@ -16,16 +16,16 @@ import {
   type ComicFilterInput,
   type CreateComicInput,
   type UpdateComicInput,
-} from "lib/validations/schemas";
-import { revalidatePath } from "next/cache";
-import type { Genre } from "types/database-auto";
+} from "lib/validations/schemas"
+import { revalidatePath } from "next/cache"
+import type { Genre } from "types/database-auto"
 
-type ParsedCreateComic = CreateComicInput & { slug?: string };
-type ParsedUpdateComic = UpdateComicInput & { slug?: string };
+type ParsedCreateComic = CreateComicInput & { slug?: string }
+type ParsedUpdateComic = UpdateComicInput & { slug?: string }
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }
-  | { success: false; error: string };
+  | { success: false; error: string }
 
 // ═══════════════════════════════════════════════════
 // CREATE COMIC
@@ -35,9 +35,9 @@ export async function createComic(
   input: CreateComicInput
 ): Promise<ActionResult<typeof comic.$inferSelect>> {
   try {
-    const validated = createComicSchema.parse(input) as ParsedCreateComic;
+    const validated = createComicSchema.parse(input) as ParsedCreateComic
 
-    const slug = validated.slug ?? slugify(validated.title);
+    const slug = validated.slug ?? slugify(validated.title)
 
     const [newComic] = await database
       .insert(comic)
@@ -47,26 +47,26 @@ export async function createComic(
         views: 0,
         rating: validated.rating ? String(validated.rating) : "0",
       })
-      .returning();
+      .returning()
 
     if (!newComic) {
-      return { success: false, error: "Failed to create comic" };
+      return { success: false, error: "Failed to create comic" }
     }
 
-    revalidatePath("/admin/comics");
-    revalidatePath("/");
+    revalidatePath("/admin/comics")
+    revalidatePath("/")
 
     return {
       success: true,
       data: newComic,
       message: "Comic created successfully",
-    };
+    }
   } catch (error) {
-    console.error("Create comic error:", error);
+    console.error("Create comic error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to create comic",
-    };
+    }
   }
 }
 
@@ -79,46 +79,46 @@ export async function updateComic(
   input: UpdateComicInput
 ): Promise<ActionResult<typeof comic.$inferSelect>> {
   try {
-    const validated = updateComicSchema.parse(input) as ParsedUpdateComic;
+    const validated = updateComicSchema.parse(input) as ParsedUpdateComic
 
     const updateData: Record<string, unknown> = {
       ...validated,
       updatedAt: new Date(),
-    };
+    }
 
     if (validated.slug !== undefined) {
-      updateData.slug = validated.slug as string;
+      updateData.slug = validated.slug as string
     }
 
     if (validated.rating !== undefined) {
-      updateData.rating = String(validated.rating);
+      updateData.rating = String(validated.rating)
     }
 
     const [updatedComic] = await database
       .update(comic)
       .set(updateData)
       .where(eq(comic.id, id))
-      .returning();
+      .returning()
 
     if (!updatedComic) {
-      return { success: false, error: "Comic not found" };
+      return { success: false, error: "Comic not found" }
     }
 
-    revalidatePath("/admin/comics");
-    revalidatePath(`/comics/${id}`);
-    revalidatePath("/");
+    revalidatePath("/admin/comics")
+    revalidatePath(`/comics/${id}`)
+    revalidatePath("/")
 
     return {
       success: true,
       data: updatedComic,
       message: "Comic updated successfully",
-    };
+    }
   } catch (error) {
-    console.error("Update comic error:", error);
+    console.error("Update comic error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to update comic",
-    };
+    }
   }
 }
 
@@ -130,29 +130,29 @@ export async function deleteComic(id: number): Promise<ActionResult<void>> {
   try {
     const existingComic = await database.query.comic.findFirst({
       where: eq(comic.id, id),
-    });
+    })
 
     if (!existingComic) {
-      return { success: false, error: "Comic not found" };
+      return { success: false, error: "Comic not found" }
     }
 
     // Delete comic (cascade will handle related records)
-    await database.delete(comic).where(eq(comic.id, id));
+    await database.delete(comic).where(eq(comic.id, id))
 
-    revalidatePath("/admin/comics");
-    revalidatePath("/");
+    revalidatePath("/admin/comics")
+    revalidatePath("/")
 
     return {
       success: true,
       data: undefined,
       message: "Comic deleted successfully",
-    };
+    }
   } catch (error) {
-    console.error("Delete comic error:", error);
+    console.error("Delete comic error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to delete comic",
-    };
+    }
   }
 }
 
@@ -169,25 +169,25 @@ export async function getComicById(id: number) {
         artist: true,
         type: true,
       },
-    });
+    })
 
     if (!result) {
-      return { success: false, error: "Comic not found" };
+      return { success: false, error: "Comic not found" }
     }
 
     // Increment view count
     await database
       .update(comic)
       .set({ views: sql`${comic.views} + 1` })
-      .where(eq(comic.id, id));
+      .where(eq(comic.id, id))
 
-    return { success: true, data: result };
+    return { success: true, data: result }
   } catch (error) {
-    console.error("Get comic error:", error);
+    console.error("Get comic error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get comic",
-    };
+    }
   }
 }
 
@@ -197,7 +197,7 @@ export async function getComicById(id: number) {
 
 export async function listComics(input?: ComicFilterInput) {
   try {
-    const validated = comicFilterSchema.parse(input || {});
+    const validated = comicFilterSchema.parse(input || {})
     const {
       page = 1,
       limit = appConfig.pagination.comicsPerPage,
@@ -209,46 +209,46 @@ export async function listComics(input?: ComicFilterInput) {
       minRating,
       sortBy = "createdAt",
       sortOrder = "desc",
-    } = validated;
+    } = validated
 
-    const offset = (page - 1) * limit;
+    const offset = (page - 1) * limit
 
     // Build where conditions
-    const conditions = [];
+    const conditions = []
 
     if (search) {
-      conditions.push(like(comic.title, `%${search}%`));
+      conditions.push(like(comic.title, `%${search}%`))
     }
 
     if (status) {
-      conditions.push(eq(comic.status, status));
+      conditions.push(eq(comic.status, status))
     }
 
     if (typeId) {
-      conditions.push(eq(comic.typeId, typeId));
+      conditions.push(eq(comic.typeId, typeId))
     }
 
     if (authorId) {
-      conditions.push(eq(comic.authorId, authorId));
+      conditions.push(eq(comic.authorId, authorId))
     }
 
     if (artistId) {
-      conditions.push(eq(comic.artistId, artistId));
+      conditions.push(eq(comic.artistId, artistId))
     }
 
     if (minRating !== undefined) {
-      conditions.push(sql`CAST(${comic.rating} AS DECIMAL) >= ${minRating}`);
+      conditions.push(sql`CAST(${comic.rating} AS DECIMAL) >= ${minRating}`)
     }
 
-    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 
     // Get total count
     const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(comic)
-      .where(whereClause);
+      .where(whereClause)
 
-    const total = countResult?.count || 0;
+    const total = countResult?.count || 0
 
     // Get comics with relations
     const results = await database.query.comic.findMany({
@@ -261,21 +261,21 @@ export async function listComics(input?: ComicFilterInput) {
       limit,
       offset,
       orderBy: (comics: any, { desc: descOrder, asc }: any) => {
-        const order = sortOrder === "desc" ? descOrder : asc;
+        const order = sortOrder === "desc" ? descOrder : asc
         switch (sortBy) {
           case "title":
-            return [order(comics.title)];
+            return [order(comics.title)]
           case "rating":
-            return [order(comics.rating)];
+            return [order(comics.rating)]
           case "views":
-            return [order(comics.views)];
+            return [order(comics.views)]
           case "publicationDate":
-            return [order(comics.publicationDate)];
+            return [order(comics.publicationDate)]
           default:
-            return [order(comics.createdAt)];
+            return [order(comics.createdAt)]
         }
       },
-    });
+    })
 
     return {
       success: true,
@@ -288,13 +288,13 @@ export async function listComics(input?: ComicFilterInput) {
           totalPages: Math.ceil(total / limit),
         },
       },
-    };
+    }
   } catch (error) {
-    console.error("List comics error:", error);
+    console.error("List comics error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to list comics",
-    };
+    }
   }
 }
 
@@ -308,7 +308,7 @@ export async function assignGenresToComic(
 ): Promise<ActionResult<void>> {
   try {
     // Remove existing genres
-    await database.delete(comicToGenre).where(eq(comicToGenre.comicId, comicId));
+    await database.delete(comicToGenre).where(eq(comicToGenre.comicId, comicId))
 
     // Add new genres
     if (genreIds.length > 0) {
@@ -317,23 +317,23 @@ export async function assignGenresToComic(
           comicId,
           genreId,
         }))
-      );
+      )
     }
 
-    revalidatePath("/admin/comics");
-    revalidatePath(`/comics/${comicId}`);
+    revalidatePath("/admin/comics")
+    revalidatePath(`/comics/${comicId}`)
 
     return {
       success: true,
       data: undefined,
       message: "Genres updated successfully",
-    };
+    }
   } catch (error) {
-    console.error("Assign genres error:", error);
+    console.error("Assign genres error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to assign genres",
-    };
+    }
   }
 }
 
@@ -348,18 +348,18 @@ export async function getComicGenres(comicId: number) {
       with: {
         genre: true,
       },
-    });
+    })
 
     return {
       success: true,
       data: genres.map((g: { genre: Genre }) => g.genre),
-    };
+    }
   } catch (error) {
-    console.error("Get comic genres error:", error);
+    console.error("Get comic genres error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get genres",
-    };
+    }
   }
 }
 
@@ -377,15 +377,15 @@ export async function getPopularComics(limit = 10) {
       },
       limit,
       orderBy: [desc(comic.views), desc(comic.rating)],
-    });
+    })
 
-    return { success: true, data: results };
+    return { success: true, data: results }
   } catch (error) {
-    console.error("Get popular comics error:", error);
+    console.error("Get popular comics error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get popular comics",
-    };
+    }
   }
 }
 
@@ -403,14 +403,14 @@ export async function getLatestComics(limit = 12) {
       },
       limit,
       orderBy: [desc(comic.createdAt)],
-    });
+    })
 
-    return { success: true, data: results };
+    return { success: true, data: results }
   } catch (error) {
-    console.error("Get latest comics error:", error);
+    console.error("Get latest comics error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get latest comics",
-    };
+    }
   }
 }

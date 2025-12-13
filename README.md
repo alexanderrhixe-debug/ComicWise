@@ -392,7 +392,7 @@ IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your-id
 ### Usage Example
 
 ```typescript
-import { uploadImage, deleteImage, getImageUrl } from "@/services/upload";
+import { uploadImage, deleteImage, getImageUrl } from "@/services/upload"
 
 // Upload an image (Buffer or File)
 const result = await uploadImage(fileBuffer, {
@@ -405,23 +405,23 @@ const result = await uploadImage(fileBuffer, {
     quality: 85,
     format: "webp",
   },
-});
+})
 
 if (result.success) {
-  console.log("Image URL:", result.url);
-  console.log("Thumbnail:", result.thumbnail);
+  console.log("Image URL:", result.url)
+  console.log("Thumbnail:", result.thumbnail)
 } else {
-  console.error("Upload failed:", result.error);
+  console.error("Upload failed:", result.error)
 }
 
 // Get optimized URL for display
 const optimizedUrl = await getImageUrl(result.publicId, {
   width: 400,
   quality: 80,
-});
+})
 
 // Delete an image
-await deleteImage(result.publicId);
+await deleteImage(result.publicId)
 ```
 
 ### Provider Features

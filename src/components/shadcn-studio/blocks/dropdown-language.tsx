@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import type { ReactNode } from "react";
-import { useState } from "react";
+import type { ReactNode } from "react"
+import { useState } from "react"
 
 import {
   DropdownMenu,
@@ -9,16 +9,16 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "ui/dropdown-menu";
+} from "ui/dropdown-menu"
 
 type Props = {
-  trigger: ReactNode;
-  defaultOpen?: boolean;
-  align?: "start" | "center" | "end";
-};
+  trigger: ReactNode
+  defaultOpen?: boolean
+  align?: "start" | "center" | "end"
+}
 
 const LanguageDropdown = ({ defaultOpen, align, trigger }: Props) => {
-  const [language, setLanguage] = useState("english");
+  const [language, setLanguage] = useState("english")
 
   return (
     <DropdownMenu defaultOpen={defaultOpen}>
@@ -58,7 +58,7 @@ const LanguageDropdown = ({ defaultOpen, align, trigger }: Props) => {
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}
 
-export default LanguageDropdown;
+export default LanguageDropdown

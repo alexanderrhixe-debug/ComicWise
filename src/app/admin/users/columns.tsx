@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { type ColumnDef } from "@tanstack/react-table";
-import { Badge } from "components/ui/badge";
-import { Button } from "components/ui/button";
+import { type ColumnDef } from "@tanstack/react-table"
+import { Badge } from "components/ui/badge"
+import { Button } from "components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,15 +10,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "components/ui/dropdown-menu";
-import { MoreHorizontal, Pencil, Trash } from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
+} from "components/ui/dropdown-menu"
+import { MoreHorizontal, Pencil, Trash } from "lucide-react"
+import Link from "next/link"
+import { toast } from "sonner"
 
-import { deleteUser } from "actions/users";
-import type { user } from "database/schema";
+import { deleteUser } from "actions/users"
+import type { user } from "database/schema"
 
-export type User = typeof user.$inferSelect;
+export type User = typeof user.$inferSelect
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -37,41 +37,41 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => {
-      const role = row.getValue("role") as string;
-      return <Badge variant={role === "admin" ? "default" : "secondary"}>{role}</Badge>;
+      const role = row.getValue("role") as string
+      return <Badge variant={role === "admin" ? "default" : "secondary"}>{role}</Badge>
     },
   },
   {
     accessorKey: "emailVerified",
     header: "Email Verified",
     cell: ({ row }) => {
-      const verified = row.getValue("emailVerified");
-      return <Badge variant={verified ? "default" : "secondary"}>{verified ? "Yes" : "No"}</Badge>;
+      const verified = row.getValue("emailVerified")
+      return <Badge variant={verified ? "default" : "secondary"}>{verified ? "Yes" : "No"}</Badge>
     },
   },
   {
     accessorKey: "createdAt",
     header: "Created",
     cell: ({ row }) => {
-      const date = row.getValue("createdAt") as Date;
-      return new Date(date).toLocaleDateString();
+      const date = row.getValue("createdAt") as Date
+      return new Date(date).toLocaleDateString()
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const user = row.original;
+      const user = row.original
 
       const handleDelete = async () => {
-        if (!confirm("Are you sure you want to delete this user?")) return;
+        if (!confirm("Are you sure you want to delete this user?")) return
 
-        const result = await deleteUser(user.id);
+        const result = await deleteUser(user.id)
         if (result.success) {
-          toast.success("User deleted successfully");
+          toast.success("User deleted successfully")
         } else {
-          toast.error(result.error || "Failed to delete user");
+          toast.error(result.error || "Failed to delete user")
         }
-      };
+      }
 
       return (
         <DropdownMenu>
@@ -99,7 +99,7 @@ export const columns: ColumnDef<User>[] = [
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      );
+      )
     },
   },
-];
+]

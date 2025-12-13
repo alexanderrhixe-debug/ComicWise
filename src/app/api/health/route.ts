@@ -1,10 +1,10 @@
-import { database } from "database/";
-import { NextResponse } from "next/server";
+import { database } from "database/"
+import { NextResponse } from "next/server"
 
 export async function GET() {
   try {
     // Check database connection
-    await database.execute("SELECT 1");
+    await database.execute("SELECT 1")
 
     return NextResponse.json(
       {
@@ -16,9 +16,9 @@ export async function GET() {
         },
       },
       { status: 200 }
-    );
+    )
   } catch (error) {
-    console.error("Health check failed:", error);
+    console.error("Health check failed:", error)
     return NextResponse.json(
       {
         status: "unhealthy",
@@ -26,6 +26,6 @@ export async function GET() {
         error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 503 }
-    );
+    )
   }
 }

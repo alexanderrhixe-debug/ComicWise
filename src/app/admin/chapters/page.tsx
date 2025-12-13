@@ -1,10 +1,10 @@
-import { DataTable } from "components/admin/DataTable";
-import { Button } from "components/ui/button";
-import { chapter, comic, database } from "database";
-import { eq } from "drizzle-orm";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
+import { DataTable } from "components/admin/DataTable"
+import { Button } from "components/ui/button"
+import { chapter, comic, database } from "database"
+import { eq } from "drizzle-orm"
+import { Plus } from "lucide-react"
+import Link from "next/link"
+import { Suspense } from "react"
 
 async function ChaptersTable() {
   const chapters = await database
@@ -19,7 +19,7 @@ async function ChaptersTable() {
     })
     .from(chapter)
     .leftJoin(comic, eq(chapter.comicId, comic.id))
-    .orderBy(chapter.createdAt);
+    .orderBy(chapter.createdAt)
 
   const columns = [
     {
@@ -46,9 +46,9 @@ async function ChaptersTable() {
       accessorKey: "releaseDate",
       header: "Release Date",
     },
-  ];
+  ]
 
-  return <DataTable columns={columns} data={chapters} />;
+  return <DataTable columns={columns} data={chapters} />
 }
 
 function ChaptersHeader() {
@@ -65,7 +65,7 @@ function ChaptersHeader() {
         </Link>
       </Button>
     </div>
-  );
+  )
 }
 
 export default function ChaptersPage() {
@@ -77,5 +77,5 @@ export default function ChaptersPage() {
         <ChaptersTable />
       </Suspense>
     </div>
-  );
+  )
 }

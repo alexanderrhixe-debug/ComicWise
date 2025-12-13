@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { DebouncedState } from "src/hooks/use-debounce-callback";
-import { useDebounceCallback } from "src/hooks/use-debounce-callback";
+import { useEffect, useMemo, useRef, useState } from "react"
+import type { DebouncedState } from "src/hooks/use-debounce-callback"
+import { useDebounceCallback } from "src/hooks/use-debounce-callback"
 
 type UseDebounceValueOptions<T> = {
-  leading?: boolean;
-  trailing?: boolean;
-  maxWait?: number;
-  equalityFn?: (left: T, right: T) => boolean;
-};
+  leading?: boolean
+  trailing?: boolean
+  maxWait?: number
+  equalityFn?: (left: T, right: T) => boolean
+}
 
 /**
  * Custom hook that returns a debounced version of the provided value, along with a function to update it.
@@ -26,21 +26,21 @@ export function useDebounceValue<T>(
   const memoEq = useMemo(
     () => options?.equalityFn ?? ((left: T, right: T) => left === right),
     [options?.equalityFn]
-  );
-  const unwrappedInitialValue = initialValue instanceof Function ? initialValue() : initialValue;
-  const [debouncedValue, setDebouncedValue] = useState<T>(unwrappedInitialValue);
-  const previousValueRef = useRef<T | undefined>(unwrappedInitialValue);
+  )
+  const unwrappedInitialValue = initialValue instanceof Function ? initialValue() : initialValue
+  const [debouncedValue, setDebouncedValue] = useState<T>(unwrappedInitialValue)
+  const previousValueRef = useRef<T | undefined>(unwrappedInitialValue)
 
-  const updateDebouncedValue = useDebounceCallback(setDebouncedValue, delay, options);
+  const updateDebouncedValue = useDebounceCallback(setDebouncedValue, delay, options)
 
   // Update the debounced value if the initial value changes — perform this
   // after render to avoid reading/modifying refs during render.
   useEffect(() => {
     if (!memoEq(previousValueRef.current as T, unwrappedInitialValue)) {
-      updateDebouncedValue(unwrappedInitialValue);
-      previousValueRef.current = unwrappedInitialValue;
+      updateDebouncedValue(unwrappedInitialValue)
+      previousValueRef.current = unwrappedInitialValue
     }
-  }, [unwrappedInitialValue, memoEq, updateDebouncedValue]);
+  }, [unwrappedInitialValue, memoEq, updateDebouncedValue])
 
-  return [debouncedValue, updateDebouncedValue];
+  return [debouncedValue, updateDebouncedValue]
 }

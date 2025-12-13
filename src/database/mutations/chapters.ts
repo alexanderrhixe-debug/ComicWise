@@ -1,20 +1,20 @@
-import { database } from "database";
-import { chapter, chapterImage } from "database/schema";
-import { eq, sql } from "drizzle-orm";
+import { database } from "database"
+import { chapter, chapterImage } from "database/schema"
+import { eq, sql } from "drizzle-orm"
 
 interface CreateChapterData {
-  title: string;
-  chapterNumber: number;
-  releaseDate: Date;
-  comicId: number;
-  slug?: string;
+  title: string
+  chapterNumber: number
+  releaseDate: Date
+  comicId: number
+  slug?: string
 }
 
 export async function createChapter(data: CreateChapterData) {
-  const { slug: providedSlug, title } = data as { slug?: string; title: string };
-  const slugModule = await import("lib/utils/slugify");
-  const slugify = slugModule.default ?? slugModule.slugify;
-  const slug = providedSlug ?? slugify(title);
+  const { slug: providedSlug, title } = data as { slug?: string; title: string }
+  const slugModule = await import("lib/utils/slugify")
+  const slugify = slugModule.default ?? slugModule.slugify
+  const slug = providedSlug ?? slugify(title)
 
   const [newChapter] = await database
     .insert(chapter)
@@ -23,15 +23,15 @@ export async function createChapter(data: CreateChapterData) {
       slug,
       views: 0,
     })
-    .returning();
+    .returning()
 
-  return newChapter;
+  return newChapter
 }
 
 interface UpdateChapterData {
-  title?: string;
-  chapterNumber?: number;
-  releaseDate?: Date;
+  title?: string
+  chapterNumber?: number
+  releaseDate?: Date
 }
 
 export async function updateChapter(chapterId: number, data: UpdateChapterData) {
@@ -39,17 +39,17 @@ export async function updateChapter(chapterId: number, data: UpdateChapterData) 
     .update(chapter)
     .set(data)
     .where(eq(chapter.id, chapterId))
-    .returning();
+    .returning()
 
-  return updated;
+  return updated
 }
 
 export async function deleteChapter(chapterId: number) {
-  await database.delete(chapterImage).where(eq(chapterImage.chapterId, chapterId));
+  await database.delete(chapterImage).where(eq(chapterImage.chapterId, chapterId))
 
-  const [deleted] = await database.delete(chapter).where(eq(chapter.id, chapterId)).returning();
+  const [deleted] = await database.delete(chapter).where(eq(chapter.id, chapterId)).returning()
 
-  return deleted;
+  return deleted
 }
 
 export async function incrementChapterViews(chapterId: number) {
@@ -59,21 +59,21 @@ export async function incrementChapterViews(chapterId: number) {
       views: sql`${chapter.views} + 1`,
     })
     .where(eq(chapter.id, chapterId))
-    .returning();
+    .returning()
 
-  return updated;
+  return updated
 }
 
 interface AddChapterImageData {
-  chapterId: number;
-  imageUrl: string;
-  pageNumber: number;
+  chapterId: number
+  imageUrl: string
+  pageNumber: number
 }
 
 export async function addChapterImage(data: AddChapterImageData) {
-  const [newImage] = await database.insert(chapterImage).values(data).returning();
+  const [newImage] = await database.insert(chapterImage).values(data).returning()
 
-  return newImage;
+  return newImage
 }
 
 export async function addChapterImages(chapterId: number, imageUrls: string[]) {
@@ -81,16 +81,16 @@ export async function addChapterImages(chapterId: number, imageUrls: string[]) {
     chapterId,
     imageUrl: url,
     pageNumber: index + 1,
-  }));
+  }))
 
-  return await database.insert(chapterImage).values(images).returning();
+  return await database.insert(chapterImage).values(images).returning()
 }
 
 export async function deleteChapterImage(imageId: number) {
   const [deleted] = await database
     .delete(chapterImage)
     .where(eq(chapterImage.id, imageId))
-    .returning();
+    .returning()
 
-  return deleted;
+  return deleted
 }

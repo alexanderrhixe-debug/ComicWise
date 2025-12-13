@@ -1,6 +1,6 @@
-import { database } from "database";
-import { comment } from "database/schema";
-import { eq } from "drizzle-orm";
+import { database } from "database"
+import { comment } from "database/schema"
+import { eq } from "drizzle-orm"
 
 export async function createComment(data: { content: string; userId: string; chapterId: number }) {
   const [newComment] = await database
@@ -12,14 +12,14 @@ export async function createComment(data: { content: string; userId: string; cha
       createdAt: new Date(),
       updatedAt: new Date(),
     })
-    .returning();
-  return newComment;
+    .returning()
+  return newComment
 }
 
 export async function updateComment(
   commentId: number,
   data: {
-    content?: string;
+    content?: string
   }
 ) {
   const [updatedComment] = await database
@@ -29,14 +29,14 @@ export async function updateComment(
       updatedAt: new Date(),
     })
     .where(eq(comment.id, commentId))
-    .returning();
-  return updatedComment;
+    .returning()
+  return updatedComment
 }
 
 export async function deleteComment(commentId: number) {
   const [deletedComment] = await database
     .delete(comment)
     .where(eq(comment.id, commentId))
-    .returning();
-  return deletedComment;
+    .returning()
+  return deletedComment
 }

@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { CircleIcon } from "lucide-react";
-import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
-import type { ComponentProps, HTMLAttributes } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card";
-import { RadioGroup } from "ui/radio-group";
-import { cn } from "utils";
+import { CircleIcon } from "lucide-react"
+import { RadioGroup as RadioGroupPrimitive } from "radix-ui"
+import type { ComponentProps, HTMLAttributes } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card"
+import { RadioGroup } from "ui/radio-group"
+import { cn } from "utils"
 
-export type ChoiceboxProps = ComponentProps<typeof RadioGroup>;
+export type ChoiceboxProps = ComponentProps<typeof RadioGroup>
 
 export const Choicebox = ({ className, ...props }: ChoiceboxProps) => (
   <RadioGroup className={cn("w-full", className)} {...(props as any)} />
-);
+)
 
-export type ChoiceboxItemProps = RadioGroupPrimitive.RadioGroupItemProps;
+export type ChoiceboxItemProps = RadioGroupPrimitive.RadioGroupItemProps
 
 export const ChoiceboxItem = ({ className, children, ...props }: ChoiceboxItemProps) => (
   <RadioGroupPrimitive.Item
@@ -34,39 +34,39 @@ export const ChoiceboxItem = ({ className, children, ...props }: ChoiceboxItemPr
       {children}
     </Card>
   </RadioGroupPrimitive.Item>
-);
+)
 
-export type ChoiceboxItemHeaderProps = ComponentProps<typeof CardHeader>;
+export type ChoiceboxItemHeaderProps = ComponentProps<typeof CardHeader>
 
 export const ChoiceboxItemHeader = ({ className, ...props }: ComponentProps<typeof CardHeader>) => (
   <CardHeader className={cn("flex-1 p-0", className)} {...(props as any)} />
-);
+)
 
-export type ChoiceboxItemTitleProps = ComponentProps<typeof CardTitle>;
+export type ChoiceboxItemTitleProps = ComponentProps<typeof CardTitle>
 
 export const ChoiceboxItemTitle = ({ className, ...props }: ChoiceboxItemTitleProps) => (
   <CardTitle className={cn("flex items-center gap-2 text-sm", className)} {...(props as any)} />
-);
+)
 
-export type ChoiceboxItemSubtitleProps = HTMLAttributes<HTMLSpanElement>;
+export type ChoiceboxItemSubtitleProps = HTMLAttributes<HTMLSpanElement>
 
 export const ChoiceboxItemSubtitle = ({ className, ...props }: ChoiceboxItemSubtitleProps) => (
   <span
     className={cn("text-xs font-normal text-muted-foreground", className)}
     {...(props as any)}
   />
-);
+)
 
-export type ChoiceboxItemDescriptionProps = ComponentProps<typeof CardDescription>;
+export type ChoiceboxItemDescriptionProps = ComponentProps<typeof CardDescription>
 
 export const ChoiceboxItemDescription = ({
   className,
   ...props
 }: ChoiceboxItemDescriptionProps) => (
   <CardDescription className={cn("text-sm", className)} {...(props as any)} />
-);
+)
 
-export type ChoiceboxItemContentProps = ComponentProps<typeof CardContent>;
+export type ChoiceboxItemContentProps = ComponentProps<typeof CardContent>
 
 export const ChoiceboxItemContent = ({ className, ...props }: ChoiceboxItemContentProps) => (
   <CardContent
@@ -76,14 +76,14 @@ export const ChoiceboxItemContent = ({ className, ...props }: ChoiceboxItemConte
     )}
     {...(props as any)}
   />
-);
+)
 
 export type ChoiceboxItemIndicatorProps = ComponentProps<
   typeof RadioGroupPrimitive.RadioGroupIndicator
->;
+>
 
 export const ChoiceboxItemIndicator = ({ className, ...props }: ChoiceboxItemIndicatorProps) => (
   <RadioGroupPrimitive.Indicator asChild {...(props as any)}>
     <CircleIcon className={cn("size-2 fill-primary", className)} />
   </RadioGroupPrimitive.Indicator>
-);
+)

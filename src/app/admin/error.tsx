@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import { isDevelopment } from "appConfig";
-import { Button } from "components/ui/button";
-import { AlertCircle, ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { useEffect } from "react";
+import { isDevelopment } from "appConfig"
+import { Button } from "components/ui/button"
+import { AlertCircle, ArrowLeft } from "lucide-react"
+import Link from "next/link"
+import { useEffect } from "react"
 
 interface ErrorBoundaryProps {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }
 
 export default function AdminError({ error, reset }: ErrorBoundaryProps) {
   useEffect(() => {
-    console.error("Admin panel error:", error);
-  }, [error]);
+    console.error("Admin panel error:", error)
+  }, [error])
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
@@ -69,5 +69,5 @@ export default function AdminError({ error, reset }: ErrorBoundaryProps) {
         )}
       </div>
     </div>
-  );
+  )
 }

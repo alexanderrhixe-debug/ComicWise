@@ -1,8 +1,8 @@
-import { db as database } from "database/db";
-import { artist, author, chapter, comic, comicToGenre, genre, type } from "database/schema";
-import { and, asc, desc, eq, gte, inArray, like, or, sql } from "drizzle-orm";
+import { db as database } from "database/db"
+import { artist, author, chapter, comic, comicToGenre, genre, type } from "database/schema"
+import { and, asc, desc, eq, gte, inArray, like, or, sql } from "drizzle-orm"
 
-import type { ComicFilters, ComicWithDetails, Genre, PaginatedResponse } from "src/types";
+import type { ComicFilters, ComicWithDetails, Genre, PaginatedResponse } from "src/types"
 
 export async function getAllComics(
   filters: ComicFilters = {}
@@ -16,7 +16,7 @@ export async function getAllComics(
     sortBy = "latest",
     page = 1,
     limit = 12,
-  } = filters;
+  } = filters
 
   let query = database
     .select({
@@ -41,9 +41,9 @@ export async function getAllComics(
     .leftJoin(author, eq(comic.authorId, author.id))
     .leftJoin(artist, eq(comic.artistId, artist.id))
     .leftJoin(type, eq(comic.typeId, type.id))
-    .$dynamic();
+    .$dynamic()
 
-  const conditions = [];
+  const conditions = []
 
   if (search) {
     conditions.push(
@@ -52,67 +52,67 @@ export async function getAllComics(
         like(author.name, `%${search}%`),
         like(artist.name, `%${search}%`)
       )
-    );
+    )
   }
 
   if (typeId) {
-    conditions.push(eq(comic.typeId, typeId));
+    conditions.push(eq(comic.typeId, typeId))
   }
 
   if (status) {
-    conditions.push(eq(comic.status, status));
+    conditions.push(eq(comic.status, status))
   }
 
   if (minRating) {
-    conditions.push(gte(comic.rating, minRating.toString()));
+    conditions.push(gte(comic.rating, minRating.toString()))
   }
 
   if (genreIds && genreIds.length > 0) {
     const comicsWithGenres = (await database
       .selectDistinct({ comicId: comicToGenre.comicId })
       .from(comicToGenre)
-      .where(inArray(comicToGenre.genreId, genreIds))) as Array<{ comicId: number }>;
+      .where(inArray(comicToGenre.genreId, genreIds))) as Array<{ comicId: number }>
 
-    const comicIds = comicsWithGenres.map((c) => c.comicId);
+    const comicIds = comicsWithGenres.map((c) => c.comicId)
     if (comicIds.length > 0) {
-      conditions.push(inArray(comic.id, comicIds));
+      conditions.push(inArray(comic.id, comicIds))
     }
   }
 
   if (conditions.length > 0) {
-    query = query.where(and(...conditions));
+    query = query.where(and(...conditions))
   }
 
   switch (sortBy) {
     case "rating":
-      query = query.orderBy(desc(comic.rating));
-      break;
+      query = query.orderBy(desc(comic.rating))
+      break
     case "title":
-      query = query.orderBy(asc(comic.title));
-      break;
+      query = query.orderBy(asc(comic.title))
+      break
     case "views":
-      query = query.orderBy(desc(comic.views));
-      break;
+      query = query.orderBy(desc(comic.views))
+      break
     case "latest":
     default:
-      query = query.orderBy(desc(comic.createdAt));
-      break;
+      query = query.orderBy(desc(comic.createdAt))
+      break
   }
 
-  const offset = (page - 1) * limit;
-  const results = await query.limit(limit).offset(offset);
+  const offset = (page - 1) * limit
+  const results = await query.limit(limit).offset(offset)
 
   const totalQuery = database
     .select({ count: sql<number>`count(*)::int` })
     .from(comic)
-    .$dynamic();
+    .$dynamic()
 
   if (conditions.length > 0) {
-    totalQuery.where(and(...conditions));
+    totalQuery.where(and(...conditions))
   }
 
-  const totalResult = await totalQuery;
-  const total = (totalResult[0]?.count as number) || 0;
+  const totalResult = await totalQuery
+  const total = (totalResult[0]?.count as number) || 0
 
   return {
     data: results as unknown as ComicWithDetails[],
@@ -132,7 +132,7 @@ export async function getAllComics(
       hasMore: page < Math.ceil(total / limit),
       hasPrevious: page > 1,
     },
-  };
+  }
 }
 
 export async function getComic(comicId: number): Promise<ComicWithDetails | null> {
@@ -148,23 +148,23 @@ export async function getComic(comicId: number): Promise<ComicWithDetails | null
     .leftJoin(artist, eq(comic.artistId, artist.id))
     .leftJoin(type, eq(comic.typeId, type.id))
     .where(eq(comic.id, comicId))
-    .limit(1);
+    .limit(1)
 
-  if (!result[0]) return null;
+  if (!result[0]) return null
 
   const chapters = await database
     .select()
     .from(chapter)
     .where(eq(chapter.comicId, comicId))
-    .orderBy(asc(chapter.chapterNumber));
+    .orderBy(asc(chapter.chapterNumber))
 
   const genresResult = await database
     .select({ genre })
     .from(comicToGenre)
     .leftJoin(genre, eq(comicToGenre.genreId, genre.id))
-    .where(eq(comicToGenre.comicId, comicId));
+    .where(eq(comicToGenre.comicId, comicId))
 
-  const genres = genresResult.map((g) => g.genre as Genre).filter(Boolean) as Genre[];
+  const genres = genresResult.map((g) => g.genre as Genre).filter(Boolean) as Genre[]
 
   return {
     ...result[0].comic,
@@ -173,13 +173,13 @@ export async function getComic(comicId: number): Promise<ComicWithDetails | null
     type: result[0].type,
     genres,
     chapters,
-  } as ComicWithDetails;
+  } as ComicWithDetails
 }
 
 export async function getRecommendedComics(comicId: number, limit: number = 6) {
-  const currentComic = await database.select().from(comic).where(eq(comic.id, comicId)).limit(1);
+  const currentComic = await database.select().from(comic).where(eq(comic.id, comicId)).limit(1)
 
-  if (!currentComic[0]) return [];
+  if (!currentComic[0]) return []
 
   const recommended = await database
     .select({
@@ -194,15 +194,15 @@ export async function getRecommendedComics(comicId: number, limit: number = 6) {
     .leftJoin(type, eq(comic.typeId, type.id))
     .where(and(eq(comic.typeId, currentComic[0].typeId!), sql`${comic.id} != ${comicId}`))
     .orderBy(desc(comic.rating))
-    .limit(limit);
+    .limit(limit)
 
-  return recommended;
+  return recommended
 }
 
 export async function searchComics(query: string, limit: number = 10) {
-  if (!query || query.trim().length === 0) return [];
+  if (!query || query.trim().length === 0) return []
 
-  const searchTerm = `%${query.trim()}%`;
+  const searchTerm = `%${query.trim()}%`
 
   const results = await database
     .select({
@@ -223,9 +223,9 @@ export async function searchComics(query: string, limit: number = 10) {
       )
     )
     .orderBy(desc(comic.views))
-    .limit(limit);
+    .limit(limit)
 
-  return results;
+  return results
 }
 
 export async function getComicsByType(typeId: number, limit: number = 12) {
@@ -234,7 +234,7 @@ export async function getComicsByType(typeId: number, limit: number = 12) {
     .from(comic)
     .where(eq(comic.typeId, typeId))
     .orderBy(desc(comic.createdAt))
-    .limit(limit);
+    .limit(limit)
 }
 
 export async function getLatestComics(limit: number = 12) {
@@ -249,7 +249,7 @@ export async function getLatestComics(limit: number = 12) {
     })
     .from(comic)
     .orderBy(desc(comic.createdAt))
-    .limit(limit);
+    .limit(limit)
 }
 
 export async function getPopularComics(limit: number = 12) {
@@ -263,5 +263,5 @@ export async function getPopularComics(limit: number = 12) {
     })
     .from(comic)
     .orderBy(desc(comic.views), desc(comic.rating))
-    .limit(limit);
+    .limit(limit)
 }

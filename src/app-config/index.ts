@@ -1,21 +1,21 @@
-import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "src/app-config/env";
+import { env, getEnv, hasEnv, isDevelopment, isProduction, isTest } from "src/app-config/env"
 
 // Load environment variables early only on the server. We dynamically import
 // `dotenv-safe` and `path` at runtime so this module can be imported from
 // client code without bundling Node-only modules like `fs`.
 if (typeof window === "undefined") {
-  (async () => {
+  ;(async () => {
     try {
-      const dotenvSafe = await import("dotenv-safe");
-      const path = await import("path");
+      const dotenvSafe = await import("dotenv-safe")
+      const path = await import("path")
       dotenvSafe.config({
         example: (path as typeof import("path")).resolve(process.cwd(), ".env"),
-      });
+      })
     } catch {
       // If dotenv-safe isn't available in the runtime environment, skip config.
       // This keeps client-side and constrained build environments from failing.
     }
-  })();
+  })()
 }
 // ═══════════════════════════════════════════════════
 // APP CONFIGURATION (Next.js 16 Optimized)
@@ -180,15 +180,15 @@ const appConfig = {
     imageUpload: hasEnv("IMAGEKIT_PUBLIC_KEY") || hasEnv("CLOUDINARY_CLOUD_NAME"),
   },
   customPassword: env.CUSTOM_PASSWORD || "",
-} as const;
+} as const
 
 // ═══════════════════════════════════════════════════
 // HELPER EXPORTS
 // ═══════════════════════════════════════════════════
 
-export { appConfig, env, getEnv, hasEnv, isDevelopment, isProduction, isTest };
+export { appConfig, env, getEnv, hasEnv, isDevelopment, isProduction, isTest }
 
-export default appConfig;
+export default appConfig
 
 // Re-export rate limiting utilities
-export { checkRateLimit, clearRateLimit, getRateLimitStatus } from "lib/ratelimit";
+export { checkRateLimit, clearRateLimit, getRateLimitStatus } from "lib/ratelimit"

@@ -2,8 +2,8 @@
 // IMAGE UPLOAD API - ImageKit Integration
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "appConfig";
-import { auth } from "auth";
+import { appConfig } from "appConfig"
+import { auth } from "auth"
 import {
   fileToBuffer,
   generateUniqueFileName,
@@ -12,9 +12,9 @@ import {
   uploadComicCover,
   uploadImage,
   validateImageFile,
-} from "lib/imagekit";
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+} from "lib/imagekit"
+import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 
 // ═══════════════════════════════════════════════════
 // UPLOAD VALIDATION SCHEMA
@@ -30,7 +30,7 @@ const uploadSchema = z
     entityId: z.string().optional(),
     sequence: z.number().optional(),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // UPLOAD IMAGE API ROUTE
@@ -38,10 +38,10 @@ const uploadSchema = z
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     // Check if ImageKit is enabled
@@ -49,23 +49,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Image upload is not configured. Please set ImageKit credentials." },
         { status: 503 }
-      );
+      )
     }
 
-    const formData = await request.formData();
-    const file = formData.get("file") as File | null;
-    const type = formData.get("type") as string | null;
-    const entityId = formData.get("entityId") as string | null;
-    const sequenceStr = formData.get("sequence") as string | null;
+    const formData = await request.formData()
+    const file = formData.get("file") as File | null
+    const type = formData.get("type") as string | null
+    const entityId = formData.get("entityId") as string | null
+    const sequenceStr = formData.get("sequence") as string | null
 
     if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
 
     // Validate file
-    const fileValidation = validateImageFile(file);
+    const fileValidation = validateImageFile(file)
     if (!fileValidation.valid) {
-      return NextResponse.json({ error: fileValidation.error }, { status: 400 });
+      return NextResponse.json({ error: fileValidation.error }, { status: 400 })
     }
 
     const validation = uploadSchema.safeParse({
@@ -73,21 +73,21 @@ export async function POST(request: NextRequest) {
       type: type || "general",
       entityId: entityId || undefined,
       sequence: sequenceStr ? parseInt(sequenceStr, 10) : undefined,
-    });
+    })
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid upload parameters", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
     // Convert file to buffer
-    const buffer = await fileToBuffer(file);
-    const fileName = generateUniqueFileName(file.name, validation.data.type);
+    const buffer = await fileToBuffer(file)
+    const fileName = generateUniqueFileName(file.name, validation.data.type)
 
     // Upload based on type
-    let uploadResult;
+    let uploadResult
 
     switch (validation.data.type) {
       case "comic-cover":
@@ -95,29 +95,29 @@ export async function POST(request: NextRequest) {
           return NextResponse.json(
             { error: "Comic ID is required for cover uploads" },
             { status: 400 }
-          );
+          )
         }
-        uploadResult = await uploadComicCover(buffer, entityId, fileName);
-        break;
+        uploadResult = await uploadComicCover(buffer, entityId, fileName)
+        break
 
       case "chapter-image":
         if (!entityId) {
           return NextResponse.json(
             { error: "Chapter ID is required for chapter image uploads" },
             { status: 400 }
-          );
+          )
         }
         uploadResult = await uploadChapterImage(
           buffer,
           entityId,
           fileName,
           validation.data.sequence
-        );
-        break;
+        )
+        break
 
       case "avatar":
-        uploadResult = await uploadAvatar(buffer, session.user.id!, fileName);
-        break;
+        uploadResult = await uploadAvatar(buffer, session.user.id!, fileName)
+        break
 
       case "general":
       default:
@@ -126,15 +126,15 @@ export async function POST(request: NextRequest) {
           fileName,
           folder: "/comicwise/general",
           tags: ["general", session.user.id!],
-        });
-        break;
+        })
+        break
     }
 
     if (!uploadResult.success) {
       return NextResponse.json(
         { error: "Upload failed", details: uploadResult.error },
         { status: 500 }
-      );
+      )
     }
 
     return NextResponse.json({
@@ -145,16 +145,16 @@ export async function POST(request: NextRequest) {
       size: uploadResult.size,
       thumbnailUrl: uploadResult.thumbnailUrl,
       type: validation.data.type,
-    });
+    })
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("Upload error:", error)
     return NextResponse.json(
       {
         error: "Failed to upload file",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -164,63 +164,63 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const formData = await request.formData();
-    const files = formData.getAll("files") as File[];
-    const type = formData.get("type") as string | null;
+    const formData = await request.formData()
+    const files = formData.getAll("files") as File[]
+    const type = formData.get("type") as string | null
 
     if (!files || files.length === 0) {
-      return NextResponse.json({ error: "No files provided" }, { status: 400 });
+      return NextResponse.json({ error: "No files provided" }, { status: 400 })
     }
 
     // Validate max files
     if (files.length > 50) {
-      return NextResponse.json({ error: "Too many files. Maximum is 50" }, { status: 400 });
+      return NextResponse.json({ error: "Too many files. Maximum is 50" }, { status: 400 })
     }
 
-    const uploadResults = [];
-    const errors = [];
+    const uploadResults = []
+    const errors = []
 
     for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+      const file = files[i]
 
       if (!file) {
-        errors.push({ index: i, filename: "unknown", error: "File is undefined" });
-        continue;
+        errors.push({ index: i, filename: "unknown", error: "File is undefined" })
+        continue
       }
 
       // Validate each file
-      const validation = uploadSchema.safeParse({ file, type: type || "other" });
+      const validation = uploadSchema.safeParse({ file, type: type || "other" })
 
       if (!validation.success) {
-        errors.push({ index: i, filename: file.name, error: "Invalid file" });
-        continue;
+        errors.push({ index: i, filename: file.name, error: "Invalid file" })
+        continue
       }
 
       // Validate file size
-      const maxSize = 10 * 1024 * 1024;
+      const maxSize = 10 * 1024 * 1024
       if (file.size > maxSize) {
-        errors.push({ index: i, filename: file.name, error: "File too large" });
-        continue;
+        errors.push({ index: i, filename: file.name, error: "File too large" })
+        continue
       }
 
       // Validate file type
-      const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+      const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"]
       if (!allowedTypes.includes(file.type)) {
-        errors.push({ index: i, filename: file.name, error: "Invalid file type" });
-        continue;
+        errors.push({ index: i, filename: file.name, error: "Invalid file type" })
+        continue
       }
 
       // Generate unique filename
-      const timestamp = Date.now();
-      const randomString = Math.random().toString(36).substring(2, 15);
-      const extension = file.name.split(".").pop();
-      const filename = `${validation.data.type}-${timestamp}-${i}-${randomString}.${extension}`;
+      const timestamp = Date.now()
+      const randomString = Math.random().toString(36).substring(2, 15)
+      const extension = file.name.split(".").pop()
+      const filename = `${validation.data.type}-${timestamp}-${i}-${randomString}.${extension}`
 
       // Mock upload response
       uploadResults.push({
@@ -230,7 +230,7 @@ export async function PUT(request: NextRequest) {
         filename: filename,
         size: file.size,
         type: file.type,
-      });
+      })
     }
 
     return NextResponse.json({
@@ -239,15 +239,15 @@ export async function PUT(request: NextRequest) {
       failed: errors.length,
       results: uploadResults,
       errors: errors,
-    });
+    })
   } catch (error) {
-    console.error("Batch upload error:", error);
+    console.error("Batch upload error:", error)
     return NextResponse.json(
       {
         error: "Failed to upload files",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }

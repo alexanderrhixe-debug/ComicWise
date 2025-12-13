@@ -20,9 +20,9 @@ import {
   TwitterIcon,
   Undo2Icon,
   UsersIcon,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,10 +30,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "components/ui/breadcrumb";
-import { Button } from "components/ui/button";
-import { Card } from "components/ui/card";
-import { Separator } from "components/ui/separator";
+} from "components/ui/breadcrumb"
+import { Button } from "components/ui/button"
+import { Card } from "components/ui/card"
+import { Separator } from "components/ui/separator"
 import {
   Sidebar,
   SidebarContent,
@@ -46,18 +46,18 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "components/ui/sidebar";
+} from "components/ui/sidebar"
 
-import CurrentYear from "@/components/CurrentYear";
-import SalesMetricsCard from "components/shadcn-studio/blocks/chart-sales-metrics";
+import CurrentYear from "@/components/CurrentYear"
+import SalesMetricsCard from "components/shadcn-studio/blocks/chart-sales-metrics"
 import TransactionDatatable, {
   type Item,
-} from "components/shadcn-studio/blocks/datatable-transaction";
-import LanguageDropdown from "components/shadcn-studio/blocks/dropdown-language";
-import ProfileDropdown from "components/shadcn-studio/blocks/dropdown-profile";
-import StatisticsCard from "components/shadcn-studio/blocks/statistics-card-01";
-import ProductInsightsCard from "components/shadcn-studio/blocks/widget-product-insights";
-import TotalEarningCard from "components/shadcn-studio/blocks/widget-total-earning";
+} from "components/shadcn-studio/blocks/datatable-transaction"
+import LanguageDropdown from "components/shadcn-studio/blocks/dropdown-language"
+import ProfileDropdown from "components/shadcn-studio/blocks/dropdown-profile"
+import StatisticsCard from "components/shadcn-studio/blocks/statistics-card-01"
+import ProductInsightsCard from "components/shadcn-studio/blocks/widget-product-insights"
+import TotalEarningCard from "components/shadcn-studio/blocks/widget-total-earning"
 
 // Statistics card data
 const StatisticsCardData = [
@@ -79,7 +79,7 @@ const StatisticsCardData = [
     title: "Missed Delivery Slots",
     changePercentage: "+4.3%",
   },
-];
+]
 
 // Earning data for Total Earning card
 const earningData = [
@@ -97,7 +97,7 @@ const earningData = [
     earnings: "-$12,650.31",
     progressPercentage: 25,
   },
-];
+]
 
 // Transaction table data
 const transactionData: Item[] = [
@@ -351,7 +351,7 @@ const transactionData: Item[] = [
     email: "mark.anderson@shadcnstudio.com",
     paidBy: "visa",
   },
-];
+]
 
 const DashboardShell = () => {
   return (
@@ -565,11 +565,11 @@ const DashboardShell = () => {
                   percentage={10}
                   comparisonText="Compare to last year ($84,325)"
                   earningData={earningData}
-                  className="justify-between gap-5 sm:min-w-0 [&>[data-slot=card-content]]:space-y-7"
+                  className="justify-between gap-5 *:data-[slot=card-content]:space-y-7 sm:min-w-0"
                 />
               </div>
 
-              <SalesMetricsCard className="col-span-full xl:col-span-2 [&>[data-slot=card-content]]:space-y-6" />
+              <SalesMetricsCard className="col-span-full *:data-[slot=card-content]:space-y-6 xl:col-span-2" />
 
               <Card className="col-span-full w-full py-0">
                 <TransactionDatatable data={transactionData} />
@@ -604,7 +604,7 @@ const DashboardShell = () => {
         </div>
       </SidebarProvider>
     </div>
-  );
-};
+  )
+}
 
-export default DashboardShell;
+export default DashboardShell

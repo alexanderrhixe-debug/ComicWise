@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import { Card, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Card, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Loader2 } from "lucide-react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function NewUserPage() {
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  const router = useRouter()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
-    if (status === "loading") return;
+    if (status === "loading") return
 
     if (status === "unauthenticated") {
-      router.push("/register");
-      return;
+      router.push("/register")
+      return
     }
 
     if (session?.user) {
       // Redirect new users to onboarding or home
-      router.push("/");
+      router.push("/")
     }
-  }, [session, status, router]);
+  }, [session, status, router])
 
   return (
     <Card>
@@ -34,5 +34,5 @@ export default function NewUserPage() {
         <CardDescription>Please wait while we set up your account...</CardDescription>
       </CardHeader>
     </Card>
-  );
+  )
 }

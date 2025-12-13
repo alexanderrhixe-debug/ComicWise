@@ -1,48 +1,48 @@
-import ClientImageUploader from "components/admin/ClientImageUploader";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import { deleteAuthor, updateAuthor } from "lib/actions/authors";
-import { revalidatePath } from "next/cache";
-import Image from "next/image";
-import { redirect } from "next/navigation";
+import ClientImageUploader from "components/admin/ClientImageUploader"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { deleteAuthor, updateAuthor } from "lib/actions/authors"
+import { revalidatePath } from "next/cache"
+import Image from "next/image"
+import { redirect } from "next/navigation"
 
 // `ClientImageUploader` moved to `src/components/admin/ClientImageUploader`
 
 export default async function EditAuthorForm({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+  const id = Number(params.id)
 
   // Fetch author data on the server to populate defaults
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/authors/${id}`, {
     cache: "no-store",
-  });
+  })
 
   if (!res.ok) {
     // If author not found or API failed, redirect back to list
-    redirect("/admin/authors");
+    redirect("/admin/authors")
   }
 
-  const author = await res.json();
+  const author = await res.json()
 
   async function handleUpdate(formData: FormData) {
     // Delegate to shared server action
-    const result = await updateAuthor(id, formData);
+    const result = await updateAuthor(id, formData)
     if (result.success) {
-      revalidatePath("/admin/authors");
-      revalidatePath(`/admin/authors/${id}`);
-      redirect("/admin/authors");
+      revalidatePath("/admin/authors")
+      revalidatePath(`/admin/authors/${id}`)
+      redirect("/admin/authors")
     }
-    throw new Error(result.error || "Failed to update author");
+    throw new Error(result.error || "Failed to update author")
   }
 
   async function handleDelete() {
-    const result = await deleteAuthor(id);
+    const result = await deleteAuthor(id)
     if (result.success) {
-      revalidatePath("/admin/authors");
-      redirect("/admin/authors");
+      revalidatePath("/admin/authors")
+      redirect("/admin/authors")
     }
-    throw new Error(result.error || "Failed to delete author");
+    throw new Error(result.error || "Failed to delete author")
   }
 
   return (
@@ -136,5 +136,5 @@ export default async function EditAuthorForm({ params }: { params: { id: string 
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

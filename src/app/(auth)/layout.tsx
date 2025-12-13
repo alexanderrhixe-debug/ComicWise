@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Authentication - ComicWise",
   description: "Sign in to your ComicWise account",
-};
+}
 
 export default function AuthLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <div
@@ -24,5 +24,5 @@ export default function AuthLayout({
         {children}
       </div>
     </div>
-  );
+  )
 }

@@ -1,26 +1,26 @@
-import { database } from "database";
-import { chapter, comic, comicToGenre } from "database/schema";
-import { eq, sql } from "drizzle-orm";
+import { database } from "database"
+import { chapter, comic, comicToGenre } from "database/schema"
+import { eq, sql } from "drizzle-orm"
 
 interface CreateComicData {
-  title: string;
-  description: string;
-  coverImage: string;
-  status?: "Ongoing" | "Hiatus" | "Completed" | "Dropped" | "Coming Soon";
-  publicationDate: Date;
-  authorId?: number;
-  artistId?: number;
-  typeId?: number;
-  genreIds?: number[];
-  slug?: string;
+  title: string
+  description: string
+  coverImage: string
+  status?: "Ongoing" | "Hiatus" | "Completed" | "Dropped" | "Coming Soon"
+  publicationDate: Date
+  authorId?: number
+  artistId?: number
+  typeId?: number
+  genreIds?: number[]
+  slug?: string
 }
 
 export async function createComic(data: CreateComicData) {
-  const { genreIds, ...comicData } = data;
-  const { slug: providedSlug, title } = comicData as { slug?: string; title: string };
-  const slugModule = await import("lib/utils/slugify");
-  const slugify = slugModule.default ?? slugModule.slugify;
-  const slug = providedSlug ?? slugify(title);
+  const { genreIds, ...comicData } = data
+  const { slug: providedSlug, title } = comicData as { slug?: string; title: string }
+  const slugModule = await import("lib/utils/slugify")
+  const slugify = slugModule.default ?? slugModule.slugify
+  const slug = providedSlug ?? slugify(title)
 
   const [newComic] = await database
     .insert(comic)
@@ -31,10 +31,10 @@ export async function createComic(data: CreateComicData) {
       rating: "0",
       views: 0,
     })
-    .returning();
+    .returning()
 
   if (!newComic) {
-    throw new Error("Failed to create comic");
+    throw new Error("Failed to create comic")
   }
 
   if (genreIds && genreIds.length > 0) {
@@ -43,26 +43,26 @@ export async function createComic(data: CreateComicData) {
         comicId: newComic.id,
         genreId,
       }))
-    );
+    )
   }
 
-  return newComic;
+  return newComic
 }
 
 interface UpdateComicData {
-  title?: string;
-  description?: string;
-  coverImage?: string;
-  status?: "Ongoing" | "Hiatus" | "Completed" | "Dropped" | "Coming Soon";
-  publicationDate?: Date;
-  authorId?: number;
-  artistId?: number;
-  typeId?: number;
-  genreIds?: number[];
+  title?: string
+  description?: string
+  coverImage?: string
+  status?: "Ongoing" | "Hiatus" | "Completed" | "Dropped" | "Coming Soon"
+  publicationDate?: Date
+  authorId?: number
+  artistId?: number
+  typeId?: number
+  genreIds?: number[]
 }
 
 export async function updateComic(comicId: number, data: UpdateComicData) {
-  const { genreIds, ...updateData } = data;
+  const { genreIds, ...updateData } = data
 
   const [updatedComic] = await database
     .update(comic)
@@ -71,10 +71,10 @@ export async function updateComic(comicId: number, data: UpdateComicData) {
       updatedAt: new Date(),
     })
     .where(eq(comic.id, comicId))
-    .returning();
+    .returning()
 
   if (genreIds !== undefined) {
-    await database.delete(comicToGenre).where(eq(comicToGenre.comicId, comicId));
+    await database.delete(comicToGenre).where(eq(comicToGenre.comicId, comicId))
 
     if (genreIds.length > 0) {
       await database.insert(comicToGenre).values(
@@ -82,21 +82,21 @@ export async function updateComic(comicId: number, data: UpdateComicData) {
           comicId,
           genreId,
         }))
-      );
+      )
     }
   }
 
-  return updatedComic;
+  return updatedComic
 }
 
 export async function deleteComic(comicId: number) {
-  await database.delete(chapter).where(eq(chapter.comicId, comicId));
+  await database.delete(chapter).where(eq(chapter.comicId, comicId))
 
-  await database.delete(comicToGenre).where(eq(comicToGenre.comicId, comicId));
+  await database.delete(comicToGenre).where(eq(comicToGenre.comicId, comicId))
 
-  const [deletedComic] = await database.delete(comic).where(eq(comic.id, comicId)).returning();
+  const [deletedComic] = await database.delete(comic).where(eq(comic.id, comicId)).returning()
 
-  return deletedComic;
+  return deletedComic
 }
 
 export async function incrementViews(comicId: number) {
@@ -106,9 +106,9 @@ export async function incrementViews(comicId: number) {
       views: sql`${comic.views} + 1`,
     })
     .where(eq(comic.id, comicId))
-    .returning();
+    .returning()
 
-  return updated;
+  return updated
 }
 
 export async function updateComicRating(comicId: number, newRating: number) {
@@ -118,7 +118,7 @@ export async function updateComicRating(comicId: number, newRating: number) {
       rating: newRating.toFixed(2),
     })
     .where(eq(comic.id, comicId))
-    .returning();
+    .returning()
 
-  return updated;
+  return updated
 }

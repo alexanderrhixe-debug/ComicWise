@@ -1,4 +1,4 @@
-import Blog from "components/shadcn-studio/blocks/blog-component-01/blog-component-01";
+import Blog from "components/shadcn-studio/blocks/blog-component-01/blog-component-01"
 
 const blogCards = [
   {
@@ -25,10 +25,10 @@ const blogCards = [
       "Welcome to this charming independent house bedroom, featuring a spacious layout and cozy furnishings. Enjoy abundant natural light and peaceful.",
     blogLink: "#",
   },
-];
+]
 
 const BlogPage = () => {
-  return <Blog blogCards={blogCards} />;
-};
+  return <Blog blogCards={blogCards} />
+}
 
-export default BlogPage;
+export default BlogPage

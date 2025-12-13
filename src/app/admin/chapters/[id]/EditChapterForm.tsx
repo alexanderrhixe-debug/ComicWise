@@ -1,27 +1,27 @@
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import { deleteChapter, updateChapter } from "lib/actions/chapters";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { deleteChapter, updateChapter } from "lib/actions/chapters"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export default async function EditChapterForm({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+  const id = Number(params.id)
 
   // Fetch chapter and comics on the server
   const [chapterRes, comicsRes] = await Promise.all([
     fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/chapters/${id}`, { cache: "no-store" }),
     fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/comics?limit=1000`, { cache: "no-store" }),
-  ]);
+  ])
 
   if (!chapterRes.ok || !comicsRes.ok) {
-    redirect("/admin/chapters");
+    redirect("/admin/chapters")
   }
 
-  const chapter = await chapterRes.json();
-  const comicsData = await comicsRes.json();
-  const comics = comicsData.comics || [];
+  const chapter = await chapterRes.json()
+  const comicsData = await comicsRes.json()
+  const comics = comicsData.comics || []
 
   async function handleUpdate(formData: FormData) {
     const payload = {
@@ -32,25 +32,25 @@ export default async function EditChapterForm({ params }: { params: { id: string
       releaseDate: formData.get("releaseDate")
         ? new Date(String(formData.get("releaseDate")))
         : undefined,
-    };
-
-    const result = await updateChapter(id, payload);
-    if (result.success) {
-      revalidatePath("/admin/chapters");
-      revalidatePath(`/comics/${payload.comicId}`);
-      redirect("/admin/chapters");
     }
 
-    throw new Error(result.error || "Failed to update chapter");
+    const result = await updateChapter(id, payload)
+    if (result.success) {
+      revalidatePath("/admin/chapters")
+      revalidatePath(`/comics/${payload.comicId}`)
+      redirect("/admin/chapters")
+    }
+
+    throw new Error(result.error || "Failed to update chapter")
   }
 
   async function handleDelete() {
-    const result = await deleteChapter(id);
+    const result = await deleteChapter(id)
     if (result.success) {
-      revalidatePath("/admin/chapters");
-      redirect("/admin/chapters");
+      revalidatePath("/admin/chapters")
+      redirect("/admin/chapters")
     }
-    throw new Error(result.error || "Failed to delete chapter");
+    throw new Error(result.error || "Failed to delete chapter")
   }
 
   return (
@@ -159,5 +159,5 @@ export default async function EditChapterForm({ params }: { params: { id: string
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

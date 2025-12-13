@@ -1,16 +1,16 @@
-"use server";
+"use server"
 
 // ═══════════════════════════════════════════════════
 // COMPREHENSIVE AUTH ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "appConfig";
-import { signIn } from "auth";
-import bcrypt from "bcryptjs";
-import { database } from "database";
-import { passwordResetToken, user, verificationToken } from "database/schema";
-import { eq } from "drizzle-orm";
-import { checkRateLimit } from "lib/ratelimit";
+import { appConfig } from "appConfig"
+import { signIn } from "auth"
+import bcrypt from "bcryptjs"
+import { database } from "database"
+import { passwordResetToken, user, verificationToken } from "database/schema"
+import { eq } from "drizzle-orm"
+import { checkRateLimit } from "lib/ratelimit"
 import {
   forgotPasswordSchema,
   resetPasswordSchema,
@@ -24,18 +24,18 @@ import {
   type SignUpInput,
   type UpdateProfileInput,
   type VerifyEmailInput,
-} from "lib/validations/schemas";
-import { executeWorkflow } from "lib/workflow";
+} from "lib/validations/schemas"
+import { executeWorkflow } from "lib/workflow"
 
 // ═══════════════════════════════════════════════════
 // TYPES
 // ═══════════════════════════════════════════════════
 
 export interface ActionResponse<T = unknown> {
-  success?: boolean;
-  error?: string;
-  data?: T;
-  field?: string;
+  success?: boolean
+  error?: string
+  data?: T
+  field?: string
 }
 
 // ═══════════════════════════════════════════════════
@@ -45,34 +45,34 @@ export interface ActionResponse<T = unknown> {
 export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
   try {
     // Rate limiting
-    const rateLimitResult = checkRateLimit(`signup:${data.email}`, appConfig.rateLimit.auth);
+    const rateLimitResult = checkRateLimit(`signup:${data.email}`, appConfig.rateLimit.auth)
 
     if (!rateLimitResult.allowed) {
       return {
         error: "Too many registration attempts. Please try again later.",
-      };
+      }
     }
 
     // Validate input
-    const validatedData = signUpSchema.parse(data);
+    const validatedData = signUpSchema.parse(data)
 
     // Check if user already exists
     const existingUser = await database.query.user.findFirst({
       where: eq(user.email, validatedData.email.toLowerCase()),
-    });
+    })
 
     if (existingUser) {
       return {
         error: "A user with this email already exists.",
         field: "email",
-      };
+      }
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(
       validatedData.password,
       appConfig.security.bcryptRounds
-    );
+    )
 
     // Create user
     const [newUser] = await database
@@ -84,21 +84,21 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
         role: "user",
         emailVerified: null, // Not verified yet
       })
-      .returning();
+      .returning()
 
     if (!newUser) {
-      return { error: "Failed to create user account." };
+      return { error: "Failed to create user account." }
     }
 
     // Generate verification token
-    const token = crypto.randomUUID();
-    const expires = new Date(Date.now() + appConfig.security.tokenExpiry.emailVerification);
+    const token = crypto.randomUUID()
+    const expires = new Date(Date.now() + appConfig.security.tokenExpiry.emailVerification)
 
     await database.insert(verificationToken).values({
       identifier: newUser.email,
       token,
       expires,
-    });
+    })
 
     // Send verification email via workflow
     await executeWorkflow({
@@ -110,7 +110,7 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
         verificationToken: token,
         verificationUrl: `${appConfig.url}/verify-email?token=${token}`,
       },
-    });
+    })
 
     // Send welcome email (async, don't wait)
     executeWorkflow({
@@ -120,7 +120,7 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
       data: {
         userId: newUser.id,
       },
-    }).catch((error) => console.error("Failed to send welcome email:", error));
+    }).catch((error) => console.error("Failed to send welcome email:", error))
 
     return {
       success: true,
@@ -128,15 +128,15 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
         email: newUser.email,
         name: newUser.name,
       },
-    };
+    }
   } catch (error: unknown) {
-    console.error("Sign up error:", error);
+    console.error("Sign up error:", error)
 
     if (error instanceof Error && error.message.includes("duplicate")) {
-      return { error: "An account with this email already exists.", field: "email" };
+      return { error: "An account with this email already exists.", field: "email" }
     }
 
-    return { error: "Failed to create account. Please try again." };
+    return { error: "Failed to create account. Please try again." }
   }
 }
 
@@ -147,37 +147,37 @@ export async function signUpAction(data: SignUpInput): Promise<ActionResponse> {
 export async function signInAction(data: SignInInput): Promise<ActionResponse> {
   try {
     // Rate limiting
-    const rateLimitResult = checkRateLimit(`signin:${data.email}`, appConfig.rateLimit.auth);
+    const rateLimitResult = checkRateLimit(`signin:${data.email}`, appConfig.rateLimit.auth)
 
     if (!rateLimitResult.allowed) {
       return {
         error: "Too many login attempts. Please try again later.",
-      };
+      }
     }
 
     // Validate input
-    const validatedData = signInSchema.parse(data);
+    const validatedData = signInSchema.parse(data)
 
     // Find user
     const existingUser = await database.query.user.findFirst({
       where: eq(user.email, validatedData.email.toLowerCase()),
-    });
+    })
 
     if (!existingUser || !existingUser.password) {
       return {
         error: "Invalid email or password.",
         field: "email",
-      };
+      }
     }
 
     // Verify password
-    const passwordMatch = await bcrypt.compare(validatedData.password, existingUser.password);
+    const passwordMatch = await bcrypt.compare(validatedData.password, existingUser.password)
 
     if (!passwordMatch) {
       return {
         error: "Invalid email or password.",
         field: "password",
-      };
+      }
     }
 
     // Sign in using NextAuth
@@ -185,10 +185,10 @@ export async function signInAction(data: SignInInput): Promise<ActionResponse> {
       email: validatedData.email,
       password: validatedData.password,
       redirect: false,
-    });
+    })
 
     if (result?.error) {
-      return { error: "Failed to sign in. Please try again." };
+      return { error: "Failed to sign in. Please try again." }
     }
 
     return {
@@ -198,18 +198,18 @@ export async function signInAction(data: SignInInput): Promise<ActionResponse> {
         name: existingUser.name,
         role: existingUser.role,
       },
-    };
+    }
   } catch (error: unknown) {
-    console.error("Sign in error:", error);
+    console.error("Sign in error:", error)
 
     if (error instanceof Error && error.message.includes("Invalid")) {
       return {
         error: "Invalid email or password.",
         field: "email",
-      };
+      }
     }
 
-    return { error: "Failed to sign in. Please try again." };
+    return { error: "Failed to sign in. Please try again." }
   }
 }
 
@@ -223,21 +223,21 @@ export async function forgotPasswordAction(data: ForgotPasswordInput): Promise<A
     const rateLimitResult = checkRateLimit(
       `forgot-password:${data.email}`,
       appConfig.rateLimit.email
-    );
+    )
 
     if (!rateLimitResult.allowed) {
       return {
         error: "Too many password reset requests. Please try again later.",
-      };
+      }
     }
 
     // Validate input
-    const validatedData = forgotPasswordSchema.parse(data);
+    const validatedData = forgotPasswordSchema.parse(data)
 
     // Find user
     const existingUser = await database.query.user.findFirst({
       where: eq(user.email, validatedData.email.toLowerCase()),
-    });
+    })
 
     // Always return success to prevent email enumeration
     if (!existingUser) {
@@ -246,24 +246,24 @@ export async function forgotPasswordAction(data: ForgotPasswordInput): Promise<A
         data: {
           message: "If an account exists with this email, you will receive a password reset link.",
         },
-      };
+      }
     }
 
     // Generate reset token
-    const token = crypto.randomUUID();
-    const expires = new Date(Date.now() + appConfig.security.tokenExpiry.passwordReset);
+    const token = crypto.randomUUID()
+    const expires = new Date(Date.now() + appConfig.security.tokenExpiry.passwordReset)
 
     // Delete any existing tokens for this email
     await database
       .delete(passwordResetToken)
-      .where(eq(passwordResetToken.email, existingUser.email));
+      .where(eq(passwordResetToken.email, existingUser.email))
 
     // Create new token
     await database.insert(passwordResetToken).values({
       email: existingUser.email,
       token,
       expires,
-    });
+    })
 
     // Send password reset email via workflow
     await executeWorkflow({
@@ -275,18 +275,18 @@ export async function forgotPasswordAction(data: ForgotPasswordInput): Promise<A
         resetToken: token,
         resetUrl: `${appConfig.url}/reset-password?token=${token}`,
       },
-    });
+    })
 
     return {
       success: true,
       data: {
         message: "If an account exists with this email, you will receive a password reset link.",
       },
-    };
+    }
   } catch (error: unknown) {
-    console.error("Forgot password error:", error);
+    console.error("Forgot password error:", error)
 
-    return { error: "Failed to process request. Please try again." };
+    return { error: "Failed to process request. Please try again." }
   }
 }
 
@@ -297,33 +297,33 @@ export async function forgotPasswordAction(data: ForgotPasswordInput): Promise<A
 export async function resetPasswordAction(data: ResetPasswordInput): Promise<ActionResponse> {
   try {
     // Validate input
-    const validatedData = resetPasswordSchema.parse(data);
+    const validatedData = resetPasswordSchema.parse(data)
 
     // Find valid token
     const resetToken = await database.query.passwordResetToken.findFirst({
       where: eq(passwordResetToken.token, validatedData.token),
-    });
+    })
 
     if (!resetToken || resetToken.expires < new Date()) {
       return {
         error: "Invalid or expired reset token. Please request a new one.",
-      };
+      }
     }
 
     // Find user
     const existingUser = await database.query.user.findFirst({
       where: eq(user.email, resetToken.email),
-    });
+    })
 
     if (!existingUser) {
-      return { error: "User not found." };
+      return { error: "User not found." }
     }
 
     // Hash new password
     const hashedPassword = await bcrypt.hash(
       validatedData.password,
       appConfig.security.bcryptRounds
-    );
+    )
 
     // Update password
     await database
@@ -332,12 +332,12 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
         password: hashedPassword,
         updatedAt: new Date(),
       })
-      .where(eq(user.id, existingUser.id));
+      .where(eq(user.id, existingUser.id))
 
     // Delete used token
     await database
       .delete(passwordResetToken)
-      .where(eq(passwordResetToken.token, validatedData.token));
+      .where(eq(passwordResetToken.token, validatedData.token))
 
     // Send confirmation email (async, don't wait)
     executeWorkflow({
@@ -348,18 +348,18 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
         userId: existingUser.id,
         changeType: "password",
       },
-    }).catch((error) => console.error("Failed to send confirmation email:", error));
+    }).catch((error) => console.error("Failed to send confirmation email:", error))
 
     return {
       success: true,
       data: {
         message: "Your password has been reset successfully.",
       },
-    };
+    }
   } catch (error: unknown) {
-    console.error("Reset password error:", error);
+    console.error("Reset password error:", error)
 
-    return { error: "Failed to reset password. Please try again." };
+    return { error: "Failed to reset password. Please try again." }
   }
 }
 
@@ -370,26 +370,26 @@ export async function resetPasswordAction(data: ResetPasswordInput): Promise<Act
 export async function verifyEmailAction(data: VerifyEmailInput): Promise<ActionResponse> {
   try {
     // Validate input
-    const validatedData = verifyEmailSchema.parse(data);
+    const validatedData = verifyEmailSchema.parse(data)
 
     // Find valid token
     const token = await database.query.verificationToken.findFirst({
       where: eq(verificationToken.token, validatedData.token),
-    });
+    })
 
     if (!token || token.expires < new Date()) {
       return {
         error: "Invalid or expired verification token.",
-      };
+      }
     }
 
     // Find user
     const existingUser = await database.query.user.findFirst({
       where: eq(user.email, token.identifier),
-    });
+    })
 
     if (!existingUser) {
-      return { error: "User not found." };
+      return { error: "User not found." }
     }
 
     // Update email verification status
@@ -399,23 +399,21 @@ export async function verifyEmailAction(data: VerifyEmailInput): Promise<ActionR
         emailVerified: new Date(),
         updatedAt: new Date(),
       })
-      .where(eq(user.id, existingUser.id));
+      .where(eq(user.id, existingUser.id))
 
     // Delete used token
-    await database
-      .delete(verificationToken)
-      .where(eq(verificationToken.token, validatedData.token));
+    await database.delete(verificationToken).where(eq(verificationToken.token, validatedData.token))
 
     return {
       success: true,
       data: {
         message: "Your email has been verified successfully.",
       },
-    };
+    }
   } catch (error: unknown) {
-    console.error("Verify email error:", error);
+    console.error("Verify email error:", error)
 
-    return { error: "Failed to verify email. Please try again." };
+    return { error: "Failed to verify email. Please try again." }
   }
 }
 
@@ -428,24 +426,24 @@ export async function resendVerificationEmailAction(
 ): Promise<ActionResponse> {
   try {
     // Handle both object and string input for backward compatibility
-    const email = typeof data === "string" ? data : data.email;
+    const email = typeof data === "string" ? data : data.email
 
     // Rate limiting
     const rateLimitResult = checkRateLimit(
       `resend-verification:${email}`,
       appConfig.rateLimit.email
-    );
+    )
 
     if (!rateLimitResult.allowed) {
       return {
         error: "Too many requests. Please try again later.",
-      };
+      }
     }
 
     // Find user
     const existingUser = await database.query.user.findFirst({
       where: eq(user.email, email.toLowerCase()),
-    });
+    })
 
     if (!existingUser) {
       // Don't reveal if user exists
@@ -454,30 +452,30 @@ export async function resendVerificationEmailAction(
         data: {
           message: "If an account exists, a verification email has been sent.",
         },
-      };
+      }
     }
 
     // Check if already verified
     if (existingUser.emailVerified) {
       return {
         error: "This email is already verified.",
-      };
+      }
     }
 
     // Delete old tokens
     await database
       .delete(verificationToken)
-      .where(eq(verificationToken.identifier, existingUser.email));
+      .where(eq(verificationToken.identifier, existingUser.email))
 
     // Generate new token
-    const token = crypto.randomUUID();
-    const expires = new Date(Date.now() + appConfig.security.tokenExpiry.emailVerification);
+    const token = crypto.randomUUID()
+    const expires = new Date(Date.now() + appConfig.security.tokenExpiry.emailVerification)
 
     await database.insert(verificationToken).values({
       identifier: existingUser.email,
       token,
       expires,
-    });
+    })
 
     // Send verification email
     await executeWorkflow({
@@ -489,17 +487,17 @@ export async function resendVerificationEmailAction(
         verificationToken: token,
         verificationUrl: `${appConfig.url}/verify-email?token=${token}`,
       },
-    });
+    })
 
     return {
       success: true,
       data: {
         message: "Verification email has been sent.",
       },
-    };
+    }
   } catch (error: unknown) {
-    console.error("Resend verification error:", error);
-    return { error: "Failed to send verification email. Please try again." };
+    console.error("Resend verification error:", error)
+    return { error: "Failed to send verification email. Please try again." }
   }
 }
 
@@ -513,7 +511,7 @@ export async function updateProfileAction(
 ): Promise<ActionResponse> {
   try {
     // Validate input
-    const validatedData = updateProfileSchema.parse(data);
+    const validatedData = updateProfileSchema.parse(data)
 
     // Update user
     const [updatedUser] = await database
@@ -523,10 +521,10 @@ export async function updateProfileAction(
         updatedAt: new Date(),
       })
       .where(eq(user.id, userId))
-      .returning();
+      .returning()
 
     if (!updatedUser) {
-      return { error: "Failed to update profile." };
+      return { error: "Failed to update profile." }
     }
 
     // Send notification email (async, don't wait)
@@ -539,7 +537,7 @@ export async function updateProfileAction(
           userId: updatedUser.id,
           changeType: "profile",
         },
-      }).catch((error) => console.error("Failed to send notification:", error));
+      }).catch((error) => console.error("Failed to send notification:", error))
     }
 
     return {
@@ -548,11 +546,11 @@ export async function updateProfileAction(
         name: updatedUser.name,
         image: updatedUser.image,
       },
-    };
+    }
   } catch (error: unknown) {
-    console.error("Update profile error:", error);
+    console.error("Update profile error:", error)
 
-    return { error: "Failed to update profile. Please try again." };
+    return { error: "Failed to update profile. Please try again." }
   }
 }
 
@@ -566,13 +564,13 @@ export async function registerUser(formData: FormData): Promise<ActionResponse> 
     email: formData.get("email") as string,
     password: formData.get("password") as string,
     confirmPassword: formData.get("confirmPassword") as string,
-  };
-  return signUpAction(data);
+  }
+  return signUpAction(data)
 }
 
 export async function requestPasswordReset(formData: FormData): Promise<ActionResponse> {
-  const email = formData.get("email") as string;
-  return forgotPasswordAction({ email });
+  const email = formData.get("email") as string
+  return forgotPasswordAction({ email })
 }
 
 export async function resetPassword(formData: FormData): Promise<ActionResponse> {
@@ -580,6 +578,6 @@ export async function resetPassword(formData: FormData): Promise<ActionResponse>
     token: formData.get("token") as string,
     password: formData.get("password") as string,
     confirmPassword: formData.get("confirmPassword") as string,
-  };
-  return resetPasswordAction(data);
+  }
+  return resetPasswordAction(data)
 }

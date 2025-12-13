@@ -1,13 +1,13 @@
-"use server";
+"use server"
 
 // ═══════════════════════════════════════════════════
 // COMPREHENSIVE WORKFLOW SYSTEM (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "appConfig";
-import emailService, { sendEmail } from "lib/email";
-import { checkRateLimit } from "lib/ratelimit";
-import { z } from "zod";
+import { appConfig } from "appConfig"
+import emailService, { sendEmail } from "lib/email"
+import { checkRateLimit } from "lib/ratelimit"
+import { z } from "zod"
 
 // ═══════════════════════════════════════════════════
 // WORKFLOW TYPES & SCHEMAS
@@ -29,14 +29,14 @@ export type WorkflowType =
   | "bookmark.reminder"
   | "comment.created"
   | "comment.reply"
-  | "admin.notification";
+  | "admin.notification"
 
 export interface WorkflowPayload {
-  type: WorkflowType;
-  data: Record<string, unknown>;
-  recipientEmail: string;
-  recipientName?: string;
-  metadata?: Record<string, unknown>;
+  type: WorkflowType
+  data: Record<string, unknown>
+  recipientEmail: string
+  recipientName?: string
+  metadata?: Record<string, unknown>
 }
 
 const workflowPayloadSchema = z
@@ -64,7 +64,7 @@ const workflowPayloadSchema = z
     recipientName: z.string().optional(),
     metadata: z.record(z.string(), z.any()).optional(),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // WORKFLOW EXECUTION ENGINE
@@ -73,31 +73,31 @@ const workflowPayloadSchema = z
 export async function executeWorkflow(payload: WorkflowPayload) {
   try {
     // Validate payload
-    const validatedPayload = workflowPayloadSchema.parse(payload);
+    const validatedPayload = workflowPayloadSchema.parse(payload)
 
     // Rate limiting for email workflows
-    const rateLimitKey = `workflow:${validatedPayload.recipientEmail}`;
-    const rateLimitResult = checkRateLimit(rateLimitKey, appConfig.rateLimit.email);
+    const rateLimitKey = `workflow:${validatedPayload.recipientEmail}`
+    const rateLimitResult = checkRateLimit(rateLimitKey, appConfig.rateLimit.email)
 
     if (!rateLimitResult.allowed) {
-      console.warn(`Rate limit exceeded for workflow: ${validatedPayload.type}`);
+      console.warn(`Rate limit exceeded for workflow: ${validatedPayload.type}`)
       return {
         success: false,
         error: "Rate limit exceeded. Please try again later.",
         retryAfter: new Date(rateLimitResult.resetAt),
-      };
+      }
     }
 
     // Execute workflow based on type
-    const result = await routeWorkflow(validatedPayload);
+    const result = await routeWorkflow(validatedPayload)
 
-    return result;
+    return result
   } catch (error) {
-    console.error("Workflow execution error:", error);
+    console.error("Workflow execution error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Workflow execution failed",
-    };
+    }
   }
 }
 
@@ -109,50 +109,50 @@ async function routeWorkflow(payload: WorkflowPayload) {
   switch (payload.type) {
     // User workflows
     case "user.welcome":
-      return await sendWelcomeEmail(payload);
+      return await sendWelcomeEmail(payload)
     case "user.verification":
-      return await sendVerificationEmail(payload);
+      return await sendVerificationEmail(payload)
     case "user.password-reset":
-      return await sendPasswordResetEmail(payload);
+      return await sendPasswordResetEmail(payload)
     case "user.account-updated":
-      return await sendAccountUpdatedEmail(payload);
+      return await sendAccountUpdatedEmail(payload)
     case "user.account-deleted":
-      return await sendAccountDeletedEmail(payload);
+      return await sendAccountDeletedEmail(payload)
 
     // Comic workflows
     case "comic.created":
-      return await sendComicCreatedNotification(payload);
+      return await sendComicCreatedNotification(payload)
     case "comic.updated":
-      return await sendComicUpdatedNotification(payload);
+      return await sendComicUpdatedNotification(payload)
     case "comic.deleted":
-      return await sendComicDeletedNotification(payload);
+      return await sendComicDeletedNotification(payload)
 
     // Chapter workflows
     case "chapter.created":
-      return await sendChapterCreatedNotification(payload);
+      return await sendChapterCreatedNotification(payload)
     case "chapter.updated":
-      return await sendChapterUpdatedNotification(payload);
+      return await sendChapterUpdatedNotification(payload)
     case "chapter.deleted":
-      return await sendChapterDeletedNotification(payload);
+      return await sendChapterDeletedNotification(payload)
 
     // Bookmark workflows
     case "bookmark.created":
-      return await sendBookmarkCreatedNotification(payload);
+      return await sendBookmarkCreatedNotification(payload)
     case "bookmark.reminder":
-      return await sendBookmarkReminder(payload);
+      return await sendBookmarkReminder(payload)
 
     // Comment workflows
     case "comment.created":
-      return await sendCommentNotification(payload);
+      return await sendCommentNotification(payload)
     case "comment.reply":
-      return await sendCommentReplyNotification(payload);
+      return await sendCommentReplyNotification(payload)
 
     // Admin workflows
     case "admin.notification":
-      return await sendAdminNotification(payload);
+      return await sendAdminNotification(payload)
 
     default:
-      throw new Error(`Unknown workflow type: ${payload.type}`);
+      throw new Error(`Unknown workflow type: ${payload.type}`)
   }
 }
 
@@ -161,44 +161,44 @@ async function routeWorkflow(payload: WorkflowPayload) {
 // ═══════════════════════════════════════════════════
 
 async function sendWelcomeEmail(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName } = payload;
+  const { recipientEmail, recipientName } = payload
 
   const result = await emailService.sendWelcomeEmail({
     name: recipientName || "Comic Reader",
     email: recipientEmail,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendVerificationEmail(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
+  const { recipientEmail, recipientName, data } = payload
 
   const result = await emailService.sendVerificationEmail({
     name: recipientName || "Comic Reader",
     email: recipientEmail,
     verificationToken: data.token as string,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendPasswordResetEmail(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
+  const { recipientEmail, recipientName, data } = payload
 
   const result = await emailService.sendPasswordResetEmail({
     name: recipientName || "Comic Reader",
     email: recipientEmail,
     resetToken: data.token as string,
     ipAddress: data.ipAddress as string | undefined,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 export async function sendNewComicNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const comicUrl = `${appConfig.url}/comics/${data.comicId}`;
+  const { recipientEmail, recipientName, data } = payload
+  const comicUrl = `${appConfig.url}/comics/${data.comicId}`
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -213,13 +213,13 @@ export async function sendNewComicNotification(payload: WorkflowPayload) {
         Read Now
       </a>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendNewChapterNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
+  const { recipientEmail, recipientName, data } = payload
 
   const result = await emailService.sendNewChapterEmail({
     userName: recipientName || "Comic Reader",
@@ -230,14 +230,14 @@ async function sendNewChapterNotification(payload: WorkflowPayload) {
     chapterTitle: data.chapterTitle as string,
     chapterSlug: data.chapterSlug as string,
     releaseDate: (data.releaseDate as string) || new Date().toLocaleDateString(),
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendBookmarkReminder(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const bookmarksUrl = `${appConfig.url}/bookmarks`;
+  const { recipientEmail, recipientName, data } = payload
+  const bookmarksUrl = `${appConfig.url}/bookmarks`
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -251,13 +251,13 @@ async function sendBookmarkReminder(payload: WorkflowPayload) {
         View Bookmarks
       </a>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendCommentNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
+  const { recipientEmail, recipientName, data } = payload
 
   const result = await emailService.sendCommentNotificationEmail({
     userName: recipientName || "Comic Reader",
@@ -269,9 +269,9 @@ async function sendCommentNotification(payload: WorkflowPayload) {
     chapterNumber: data.chapterNumber as number | undefined,
     commentId: data.commentId as string,
     commentType: (data.commentType as "reply" | "mention" | "new") || "new",
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 // ═══════════════════════════════════════════════════
@@ -279,17 +279,17 @@ async function sendCommentNotification(payload: WorkflowPayload) {
 // ═══════════════════════════════════════════════════
 
 export async function executeBatchWorkflow(payloads: WorkflowPayload[]) {
-  const results = await Promise.allSettled(payloads.map((payload) => executeWorkflow(payload)));
+  const results = await Promise.allSettled(payloads.map((payload) => executeWorkflow(payload)))
 
   return {
     total: results.length,
     succeeded: results.filter((r) => r.status === "fulfilled" && r.value.success).length,
     failed: results.filter((r) => r.status === "rejected" || !r.value.success).length,
     results,
-  };
+  }
 }
 async function sendAccountUpdatedEmail(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
+  const { recipientEmail, recipientName, data } = payload
 
   const result = await emailService.sendAccountUpdatedEmail({
     name: recipientName || "Comic Reader",
@@ -297,9 +297,9 @@ async function sendAccountUpdatedEmail(payload: WorkflowPayload) {
     changeType: (data.changeType as "password" | "email" | "profile") || "profile",
     changeDetails: data.changes as string | undefined,
     ipAddress: data.ipAddress as string | undefined,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 // ═══════════════════════════════════════════════════
@@ -307,8 +307,8 @@ async function sendAccountUpdatedEmail(payload: WorkflowPayload) {
 // ═══════════════════════════════════════════════════
 
 async function sendAccountDeletedEmail(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const deletionDate = new Date().toLocaleDateString();
+  const { recipientEmail, recipientName, data } = payload
+  const deletionDate = new Date().toLocaleDateString()
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -371,9 +371,9 @@ async function sendAccountDeletedEmail(payload: WorkflowPayload) {
         </body>
       </html>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 // ═══════════════════════════════════════════════════
@@ -381,9 +381,9 @@ async function sendAccountDeletedEmail(payload: WorkflowPayload) {
 // ═══════════════════════════════════════════════════
 
 async function sendComicCreatedNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const comicUrl = `${appConfig.url}/comics/${data.comicSlug || data.comicId}`;
-  const coverUrl = (data.comicCoverUrl as string) || `${appConfig.url}/placeholder-cover.jpg`;
+  const { recipientEmail, recipientName, data } = payload
+  const comicUrl = `${appConfig.url}/comics/${data.comicSlug || data.comicId}`
+  const coverUrl = (data.comicCoverUrl as string) || `${appConfig.url}/placeholder-cover.jpg`
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -469,14 +469,14 @@ async function sendComicCreatedNotification(payload: WorkflowPayload) {
         </body>
       </html>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendComicUpdatedNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const comicUrl = `${appConfig.url}/comics/${data.comicSlug || data.comicId}`;
+  const { recipientEmail, recipientName, data } = payload
+  const comicUrl = `${appConfig.url}/comics/${data.comicSlug || data.comicId}`
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -524,14 +524,14 @@ async function sendComicUpdatedNotification(payload: WorkflowPayload) {
         </body>
       </html>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendComicDeletedNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const alternativesUrl = `${appConfig.url}/comics`;
+  const { recipientEmail, recipientName, data } = payload
+  const alternativesUrl = `${appConfig.url}/comics`
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -582,9 +582,9 @@ async function sendComicDeletedNotification(payload: WorkflowPayload) {
         </body>
       </html>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 // ═══════════════════════════════════════════════════
@@ -592,12 +592,12 @@ async function sendComicDeletedNotification(payload: WorkflowPayload) {
 // ═══════════════════════════════════════════════════
 
 async function sendChapterCreatedNotification(payload: WorkflowPayload) {
-  return await sendNewChapterNotification(payload);
+  return await sendNewChapterNotification(payload)
 }
 
 async function sendChapterUpdatedNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const chapterUrl = `${appConfig.url}/comics/${data.comicSlug}/read/${data.chapterSlug}`;
+  const { recipientEmail, recipientName, data } = payload
+  const chapterUrl = `${appConfig.url}/comics/${data.comicSlug}/read/${data.chapterSlug}`
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -648,14 +648,14 @@ async function sendChapterUpdatedNotification(payload: WorkflowPayload) {
         </body>
       </html>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendChapterDeletedNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const comicUrl = `${appConfig.url}/comics/${data.comicSlug}`;
+  const { recipientEmail, recipientName, data } = payload
+  const comicUrl = `${appConfig.url}/comics/${data.comicSlug}`
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -706,9 +706,9 @@ async function sendChapterDeletedNotification(payload: WorkflowPayload) {
         </body>
       </html>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 // ═══════════════════════════════════════════════════
@@ -716,9 +716,9 @@ async function sendChapterDeletedNotification(payload: WorkflowPayload) {
 // ═══════════════════════════════════════════════════
 
 async function sendBookmarkCreatedNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const bookmarksUrl = `${appConfig.url}/bookmarks`;
-  const comicUrl = `${appConfig.url}/comics/${data.comicSlug}`;
+  const { recipientEmail, recipientName, data } = payload
+  const bookmarksUrl = `${appConfig.url}/bookmarks`
+  const comicUrl = `${appConfig.url}/comics/${data.comicSlug}`
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -765,26 +765,26 @@ async function sendBookmarkCreatedNotification(payload: WorkflowPayload) {
         </body>
       </html>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }
 
 async function sendCommentReplyNotification(payload: WorkflowPayload) {
-  return await sendCommentNotification(payload);
+  return await sendCommentNotification(payload)
 }
 
 async function sendAdminNotification(payload: WorkflowPayload) {
-  const { recipientEmail, recipientName, data } = payload;
-  const adminUrl = `${appConfig.url}/admin`;
-  const priority = (data.priority as string) || "normal";
+  const { recipientEmail, recipientName, data } = payload
+  const adminUrl = `${appConfig.url}/admin`
+  const priority = (data.priority as string) || "normal"
   const priorityColors = {
     low: { bg: "#f0fdf4", border: "#10b981", text: "#065f46" },
     normal: { bg: "#eff6ff", border: "#3b82f6", text: "#1e40af" },
     high: { bg: "#fef3c7", border: "#f59e0b", text: "#92400e" },
     critical: { bg: "#fef2f2", border: "#ef4444", text: "#991b1b" },
-  };
-  const colors = priorityColors[priority as keyof typeof priorityColors] || priorityColors.normal;
+  }
+  const colors = priorityColors[priority as keyof typeof priorityColors] || priorityColors.normal
 
   const result = await sendEmail({
     to: recipientEmail,
@@ -862,7 +862,7 @@ async function sendAdminNotification(payload: WorkflowPayload) {
         </body>
       </html>
     `,
-  });
+  })
 
-  return { success: result.success };
+  return { success: result.success }
 }

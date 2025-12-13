@@ -11,54 +11,53 @@
  */
 
 module.exports = function transformer(file, api) {
-  const j = api.jscodeshift;
-  const root = j(file.source);
+  const j = api.jscodeshift
+  const root = j(file.source)
 
   const hasHandleFn =
     root.find(j.FunctionDeclaration, { id: { name: "handleImageUpload" } }).size() > 0 ||
-    root.find(j.VariableDeclarator, { id: { name: "handleImageUpload" } }).size() > 0;
+    root.find(j.VariableDeclarator, { id: { name: "handleImageUpload" } }).size() > 0
 
   if (!hasHandleFn && file.source.indexOf("handleImageUpload") === -1) {
-    return null; // nothing to do
+    return null // nothing to do
   }
 
   // Remove top-level function declaration named handleImageUpload
   root.find(j.FunctionDeclaration, { id: { name: "handleImageUpload" } }).forEach((p) => {
-    j(p).remove();
-  });
+    j(p).remove()
+  })
 
   // Also remove var/const declarations like: const handleImageUpload = async (...) => { ... }
   root.find(j.VariableDeclarator, { id: { name: "handleImageUpload" } }).forEach((p) => {
-    const parent = p.parentPath && p.parentPath.parentPath;
+    const parent = p.parentPath && p.parentPath.parentPath
     if (parent && parent.node && parent.node.type === "VariableDeclaration") {
-      j(parent).remove();
+      j(parent).remove()
     } else {
-      j(p).remove();
+      j(p).remove()
     }
-  });
+  })
 
   // Ensure import for useImageUpload exists
   const existingImport = root.find(j.ImportDeclaration, {
     source: { value: "src/hooks/useImageUpload" },
-  });
+  })
   if (existingImport.size() === 0) {
     // insert after last import
-    const imports = root.find(j.ImportDeclaration);
+    const imports = root.find(j.ImportDeclaration)
     const hookImport = j.importDeclaration(
       [j.importSpecifier(j.identifier("useImageUpload"))],
       j.literal("src/hooks/useImageUpload")
-    );
+    )
 
     if (imports.size() > 0) {
-      imports.at(imports.size() - 1).insertAfter(hookImport);
+      imports.at(imports.size() - 1).insertAfter(hookImport)
     } else {
-      root.get().node.program.body.unshift(hookImport);
+      root.get().node.program.body.unshift(hookImport)
     }
   }
 
   // Insert hook usage snippet after imports if not already present
-  const hasHookCall =
-    root.find(j.CallExpression, { callee: { name: "useImageUpload" } }).size() > 0;
+  const hasHookCall = root.find(j.CallExpression, { callee: { name: "useImageUpload" } }).size() > 0
   if (!hasHookCall) {
     const hookVar = j.variableDeclaration("const", [
       j.variableDeclarator(
@@ -71,14 +70,14 @@ module.exports = function transformer(file, api) {
           j.objectExpression([j.property("init", j.identifier("uploadType"), j.literal("avatar"))]),
         ])
       ),
-    ]);
+    ])
 
     // Insert after last import
-    const imports = root.find(j.ImportDeclaration);
+    const imports = root.find(j.ImportDeclaration)
     if (imports.size() > 0) {
-      imports.at(imports.size() - 1).insertAfter(hookVar);
+      imports.at(imports.size() - 1).insertAfter(hookVar)
     } else {
-      root.get().node.program.body.unshift(hookVar);
+      root.get().node.program.body.unshift(hookVar)
     }
   }
 
@@ -93,8 +92,8 @@ module.exports = function transformer(file, api) {
         path.node.value.expression.name === "handleImageUpload"
     )
     .forEach((path) => {
-      path.get("value").get("expression").replace(j.identifier("handleFileSelect"));
-    });
+      path.get("value").get("expression").replace(j.identifier("handleFileSelect"))
+    })
 
   // Replace document.getElementById('...')?.click() with fileInputRef.current?.click()
   root
@@ -105,15 +104,15 @@ module.exports = function transformer(file, api) {
       },
     })
     .forEach((path) => {
-      const callee = path.node.callee;
-      if (callee.object && callee.object.type === "OptionalCallExpression") return; // skip odd patterns
+      const callee = path.node.callee
+      if (callee.object && callee.object.type === "OptionalCallExpression") return // skip odd patterns
       // look for MemberExpression: document.getElementById(...).click
       if (
         callee.object &&
         callee.object.type === "CallExpression" &&
         callee.object.callee.type === "MemberExpression"
       ) {
-        const mem = callee.object.callee;
+        const mem = callee.object.callee
         if (
           mem.object &&
           mem.object.name === "document" &&
@@ -134,10 +133,10 @@ module.exports = function transformer(file, api) {
               ),
               []
             )
-          );
+          )
         }
       }
-    });
+    })
 
-  return root.toSource({ quote: "single" });
-};
+  return root.toSource({ quote: "single" })
+}

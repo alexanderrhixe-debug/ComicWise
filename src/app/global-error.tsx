@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { isDevelopment } from "appConfig";
-import { AlertCircle } from "lucide-react";
-import Link from "next/link";
-import { useEffect } from "react";
-import { Button } from "ui/button";
+import { isDevelopment } from "appConfig"
+import { AlertCircle } from "lucide-react"
+import Link from "next/link"
+import { useEffect } from "react"
+import { Button } from "ui/button"
 
 interface GlobalErrorProps {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }
 
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
   useEffect(() => {
     // Log critical error to monitoring service
-    console.error("Global application error:", error);
-  }, [error]);
+    console.error("Global application error:", error)
+  }, [error])
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
@@ -56,5 +56,5 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
         )}
       </div>
     </div>
-  );
+  )
 }

@@ -15,18 +15,18 @@ import {
   Preview,
   Section,
   Text,
-} from "@react-email/components";
+} from "@react-email/components"
 
 interface CommentNotificationEmailProps {
-  userName: string;
-  userEmail: string;
-  commenterName: string;
-  commenterAvatar?: string;
-  commentText: string;
-  comicTitle: string;
-  chapterNumber?: number;
-  commentUrl: string;
-  commentType: "reply" | "mention" | "new";
+  userName: string
+  userEmail: string
+  commenterName: string
+  commenterAvatar?: string
+  commentText: string
+  comicTitle: string
+  chapterNumber?: number
+  commentUrl: string
+  commentType: "reply" | "mention" | "new"
 }
 
 export const CommentNotificationEmail = ({
@@ -43,30 +43,30 @@ export const CommentNotificationEmail = ({
   const getNotificationTitle = () => {
     switch (commentType) {
       case "reply":
-        return `${commenterName} replied to your comment`;
+        return `${commenterName} replied to your comment`
       case "mention":
-        return `${commenterName} mentioned you in a comment`;
+        return `${commenterName} mentioned you in a comment`
       case "new":
-        return `New comment on ${comicTitle}`;
+        return `New comment on ${comicTitle}`
       default:
-        return "New activity on ComicWise";
+        return "New activity on ComicWise"
     }
-  };
+  }
 
   const getNotificationMessage = () => {
-    const location = chapterNumber ? `Chapter ${chapterNumber} of ${comicTitle}` : comicTitle;
+    const location = chapterNumber ? `Chapter ${chapterNumber} of ${comicTitle}` : comicTitle
 
     switch (commentType) {
       case "reply":
-        return `${commenterName} replied to your comment on ${location}.`;
+        return `${commenterName} replied to your comment on ${location}.`
       case "mention":
-        return `${commenterName} mentioned you in a comment on ${location}.`;
+        return `${commenterName} mentioned you in a comment on ${location}.`
       case "new":
-        return `${commenterName} left a new comment on ${location}.`;
+        return `${commenterName} left a new comment on ${location}.`
       default:
-        return `New activity on ${location}.`;
+        return `New activity on ${location}.`
     }
-  };
+  }
 
   return (
     <Html>
@@ -173,10 +173,10 @@ export const CommentNotificationEmail = ({
         </Container>
       </Body>
     </Html>
-  );
-};
+  )
+}
 
-export default CommentNotificationEmail;
+export default CommentNotificationEmail
 
 // ═══════════════════════════════════════════════════
 // STYLES
@@ -186,7 +186,7 @@ const main = {
   backgroundColor: "#f6f9fc",
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
+}
 
 const container = {
   backgroundColor: "#ffffff",
@@ -194,17 +194,17 @@ const container = {
   padding: "20px 0 48px",
   marginBottom: "64px",
   maxWidth: "600px",
-};
+}
 
 const header = {
   padding: "32px 40px",
   textAlign: "center" as const,
-};
+}
 
 const logo = {
   margin: "0 auto",
   marginBottom: "16px",
-};
+}
 
 const heading = {
   fontSize: "28px",
@@ -212,18 +212,18 @@ const heading = {
   fontWeight: "700",
   color: "#1a1a1a",
   margin: "0",
-};
+}
 
 const content = {
   padding: "0 40px",
-};
+}
 
 const paragraph = {
   fontSize: "16px",
   lineHeight: "26px",
   color: "#484848",
   margin: "16px 0",
-};
+}
 
 const commentCard = {
   backgroundColor: "#f8fafc",
@@ -231,18 +231,18 @@ const commentCard = {
   border: "1px solid #e6ebf1",
   padding: "20px",
   margin: "24px 0",
-};
+}
 
 const commenterInfo = {
   display: "flex",
   alignItems: "center",
   marginBottom: "16px",
-};
+}
 
 const avatar = {
   borderRadius: "50%",
   marginRight: "12px",
-};
+}
 
 const avatarPlaceholder = {
   width: "40px",
@@ -256,24 +256,24 @@ const avatarPlaceholder = {
   fontSize: "18px",
   fontWeight: "600",
   marginRight: "12px",
-};
+}
 
 const commenterDetails = {
   flex: 1,
-};
+}
 
 const commenterNameText = {
   fontSize: "15px",
   fontWeight: "600",
   color: "#1a1a1a",
   margin: "0 0 2px 0",
-};
+}
 
 const timestamp = {
   fontSize: "13px",
   color: "#64748b",
   margin: "0",
-};
+}
 
 const commentBody = {
   padding: "16px",
@@ -281,7 +281,7 @@ const commentBody = {
   borderRadius: "6px",
   borderLeft: "3px solid #5469d4",
   margin: "12px 0",
-};
+}
 
 const commentTextStyle = {
   fontSize: "15px",
@@ -289,22 +289,22 @@ const commentTextStyle = {
   color: "#1a1a1a",
   margin: "0",
   fontStyle: "italic" as const,
-};
+}
 
 const comicInfo = {
   marginTop: "12px",
-};
+}
 
 const comicInfoText = {
   fontSize: "13px",
   color: "#64748b",
   margin: "0",
-};
+}
 
 const buttonContainer = {
   textAlign: "center" as const,
   margin: "32px 0",
-};
+}
 
 const button = {
   backgroundColor: "#8b5cf6",
@@ -316,42 +316,42 @@ const button = {
   textAlign: "center" as const,
   display: "inline-block",
   padding: "12px 32px",
-};
+}
 
 const tipsBox = {
   backgroundColor: "#f0f9ff",
   borderRadius: "4px",
   padding: "16px",
   margin: "24px 0",
-};
+}
 
 const tipsText = {
   fontSize: "13px",
   lineHeight: "20px",
   color: "#1e40af",
   margin: "0",
-};
+}
 
 const smallText = {
   fontSize: "13px",
   lineHeight: "20px",
   color: "#64748b",
   margin: "16px 0",
-};
+}
 
 const link = {
   color: "#5469d4",
   textDecoration: "underline",
-};
+}
 
 const hr = {
   borderColor: "#e6ebf1",
   margin: "32px 0",
-};
+}
 
 const footer = {
   padding: "0 40px",
-};
+}
 
 const footerText = {
   fontSize: "12px",
@@ -359,9 +359,9 @@ const footerText = {
   color: "#8898aa",
   margin: "4px 0",
   textAlign: "center" as const,
-};
+}
 
 const footerLink = {
   color: "#8898aa",
   textDecoration: "underline",
-};
+}

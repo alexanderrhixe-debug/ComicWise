@@ -1,19 +1,13 @@
-import { createComic } from "actions/comics";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Label } from "components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "components/ui/select";
-import { Textarea } from "components/ui/textarea";
-import type { CreateComicInput } from "lib/validations/schemas";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { createComic } from "actions/comics"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Label } from "components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "components/ui/select"
+import { Textarea } from "components/ui/textarea"
+import type { CreateComicInput } from "lib/validations/schemas"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 async function handleCreate(formData: FormData) {
   // Build payload from FormData and coerce types to match CreateComicInput
@@ -30,19 +24,19 @@ async function handleCreate(formData: FormData) {
     authorId: formData.get("authorId") ? Number(formData.get("authorId")) : undefined,
     artistId: formData.get("artistId") ? Number(formData.get("artistId")) : undefined,
     typeId: formData.get("typeId") ? Number(formData.get("typeId")) : undefined,
-  };
+  }
 
-  const result = await createComic(payload);
+  const result = await createComic(payload)
 
   if (result.success) {
     // Revalidate admin comics list and home
-    revalidatePath("/admin/comics");
-    revalidatePath("/");
-    redirect("/admin/comics");
+    revalidatePath("/admin/comics")
+    revalidatePath("/")
+    redirect("/admin/comics")
   }
 
   // On failure throw so framework surfaces error (could be improved)
-  throw new Error(result.error || "Failed to create comic");
+  throw new Error(result.error || "Failed to create comic")
 }
 
 export default function ComicForm() {
@@ -165,5 +159,5 @@ export default function ComicForm() {
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

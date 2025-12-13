@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { Eye, Star } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import type { Comic } from "src/types";
-import { Badge } from "ui/badge";
-import { Card, CardContent, CardFooter } from "ui/card";
+import { Eye, Star } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import type { Comic } from "src/types"
+import { Badge } from "ui/badge"
+import { Card, CardContent, CardFooter } from "ui/card"
 
 interface ComicCardProps {
-  comic: Partial<Comic> & { id: number; title: string; coverImage: string; rating?: string | null };
-  authorName?: string | null;
-  typeName?: string | null;
+  comic: Partial<Comic> & { id: number; title: string; coverImage: string; rating?: string | null }
+  authorName?: string | null
+  typeName?: string | null
 }
 
 export function ComicCard({ comic, authorName, typeName }: ComicCardProps) {
@@ -54,5 +54,5 @@ export function ComicCard({ comic, authorName, typeName }: ComicCardProps) {
         </CardFooter>
       </Card>
     </Link>
-  );
+  )
 }

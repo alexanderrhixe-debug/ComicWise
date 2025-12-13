@@ -1,17 +1,17 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from "react"
 
-import { Card, CardContent, CardHeader } from "ui/card";
+import { Card, CardContent, CardHeader } from "ui/card"
 
-import { cn } from "utils";
+import { cn } from "utils"
 
 // Statistics card data type
 type StatisticsCardProps = {
-  icon: ReactNode;
-  value: string;
-  title: string;
-  changePercentage: string;
-  className?: string;
-};
+  icon: ReactNode
+  value: string
+  title: string
+  changePercentage: string
+  className?: string
+}
 
 const StatisticsCard = ({
   icon,
@@ -36,7 +36,7 @@ const StatisticsCard = ({
         </p>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default StatisticsCard;
+export default StatisticsCard

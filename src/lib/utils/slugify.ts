@@ -1,5 +1,5 @@
 export function slugify(input: string): string {
-  if (!input) return "";
+  if (!input) return ""
   return input
     .toString()
     .normalize("NFKD")
@@ -8,7 +8,7 @@ export function slugify(input: string): string {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
-    .slice(0, 200);
+    .slice(0, 200)
 }
 
-export default slugify;
+export default slugify

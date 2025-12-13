@@ -1,15 +1,15 @@
-import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { create } from "zustand"
+import { createJSONStorage, persist } from "zustand/middleware"
 
 interface BookmarkState {
-  bookmarks: Set<number>;
-  readingProgress: Map<number, number>;
-  addBookmark: (comicId: number) => void;
-  removeBookmark: (comicId: number) => void;
-  updateProgress: (comicId: number, chapterId: number) => void;
-  isBookmarked: (comicId: number) => boolean;
-  getProgress: (comicId: number) => number | undefined;
-  clearAll: () => void;
+  bookmarks: Set<number>
+  readingProgress: Map<number, number>
+  addBookmark: (comicId: number) => void
+  removeBookmark: (comicId: number) => void
+  updateProgress: (comicId: number, chapterId: number) => void
+  isBookmarked: (comicId: number) => boolean
+  getProgress: (comicId: number) => number | undefined
+  clearAll: () => void
 }
 
 export const useBookmarkStore = create<BookmarkState>()(
@@ -25,13 +25,13 @@ export const useBookmarkStore = create<BookmarkState>()(
 
       removeBookmark: (comicId) =>
         set((state) => {
-          const newBookmarks = new Set(state.bookmarks);
+          const newBookmarks = new Set(state.bookmarks)
 
-          newBookmarks.delete(comicId);
-          const newProgress = new Map(state.readingProgress);
+          newBookmarks.delete(comicId)
+          const newProgress = new Map(state.readingProgress)
 
-          newProgress.delete(comicId);
-          return { bookmarks: newBookmarks, readingProgress: newProgress };
+          newProgress.delete(comicId)
+          return { bookmarks: newBookmarks, readingProgress: newProgress }
         }),
 
       updateProgress: (comicId, chapterId) =>
@@ -54,4 +54,4 @@ export const useBookmarkStore = create<BookmarkState>()(
       storage: createJSONStorage(() => localStorage),
     }
   )
-);
+)

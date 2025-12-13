@@ -2,17 +2,17 @@
 // EMAIL SERVICE - Send Emails with React Email Templates
 // ═══════════════════════════════════════════════════
 
-import { render } from "@react-email/components";
-import { appConfig, isDevelopment } from "appConfig";
-import AccountUpdatedEmail from "components/emails/AccountUpdatedEmail";
-import CommentNotificationEmail from "components/emails/CommentNotificationEmail";
-import NewChapterEmail from "components/emails/NewChapterEmail";
-import PasswordResetEmail from "components/emails/PasswordResetEmail";
-import VerificationEmail from "components/emails/VerificationEmail";
-import WelcomeEmail from "components/emails/WelcomeEmail";
-import nodemailer from "nodemailer";
+import { render } from "@react-email/components"
+import { appConfig, isDevelopment } from "appConfig"
+import AccountUpdatedEmail from "components/emails/AccountUpdatedEmail"
+import CommentNotificationEmail from "components/emails/CommentNotificationEmail"
+import NewChapterEmail from "components/emails/NewChapterEmail"
+import PasswordResetEmail from "components/emails/PasswordResetEmail"
+import VerificationEmail from "components/emails/VerificationEmail"
+import WelcomeEmail from "components/emails/WelcomeEmail"
+import nodemailer from "nodemailer"
 
-import type { SendEmailOptions } from "src/types";
+import type { SendEmailOptions } from "src/types"
 
 // ═══════════════════════════════════════════════════
 // NODEMAILER TRANSPORTER SETUP
@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
     user: appConfig.email.user,
     pass: appConfig.email.password,
   },
-});
+})
 
 // Verify transporter configuration
 // Avoid verifying the transporter during static build/prerender to prevent
@@ -36,11 +36,11 @@ if (appConfig.email.enabled && isDevelopment) {
   transporter
     .verify()
     .then(() => {
-      console.log("✅ Email server is ready to send messages");
+      console.log("✅ Email server is ready to send messages")
     })
     .catch((error) => {
-      console.error("❌ Email transporter verification failed:", error);
-    });
+      console.error("❌ Email transporter verification failed:", error)
+    })
 }
 
 // ═══════════════════════════════════════════════════
@@ -48,10 +48,10 @@ if (appConfig.email.enabled && isDevelopment) {
 // ═══════════════════════════════════════════════════
 
 export interface SendEmailParams {
-  to: string;
-  subject: string;
-  html: string;
-  text?: string;
+  to: string
+  subject: string
+  html: string
+  text?: string
 }
 
 /**
@@ -59,8 +59,8 @@ export interface SendEmailParams {
  */
 export async function sendEmail({ to, subject, html, text }: SendEmailParams) {
   if (!appConfig.email.enabled) {
-    console.warn("⚠️ Email feature is disabled. Skipping email send.");
-    return { success: false, error: "Email feature is disabled" };
+    console.warn("⚠️ Email feature is disabled. Skipping email send.")
+    return { success: false, error: "Email feature is disabled" }
   }
 
   try {
@@ -70,16 +70,16 @@ export async function sendEmail({ to, subject, html, text }: SendEmailParams) {
       subject,
       html,
       text: text || undefined,
-    });
+    })
 
-    console.log("✅ Email sent successfully:", info.messageId);
-    return { success: true, messageId: info.messageId };
+    console.log("✅ Email sent successfully:", info.messageId)
+    return { success: true, messageId: info.messageId }
   } catch (error) {
-    console.error("❌ Failed to send email:", error);
+    console.error("❌ Failed to send email:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to send email",
-    };
+    }
   }
 }
 
@@ -91,22 +91,22 @@ export async function sendEmail({ to, subject, html, text }: SendEmailParams) {
  * Send welcome email to new users
  */
 export async function sendWelcomeEmail(params: { name: string; email: string }) {
-  const html = await render(WelcomeEmail({ name: params.name, email: params.email }));
+  const html = await render(WelcomeEmail({ name: params.name, email: params.email }))
 
   return sendEmail({
     to: params.email,
     subject: `Welcome to ${appConfig.name}! 🎉`,
     html,
-  });
+  })
 }
 
 /**
  * Send email verification link
  */
 export async function sendVerificationEmail(params: {
-  name: string;
-  email: string;
-  verificationToken: string;
+  name: string
+  email: string
+  verificationToken: string
 }) {
   const html = await render(
     VerificationEmail({
@@ -114,23 +114,23 @@ export async function sendVerificationEmail(params: {
       email: params.email,
       token: params.verificationToken,
     })
-  );
+  )
 
   return sendEmail({
     to: params.email,
     subject: `Verify your ${appConfig.name} email address`,
     html,
-  });
+  })
 }
 
 /**
  * Send password reset email
  */
 export async function sendPasswordResetEmail(params: {
-  name: string;
-  email: string;
-  resetToken: string;
-  ipAddress?: string;
+  name: string
+  email: string
+  resetToken: string
+  ipAddress?: string
 }) {
   const html = await render(
     PasswordResetEmail({
@@ -138,24 +138,24 @@ export async function sendPasswordResetEmail(params: {
       email: params.email,
       token: params.resetToken,
     })
-  );
+  )
 
   return sendEmail({
     to: params.email,
     subject: `Reset your ${appConfig.name} password`,
     html,
-  });
+  })
 }
 
 /**
  * Send account updated notification
  */
 export async function sendAccountUpdatedEmail(params: {
-  name: string;
-  email: string;
-  changeType: "password" | "email" | "profile";
-  changeDetails?: string;
-  ipAddress?: string;
+  name: string
+  email: string
+  changeType: "password" | "email" | "profile"
+  changeDetails?: string
+  ipAddress?: string
 }) {
   const html = await render(
     AccountUpdatedEmail({
@@ -165,29 +165,29 @@ export async function sendAccountUpdatedEmail(params: {
       changeDetails: params.changeDetails,
       ipAddress: params.ipAddress,
     })
-  );
+  )
 
   return sendEmail({
     to: params.email,
     subject: `Your ${appConfig.name} account has been updated`,
     html,
-  });
+  })
 }
 
 /**
  * Send new chapter notification
  */
 export async function sendNewChapterEmail(params: {
-  userName: string;
-  userEmail: string;
-  comicTitle: string;
-  comicCoverUrl: string;
-  chapterNumber: number;
-  chapterTitle: string;
-  chapterSlug: string;
-  releaseDate: string;
+  userName: string
+  userEmail: string
+  comicTitle: string
+  comicCoverUrl: string
+  chapterNumber: number
+  chapterTitle: string
+  chapterSlug: string
+  releaseDate: string
 }) {
-  const chapterUrl = `${appConfig.url}/read/${params.chapterSlug}`;
+  const chapterUrl = `${appConfig.url}/read/${params.chapterSlug}`
 
   const html = await render(
     NewChapterEmail({
@@ -200,25 +200,25 @@ export async function sendNewChapterEmail(params: {
       chapterUrl,
       releaseDate: params.releaseDate,
     })
-  );
+  )
 
   return sendEmail({
     to: params.userEmail,
     subject: `New chapter of ${params.comicTitle} is available!`,
     html,
-  });
+  })
 }
 
 /**
  * Send new chapter notification (simplified)
  */
 export async function sendNewChapterNotification(params: {
-  to: string;
-  userName: string;
-  comicTitle: string;
-  chapterTitle: string;
-  chapterNumber: number;
-  chapterUrl: string;
+  to: string
+  userName: string
+  comicTitle: string
+  chapterTitle: string
+  chapterNumber: number
+  chapterUrl: string
 }) {
   const html = await render(
     NewChapterEmail({
@@ -231,30 +231,30 @@ export async function sendNewChapterNotification(params: {
       chapterUrl: params.chapterUrl,
       releaseDate: new Date().toLocaleDateString(),
     })
-  );
+  )
 
   return sendEmail({
     to: params.to,
     subject: `New chapter of ${params.comicTitle} is available!`,
     html,
-  });
+  })
 }
 
 /**
  * Send comment notification
  */
 export async function sendCommentNotificationEmail(params: {
-  userName: string;
-  userEmail: string;
-  commenterName: string;
-  commenterAvatar?: string;
-  commentText: string;
-  comicTitle: string;
-  chapterNumber?: number;
-  commentId: string;
-  commentType: "reply" | "mention" | "new";
+  userName: string
+  userEmail: string
+  commenterName: string
+  commenterAvatar?: string
+  commentText: string
+  comicTitle: string
+  chapterNumber?: number
+  commentId: string
+  commentType: "reply" | "mention" | "new"
 }) {
-  const commentUrl = `${appConfig.url}/comic/${params.comicTitle}#comment-${params.commentId}`;
+  const commentUrl = `${appConfig.url}/comic/${params.comicTitle}#comment-${params.commentId}`
 
   const html = await render(
     CommentNotificationEmail({
@@ -268,26 +268,26 @@ export async function sendCommentNotificationEmail(params: {
       commentUrl,
       commentType: params.commentType,
     })
-  );
+  )
 
   const getSubject = () => {
     switch (params.commentType) {
       case "reply":
-        return `${params.commenterName} replied to your comment`;
+        return `${params.commenterName} replied to your comment`
       case "mention":
-        return `${params.commenterName} mentioned you in a comment`;
+        return `${params.commenterName} mentioned you in a comment`
       case "new":
-        return `New comment on ${params.comicTitle}`;
+        return `New comment on ${params.comicTitle}`
       default:
-        return "New activity on ComicWise";
+        return "New activity on ComicWise"
     }
-  };
+  }
 
   return sendEmail({
     to: params.userEmail,
     subject: getSubject(),
     html,
-  });
+  })
 }
 
 // ═══════════════════════════════════════════════════
@@ -302,31 +302,31 @@ export async function sendBulkEmails(
   emailGenerator: (email: string) => Promise<SendEmailOptions>
 ) {
   if (!appConfig.features.email) {
-    console.warn("⚠️ Email feature is disabled. Skipping bulk email send.");
-    return { success: false, error: "Email feature is disabled" };
+    console.warn("⚠️ Email feature is disabled. Skipping bulk email send.")
+    return { success: false, error: "Email feature is disabled" }
   }
 
   const results = await Promise.allSettled(
     recipients.map(async (email) => {
-      const emailOptions = await emailGenerator(email);
+      const emailOptions = await emailGenerator(email)
       // Convert SendEmailOptions to SendEmailParams (single recipient only)
-      const recipientEmail = Array.isArray(emailOptions.to) ? emailOptions.to[0] : emailOptions.to;
+      const recipientEmail = Array.isArray(emailOptions.to) ? emailOptions.to[0] : emailOptions.to
       if (!recipientEmail) {
-        throw new Error("No recipient email provided");
+        throw new Error("No recipient email provided")
       }
       return sendEmail({
         to: recipientEmail,
         subject: emailOptions.subject,
         html: emailOptions.html,
         text: emailOptions.text,
-      });
+      })
     })
-  );
+  )
 
-  const successful = results.filter((r) => r.status === "fulfilled").length;
-  const failed = results.filter((r) => r.status === "rejected").length;
+  const successful = results.filter((r) => r.status === "fulfilled").length
+  const failed = results.filter((r) => r.status === "rejected").length
 
-  console.log(`📧 Bulk email results: ${successful} sent, ${failed} failed`);
+  console.log(`📧 Bulk email results: ${successful} sent, ${failed} failed`)
 
   return {
     success: failed === 0,
@@ -335,7 +335,7 @@ export async function sendBulkEmails(
       successful,
       failed,
     },
-  };
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -350,6 +350,6 @@ export const emailService = {
   sendNewChapterEmail,
   sendCommentNotificationEmail,
   sendBulkEmails,
-};
+}
 
-export default emailService;
+export default emailService

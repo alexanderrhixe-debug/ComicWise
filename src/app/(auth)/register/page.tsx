@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
 // ═══════════════════════════════════════════════════
 // REGISTER PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpAction } from "actions/auth/index";
-import { Alert, AlertDescription } from "components/ui/alert";
-import { Button } from "components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { signUpAction } from "actions/auth/index"
+import { Alert, AlertDescription } from "components/ui/alert"
+import { Button } from "components/ui/button"
 import {
   Card,
   CardContent,
@@ -15,23 +15,23 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Label } from "components/ui/label";
-import { PasswordInput } from "components/ui/password-input";
-import { signUpSchema, type SignUpInput } from "lib/validations/schemas";
-import { Loader2 } from "lucide-react";
-import { signIn } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+} from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Label } from "components/ui/label"
+import { PasswordInput } from "components/ui/password-input"
+import { signUpSchema, type SignUpInput } from "lib/validations/schemas"
+import { Loader2 } from "lucide-react"
+import { signIn } from "next-auth/react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export default function RegisterPage() {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const {
     register,
@@ -45,41 +45,41 @@ export default function RegisterPage() {
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   const onSubmit = async (data: SignUpInput) => {
-    setError(null);
+    setError(null)
 
     startTransition(async () => {
       try {
-        const result = await signUpAction(data);
+        const result = await signUpAction(data)
 
         if (!result.success) {
-          setError(result.error || "Registration failed");
-          toast.error(result.error || "Failed to create account");
+          setError(result.error || "Registration failed")
+          toast.error(result.error || "Failed to create account")
         } else {
-          toast.success("Account created! Please check your email to verify your account.");
-          router.push("/verify-request");
+          toast.success("Account created! Please check your email to verify your account.")
+          router.push("/verify-request")
         }
       } catch (err) {
-        console.error("Registration error:", err);
-        setError("An unexpected error occurred. Please try again.");
-        toast.error("Failed to create account");
+        console.error("Registration error:", err)
+        setError("An unexpected error occurred. Please try again.")
+        toast.error("Failed to create account")
       }
-    });
-  };
+    })
+  }
 
   const handleGoogleSignUp = () => {
     startTransition(async () => {
       try {
-        await signIn("google", { callbackUrl: "/" });
+        await signIn("google", { callbackUrl: "/" })
       } catch {
-        toast.error("Failed to sign up with Google");
+        toast.error("Failed to sign up with Google")
       }
-    });
-  };
+    })
+  }
 
-  const isLoading = isSubmitting || isPending;
+  const isLoading = isSubmitting || isPending
 
   return (
     <Card className="w-full max-w-md">
@@ -206,5 +206,5 @@ export default function RegisterPage() {
         </CardFooter>
       </form>
     </Card>
-  );
+  )
 }

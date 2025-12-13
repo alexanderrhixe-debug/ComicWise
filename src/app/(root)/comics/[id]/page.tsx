@@ -1,26 +1,26 @@
-import { BookmarkButton } from "components/BookmarkButton";
-import { ComicCard } from "components/ComicCard";
-import { Badge } from "components/ui/badge";
-import { Button } from "components/ui/button";
-import { Card, CardContent } from "components/ui/card";
-import { Skeleton } from "components/ui/skeleton";
-import { getComic, getRecommendedComics } from "database/queries";
-import { BookOpen, Calendar, Eye, Star } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import { formatDate } from "utils";
+import { BookmarkButton } from "components/BookmarkButton"
+import { ComicCard } from "components/ComicCard"
+import { Badge } from "components/ui/badge"
+import { Button } from "components/ui/button"
+import { Card, CardContent } from "components/ui/card"
+import { Skeleton } from "components/ui/skeleton"
+import { getComic, getRecommendedComics } from "database/queries"
+import { BookOpen, Calendar, Eye, Star } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { Suspense } from "react"
+import { formatDate } from "utils"
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }
 
 async function ComicDetails({ comicId }: { comicId: number }) {
-  const comic = await getComic(comicId);
+  const comic = await getComic(comicId)
 
   if (!comic) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -130,13 +130,13 @@ async function ComicDetails({ comicId }: { comicId: number }) {
         </div>
       </section>
     </>
-  );
+  )
 }
 
 async function RecommendedComics({ comicId }: { comicId: number }) {
-  const recommended = await getRecommendedComics(comicId, 4);
+  const recommended = await getRecommendedComics(comicId, 4)
 
-  if (recommended.length === 0) return null;
+  if (recommended.length === 0) return null
 
   return (
     <section className="mt-12">
@@ -147,7 +147,7 @@ async function RecommendedComics({ comicId }: { comicId: number }) {
         ))}
       </div>
     </section>
-  );
+  )
 }
 
 function LoadingSkeleton() {
@@ -160,15 +160,15 @@ function LoadingSkeleton() {
         <Skeleton className="h-40 w-full" />
       </div>
     </div>
-  );
+  )
 }
 
 export default async function ComicDetailPage({ params }: PageProps) {
-  const { id } = await params;
-  const comicId = parseInt(id);
+  const { id } = await params
+  const comicId = parseInt(id)
 
   if (isNaN(comicId)) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -181,5 +181,5 @@ export default async function ComicDetailPage({ params }: PageProps) {
         <RecommendedComics comicId={comicId} />
       </Suspense>
     </div>
-  );
+  )
 }

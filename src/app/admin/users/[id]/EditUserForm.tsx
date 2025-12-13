@@ -1,45 +1,45 @@
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { deleteUser, updateUser } from "lib/actions/users";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { deleteUser, updateUser } from "lib/actions/users"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export default async function EditUserForm({ params }: { params: { id: string } }) {
-  const id = String(params.id);
+  const id = String(params.id)
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/users/${id}`, {
     cache: "no-store",
-  });
+  })
   if (!res.ok) {
-    redirect("/admin/users");
+    redirect("/admin/users")
   }
 
-  const result = await res.json();
+  const result = await res.json()
   if (!result?.success) {
-    redirect("/admin/users");
+    redirect("/admin/users")
   }
 
-  const user = result.data;
+  const user = result.data
 
   async function handleUpdate(formData: FormData) {
     // convert emailVerified boolean to date server-side is handled in updateUser action
-    const result = await updateUser(id, formData);
+    const result = await updateUser(id, formData)
     if (result.success) {
-      revalidatePath("/admin/users");
-      revalidatePath(`/admin/users/${id}`);
-      redirect("/admin/users");
+      revalidatePath("/admin/users")
+      revalidatePath(`/admin/users/${id}`)
+      redirect("/admin/users")
     }
-    throw new Error(result.error || "Failed to update user");
+    throw new Error(result.error || "Failed to update user")
   }
 
   async function handleDelete() {
-    const result = await deleteUser(id);
+    const result = await deleteUser(id)
     if (result.success) {
-      revalidatePath("/admin/users");
-      redirect("/admin/users");
+      revalidatePath("/admin/users")
+      redirect("/admin/users")
     }
-    throw new Error(result.error || "Failed to delete user");
+    throw new Error(result.error || "Failed to delete user")
   }
 
   return (
@@ -126,5 +126,5 @@ export default async function EditUserForm({ params }: { params: { id: string } 
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

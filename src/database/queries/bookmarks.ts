@@ -1,6 +1,6 @@
-import { database } from "database";
-import { bookmark, chapter, comic, user } from "database/schema";
-import { and, desc, eq } from "drizzle-orm";
+import { database } from "database"
+import { bookmark, chapter, comic, user } from "database/schema"
+import { and, desc, eq } from "drizzle-orm"
 
 export async function getUserBookmarks(userId: string) {
   const bookmarks = await database
@@ -13,9 +13,9 @@ export async function getUserBookmarks(userId: string) {
     .leftJoin(comic, eq(bookmark.comicId, comic.id))
     .leftJoin(chapter, eq(bookmark.lastReadChapterId, chapter.id))
     .where(eq(bookmark.userId, userId))
-    .orderBy(desc(bookmark.updatedAt));
+    .orderBy(desc(bookmark.updatedAt))
 
-  return bookmarks;
+  return bookmarks
 }
 
 export async function isBookmarked(userId: string, comicId: number): Promise<boolean> {
@@ -23,9 +23,9 @@ export async function isBookmarked(userId: string, comicId: number): Promise<boo
     .select()
     .from(bookmark)
     .where(and(eq(bookmark.userId, userId), eq(bookmark.comicId, comicId)))
-    .limit(1);
+    .limit(1)
 
-  return result.length > 0;
+  return result.length > 0
 }
 
 export async function getBookmarkWithProgress(userId: string, comicId: number) {
@@ -37,18 +37,18 @@ export async function getBookmarkWithProgress(userId: string, comicId: number) {
     .from(bookmark)
     .leftJoin(chapter, eq(bookmark.lastReadChapterId, chapter.id))
     .where(and(eq(bookmark.userId, userId), eq(bookmark.comicId, comicId)))
-    .limit(1);
+    .limit(1)
 
-  return result[0] || null;
+  return result[0] || null
 }
 
 export async function getBookmarkCount(userId: string): Promise<number> {
   const result = await database
     .select({ comicId: bookmark.comicId })
     .from(bookmark)
-    .where(eq(bookmark.userId, userId));
+    .where(eq(bookmark.userId, userId))
 
-  return result.length;
+  return result.length
 }
 
 export async function getUsersBookmarkedComic(comicId: number) {
@@ -60,7 +60,7 @@ export async function getUsersBookmarkedComic(comicId: number) {
     })
     .from(bookmark)
     .innerJoin(user, eq(bookmark.userId, user.id))
-    .where(eq(bookmark.comicId, comicId));
+    .where(eq(bookmark.comicId, comicId))
 
-  return bookmarks;
+  return bookmarks
 }

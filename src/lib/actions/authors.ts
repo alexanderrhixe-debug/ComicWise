@@ -1,45 +1,45 @@
-"use server";
+"use server"
 
-import { error } from "actions/utils";
-import { appConfig, checkRateLimit } from "appConfig";
-import * as mutations from "database/mutations";
-import { createAuthorSchema, updateAuthorSchema } from "lib/validator";
-import { revalidatePath } from "next/cache";
-import type { ActionResponse } from "src/types";
-import z from "zod";
+import { error } from "actions/utils"
+import { appConfig, checkRateLimit } from "appConfig"
+import * as mutations from "database/mutations"
+import { createAuthorSchema, updateAuthorSchema } from "lib/validator"
+import { revalidatePath } from "next/cache"
+import type { ActionResponse } from "src/types"
+import z from "zod"
 export async function createAuthor(formData: FormData): Promise<ActionResponse<{ id: number }>> {
   try {
     // Rate limiting
-    const rateLimit = checkRateLimit("create:author", appConfig.rateLimit.default);
+    const rateLimit = checkRateLimit("create:author", appConfig.rateLimit.default)
     if (!rateLimit.allowed) {
-      return error("Too many requests. Please try again later.");
+      return error("Too many requests. Please try again later.")
     }
 
     const data = createAuthorSchema.parse({
       name: formData.get("name"),
       bio: formData.get("bio") || undefined,
       image: formData.get("image") || undefined,
-    });
+    })
 
     const cleanData = {
       name: data.name,
       bio: data.bio ?? undefined,
       image: data.image ?? undefined,
-    };
-
-    const author = await mutations.createAuthor(cleanData);
-    if (!author) {
-      return error("Failed to create author");
     }
 
-    revalidatePath("/admin/authors");
-    return { success: true, data: { id: author.id } };
+    const author = await mutations.createAuthor(cleanData)
+    if (!author) {
+      return error("Failed to create author")
+    }
+
+    revalidatePath("/admin/authors")
+    return { success: true, data: { id: author.id } }
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return error(err.issues[0]?.message || "Validation error");
+      return error(err.issues[0]?.message || "Validation error")
     }
-    console.error("Create author error:", err);
-    return error("Failed to create author");
+    console.error("Create author error:", err)
+    return error("Failed to create author")
   }
 }
 
@@ -49,30 +49,30 @@ export async function updateAuthor(authorId: number, formData: FormData): Promis
       name: formData.get("name") || undefined,
       bio: formData.get("bio") || undefined,
       image: formData.get("image") || undefined,
-    });
+    })
 
-    await mutations.updateAuthor(authorId, data);
-    revalidatePath("/admin/authors");
-    revalidatePath(`/admin/authors/${authorId}`);
+    await mutations.updateAuthor(authorId, data)
+    revalidatePath("/admin/authors")
+    revalidatePath(`/admin/authors/${authorId}`)
 
-    return { success: true };
+    return { success: true }
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return error(err.issues[0]?.message || "Validation error");
+      return error(err.issues[0]?.message || "Validation error")
     }
-    console.error("Update author error:", err);
-    return error("Failed to update author");
+    console.error("Update author error:", err)
+    return error("Failed to update author")
   }
 }
 
 export async function deleteAuthor(authorId: number): Promise<ActionResponse> {
   try {
-    await mutations.deleteAuthor(authorId);
-    revalidatePath("/admin/authors");
+    await mutations.deleteAuthor(authorId)
+    revalidatePath("/admin/authors")
 
-    return { success: true };
+    return { success: true }
   } catch (err) {
-    console.error("Delete author error:", err);
-    return error("Failed to delete author");
+    console.error("Delete author error:", err)
+    return error("Failed to delete author")
   }
 }

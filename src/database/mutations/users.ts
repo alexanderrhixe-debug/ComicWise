@@ -1,13 +1,13 @@
-import { database } from "database";
-import { user } from "database/schema";
-import { eq } from "drizzle-orm";
+import { database } from "database"
+import { user } from "database/schema"
+import { eq } from "drizzle-orm"
 
 export async function createUser(data: {
-  email: string;
-  name?: string;
-  password?: string;
-  image?: string;
-  role?: "user" | "admin" | "moderator";
+  email: string
+  name?: string
+  password?: string
+  image?: string
+  role?: "user" | "admin" | "moderator"
 }) {
   const [newUser] = await database
     .insert(user)
@@ -20,18 +20,18 @@ export async function createUser(data: {
       createdAt: new Date(),
       updatedAt: new Date(),
     })
-    .returning();
-  return newUser;
+    .returning()
+  return newUser
 }
 
 export async function updateUser(
   userId: string,
   data: {
-    name?: string;
-    email?: string;
-    image?: string | null;
-    role?: "user" | "admin" | "moderator";
-    emailVerified?: Date;
+    name?: string
+    email?: string
+    image?: string | null
+    role?: "user" | "admin" | "moderator"
+    emailVerified?: Date
   }
 ) {
   const cleanData = {
@@ -41,13 +41,13 @@ export async function updateUser(
     ...(data.role !== undefined && { role: data.role }),
     ...(data.emailVerified !== undefined && { emailVerified: data.emailVerified }),
     updatedAt: new Date(),
-  };
+  }
   const [updatedUser] = await database
     .update(user)
     .set(cleanData)
     .where(eq(user.id, userId))
-    .returning();
-  return updatedUser;
+    .returning()
+  return updatedUser
 }
 
 export async function updateUserPassword(userId: string, password: string) {
@@ -58,13 +58,13 @@ export async function updateUserPassword(userId: string, password: string) {
       updatedAt: new Date(),
     })
     .where(eq(user.id, userId))
-    .returning();
-  return updatedUser;
+    .returning()
+  return updatedUser
 }
 
 export async function deleteUser(userId: string) {
-  const [deletedUser] = await database.delete(user).where(eq(user.id, userId)).returning();
-  return deletedUser;
+  const [deletedUser] = await database.delete(user).where(eq(user.id, userId)).returning()
+  return deletedUser
 }
 
 export async function verifyUserEmail(userId: string) {
@@ -75,6 +75,6 @@ export async function verifyUserEmail(userId: string) {
       updatedAt: new Date(),
     })
     .where(eq(user.id, userId))
-    .returning();
-  return updatedUser;
+    .returning()
+  return updatedUser
 }

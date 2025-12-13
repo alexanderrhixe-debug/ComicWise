@@ -1,4 +1,5 @@
 {
+  "terminal.integrated.shellIntegration.enabled": "true",
   "makefile.configureOnOpen": true,
   //-------- Code Spell Checker Configuration --------
   "cSpell.enabled": true,

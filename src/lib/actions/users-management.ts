@@ -1,15 +1,15 @@
-"use server";
+"use server"
 
 // ═══════════════════════════════════════════════════
 // USERS MANAGEMENT SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "appConfig";
-import bcrypt from "bcryptjs";
-import { database } from "database";
-import { user } from "database/schema";
-import { asc, desc, eq, like, or, sql } from "drizzle-orm";
-import { sendAccountUpdatedEmail, sendWelcomeEmail } from "lib/email";
+import { appConfig } from "appConfig"
+import bcrypt from "bcryptjs"
+import { database } from "database"
+import { user } from "database/schema"
+import { asc, desc, eq, like, or, sql } from "drizzle-orm"
+import { sendAccountUpdatedEmail, sendWelcomeEmail } from "lib/email"
 import {
   createUserSchema,
   updateUserSchema,
@@ -17,12 +17,12 @@ import {
   type CreateUserInput,
   type UpdateUserInput,
   type UserFilterInput,
-} from "lib/validations/schemas";
-import { revalidatePath } from "next/cache";
+} from "lib/validations/schemas"
+import { revalidatePath } from "next/cache"
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }
-  | { success: false; error: string };
+  | { success: false; error: string }
 
 // ═══════════════════════════════════════════════════
 // CREATE USER (Admin Only)
@@ -32,19 +32,19 @@ export async function createUserAdmin(
   input: CreateUserInput
 ): Promise<ActionResult<typeof user.$inferSelect>> {
   try {
-    const validated = createUserSchema.parse(input);
+    const validated = createUserSchema.parse(input)
 
     // Check if user exists
     const existing = await database.query.user.findFirst({
       where: eq(user.email, validated.email.toLowerCase()),
-    });
+    })
 
     if (existing) {
-      return { success: false, error: "User with this email already exists" };
+      return { success: false, error: "User with this email already exists" }
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(validated.password, appConfig.security.bcryptRounds);
+    const hashedPassword = await bcrypt.hash(validated.password, appConfig.security.bcryptRounds)
 
     const [newUser] = await database
       .insert(user)
@@ -54,10 +54,10 @@ export async function createUserAdmin(
         password: hashedPassword,
         emailVerified: new Date(), // Admin created users are auto-verified
       })
-      .returning();
+      .returning()
 
     if (!newUser) {
-      return { success: false, error: "Failed to create user" };
+      return { success: false, error: "Failed to create user" }
     }
 
     // Send welcome email
@@ -65,22 +65,22 @@ export async function createUserAdmin(
       await sendWelcomeEmail({
         name: newUser.name || "User",
         email: newUser.email,
-      }).catch(console.error);
+      }).catch(console.error)
     }
 
-    revalidatePath("/admin/users");
+    revalidatePath("/admin/users")
 
     return {
       success: true,
       data: newUser,
       message: "User created successfully",
-    };
+    }
   } catch (error) {
-    console.error("Create user error:", error);
+    console.error("Create user error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to create user",
-    };
+    }
   }
 }
 
@@ -93,44 +93,44 @@ export async function updateUserAdmin(
   input: UpdateUserInput
 ): Promise<ActionResult<typeof user.$inferSelect>> {
   try {
-    const validated = updateUserSchema.parse(input);
+    const validated = updateUserSchema.parse(input)
 
     const existingUser = await database.query.user.findFirst({
       where: eq(user.id, userId),
-    });
+    })
 
     if (!existingUser) {
-      return { success: false, error: "User not found" };
+      return { success: false, error: "User not found" }
     }
 
     // Check email uniqueness if email is being changed
     if (validated.email && validated.email !== existingUser.email) {
       const emailExists = await database.query.user.findFirst({
         where: eq(user.email, validated.email.toLowerCase()),
-      });
+      })
 
       if (emailExists) {
-        return { success: false, error: "Email already in use" };
+        return { success: false, error: "Email already in use" }
       }
     }
 
     const updateData: Record<string, unknown> = {
       ...validated,
       updatedAt: new Date(),
-    };
+    }
 
     if (validated.email) {
-      updateData.email = validated.email.toLowerCase();
+      updateData.email = validated.email.toLowerCase()
     }
 
     const [updatedUser] = await database
       .update(user)
       .set(updateData)
       .where(eq(user.id, userId))
-      .returning();
+      .returning()
 
     if (!updatedUser) {
-      return { success: false, error: "Failed to update user" };
+      return { success: false, error: "Failed to update user" }
     }
 
     // Send notification email
@@ -139,23 +139,23 @@ export async function updateUserAdmin(
         name: updatedUser.name || "User",
         email: updatedUser.email,
         changeType: "profile",
-      }).catch(console.error);
+      }).catch(console.error)
     }
 
-    revalidatePath("/admin/users");
-    revalidatePath(`/profile/${userId}`);
+    revalidatePath("/admin/users")
+    revalidatePath(`/profile/${userId}`)
 
     return {
       success: true,
       data: updatedUser,
       message: "User updated successfully",
-    };
+    }
   } catch (error) {
-    console.error("Update user error:", error);
+    console.error("Update user error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to update user",
-    };
+    }
   }
 }
 
@@ -167,31 +167,31 @@ export async function deleteUserAdmin(userId: string): Promise<ActionResult<void
   try {
     const existingUser = await database.query.user.findFirst({
       where: eq(user.id, userId),
-    });
+    })
 
     if (!existingUser) {
-      return { success: false, error: "User not found" };
+      return { success: false, error: "User not found" }
     }
 
     // Prevent deleting own account
     // Note: You'd need to pass current user ID to check this
     // For now, we'll allow it but recommend adding this check in the UI
 
-    await database.delete(user).where(eq(user.id, userId));
+    await database.delete(user).where(eq(user.id, userId))
 
-    revalidatePath("/admin/users");
+    revalidatePath("/admin/users")
 
     return {
       success: true,
       data: undefined,
       message: "User deleted successfully",
-    };
+    }
   } catch (error) {
-    console.error("Delete user error:", error);
+    console.error("Delete user error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to delete user",
-    };
+    }
   }
 }
 
@@ -203,22 +203,22 @@ export async function getUserById(userId: string) {
   try {
     const result = await database.query.user.findFirst({
       where: eq(user.id, userId),
-    });
+    })
 
     if (!result) {
-      return { success: false, error: "User not found" };
+      return { success: false, error: "User not found" }
     }
 
     // Remove sensitive data
-    const { password: _password, ...safeUser } = result;
+    const { password: _password, ...safeUser } = result
 
-    return { success: true, data: safeUser };
+    return { success: true, data: safeUser }
   } catch (error) {
-    console.error("Get user error:", error);
+    console.error("Get user error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get user",
-    };
+    }
   }
 }
 
@@ -228,7 +228,7 @@ export async function getUserById(userId: string) {
 
 export async function listUsers(input?: UserFilterInput) {
   try {
-    const validated = userFilterSchema.parse(input || {});
+    const validated = userFilterSchema.parse(input || {})
     const {
       page = 1,
       limit = appConfig.pagination.defaultLimit,
@@ -236,30 +236,30 @@ export async function listUsers(input?: UserFilterInput) {
       role,
       sortBy = "createdAt",
       sortOrder = "desc",
-    } = validated;
+    } = validated
 
-    const offset = (page - 1) * limit;
+    const offset = (page - 1) * limit
 
     // Build where conditions
-    const conditions = [];
+    const conditions = []
 
     if (search) {
-      conditions.push(or(like(user.name, `%${search}%`), like(user.email, `%${search}%`)));
+      conditions.push(or(like(user.name, `%${search}%`), like(user.email, `%${search}%`)))
     }
 
     if (role) {
-      conditions.push(eq(user.role, role));
+      conditions.push(eq(user.role, role))
     }
 
-    const whereClause = conditions.length > 0 ? conditions[0] : undefined;
+    const whereClause = conditions.length > 0 ? conditions[0] : undefined
 
     // Get total count
     const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(user)
-      .where(whereClause);
+      .where(whereClause)
 
-    const total = countResult?.count || 0;
+    const total = countResult?.count || 0
 
     // Get users (without passwords)
     let usersQuery = database
@@ -276,22 +276,22 @@ export async function listUsers(input?: UserFilterInput) {
       .from(user)
       .where(whereClause)
       .limit(limit)
-      .offset(offset);
+      .offset(offset)
 
     // Apply ordering with typed columns (avoid implicit `any` in callback)
     if (sortBy === "name") {
-      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.name) : asc(user.name));
+      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.name) : asc(user.name))
     } else if (sortBy === "email") {
-      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.email) : asc(user.email));
+      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.email) : asc(user.email))
     } else if (sortBy === "role") {
-      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.role) : asc(user.role));
+      usersQuery = usersQuery.orderBy(sortOrder === "desc" ? desc(user.role) : asc(user.role))
     } else {
       usersQuery = usersQuery.orderBy(
         sortOrder === "desc" ? desc(user.createdAt) : asc(user.createdAt)
-      );
+      )
     }
 
-    const results = await usersQuery;
+    const results = await usersQuery
 
     return {
       success: true,
@@ -304,13 +304,13 @@ export async function listUsers(input?: UserFilterInput) {
           totalPages: Math.ceil(total / limit),
         },
       },
-    };
+    }
   } catch (error) {
-    console.error("List users error:", error);
+    console.error("List users error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to list users",
-    };
+    }
   }
 }
 
@@ -325,27 +325,27 @@ export async function updateUserRole(
   try {
     const existingUser = await database.query.user.findFirst({
       where: eq(user.id, userId),
-    });
+    })
 
     if (!existingUser) {
-      return { success: false, error: "User not found" };
+      return { success: false, error: "User not found" }
     }
 
-    await database.update(user).set({ role, updatedAt: new Date() }).where(eq(user.id, userId));
+    await database.update(user).set({ role, updatedAt: new Date() }).where(eq(user.id, userId))
 
-    revalidatePath("/admin/users");
+    revalidatePath("/admin/users")
 
     return {
       success: true,
       data: undefined,
       message: `User role updated to ${role}`,
-    };
+    }
   } catch (error) {
-    console.error("Update user role error:", error);
+    console.error("Update user role error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to update user role",
-    };
+    }
   }
 }
 
@@ -357,34 +357,34 @@ export async function verifyUserEmailAdmin(userId: string): Promise<ActionResult
   try {
     const existingUser = await database.query.user.findFirst({
       where: eq(user.id, userId),
-    });
+    })
 
     if (!existingUser) {
-      return { success: false, error: "User not found" };
+      return { success: false, error: "User not found" }
     }
 
     if (existingUser.emailVerified) {
-      return { success: false, error: "Email already verified" };
+      return { success: false, error: "Email already verified" }
     }
 
     await database
       .update(user)
       .set({ emailVerified: new Date(), updatedAt: new Date() })
-      .where(eq(user.id, userId));
+      .where(eq(user.id, userId))
 
-    revalidatePath("/admin/users");
+    revalidatePath("/admin/users")
 
     return {
       success: true,
       data: undefined,
       message: "Email verified successfully",
-    };
+    }
   } catch (error) {
-    console.error("Verify email error:", error);
+    console.error("Verify email error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to verify email",
-    };
+    }
   }
 }
 
@@ -403,7 +403,7 @@ export async function getUserStatistics() {
         verified: sql<number>`count(*) FILTER (WHERE ${user.emailVerified} IS NOT NULL)`,
         unverified: sql<number>`count(*) FILTER (WHERE ${user.emailVerified} IS NULL)`,
       })
-      .from(user);
+      .from(user)
 
     return {
       success: true,
@@ -415,12 +415,12 @@ export async function getUserStatistics() {
         verified: 0,
         unverified: 0,
       },
-    };
+    }
   } catch (error) {
-    console.error("Get user statistics error:", error);
+    console.error("Get user statistics error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get statistics",
-    };
+    }
   }
 }

@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { registerUser } from "actions/users";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
-import { Input } from "components/ui/input";
-import { signUpSchema } from "lib/validations/schemas";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { registerUser } from "actions/users"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form"
+import { Input } from "components/ui/input"
+import { signUpSchema } from "lib/validations/schemas"
+import { ArrowLeft } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-import type { z } from "zod";
+import type { z } from "zod"
 
 export default function NewUserPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -28,31 +28,31 @@ export default function NewUserPage() {
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-      formData.append("password", values.password);
+      const formData = new FormData()
+      formData.append("name", values.name)
+      formData.append("email", values.email)
+      formData.append("password", values.password)
 
-      const result = await registerUser(formData);
+      const result = await registerUser(formData)
 
       if (result.error) {
-        toast.error(result.error);
+        toast.error(result.error)
       } else {
-        toast.success("User created successfully");
-        router.push("/admin/users");
-        router.refresh();
+        toast.success("User created successfully")
+        router.push("/admin/users")
+        router.refresh()
       }
     } catch {
-      toast.error("Failed to create user");
+      toast.error("Failed to create user")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="container mx-auto py-10">
@@ -135,5 +135,5 @@ export default function NewUserPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

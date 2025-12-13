@@ -1,13 +1,13 @@
-import type { Adapter } from "@auth/core/adapters";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { account, authenticator, session, user, verificationToken } from "database/schema";
-import type { Database } from "db";
-import { db } from "db";
+import type { Adapter } from "@auth/core/adapters"
+import { DrizzleAdapter } from "@auth/drizzle-adapter"
+import { account, authenticator, session, user, verificationToken } from "database/schema"
+import type { Database } from "db"
+import { db } from "db"
 
 // Wrap drizzle db with the adapter that next-auth can use.
 // Use the `Database` type for static typing while allowing the
 // runtime `db` export to be permissive via ambient overrides.
-export const adapter = DrizzleAdapter(db as unknown as Database);
+export const adapter = DrizzleAdapter(db as unknown as Database)
 
 export function createDrizzleAdapter(database: Database): Adapter {
   // Initialize the standard Drizzle adapter with your database instance and schema
@@ -17,7 +17,7 @@ export function createDrizzleAdapter(database: Database): Adapter {
     sessionsTable: session,
     verificationTokensTable: verificationToken,
     authenticatorsTable: authenticator,
-  });
+  })
   return {
     ...standardAdapter,
     /**
@@ -27,11 +27,11 @@ export function createDrizzleAdapter(database: Database): Adapter {
       // Add custom logic here, e.g., generating a default username
       // If you need to persist custom fields, do so separately after creation
       if (!standardAdapter.createUser) {
-        throw new Error("standardAdapter.createUser is not available");
+        throw new Error("standardAdapter.createUser is not available")
       }
-      const createdUser = await standardAdapter.createUser(user);
+      const createdUser = await standardAdapter.createUser(user)
       // Optionally, update role or other custom fields here if needed
-      return createdUser;
+      return createdUser
     },
 
     /**
@@ -40,15 +40,15 @@ export function createDrizzleAdapter(database: Database): Adapter {
     async updateUser(user: Record<string, unknown>) {
       // You can add logic to handle updates to the 'username' field here
       if (!standardAdapter.updateUser) {
-        throw new Error("standardAdapter.updateUser is not available");
+        throw new Error("standardAdapter.updateUser is not available")
       }
-      const updatedUser = await standardAdapter.updateUser(user);
-      return updatedUser;
+      const updatedUser = await standardAdapter.updateUser(user)
+      return updatedUser
     },
 
     // You can override other methods like `getUser` or `getSessionAndUser`
     // to ensure they return the custom fields correctly if necessary.
-  };
+  }
 }
 
-export default createDrizzleAdapter;
+export default createDrizzleAdapter

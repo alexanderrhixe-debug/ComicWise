@@ -1,34 +1,34 @@
-import { ChevronDownIcon, ChevronUpIcon, EllipsisVerticalIcon } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon, EllipsisVerticalIcon } from "lucide-react"
 
-import { Avatar, AvatarFallback } from "ui/avatar";
-import { Button } from "ui/button";
-import { Card, CardContent, CardHeader } from "ui/card";
+import { Avatar, AvatarFallback } from "ui/avatar"
+import { Button } from "ui/button"
+import { Card, CardContent, CardHeader } from "ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "ui/dropdown-menu";
-import { Progress } from "ui/progress";
+} from "ui/dropdown-menu"
+import { Progress } from "ui/progress"
 
-const listItems = ["Share", "Update", "Refresh"];
+const listItems = ["Share", "Update", "Refresh"]
 
 type Props = {
-  title: string;
-  earning: number;
-  trend: "up" | "down";
-  percentage: number;
-  comparisonText: string;
+  title: string
+  earning: number
+  trend: "up" | "down"
+  percentage: number
+  comparisonText: string
   earningData: {
-    img: string;
-    platform: string;
-    technologies: string;
-    earnings: string;
-    progressPercentage: number;
-  }[];
-  className?: string;
-};
+    img: string
+    platform: string
+    technologies: string
+    earnings: string
+    progressPercentage: number
+  }[]
+  className?: string
+}
 
 const TotalEarningCard = ({
   earningData,
@@ -101,7 +101,7 @@ const TotalEarningCard = ({
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default TotalEarningCard;
+export default TotalEarningCard

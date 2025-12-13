@@ -1,39 +1,39 @@
-import { getAllGenres, getAllTypes } from "actions/genres-types";
-import { ComicCard } from "components/ComicCard";
-import { Filters } from "components/Filters";
-import { Pagination } from "components/Pagination";
-import { Skeleton } from "components/ui/skeleton";
-import { getAllComics } from "database/queries/comics";
-import { Suspense } from "react";
+import { getAllGenres, getAllTypes } from "actions/genres-types"
+import { ComicCard } from "components/ComicCard"
+import { Filters } from "components/Filters"
+import { Pagination } from "components/Pagination"
+import { Skeleton } from "components/ui/skeleton"
+import { getAllComics } from "database/queries/comics"
+import { Suspense } from "react"
 
-import type { Metadata } from "next";
-import type { ComicFilters } from "src/types/database";
+import type { Metadata } from "next"
+import type { ComicFilters } from "src/types/database"
 
 interface Type {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 interface Genre {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 export const metadata: Metadata = {
   title: "Browse Comics - ComicWise",
   description: "Browse our extensive collection of comics",
-};
+}
 
 interface PageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 async function ComicsGrid({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  const sortByParam = (searchParams.sort as string) || "latest";
+  const sortByParam = (searchParams.sort as string) || "latest"
 
   const filters: ComicFilters = {
     search: typeof searchParams.search === "string" ? searchParams.search : undefined,
@@ -45,9 +45,9 @@ async function ComicsGrid({
     sortBy: sortByParam as "latest" | "rating" | "title" | "views",
     page: searchParams.page ? Number(searchParams.page) : 1,
     limit: 12,
-  };
+  }
 
-  const { data: comics, pagination } = await getAllComics(filters);
+  const { data: comics, pagination } = await getAllComics(filters)
 
   if (comics.length === 0) {
     return (
@@ -55,7 +55,7 @@ async function ComicsGrid({
         <h3 className="mb-2 text-2xl font-semibold">No comics found</h3>
         <p className="text-muted-foreground">Try adjusting your filters or search terms</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -81,7 +81,7 @@ async function ComicsGrid({
         </div>
       )}
     </>
-  );
+  )
 }
 
 function LoadingSkeleton() {
@@ -95,15 +95,15 @@ function LoadingSkeleton() {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 export default async function ComicsPage({ searchParams }: PageProps) {
-  const resolvedSearchParams = await searchParams;
-  const [typesResult, genresResult] = await Promise.all([getAllTypes(), getAllGenres()]);
+  const resolvedSearchParams = await searchParams
+  const [typesResult, genresResult] = await Promise.all([getAllTypes(), getAllGenres()])
 
-  const types = (typesResult.success ? typesResult.data : []) as Type[];
-  const genres = (genresResult.success ? genresResult.data : []) as Genre[];
+  const types = (typesResult.success ? typesResult.data : []) as Type[]
+  const genres = (genresResult.success ? genresResult.data : []) as Genre[]
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -118,5 +118,5 @@ export default async function ComicsPage({ searchParams }: PageProps) {
         <ComicsGrid searchParams={resolvedSearchParams} />
       </Suspense>
     </div>
-  );
+  )
 }

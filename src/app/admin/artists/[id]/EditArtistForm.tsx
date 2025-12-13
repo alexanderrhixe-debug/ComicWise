@@ -1,44 +1,44 @@
-import ClientImageUploader from "components/admin/ClientImageUploader";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import { deleteArtist, updateArtist } from "lib/actions/artists";
-import { revalidatePath } from "next/cache";
-import Image from "next/image";
-import { redirect } from "next/navigation";
+import ClientImageUploader from "components/admin/ClientImageUploader"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { deleteArtist, updateArtist } from "lib/actions/artists"
+import { revalidatePath } from "next/cache"
+import Image from "next/image"
+import { redirect } from "next/navigation"
 
 // `ClientImageUploader` moved to `src/components/admin/ClientImageUploader`
 
 export default async function EditArtistForm({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+  const id = Number(params.id)
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/artists/${id}`, {
     cache: "no-store",
-  });
+  })
   if (!res.ok) {
-    redirect("/admin/artists");
+    redirect("/admin/artists")
   }
 
-  const artist = await res.json();
+  const artist = await res.json()
 
   async function handleUpdate(formData: FormData) {
-    const result = await updateArtist(id, formData);
+    const result = await updateArtist(id, formData)
     if (result.success) {
-      revalidatePath("/admin/artists");
-      revalidatePath(`/admin/artists/${id}`);
-      redirect("/admin/artists");
+      revalidatePath("/admin/artists")
+      revalidatePath(`/admin/artists/${id}`)
+      redirect("/admin/artists")
     }
-    throw new Error(result.error || "Failed to update artist");
+    throw new Error(result.error || "Failed to update artist")
   }
 
   async function handleDelete() {
-    const result = await deleteArtist(id);
+    const result = await deleteArtist(id)
     if (result.success) {
-      revalidatePath("/admin/artists");
-      redirect("/admin/artists");
+      revalidatePath("/admin/artists")
+      redirect("/admin/artists")
     }
-    throw new Error(result.error || "Failed to delete artist");
+    throw new Error(result.error || "Failed to delete artist")
   }
 
   return (
@@ -132,5 +132,5 @@ export default async function EditArtistForm({ params }: { params: { id: string 
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

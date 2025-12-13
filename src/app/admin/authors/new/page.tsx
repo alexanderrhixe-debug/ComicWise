@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
 import {
   Form,
   FormControl,
@@ -11,16 +11,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "components/ui/form";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import { useImageUpload } from "hooks/useImageUpload";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+} from "components/ui/form"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { useImageUpload } from "hooks/useImageUpload"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
 
 const authorSchema = z
   .object({
@@ -28,22 +28,22 @@ const authorSchema = z
     bio: z.string().optional(),
     profileImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   })
-  .strict();
+  .strict()
 
-type AuthorFormValues = z.infer<typeof authorSchema>;
+type AuthorFormValues = z.infer<typeof authorSchema>
 
 export default function NewAuthorPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   const { fileInputRef, isUploading, handleFileSelect } = useImageUpload({
     uploadType: "avatar",
     onChange: (url: string) => {
-      form.setValue("profileImage", url);
+      form.setValue("profileImage", url)
     },
     onUploadComplete: () => {
-      toast.success("Image uploaded successfully");
+      toast.success("Image uploaded successfully")
     },
-  });
+  })
 
   const form = useForm<AuthorFormValues>({
     resolver: zodResolver(authorSchema),
@@ -52,34 +52,34 @@ export default function NewAuthorPage() {
       bio: "",
       profileImage: "",
     },
-  });
+  })
 
-  const profileImage = form.watch("profileImage");
+  const profileImage = form.watch("profileImage")
 
   // image upload handled by useImageUpload hook above
 
   async function onSubmit(data: AuthorFormValues) {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
       const response = await fetch("/api/authors", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      });
+      })
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create author");
+        const error = await response.json()
+        throw new Error(error.error || "Failed to create author")
       }
 
-      toast.success("Author created successfully");
-      router.push("/admin/authors");
-      router.refresh();
+      toast.success("Author created successfully")
+      router.push("/admin/authors")
+      router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create author");
+      toast.error(error instanceof Error ? error.message : "Failed to create author")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
@@ -201,5 +201,5 @@ export default function NewAuthorPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

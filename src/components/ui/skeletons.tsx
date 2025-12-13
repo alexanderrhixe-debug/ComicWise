@@ -1,4 +1,4 @@
-import { Skeleton } from "ui/skeleton";
+import { Skeleton } from "ui/skeleton"
 
 export function ComicCardSkeleton() {
   return (
@@ -7,7 +7,7 @@ export function ComicCardSkeleton() {
       <Skeleton className="h-5 w-3/4" />
       <Skeleton className="h-4 w-1/2" />
     </div>
-  );
+  )
 }
 
 export function ComicGridSkeleton({ count = 12 }: { count?: number }) {
@@ -17,7 +17,7 @@ export function ComicGridSkeleton({ count = 12 }: { count?: number }) {
         <ComicCardSkeleton key={i} />
       ))}
     </div>
-  );
+  )
 }
 
 export function ChapterListSkeleton({ count = 10 }: { count?: number }) {
@@ -33,7 +33,7 @@ export function ChapterListSkeleton({ count = 10 }: { count?: number }) {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 export function ComicDetailSkeleton() {
@@ -62,7 +62,7 @@ export function ComicDetailSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function ProfileSkeleton() {
@@ -81,7 +81,7 @@ export function ProfileSkeleton() {
         <Skeleton className="h-10 w-full max-w-md" />
       </div>
     </div>
-  );
+  )
 }
 
 export function AdminTableSkeleton({ rows = 10 }: { rows?: number }) {
@@ -112,5 +112,5 @@ export function AdminTableSkeleton({ rows = 10 }: { rows?: number }) {
         ))}
       </div>
     </div>
-  );
+  )
 }
