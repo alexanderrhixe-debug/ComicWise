@@ -877,21 +877,7 @@ export type BulkAssignGenresInput = z.infer<typeof bulkAssignGenresSchema>
 // ═══════════════════════════════════════════════════
 // SEED DATA VALIDATION SCHEMAS
 // ═══════════════════════════════════════════════════
-export const userSeedSchema = z
-  .object({
-    id: z.string().uuid().optional(),
-    name: z.string().min(1),
-    email: z.string().email(),
-    emailVerified: z.coerce.date().nullable().optional(),
-    image: z.string().nullable().optional(),
-    password: z.string().optional(),
-    role: z.enum(["user", "admin", "moderator"]).default("user"),
-    status: z.boolean().optional(),
-    createdAt: z.coerce.date().optional(),
-    updatedAt: z.coerce.date().optional(),
-    lastActivityDate: z.coerce.date().nullable().optional(),
-  })
-  .strict()
+
 export const seedUserSchema = userSeedSchema.extend({
   id: z.string().uuid().optional(),
   emailVerified: z.coerce.date().nullable().optional(),

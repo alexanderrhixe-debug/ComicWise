@@ -32,12 +32,16 @@ export const truncate = (str: string, length: number): string => {
 }
 
 export const slugify = (str: string): string => {
+  if (!str) return ""
   return str
+    .toString()
+    .normalize("NFKD")
+    .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
+    .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
+    .slice(0, 200)
 }
 
 export const debounce = <T extends (...args: unknown[]) => unknown>(

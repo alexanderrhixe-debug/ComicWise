@@ -10,7 +10,7 @@ import {
   updateComicSchema,
   updateCommentSchema,
   verifyEmailSchema,
-} from "lib/validations/index"
+} from "lib/validator"
 import { describe, expect, it } from "vitest"
 
 describe("Authentication Validation Schemas", () => {

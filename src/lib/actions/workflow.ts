@@ -10,17 +10,16 @@ import { sendPasswordResetEmail, sendVerificationEmail, sendWelcomeEmail } from 
 import { checkRateLimit } from "lib/ratelimit"
 import {
   forgotPasswordSchema,
-  registerSchema,
   resetPasswordSchema,
+  signUpSchema,
   verifyEmailSchema,
 } from "lib/validator"
-import { z } from "zod"
-
 import type { ActionResponse } from "src/types"
+import { z } from "zod"
 
 export async function registerWorkflow(formData: FormData): Promise<ActionResponse> {
   try {
-    const data = registerSchema.parse({
+    const data = signUpSchema.parse({
       name: formData.get("name"),
       email: formData.get("email"),
       password: formData.get("password"),
@@ -193,7 +192,7 @@ export async function verifyEmailWorkflow(formData: FormData): Promise<ActionRes
     await database.delete(verificationToken).where(eq(verificationToken.token, data.token))
 
     // Send welcome email
-    await sendWelcomeEmail(existingUser.email!, existingUser.name || "User")
+    await sendWelcomeEmail(existingUser.email, existingUser.name || "User")
 
     return { success: true }
   } catch (err) {
