@@ -5,7 +5,7 @@
     "bradlc.vscode-tailwindcss",
     "eamodio.gitlens",
     "ms-azuretools.vscode-docker",
-    "visualstudioexptteam.vscodeintellicode",
+    "ms-vscode.vscode-typescript-next",
     "orta.vscode-jest",
     // Essential Code Quality & Formatting
     "dbaeumer.vscode-eslint",
@@ -73,6 +73,7 @@
   "unwantedRecommendations": [
     "hookyqr.beautify",
     "dbaeumer.jshint",
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "visualstudioexptteam.vscodeintellicode"
   ]
 }

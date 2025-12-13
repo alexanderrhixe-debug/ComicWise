@@ -11,8 +11,8 @@ deploy, test, build, dev, lint, format, type-check, fix-imports, refactor).
 #>
 
 param(
-  [Parameter(Mandatory=$true)]
-  [ValidateSet("setup","cleanup","backup","restore","deploy","test","build","dev","run","lint","format","type-check","fix-imports","refactor")]
+  [Parameter(Mandatory = $true)]
+  [ValidateSet("setup", "cleanup", "backup", "restore", "deploy", "test", "build", "dev", "run", "lint", "format", "type-check", "fix-imports", "refactor")]
   [string]$Task,
   [string]$Name = "comicwise-backup.zip",
   [string]$Source = ".",
@@ -21,7 +21,7 @@ param(
 
 function Exec([string]$cmd) {
   Write-Host "-> $cmd" -ForegroundColor Cyan
-  iex $cmd
+  Invoke-Expression $cmd
 }
 
 switch ($Task) {
@@ -41,8 +41,7 @@ switch ($Task) {
 
   'backup' {
     Write-Host "Creating repository backup: $Name" -ForegroundColor Green
-    $exclusions = @('node_modules','pnpm-store','dist','.next','.git')
-    $tempFiles = Get-ChildItem -Path $Source -Recurse -Force | Where-Object { foreach ($ex in $exclusions) { if ($_.FullName -like "*\$ex*") { return $false } }; return $true }
+    $exclusions = @('node_modules', 'pnpm-store', 'dist', '.next', '.git')
     $zipPath = Join-Path -Path $PWD -ChildPath $Name
     if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
     Compress-Archive -Path (Get-ChildItem -Path $Source -Recurse | Where-Object { foreach ($ex in $exclusions) { if ($_.FullName -like "*\$ex*") { return $false } }; return $true } | Select-Object -ExpandProperty FullName) -DestinationPath $zipPath
@@ -60,9 +59,11 @@ switch ($Task) {
     Write-Host "Deploying application..." -ForegroundColor Green
     if (Test-Path compose\deploy.ps1) {
       Exec "pwsh -File compose\deploy.ps1"
-    } elseif (Get-Command docker-compose -ErrorAction SilentlyContinue) {
+    }
+    elseif (Get-Command docker-compose -ErrorAction SilentlyContinue) {
       Exec "docker-compose up -d --build"
-    } else {
+    }
+    else {
       Exec "pnpm build"
       Write-Host "No deploy helper found. Build completed locally." -ForegroundColor Yellow
     }
@@ -106,7 +107,8 @@ switch ($Task) {
     Write-Host "Attempting to run update-imports-to-aliases script (if present)..." -ForegroundColor Green
     if (Test-Path scripts\update-imports-to-aliases.ts) {
       if (Get-Command pnpm -ErrorAction SilentlyContinue) { Exec "pnpm ts-node scripts/update-imports-to-aliases.ts" } else { Write-Host "ts-node not available; run 'pnpm install -D ts-node' or run script manually with ts-node." -ForegroundColor Yellow }
-    } else {
+    }
+    else {
       Write-Host "No update-imports script found. Falling back to ESLint --fix for import fixes." -ForegroundColor Yellow
       Exec "pnpm lint -- --fix"
     }

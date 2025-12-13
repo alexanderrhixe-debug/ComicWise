@@ -1,8 +1,8 @@
 import * as dotenv from "dotenv";
-import { defineConfig } from "drizzle-kit";
+import { Config, defineConfig } from "drizzle-kit";
 
 // Load .env files when running migrations locally
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
 dotenv.config();
 
 // Get DATABASE_URL with fallback to NEON_DATABASE_URL
@@ -53,6 +53,6 @@ const cfg = {
   },
   verbose: true,
   strict: true,
-} as any;
+} as Config;
 
 export default defineConfig(cfg);
