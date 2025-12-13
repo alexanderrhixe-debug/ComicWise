@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   flexRender,
@@ -10,29 +10,29 @@ import {
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
-} from "@tanstack/react-table";
-import { Download, Filter, X } from "lucide-react";
-import Papa from "papaparse";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Button } from "ui/button";
-import { Checkbox } from "ui/checkbox";
+} from "@tanstack/react-table"
+import { Download, Filter, X } from "lucide-react"
+import Papa from "papaparse"
+import { useState } from "react"
+import { toast } from "sonner"
+import { Button } from "ui/button"
+import { Checkbox } from "ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "ui/dropdown-menu";
-import { Input } from "ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table";
+} from "ui/dropdown-menu"
+import { Input } from "ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table"
 
 interface EnhancedDataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  searchPlaceholder?: string;
-  onBulkDelete?: (selectedIds: number[]) => Promise<void>;
-  enableRowSelection?: boolean;
-  exportFilename?: string;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  searchPlaceholder?: string
+  onBulkDelete?: (selectedIds: number[]) => Promise<void>
+  enableRowSelection?: boolean
+  exportFilename?: string
 }
 
 export function EnhancedDataTable<TData, TValue>({
@@ -43,11 +43,11 @@ export function EnhancedDataTable<TData, TValue>({
   enableRowSelection = false,
   exportFilename = "export",
 }: EnhancedDataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const table = useReactTable({
     data,
@@ -66,62 +66,62 @@ export function EnhancedDataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
     },
-  });
+  })
 
-  const selectedRowCount = Object.keys(rowSelection).length;
+  const selectedRowCount = Object.keys(rowSelection).length
 
   async function handleBulkDelete() {
     if (!onBulkDelete) {
-      return;
+      return
     }
 
     const selectedIds = table
       .getFilteredSelectedRowModel()
-      .rows.map((row) => (row.original as { id: number }).id);
+      .rows.map((row) => (row.original as { id: number }).id)
 
     if (
       !confirm(
         `Are you sure you want to delete ${selectedIds.length} item(s)? This action cannot be undone.`
       )
     ) {
-      return;
+      return
     }
 
-    setIsDeleting(true);
+    setIsDeleting(true)
     try {
-      await onBulkDelete(selectedIds);
-      toast.success(`Successfully deleted ${selectedIds.length} item(s)`);
-      setRowSelection({});
+      await onBulkDelete(selectedIds)
+      toast.success(`Successfully deleted ${selectedIds.length} item(s)`)
+      setRowSelection({})
     } catch {
-      toast.error("Failed to delete items");
+      toast.error("Failed to delete items")
     } finally {
-      setIsDeleting(false);
+      setIsDeleting(false)
     }
   }
 
   function exportToCSV() {
     const exportData = table.getFilteredRowModel().rows.map((row) => {
-      const rowData: Record<string, unknown> = {};
+      const rowData: Record<string, unknown> = {}
       columns.forEach((col) => {
-        const column = col as { accessorKey?: string; header?: string };
+        const column = col as { accessorKey?: string; header?: string }
         if (column.accessorKey && column.header) {
-          rowData[column.header] = (row.original as Record<string, unknown>)[column.accessorKey];
+          rowData[column.header] = (row.original as Record<string, unknown>)[column.accessorKey]
         }
-      });
-      return rowData;
-    });
+      })
+      return rowData
+    })
 
-    const csv = Papa.unparse(exportData);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", `${exportFilename}-${Date.now()}.csv`);
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    toast.success("Data exported successfully");
+    const csv = Papa.unparse(exportData)
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+    const link = document.createElement("a")
+    const url = URL.createObjectURL(blob)
+    link.setAttribute("href", url)
+    link.setAttribute("download", `${exportFilename}-${Date.now()}.csv`)
+    link.style.visibility = "hidden"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    toast.success("Data exported successfully")
   }
 
   return (
@@ -180,7 +180,7 @@ export function EnhancedDataTable<TData, TValue>({
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  );
+                  )
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -219,7 +219,7 @@ export function EnhancedDataTable<TData, TValue>({
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -258,7 +258,7 @@ export function EnhancedDataTable<TData, TValue>({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 // Helper to create selection column
@@ -281,5 +281,5 @@ export function createSelectionColumn<TData>(): ColumnDef<TData> {
     ),
     enableSorting: false,
     enableHiding: false,
-  };
+  }
 }

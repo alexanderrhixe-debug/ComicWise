@@ -1,86 +1,86 @@
-"use client";
+"use client"
 
-import { SlidersHorizontal, X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { Badge } from "ui/badge";
-import { Button } from "ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "ui/card";
-import { Label } from "ui/label";
+import { SlidersHorizontal, X } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
+import { Badge } from "ui/badge"
+import { Button } from "ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "ui/card"
+import { Label } from "ui/label"
 
 interface Type {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 interface Genre {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 interface FiltersProps {
-  types: Type[];
-  genres: Genre[];
+  types: Type[]
+  genres: Genre[]
 }
 
 export function Filters({ types, genres }: FiltersProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   const [selectedType, setSelectedType] = useState<number | null>(
     searchParams.get("type") ? Number(searchParams.get("type")) : null
-  );
+  )
   const [selectedGenres, setSelectedGenres] = useState<number[]>(
     searchParams.get("genres") ? searchParams.get("genres")!.split(",").map(Number) : []
-  );
+  )
   const [selectedStatus, setSelectedStatus] = useState<string | null>(
     searchParams.get("status") || null
-  );
-  const [sortBy, setSortBy] = useState<string>(searchParams.get("sort") || "latest");
-  const [isOpen, setIsOpen] = useState(false);
+  )
+  const [sortBy, setSortBy] = useState<string>(searchParams.get("sort") || "latest")
+  const [isOpen, setIsOpen] = useState(false)
 
-  const statuses = ["Ongoing", "Completed", "Hiatus", "Dropped", "Coming Soon"];
+  const statuses = ["Ongoing", "Completed", "Hiatus", "Dropped", "Coming Soon"]
   const sortOptions = [
     { value: "latest", label: "Latest" },
     { value: "rating", label: "Highest Rated" },
     { value: "views", label: "Most Popular" },
     { value: "title", label: "A-Z" },
-  ];
+  ]
 
   const toggleGenre = (genreId: number) => {
     setSelectedGenres((prev) =>
       prev.includes(genreId) ? prev.filter((id) => id !== genreId) : [...prev, genreId]
-    );
-  };
+    )
+  }
 
   const applyFilters = () => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams()
 
     if (selectedType) {
-      params.set("type", selectedType.toString());
+      params.set("type", selectedType.toString())
     }
     if (selectedGenres.length > 0) {
-      params.set("genres", selectedGenres.join(","));
+      params.set("genres", selectedGenres.join(","))
     }
     if (selectedStatus) {
-      params.set("status", selectedStatus);
+      params.set("status", selectedStatus)
     }
     if (sortBy) {
-      params.set("sort", sortBy);
+      params.set("sort", sortBy)
     }
 
-    router.push(`/comics?${params.toString()}`);
-  };
+    router.push(`/comics?${params.toString()}`)
+  }
 
   const resetFilters = () => {
-    setSelectedType(null);
-    setSelectedGenres([]);
-    setSelectedStatus(null);
-    setSortBy("latest");
-    router.push("/comics");
-  };
+    setSelectedType(null)
+    setSelectedGenres([])
+    setSelectedStatus(null)
+    setSortBy("latest")
+    router.push("/comics")
+  }
 
-  const hasActiveFilters = selectedType || selectedGenres.length > 0 || selectedStatus;
+  const hasActiveFilters = selectedType || selectedGenres.length > 0 || selectedStatus
 
   return (
     <>
@@ -187,5 +187,5 @@ export function Filters({ types, genres }: FiltersProps) {
         </CardContent>
       </Card>
     </>
-  );
+  )
 }

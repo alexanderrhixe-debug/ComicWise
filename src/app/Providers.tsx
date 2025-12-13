@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import type { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "next-themes";
-import { lazy, Suspense, type ComponentProps, type ReactNode } from "react";
+import type { Session } from "next-auth"
+import { SessionProvider } from "next-auth/react"
+import { ThemeProvider } from "next-themes"
+import { lazy, Suspense, type ComponentProps, type ReactNode } from "react"
 
-const Toaster = lazy(() => import("ui/sonner").then((mod) => ({ default: mod.Toaster })));
+const Toaster = lazy(() => import("ui/sonner").then((mod) => ({ default: mod.Toaster })))
 
 type AppProps = {
-  children: ReactNode;
-  session?: Session | null;
-} & ComponentProps<typeof ThemeProvider>;
+  children: ReactNode
+  session?: Session | null
+} & ComponentProps<typeof ThemeProvider>
 export function Providers({ children, attribute, defaultTheme, enableSystem }: AppProps) {
   return (
     <SessionProvider>
@@ -21,5 +21,5 @@ export function Providers({ children, attribute, defaultTheme, enableSystem }: A
         </Suspense>
       </ThemeProvider>
     </SessionProvider>
-  );
+  )
 }

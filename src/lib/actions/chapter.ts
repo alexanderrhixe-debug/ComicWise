@@ -1,45 +1,45 @@
-"use server";
+"use server"
 
-import { auth } from "auth";
+import { auth } from "auth"
 import {
   createChapter as createChapterMutation,
   updateChapter as updateChapterMutation,
-} from "database/mutations";
-import { getChapterImages as getChapterImagesMutation } from "database/queries";
-import { createChapterSchema, updateChapterSchema } from "lib/validations/schemas";
-import { revalidatePath } from "next/cache";
+} from "database/mutations"
+import { getChapterImages as getChapterImagesMutation } from "database/queries"
+import { createChapterSchema, updateChapterSchema } from "lib/validations/schemas"
+import { revalidatePath } from "next/cache"
 
-import type { z } from "zod";
+import type { z } from "zod"
 
 export async function getChapterImages(chapterId: number) {
-  return await getChapterImagesMutation(chapterId);
+  return await getChapterImagesMutation(chapterId)
 }
 
 export async function createChapter(data: z.infer<typeof createChapterSchema>) {
-  const session = await auth();
+  const session = await auth()
 
   if (!session?.user?.id || session.user.role !== "admin") {
-    throw new Error("Unauthorized - Admin only");
+    throw new Error("Unauthorized - Admin only")
   }
 
-  const chapter = await createChapterMutation(data);
-  revalidatePath(`/comics/${data.comicId}`);
-  revalidatePath("/admin/chapters");
+  const chapter = await createChapterMutation(data)
+  revalidatePath(`/comics/${data.comicId}`)
+  revalidatePath("/admin/chapters")
 
-  return chapter;
+  return chapter
 }
 
 export async function updateChapter(id: number, data: z.infer<typeof updateChapterSchema>) {
-  const session = await auth();
+  const session = await auth()
 
   if (!session?.user?.id || session.user.role !== "admin") {
-    throw new Error("Unauthorized - Admin only");
+    throw new Error("Unauthorized - Admin only")
   }
 
-  const chapter = await updateChapterMutation(id, data);
-  revalidatePath(`/comics/${data.comicId}`);
-  revalidatePath(`/comics/${data.comicId}/read/${id}`);
-  revalidatePath("/admin/chapters");
+  const chapter = await updateChapterMutation(id, data)
+  revalidatePath(`/comics/${data.comicId}`)
+  revalidatePath(`/comics/${data.comicId}/read/${id}`)
+  revalidatePath("/admin/chapters")
 
-  return chapter;
+  return chapter
 }

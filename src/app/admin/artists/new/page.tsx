@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
 import {
   Form,
   FormControl,
@@ -11,15 +11,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "components/ui/form";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+} from "components/ui/form"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { useImageUpload } from "hooks/useImageUpload"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
 
 const artistSchema = z
   .object({
@@ -27,14 +28,22 @@ const artistSchema = z
     bio: z.string().optional(),
     profileImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   })
-  .strict();
+  .strict()
 
-type ArtistFormValues = z.infer<typeof artistSchema>;
+type ArtistFormValues = z.infer<typeof artistSchema>
 
 export default function NewArtistPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const { fileInputRef, isUploading, handleFileSelect } = useImageUpload({
+    uploadType: "avatar",
+    onChange: (url: string) => {
+      form.setValue("profileImage", url)
+    },
+    onUploadComplete: () => {
+      toast.success("Image uploaded successfully")
+    },
+  })
 
   const form = useForm<ArtistFormValues>({
     resolver: zodResolver(artistSchema),
@@ -43,62 +52,34 @@ export default function NewArtistPage() {
       bio: "",
       profileImage: "",
     },
-  });
+  })
 
-  const profileImage = form.watch("profileImage");
+  const profileImage = form.watch("profileImage")
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsUploading(true);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("type", "avatar");
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
-      }
-
-      const data = await response.json();
-      form.setValue("profileImage", data.url);
-      toast.success("Image uploaded successfully");
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to upload image");
-    } finally {
-      setIsUploading(false);
-    }
-  }
+  // image upload handled by useImageUpload hook above
 
   async function onSubmit(data: ArtistFormValues) {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
       const response = await fetch("/api/artists", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      });
+      })
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create artist");
+        const error = await response.json()
+        throw new Error(error.error || "Failed to create artist")
       }
 
-      toast.success("Artist created successfully");
-      router.push("/admin/artists");
-      router.refresh();
+      toast.success("Artist created successfully")
+      router.push("/admin/artists")
+      router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create artist");
+      toast.error(error instanceof Error ? error.message : "Failed to create artist")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
@@ -163,7 +144,7 @@ export default function NewArtistPage() {
                           <Button
                             type="button"
                             variant="outline"
-                            onClick={() => document.getElementById("profile-upload")?.click()}
+                            onClick={() => fileInputRef.current?.click()}
                             disabled={isUploading}
                           >
                             {isUploading ? "Uploading..." : "Upload Image"}
@@ -176,7 +157,8 @@ export default function NewArtistPage() {
                             type="file"
                             accept="image/*"
                             className="sr-only"
-                            onChange={handleImageUpload}
+                            ref={fileInputRef}
+                            onChange={handleFileSelect}
                             aria-label="Upload artist profile image"
                             title="Upload artist profile image"
                           />
@@ -219,5 +201,5 @@ export default function NewArtistPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

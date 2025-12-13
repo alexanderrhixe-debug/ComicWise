@@ -1,10 +1,10 @@
-import type { ComponentProps, HTMLAttributes } from "react";
-import { Badge } from "ui/badge";
-import { cn } from "utils";
+import type { ComponentProps, HTMLAttributes } from "react"
+import { Badge } from "ui/badge"
+import { cn } from "utils"
 
 export type AnnouncementProps = ComponentProps<typeof Badge> & {
-  themed?: boolean;
-};
+  themed?: boolean
+}
 
 export const Announcement = ({
   variant = "outline",
@@ -22,9 +22,9 @@ export const Announcement = ({
     variant={variant}
     {...(props as any)}
   />
-);
+)
 
-export type AnnouncementTagProps = HTMLAttributes<HTMLDivElement>;
+export type AnnouncementTagProps = HTMLAttributes<HTMLDivElement>
 
 export const AnnouncementTag = ({ className, ...props }: AnnouncementTagProps) => (
   <div
@@ -35,10 +35,10 @@ export const AnnouncementTag = ({ className, ...props }: AnnouncementTagProps) =
     )}
     {...(props as any)}
   />
-);
+)
 
-export type AnnouncementTitleProps = HTMLAttributes<HTMLDivElement>;
+export type AnnouncementTitleProps = HTMLAttributes<HTMLDivElement>
 
 export const AnnouncementTitle = ({ className, ...props }: AnnouncementTitleProps) => (
   <div className={cn("flex items-center gap-1 truncate py-1", className)} {...(props as any)} />
-);
+)

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   BadgePercentIcon,
@@ -7,39 +7,39 @@ import {
   DollarSignIcon,
   ShoppingBagIcon,
   TrendingUpIcon,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Bar, BarChart, Label, Pie, PieChart } from "recharts";
+import { Bar, BarChart, Label, Pie, PieChart } from "recharts"
 
-import { Avatar, AvatarFallback } from "ui/avatar";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "ui/card";
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "ui/chart";
+import { Avatar, AvatarFallback } from "ui/avatar"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "ui/card"
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "ui/chart"
 
-const salesPlanPercentage = 54;
-const totalBars = 24;
-const filledBars = Math.round((salesPlanPercentage * totalBars) / 100);
+const salesPlanPercentage = 54
+const totalBars = 24
+const filledBars = Math.round((salesPlanPercentage * totalBars) / 100)
 
 // Sales chart data
 const salesChartData = Array.from({ length: totalBars }, (_, index) => {
-  const date = new Date(2025, 5, 15);
+  const date = new Date(2025, 5, 15)
 
   const formattedDate = date.toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-  });
+  })
 
   return {
     date: formattedDate,
     sales: index < filledBars ? 315 : 0,
-  };
-});
+  }
+})
 
 const salesChartConfig = {
   sales: {
     label: "Sales",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 const MetricsData = [
   {
@@ -62,13 +62,13 @@ const MetricsData = [
     title: "Total orders",
     value: "248",
   },
-];
+]
 
 const revenueChartData = [
   { month: "january", sales: 340, fill: "var(--color-january)" },
   { month: "february", sales: 200, fill: "var(--color-february)" },
   { month: "march", sales: 200, fill: "var(--color-march)" },
-];
+]
 
 const revenueChartConfig = {
   sales: {
@@ -86,7 +86,7 @@ const revenueChartConfig = {
     label: "March",
     color: "color-mix(in oklab, var(--primary) 20%, transparent)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 const SalesMetricsCard = ({ className }: { className?: string }) => {
   return (
@@ -169,9 +169,9 @@ const SalesMetricsCard = ({ className }: { className?: string }) => {
                                 Total Profit
                               </tspan>
                             </text>
-                          );
+                          )
                         }
-                        return null;
+                        return null
                       }}
                     />
                   </Pie>
@@ -237,7 +237,7 @@ const SalesMetricsCard = ({ className }: { className?: string }) => {
         </Card>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default SalesMetricsCard;
+export default SalesMetricsCard

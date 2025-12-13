@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { Bar, BarChart } from "recharts";
+import { Bar, BarChart } from "recharts"
 
-import { Card, CardContent, CardHeader } from "ui/card";
-import { type ChartConfig, ChartContainer } from "ui/chart";
-import { Separator } from "ui/separator";
+import { Card, CardContent, CardHeader } from "ui/card"
+import { type ChartConfig, ChartContainer } from "ui/chart"
+import { Separator } from "ui/separator"
 
-import { cn } from "utils";
+import { cn } from "utils"
 
 // Product reached data
 const productReachChartData = [
@@ -15,14 +15,14 @@ const productReachChartData = [
   { month: "March", reached: 213 },
   { month: "April", reached: 330 },
   { month: "May", reached: 305 },
-];
+]
 
 const productReachChartConfig = {
   reached: {
     label: "Reached",
     color: "var(--primary)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 // Order placed data
 const orderPlacedChartData = [
@@ -31,14 +31,14 @@ const orderPlacedChartData = [
   { month: "March", orders: 213 },
   { month: "April", orders: 330 },
   { month: "May", orders: 305 },
-];
+]
 
 const orderPlacedChartConfig = {
   orders: {
     label: "Orders",
     color: "color-mix(in oklab, var(--primary) 10%, transparent)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 const ProductInsightsCard = ({ className }: { className?: string }) => {
   return (
@@ -81,7 +81,7 @@ const ProductInsightsCard = ({ className }: { className?: string }) => {
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default ProductInsightsCard;
+export default ProductInsightsCard

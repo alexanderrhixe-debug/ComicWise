@@ -1,39 +1,39 @@
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import { deleteType, updateType } from "lib/actions/types";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { deleteType, updateType } from "lib/actions/types"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export default async function EditTypeForm({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+  const id = Number(params.id)
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/types/${id}`, {
     cache: "no-store",
-  });
+  })
   if (!res.ok) {
-    redirect("/admin/types");
+    redirect("/admin/types")
   }
 
-  const type = await res.json();
+  const type = await res.json()
 
   async function handleUpdate(formData: FormData) {
-    const result = await updateType(id, formData);
+    const result = await updateType(id, formData)
     if (result.success) {
-      revalidatePath("/admin/types");
-      redirect("/admin/types");
+      revalidatePath("/admin/types")
+      redirect("/admin/types")
     }
-    throw new Error(result.error || "Failed to update type");
+    throw new Error(result.error || "Failed to update type")
   }
 
   async function handleDelete() {
-    const result = await deleteType(id);
+    const result = await deleteType(id)
     if (result.success) {
-      revalidatePath("/admin/types");
-      redirect("/admin/types");
+      revalidatePath("/admin/types")
+      redirect("/admin/types")
     }
-    throw new Error(result.error || "Failed to delete type");
+    throw new Error(result.error || "Failed to delete type")
   }
 
   return (
@@ -96,5 +96,5 @@ export default async function EditTypeForm({ params }: { params: { id: string } 
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

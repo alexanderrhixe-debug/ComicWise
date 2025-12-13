@@ -2,76 +2,76 @@
  * Chapter Seeder
  */
 
-import { database } from "database";
-import { chapter, comic } from "database/schema";
-import { ProgressTracker } from "database/seed/logger";
-import { BatchProcessor } from "database/seed/utils/batch-processor";
-import { createSlug, extractChapterNumber, normalizeDate } from "database/seed/utils/helpers";
-import { and, eq } from "drizzle-orm";
+import { database } from "database"
+import { chapter, comic } from "database/schema"
+import { ProgressTracker } from "database/seed/logger"
+import { BatchProcessor } from "database/seed/utils/batch-processor"
+import { createSlug, extractChapterNumber, normalizeDate } from "database/seed/utils/helpers"
+import { and, eq } from "drizzle-orm"
 
-import type { SeedConfig } from "database/seed/config";
-import type { ChapterSeed } from "lib/validations/seed";
-import { imageService } from "services/image.service";
+import type { SeedConfig } from "database/seed/config"
+import type { ChapterSeed } from "lib/validations/seed"
+import { imageService } from "services/image.service"
 
 export class ChapterSeeder {
-  private options: SeedConfig["options"];
-  private comicCache = new Map<string, number>();
-  private batchProcessor: BatchProcessor<ChapterSeed, void>;
+  private options: SeedConfig["options"]
+  private comicCache = new Map<string, number>()
+  private batchProcessor: BatchProcessor<ChapterSeed, void>
 
   constructor(options: SeedConfig["options"]) {
-    this.options = options;
+    this.options = options
     this.batchProcessor = new BatchProcessor<ChapterSeed, void>({
       batchSize: 100,
       concurrency: 5,
-    });
+    })
   }
 
   async seed(chapters: ChapterSeed[]): Promise<void> {
-    const tracker = new ProgressTracker("Chapters", chapters.length);
+    const tracker = new ProgressTracker("Chapters", chapters.length)
 
     await this.batchProcessor.process(chapters, async (chapterData) => {
       try {
-        await this.processChapter(chapterData, tracker);
+        await this.processChapter(chapterData, tracker)
       } catch (error) {
-        tracker.incrementError(`${chapterData.chaptername || chapterData.title}: ${error}`);
+        tracker.incrementError(`${chapterData.chaptername || chapterData.title}: ${error}`)
       }
-    });
+    })
 
-    tracker.complete();
+    tracker.complete()
   }
 
   private async processChapter(chapterData: ChapterSeed, tracker: ProgressTracker): Promise<void> {
     // Get comic ID
-    const comicId = await this.getComicId(chapterData);
+    const comicId = await this.getComicId(chapterData)
     if (!comicId) {
-      tracker.incrementSkipped("Comic not found");
-      return;
+      tracker.incrementSkipped("Comic not found")
+      return
     }
 
-    const chapterTitle = chapterData.chaptername || chapterData.title || "Untitled Chapter";
-    const chapterNumber = extractChapterNumber(chapterTitle);
-    const chapterSlug = createSlug(chapterTitle);
+    const chapterTitle = chapterData.chaptername || chapterData.title || "Untitled Chapter"
+    const chapterNumber = extractChapterNumber(chapterTitle)
+    const chapterSlug = createSlug(chapterTitle)
 
     // Check if chapter exists
     const existing = await database.query.chapter.findFirst({
       where: and(eq(chapter.comicId, comicId), eq(chapter.chapterNumber, chapterNumber)),
-    });
+    })
 
     // Process page images
-    const pageImages: string[] = [];
+    const pageImages: string[] = []
     if (!this.options.skipImageDownload && chapterData.images) {
-      const comicSlug = await this.getComicSlug(comicId);
+      const comicSlug = await this.getComicSlug(comicId)
 
       for (let i = 0; i < chapterData.images.length; i++) {
-        const img = chapterData.images[i];
-        const imageUrl = typeof img === "string" ? img : img?.url || "";
+        const img = chapterData.images[i]
+        const imageUrl = typeof img === "string" ? img : img?.url || ""
         if (imageUrl) {
           const result = await imageService.processImageUrl(
             imageUrl,
             `comics/${comicSlug}/${chapterSlug}`
-          );
+          )
           if (result) {
-            pageImages.push(result);
+            pageImages.push(result)
           }
         }
       }
@@ -79,7 +79,7 @@ export class ChapterSeeder {
 
     const chapterReleaseDate = normalizeDate(
       chapterData.releaseDate || chapterData.updated_at || chapterData.updatedAt
-    );
+    )
 
     if (existing) {
       // Update existing chapter
@@ -90,9 +90,9 @@ export class ChapterSeeder {
           slug: createSlug(chapterTitle),
           releaseDate: chapterReleaseDate,
         })
-        .where(eq(chapter.id, existing.id));
+        .where(eq(chapter.id, existing.id))
 
-      tracker.incrementUpdated(chapterTitle);
+      tracker.incrementUpdated(chapterTitle)
     } else {
       // Create new chapter
       await database.insert(chapter).values({
@@ -102,47 +102,47 @@ export class ChapterSeeder {
         slug: chapterSlug,
         releaseDate: chapterReleaseDate,
         views: 0,
-      });
+      })
 
-      tracker.incrementCreated(chapterTitle);
+      tracker.incrementCreated(chapterTitle)
     }
   }
 
   private async getComicId(chapterData: ChapterSeed): Promise<number | null> {
     // Extract comic title from different field names
-    const comicTitle = chapterData.comictitle || "";
+    const comicTitle = chapterData.comictitle || ""
 
     if (!comicTitle) {
-      return null;
+      return null
     }
 
     // Check cache first
     if (this.comicCache.has(comicTitle)) {
-      return this.comicCache.get(comicTitle) || null;
+      return this.comicCache.get(comicTitle) || null
     }
 
     // Query database
     const comicRecord = await database.query.comic.findFirst({
       where: eq(comic.title, comicTitle),
-    });
+    })
 
     if (comicRecord) {
-      this.comicCache.set(comicTitle, comicRecord.id);
-      return comicRecord.id;
+      this.comicCache.set(comicTitle, comicRecord.id)
+      return comicRecord.id
     }
 
-    return null;
+    return null
   }
 
   private async getComicSlug(comicId: number): Promise<string> {
     const comicRecord = await database.query.comic.findFirst({
       where: eq(comic.id, comicId),
-    });
+    })
 
     if (!comicRecord) {
-      return "unknown";
+      return "unknown"
     }
 
-    return createSlug(comicRecord.title);
+    return createSlug(comicRecord.title)
   }
 }

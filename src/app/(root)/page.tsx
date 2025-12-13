@@ -1,18 +1,18 @@
-import { ComicCard } from "components/ComicCard";
-import { Button } from "components/ui/button";
-import { Skeleton } from "components/ui/skeleton";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
-import { getLatestComics, getPopularComics } from "src/database/queries";
+import { ComicCard } from "components/ComicCard"
+import { Button } from "components/ui/button"
+import { Skeleton } from "components/ui/skeleton"
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+import { Suspense } from "react"
+import { getLatestComics, getPopularComics } from "src/database/queries"
 
 export const metadata = {
   title: "ComicWise - Your Comic Reading Platform",
   description: "Discover and read your favorite comics online",
-};
+}
 
 async function LatestComics() {
-  const comics = await getLatestComics(8);
+  const comics = await getLatestComics(8)
 
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
@@ -20,11 +20,11 @@ async function LatestComics() {
         <ComicCard key={comic.id} comic={comic} authorName={null} typeName={null} />
       ))}
     </div>
-  );
+  )
 }
 
 async function PopularComics() {
-  const comics = await getPopularComics(8);
+  const comics = await getPopularComics(8)
 
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
@@ -32,7 +32,7 @@ async function PopularComics() {
         <ComicCard key={comic.id} comic={comic} authorName={null} typeName={null} />
       ))}
     </div>
-  );
+  )
 }
 
 function ComicGridSkeleton() {
@@ -46,7 +46,7 @@ function ComicGridSkeleton() {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 export default function HomePage() {
@@ -117,5 +117,5 @@ export default function HomePage() {
         </Link>
       </section>
     </div>
-  );
+  )
 }

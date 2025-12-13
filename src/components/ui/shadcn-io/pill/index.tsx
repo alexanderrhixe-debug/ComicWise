@@ -1,13 +1,13 @@
-import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "lucide-react";
-import type { ComponentProps, ReactNode } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar";
-import { Badge } from "ui/badge";
-import { Button } from "ui/button";
-import { cn } from "utils";
+import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "lucide-react"
+import type { ComponentProps, ReactNode } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar"
+import { Badge } from "ui/badge"
+import { Button } from "ui/button"
+import { cn } from "utils"
 
 export type PillProps = ComponentProps<typeof Badge> & {
-  themed?: boolean;
-};
+  themed?: boolean
+}
 
 export const Pill = ({
   variant = "secondary",
@@ -20,20 +20,20 @@ export const Pill = ({
     variant={variant}
     {...(props as any)}
   />
-);
+)
 
 export type PillAvatarProps = ComponentProps<typeof AvatarImage> & {
-  fallback?: string;
-};
+  fallback?: string
+}
 
 export const PillAvatar = ({ fallback, className, ...props }: PillAvatarProps) => (
   <Avatar className={cn("-ml-1 h-4 w-4", className)}>
     <AvatarImage {...(props as any)} />
     <AvatarFallback>{fallback}</AvatarFallback>
   </Avatar>
-);
+)
 
-export type PillButtonProps = ComponentProps<typeof Button>;
+export type PillButtonProps = ComponentProps<typeof Button>
 
 export const PillButton = ({ className, ...props }: PillButtonProps) => (
   <Button
@@ -42,12 +42,12 @@ export const PillButton = ({ className, ...props }: PillButtonProps) => (
     variant="ghost"
     {...(props as any)}
   />
-);
+)
 
 export type PillStatusProps = {
-  children: ReactNode;
-  className?: string;
-};
+  children: ReactNode
+  className?: string
+}
 
 export const PillStatus = ({ children, className, ...props }: PillStatusProps) => (
   <div
@@ -56,12 +56,12 @@ export const PillStatus = ({ children, className, ...props }: PillStatusProps) =
   >
     {children}
   </div>
-);
+)
 
 export type PillIndicatorProps = {
-  variant?: "success" | "error" | "warning" | "info";
-  pulse?: boolean;
-};
+  variant?: "success" | "error" | "warning" | "info"
+  pulse?: boolean
+}
 
 export const PillIndicator = ({ variant = "success", pulse = false }: PillIndicatorProps) => (
   <span className="relative flex size-2">
@@ -86,38 +86,38 @@ export const PillIndicator = ({ variant = "success", pulse = false }: PillIndica
       )}
     />
   </span>
-);
+)
 
 export type PillDeltaProps = {
-  className?: string;
-  delta: number;
-};
+  className?: string
+  delta: number
+}
 
 export const PillDelta = ({ className, delta }: PillDeltaProps) => {
   if (!delta) {
-    return <MinusIcon className={cn("size-3 text-muted-foreground", className)} />;
+    return <MinusIcon className={cn("size-3 text-muted-foreground", className)} />
   }
 
   if (delta > 0) {
-    return <ChevronUpIcon className={cn("size-3 text-emerald-500", className)} />;
+    return <ChevronUpIcon className={cn("size-3 text-emerald-500", className)} />
   }
 
-  return <ChevronDownIcon className={cn("size-3 text-rose-500", className)} />;
-};
+  return <ChevronDownIcon className={cn("size-3 text-rose-500", className)} />
+}
 
 export type PillIconProps = {
-  icon: typeof ChevronUpIcon;
-  className?: string;
-};
+  icon: typeof ChevronUpIcon
+  className?: string
+}
 
 export const PillIcon = ({ icon: Icon, className, ...props }: PillIconProps) => (
   <Icon className={cn("size-3 text-muted-foreground", className)} size={12} {...(props as any)} />
-);
+)
 
 export type PillAvatarGroupProps = {
-  children: ReactNode;
-  className?: string;
-};
+  children: ReactNode
+  className?: string
+}
 
 export const PillAvatarGroup = ({ children, className, ...props }: PillAvatarGroupProps) => (
   <div
@@ -130,4 +130,4 @@ export const PillAvatarGroup = ({ children, className, ...props }: PillAvatarGro
   >
     {children}
   </div>
-);
+)

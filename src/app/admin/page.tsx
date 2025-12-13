@@ -1,10 +1,10 @@
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
-import { bookmark, chapter, comic, comment, database, user } from "database";
-import { desc, sql } from "drizzle-orm";
-import { BookMarked, BookOpen, BookPlus, Eye, FileText, Plus, UserPlus, Users } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
+import { bookmark, chapter, comic, comment, database, user } from "database"
+import { desc, sql } from "drizzle-orm"
+import { BookMarked, BookOpen, BookPlus, Eye, FileText, Plus, UserPlus, Users } from "lucide-react"
+import Link from "next/link"
+import { Suspense } from "react"
 
 function QuickActions() {
   const quickActions = [
@@ -26,7 +26,7 @@ function QuickActions() {
       icon: UserPlus,
       description: "Create new user",
     },
-  ];
+  ]
 
   return (
     <Card>
@@ -36,7 +36,7 @@ function QuickActions() {
       <CardContent>
         <div className="grid gap-4 md:grid-cols-3">
           {quickActions.map((action) => {
-            const Icon = action.icon;
+            const Icon = action.icon
             return (
               <Button
                 key={action.title}
@@ -52,12 +52,12 @@ function QuickActions() {
                   </div>
                 </Link>
               </Button>
-            );
+            )
           })}
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 async function StatsGrid() {
@@ -82,7 +82,7 @@ async function StatsGrid() {
       .select({ total: sql<number>`sum(views)::int` })
       .from(comic)
       .then((r: any) => r[0]?.total || 0),
-  ]);
+  ])
 
   const stats = [
     {
@@ -115,12 +115,12 @@ async function StatsGrid() {
       description: "Comic views",
       icon: Eye,
     },
-  ];
+  ]
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
       {stats.map((stat) => {
-        const Icon = stat.icon;
+        const Icon = stat.icon
         return (
           <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -132,10 +132,10 @@ async function StatsGrid() {
               <p className="text-xs text-muted-foreground">{stat.description}</p>
             </CardContent>
           </Card>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 async function RecentComics() {
@@ -149,7 +149,7 @@ async function RecentComics() {
     })
     .from(comic)
     .orderBy(desc(comic.createdAt))
-    .limit(5);
+    .limit(5)
 
   return (
     <Card>
@@ -182,7 +182,7 @@ async function RecentComics() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 async function RecentUsers() {
@@ -196,7 +196,7 @@ async function RecentUsers() {
     })
     .from(user)
     .orderBy(desc(user.createdAt))
-    .limit(5);
+    .limit(5)
 
   return (
     <Card>
@@ -227,7 +227,7 @@ async function RecentUsers() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 async function RecentChapters() {
@@ -241,7 +241,7 @@ async function RecentChapters() {
     })
     .from(chapter)
     .orderBy(desc(chapter.createdAt))
-    .limit(5);
+    .limit(5)
 
   return (
     <Card>
@@ -272,7 +272,7 @@ async function RecentChapters() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 async function RecentComments() {
@@ -286,7 +286,7 @@ async function RecentComments() {
     .from(comment)
     .leftJoin(user, sql`${comment.userId} = ${user.id}`)
     .orderBy(desc(comment.createdAt))
-    .limit(5);
+    .limit(5)
 
   return (
     <Card>
@@ -315,7 +315,7 @@ async function RecentComments() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 export default function AdminDashboard() {
@@ -352,5 +352,5 @@ export default function AdminDashboard() {
         </Suspense>
       </div>
     </div>
-  );
+  )
 }

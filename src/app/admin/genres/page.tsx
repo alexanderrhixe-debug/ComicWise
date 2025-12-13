@@ -1,20 +1,20 @@
-import { env } from "appConfig";
-import { DataTable } from "components/admin/DataTable";
-import { Button } from "components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
+import { env } from "appConfig"
+import { DataTable } from "components/admin/DataTable"
+import { Button } from "components/ui/button"
+import { Plus } from "lucide-react"
+import Link from "next/link"
+import { Suspense } from "react"
 
 async function getGenres() {
-  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const response = await fetch(`${baseUrl}/api/genres?limit=100`);
+  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  const response = await fetch(`${baseUrl}/api/genres?limit=100`)
 
   if (!response.ok) {
-    throw new Error("Failed to fetch genres");
+    throw new Error("Failed to fetch genres")
   }
 
-  const data = await response.json();
-  return data.genres || [];
+  const data = await response.json()
+  return data.genres || []
 }
 
 function GenresHeader() {
@@ -31,11 +31,11 @@ function GenresHeader() {
         </Link>
       </Button>
     </div>
-  );
+  )
 }
 
 async function GenresTable() {
-  const genres = await getGenres();
+  const genres = await getGenres()
 
   const columns = [
     {
@@ -54,9 +54,9 @@ async function GenresTable() {
       accessorKey: "createdAt",
       header: "Created",
     },
-  ];
+  ]
 
-  return <DataTable columns={columns} data={genres} />;
+  return <DataTable columns={columns} data={genres} />
 }
 
 export default function GenresPage() {
@@ -68,5 +68,5 @@ export default function GenresPage() {
         <GenresTable />
       </Suspense>
     </div>
-  );
+  )
 }

@@ -1,20 +1,20 @@
-import { env } from "appConfig";
-import { DataTable } from "components/admin/DataTable";
-import { Button } from "components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
+import { env } from "appConfig"
+import { DataTable } from "components/admin/DataTable"
+import { Button } from "components/ui/button"
+import { Plus } from "lucide-react"
+import Link from "next/link"
+import { Suspense } from "react"
 
 async function getAuthors() {
-  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const response = await fetch(`${baseUrl}/api/authors?limit=100`);
+  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  const response = await fetch(`${baseUrl}/api/authors?limit=100`)
 
   if (!response.ok) {
-    throw new Error("Failed to fetch authors");
+    throw new Error("Failed to fetch authors")
   }
 
-  const data = await response.json();
-  return data.authors || [];
+  const data = await response.json()
+  return data.authors || []
 }
 
 function AuthorsHeader() {
@@ -31,11 +31,11 @@ function AuthorsHeader() {
         </Link>
       </Button>
     </div>
-  );
+  )
 }
 
 async function AuthorsTable() {
-  const authors = await getAuthors();
+  const authors = await getAuthors()
 
   const columns = [
     {
@@ -54,9 +54,9 @@ async function AuthorsTable() {
       accessorKey: "createdAt",
       header: "Created",
     },
-  ];
+  ]
 
-  return <DataTable columns={columns} data={authors} />;
+  return <DataTable columns={columns} data={authors} />
 }
 
 export default function AuthorsPage() {
@@ -68,5 +68,5 @@ export default function AuthorsPage() {
         <AuthorsTable />
       </Suspense>
     </div>
-  );
+  )
 }

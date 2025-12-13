@@ -2,13 +2,13 @@
 // COMICS API - Full CRUD with Filtering & Pagination
 // ═══════════════════════════════════════════════════
 
-import { auth } from "auth";
-import { comicFilterSchema, createComicSchema } from "lib/validations/schemas";
-import { NextRequest, NextResponse } from "next/server";
-import { createComic } from "src/database/mutations/comics";
-import { getAllComics } from "src/database/queries/comics";
+import { auth } from "auth"
+import { comicFilterSchema, createComicSchema } from "lib/validations/schemas"
+import { NextRequest, NextResponse } from "next/server"
+import { createComic } from "src/database/mutations/comics"
+import { getAllComics } from "src/database/queries/comics"
 
-import type { ComicFilters } from "src/types";
+import type { ComicFilters } from "src/types"
 
 // ═══════════════════════════════════════════════════
 // GET - List Comics with Filtering & Pagination
@@ -16,7 +16,7 @@ import type { ComicFilters } from "src/types";
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = new URL(request.url).searchParams;
+    const searchParams = new URL(request.url).searchParams
 
     const filters = {
       search: searchParams.get("search") || undefined,
@@ -32,34 +32,34 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get("limit") ? parseInt(searchParams.get("limit")!) : 12,
       sortBy: searchParams.get("sortBy") || "latest",
       sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || "desc",
-    };
+    }
 
     // Validate filters
-    const validation = comicFilterSchema.safeParse(filters);
+    const validation = comicFilterSchema.safeParse(filters)
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid filters", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
-    const result = await getAllComics(validation.data as ComicFilters);
+    const result = await getAllComics(validation.data as ComicFilters)
 
     return NextResponse.json({
       success: true,
       data: result.data,
       pagination: result.pagination,
-    });
+    })
   } catch (error) {
-    console.error("Get comics error:", error);
+    console.error("Get comics error:", error)
     return NextResponse.json(
       {
         error: "Failed to fetch comics",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -69,22 +69,22 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user || session.user.role !== "admin") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json();
+    const body = await request.json()
 
     // Validate input
-    const validation = createComicSchema.safeParse(body);
+    const validation = createComicSchema.safeParse(body)
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid input", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
     const newComic = await createComic({
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       artistId: validation.data.artistId,
       typeId: validation.data.typeId,
       genreIds: body.genreIds,
-    });
+    })
 
     return NextResponse.json(
       {
@@ -106,15 +106,15 @@ export async function POST(request: NextRequest) {
         message: "Comic created successfully",
       },
       { status: 201 }
-    );
+    )
   } catch (error) {
-    console.error("Create comic error:", error);
+    console.error("Create comic error:", error)
     return NextResponse.json(
       {
         error: "Failed to create comic",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }

@@ -81,7 +81,7 @@ export const appConfig = {
       urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || "",
     },
   },
-};
+}
 ```
 
 ### Getting ImageKit Credentials
@@ -157,21 +157,21 @@ export const appConfig = {
 
 ```typescript
 async function uploadImage(file: File, type: string) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("type", type);
+  const formData = new FormData()
+  formData.append("file", file)
+  formData.append("type", type)
 
   const response = await fetch("/api/upload", {
     method: "POST",
     body: formData,
-  });
+  })
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || "Upload failed");
+    const error = await response.json()
+    throw new Error(error.error || "Upload failed")
   }
 
-  return await response.json();
+  return await response.json()
 }
 ```
 
@@ -313,13 +313,13 @@ Uploads cover images for comics.
 
 ```typescript
 // API Request
-const formData = new FormData();
-formData.append("file", coverFile);
-formData.append("type", "comic-cover");
-formData.append("entityId", "comic-123");
+const formData = new FormData()
+formData.append("file", coverFile)
+formData.append("type", "comic-cover")
+formData.append("entityId", "comic-123")
 
 // Server-side (ImageKit Service)
-const result = await uploadComicCover(buffer, comicId, fileName);
+const result = await uploadComicCover(buffer, comicId, fileName)
 ```
 
 **Folder Structure**: `/comicwise/comics/covers/`
@@ -332,14 +332,14 @@ Uploads content images for chapters.
 
 ```typescript
 // API Request
-const formData = new FormData();
-formData.append("file", imageFile);
-formData.append("type", "chapter-image");
-formData.append("entityId", "chapter-456");
-formData.append("sequence", "1");
+const formData = new FormData()
+formData.append("file", imageFile)
+formData.append("type", "chapter-image")
+formData.append("entityId", "chapter-456")
+formData.append("sequence", "1")
 
 // Server-side (ImageKit Service)
-const result = await uploadChapterImage(buffer, chapterId, fileName, sequence);
+const result = await uploadChapterImage(buffer, chapterId, fileName, sequence)
 ```
 
 **Folder Structure**: `/comicwise/chapters/images/`
@@ -352,12 +352,12 @@ Uploads user profile avatars.
 
 ```typescript
 // API Request
-const formData = new FormData();
-formData.append("file", avatarFile);
-formData.append("type", "avatar");
+const formData = new FormData()
+formData.append("file", avatarFile)
+formData.append("type", "avatar")
 
 // Server-side (ImageKit Service)
-const result = await uploadAvatar(buffer, userId, fileName);
+const result = await uploadAvatar(buffer, userId, fileName)
 ```
 
 **Folder Structure**: `/comicwise/avatars/`
@@ -370,9 +370,9 @@ Uploads general-purpose images.
 
 ```typescript
 // API Request
-const formData = new FormData();
-formData.append("file", imageFile);
-formData.append("type", "general");
+const formData = new FormData()
+formData.append("file", imageFile)
+formData.append("type", "general")
 
 // Server-side (ImageKit Service)
 const result = await uploadImage({
@@ -380,7 +380,7 @@ const result = await uploadImage({
   fileName,
   folder: "/comicwise/general",
   tags: ["general"],
-});
+})
 ```
 
 **Folder Structure**: `/comicwise/general/`
@@ -394,7 +394,7 @@ const result = await uploadImage({
 Generate optimized image URLs with transformations:
 
 ```typescript
-import { getOptimizedUrl } from "@/lib/imagekit";
+import { getOptimizedUrl } from "@/lib/imagekit"
 
 // Basic optimization
 const optimized = getOptimizedUrl(originalUrl, {
@@ -402,13 +402,13 @@ const optimized = getOptimizedUrl(originalUrl, {
   height: 600,
   quality: 80,
   format: "webp",
-});
+})
 
 // With blur effect
 const blurred = getOptimizedUrl(originalUrl, {
   width: 400,
   blur: 10,
-});
+})
 ```
 
 ### Thumbnail Generation
@@ -416,9 +416,9 @@ const blurred = getOptimizedUrl(originalUrl, {
 Generate thumbnail URLs:
 
 ```typescript
-import { getThumbnailUrl } from "@/lib/imagekit";
+import { getThumbnailUrl } from "@/lib/imagekit"
 
-const thumbnail = getThumbnailUrl(originalUrl, "medium");
+const thumbnail = getThumbnailUrl(originalUrl, "medium")
 // Sizes: "small" (200x300), "medium" (400x600), "large" (800x1200)
 ```
 
@@ -427,9 +427,9 @@ const thumbnail = getThumbnailUrl(originalUrl, "medium");
 Generate responsive image sets:
 
 ```typescript
-import { getResponsiveUrls } from "@/lib/imagekit";
+import { getResponsiveUrls } from "@/lib/imagekit"
 
-const responsiveUrls = getResponsiveUrls(originalUrl);
+const responsiveUrls = getResponsiveUrls(originalUrl)
 
 // Returns:
 // {
@@ -465,10 +465,10 @@ const responsiveUrls = getResponsiveUrls(originalUrl);
 All upload endpoints require authentication:
 
 ```typescript
-const session = await auth();
+const session = await auth()
 
 if (!session?.user) {
-  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 }
 ```
 
@@ -478,13 +478,13 @@ Files are validated on both client and server:
 
 ```typescript
 // Client-side validation
-const maxSize = 10 * 1024 * 1024; // 10MB
-const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+const maxSize = 10 * 1024 * 1024 // 10MB
+const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"]
 
 // Server-side validation
-const validation = validateImageFile(file);
+const validation = validateImageFile(file)
 if (!validation.valid) {
-  return NextResponse.json({ error: validation.error }, { status: 400 });
+  return NextResponse.json({ error: validation.error }, { status: 400 })
 }
 ```
 
@@ -494,17 +494,17 @@ Consider implementing rate limiting for upload endpoints:
 
 ```typescript
 // Example with upstash/ratelimit
-import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
+import { Ratelimit } from "@upstash/ratelimit"
+import { Redis } from "@upstash/redis"
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(10, "1 h"), // 10 uploads per hour
-});
+})
 
-const { success } = await ratelimit.limit(`upload_${session.user.id}`);
+const { success } = await ratelimit.limit(`upload_${session.user.id}`)
 if (!success) {
-  return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
 }
 ```
 
@@ -513,10 +513,10 @@ if (!success) {
 Maximum file size: **10MB**
 
 ```typescript
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
 if (file.size > MAX_FILE_SIZE) {
-  throw new Error("File too large. Maximum size is 10MB");
+  throw new Error("File too large. Maximum size is 10MB")
 }
 ```
 
@@ -535,17 +535,17 @@ if (file.size > MAX_FILE_SIZE) {
 
 ```typescript
 try {
-  const result = await uploadImage(file, "comic-cover");
-  console.log("Upload successful:", result.url);
+  const result = await uploadImage(file, "comic-cover")
+  console.log("Upload successful:", result.url)
 } catch (error) {
   if (error instanceof Error) {
     // Handle specific error types
     if (error.message.includes("too large")) {
-      alert("File is too large. Please choose a smaller image.");
+      alert("File is too large. Please choose a smaller image.")
     } else if (error.message.includes("Invalid file type")) {
-      alert("Please upload a valid image file (JPEG, PNG, GIF, or WebP).");
+      alert("Please upload a valid image file (JPEG, PNG, GIF, or WebP).")
     } else {
-      alert("Upload failed. Please try again.");
+      alert("Upload failed. Please try again.")
     }
   }
 }
@@ -557,24 +557,24 @@ All ImageKit service functions return a result object:
 
 ```typescript
 interface UploadResult {
-  success: boolean;
-  url?: string;
-  fileId?: string;
-  name?: string;
-  size?: number;
-  thumbnailUrl?: string;
-  error?: string;
+  success: boolean
+  url?: string
+  fileId?: string
+  name?: string
+  size?: number
+  thumbnailUrl?: string
+  error?: string
 }
 
 // Usage
-const result = await uploadComicCover(buffer, comicId, fileName);
+const result = await uploadComicCover(buffer, comicId, fileName)
 
 if (!result.success) {
-  console.error("Upload failed:", result.error);
+  console.error("Upload failed:", result.error)
   return NextResponse.json(
     { error: "Upload failed", details: result.error },
     { status: 500 }
-  );
+  )
 }
 ```
 
@@ -606,12 +606,12 @@ npm install sharp
 ```
 
 ```typescript
-import sharp from "sharp";
+import sharp from "sharp"
 
 const optimizedBuffer = await sharp(inputBuffer)
   .resize(1200, 1800, { fit: "inside" })
   .webp({ quality: 85 })
-  .toBuffer();
+  .toBuffer()
 ```
 
 ### 2. Progressive Loading
@@ -656,17 +656,17 @@ Wrap upload components in error boundaries:
 Show upload progress to users:
 
 ```typescript
-const xhr = new XMLHttpRequest();
+const xhr = new XMLHttpRequest()
 
 xhr.upload.addEventListener("progress", (e) => {
   if (e.lengthComputable) {
-    const percentComplete = (e.loaded / e.total) * 100;
-    setProgress(percentComplete);
+    const percentComplete = (e.loaded / e.total) * 100
+    setProgress(percentComplete)
   }
-});
+})
 
-xhr.open("POST", "/api/upload");
-xhr.send(formData);
+xhr.open("POST", "/api/upload")
+xhr.send(formData)
 ```
 
 ### 6. Batch Uploads
@@ -674,17 +674,17 @@ xhr.send(formData);
 For multiple images, use batch upload:
 
 ```typescript
-import { uploadMultipleImages } from "@/lib/imagekit";
+import { uploadMultipleImages } from "@/lib/imagekit"
 
 const files = [
   { file: buffer1, fileName: "image1.jpg", folder: "/chapter-1" },
   { file: buffer2, fileName: "image2.jpg", folder: "/chapter-1" },
   { file: buffer3, fileName: "image3.jpg", folder: "/chapter-1" },
-];
+]
 
-const results = await uploadMultipleImages(files);
-const successful = results.filter((r) => r.success);
-const failed = results.filter((r) => !r.success);
+const results = await uploadMultipleImages(files)
+const successful = results.filter((r) => r.success)
+const failed = results.filter((r) => !r.success)
 ```
 
 ### 7. Cleanup Old Images
@@ -692,12 +692,12 @@ const failed = results.filter((r) => !r.success);
 Delete unused images to save storage:
 
 ```typescript
-import { deleteImage } from "@/lib/imagekit";
+import { deleteImage } from "@/lib/imagekit"
 
 // When deleting a comic
-const result = await deleteImage(oldCoverImageId);
+const result = await deleteImage(oldCoverImageId)
 if (result.success) {
-  console.log("Old cover image deleted");
+  console.log("Old cover image deleted")
 }
 ```
 
@@ -769,7 +769,7 @@ if (result.success) {
          sizeLimit: "10mb",
        },
      },
-   };
+   }
    ```
 
 ### Issue: Slow Upload Performance

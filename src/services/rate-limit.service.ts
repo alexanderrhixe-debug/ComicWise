@@ -4,95 +4,95 @@
  * Using sliding window algorithm with Redis
  */
 
-import { Redis } from "@upstash/redis";
-import { env } from "appConfig";
+import { Redis } from "@upstash/redis"
+import { env } from "appConfig"
 
 const redis = new Redis({
   url: env.UPSTASH_REDIS_REST_URL || "",
   token: env.UPSTASH_REDIS_REST_TOKEN || "",
-});
+})
 
 export interface RateLimitConfig {
-  limit: number; // Number of requests allowed
-  window: number; // Time window in seconds
+  limit: number // Number of requests allowed
+  window: number // Time window in seconds
 }
 
 export interface RateLimitResult {
-  success: boolean;
-  limit: number;
-  remaining: number;
-  reset: number; // Timestamp when limit resets
+  success: boolean
+  limit: number
+  remaining: number
+  reset: number // Timestamp when limit resets
 }
 
 export class RateLimiter {
-  private config: RateLimitConfig;
+  private config: RateLimitConfig
 
   constructor(config: RateLimitConfig) {
-    this.config = config;
+    this.config = config
   }
 
   /**
    * Check if request is within rate limit
    */
   async check(identifier: string): Promise<RateLimitResult> {
-    const key = `ratelimit:${identifier}`;
-    const now = Date.now();
+    const key = `ratelimit:${identifier}`
+    const now = Date.now()
 
     try {
       // Get current count from a simple counter
-      const countKey = `${key}:count`;
-      const timestampKey = `${key}:timestamp`;
+      const countKey = `${key}:count`
+      const timestampKey = `${key}:timestamp`
 
       // Get current count and first timestamp
-      const currentCount = (await redis.get<number>(countKey)) || 0;
-      const firstTimestamp = (await redis.get<number>(timestampKey)) || now;
+      const currentCount = (await redis.get<number>(countKey)) || 0
+      const firstTimestamp = (await redis.get<number>(timestampKey)) || now
 
       // Check if window has expired
       if (now - firstTimestamp >= this.config.window * 1000) {
         // Reset window
-        await redis.set(countKey, 1, { ex: this.config.window });
-        await redis.set(timestampKey, now, { ex: this.config.window });
+        await redis.set(countKey, 1, { ex: this.config.window })
+        await redis.set(timestampKey, now, { ex: this.config.window })
 
         return {
           success: true,
           limit: this.config.limit,
           remaining: this.config.limit - 1,
           reset: now + this.config.window * 1000,
-        };
+        }
       }
 
       // Check if limit exceeded
       if (currentCount >= this.config.limit) {
-        const reset = firstTimestamp + this.config.window * 1000;
+        const reset = firstTimestamp + this.config.window * 1000
         return {
           success: false,
           limit: this.config.limit,
           remaining: 0,
           reset,
-        };
+        }
       }
 
       // Increment counter
-      await redis.set(countKey, currentCount + 1, { ex: this.config.window });
+      await redis.set(countKey, currentCount + 1, { ex: this.config.window })
 
-      const remaining = Math.max(0, this.config.limit - currentCount - 1);
-      const reset = firstTimestamp + this.config.window * 1000;
+      const remaining = Math.max(0, this.config.limit - currentCount - 1)
+      const reset = firstTimestamp + this.config.window * 1000
 
       return {
         success: true,
         limit: this.config.limit,
         remaining,
         reset,
-      };
+      }
     } catch (error) {
-      console.error("Rate limit check error:", error);
+      console.error("Rate limit check error:", error)
       // On error, allow the request
       return {
         success: true,
         limit: this.config.limit,
         remaining: this.config.limit,
         reset: now + this.config.window * 1000,
-      };
+      }
     }
   }
 
@@ -101,10 +101,10 @@ export class RateLimiter {
    */
   async reset(identifier: string): Promise<void> {
     try {
-      const key = `ratelimit:${identifier}`;
-      await redis.del(key);
+      const key = `ratelimit:${identifier}`
+      await redis.del(key)
     } catch (error) {
-      console.error("Rate limit reset error:", error);
+      console.error("Rate limit reset error:", error)
     }
   }
 }
@@ -135,11 +135,11 @@ export const rateLimitConfig = {
     bookmark: { limit: 50, window: 300 }, // 50 bookmarks per 5 minutes
     rating: { limit: 20, window: 300 }, // 20 ratings per 5 minutes
   },
-};
+}
 
 // Helper function to create rate limiters
 export function createRateLimiter(config: RateLimitConfig): RateLimiter {
-  return new RateLimiter(config);
+  return new RateLimiter(config)
 }
 
 // Predefined rate limiters
@@ -163,7 +163,7 @@ export const rateLimiters = {
     bookmark: createRateLimiter(rateLimitConfig.user.bookmark),
     rating: createRateLimiter(rateLimitConfig.user.rating),
   },
-};
+}
 
 /**
  * Get rate limit identifier from request
@@ -171,14 +171,13 @@ export const rateLimiters = {
  */
 export function getRateLimitIdentifier(request: Request, userId?: string): string {
   if (userId) {
-    return `user:${userId}`;
+    return `user:${userId}`
   }
 
   // Get IP from headers
-  const ip =
-    request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+  const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
 
-  return `ip:${ip}`;
+  return `ip:${ip}`
 }
 
 /**
@@ -189,8 +188,8 @@ export async function rateLimit(
   limiter: RateLimiter,
   identifier?: string
 ): Promise<RateLimitResult> {
-  const id = identifier || getRateLimitIdentifier(request);
-  return limiter.check(id);
+  const id = identifier || getRateLimitIdentifier(request)
+  return limiter.check(id)
 }
 
 /**
@@ -212,5 +211,5 @@ export function createRateLimitResponse(result: RateLimitResult): Response {
         "Retry-After": Math.ceil((result.reset - Date.now()) / 1000).toString(),
       },
     }
-  );
+  )
 }

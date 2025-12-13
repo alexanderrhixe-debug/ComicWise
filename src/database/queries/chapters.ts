@@ -1,13 +1,13 @@
-import { database } from "database";
-import { chapter, chapterImage, comic } from "database/schema";
-import { and, asc, desc, eq, gt, lt } from "drizzle-orm";
+import { database } from "database"
+import { chapter, chapterImage, comic } from "database/schema"
+import { and, asc, desc, eq, gt, lt } from "drizzle-orm"
 
 export async function getChaptersByComicId(comicId: number) {
   return await database
     .select()
     .from(chapter)
     .where(eq(chapter.comicId, comicId))
-    .orderBy(asc(chapter.chapterNumber));
+    .orderBy(asc(chapter.chapterNumber))
 }
 
 export async function getChapter(chapterId: number) {
@@ -19,21 +19,21 @@ export async function getChapter(chapterId: number) {
     .from(chapter)
     .leftJoin(comic, eq(chapter.comicId, comic.id))
     .where(eq(chapter.id, chapterId))
-    .limit(1);
+    .limit(1)
 
-  if (!result[0]) return null;
+  if (!result[0]) return null
 
   const images = await database
     .select()
     .from(chapterImage)
     .where(eq(chapterImage.chapterId, chapterId))
-    .orderBy(asc(chapterImage.pageNumber));
+    .orderBy(asc(chapterImage.pageNumber))
 
   return {
     ...result[0].chapter,
     comic: result[0].comic,
     images,
-  };
+  }
 }
 
 export async function getChapterImages(chapterId: number) {
@@ -41,7 +41,7 @@ export async function getChapterImages(chapterId: number) {
     .select()
     .from(chapterImage)
     .where(eq(chapterImage.chapterId, chapterId))
-    .orderBy(asc(chapterImage.pageNumber));
+    .orderBy(asc(chapterImage.pageNumber))
 }
 
 export async function getNextChapter(currentChapterId: number) {
@@ -49,9 +49,9 @@ export async function getNextChapter(currentChapterId: number) {
     .select()
     .from(chapter)
     .where(eq(chapter.id, currentChapterId))
-    .limit(1);
+    .limit(1)
 
-  if (!current[0]) return null;
+  if (!current[0]) return null
 
   const next = await database
     .select()
@@ -63,9 +63,9 @@ export async function getNextChapter(currentChapterId: number) {
       )
     )
     .orderBy(asc(chapter.chapterNumber))
-    .limit(1);
+    .limit(1)
 
-  return next[0] || null;
+  return next[0] || null
 }
 
 export async function getPreviousChapter(currentChapterId: number) {
@@ -73,9 +73,9 @@ export async function getPreviousChapter(currentChapterId: number) {
     .select()
     .from(chapter)
     .where(eq(chapter.id, currentChapterId))
-    .limit(1);
+    .limit(1)
 
-  if (!current[0]) return null;
+  if (!current[0]) return null
 
   const previous = await database
     .select()
@@ -87,9 +87,9 @@ export async function getPreviousChapter(currentChapterId: number) {
       )
     )
     .orderBy(desc(chapter.chapterNumber))
-    .limit(1);
+    .limit(1)
 
-  return previous[0] || null;
+  return previous[0] || null
 }
 
 export async function getFirstChapter(comicId: number) {
@@ -98,9 +98,9 @@ export async function getFirstChapter(comicId: number) {
     .from(chapter)
     .where(eq(chapter.comicId, comicId))
     .orderBy(asc(chapter.chapterNumber))
-    .limit(1);
+    .limit(1)
 
-  return result[0] || null;
+  return result[0] || null
 }
 
 export async function getLatestChapter(comicId: number) {
@@ -109,19 +109,19 @@ export async function getLatestChapter(comicId: number) {
     .from(chapter)
     .where(eq(chapter.comicId, comicId))
     .orderBy(desc(chapter.chapterNumber))
-    .limit(1);
+    .limit(1)
 
-  return result[0] || null;
+  return result[0] || null
 }
 
 // Wrapper function for API compatibility
 export async function getAllChapters(filters?: {
-  comicId?: number;
-  search?: string;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
+  comicId?: number
+  search?: string
+  page?: number
+  limit?: number
+  sortBy?: string
+  sortOrder?: "asc" | "desc"
 }) {
   const {
     comicId,
@@ -130,39 +130,39 @@ export async function getAllChapters(filters?: {
     limit = 12,
     sortBy = "chapterNumber",
     sortOrder = "asc",
-  } = filters || {};
+  } = filters || {}
 
-  let query = database.select().from(chapter).$dynamic();
+  let query = database.select().from(chapter).$dynamic()
 
   if (comicId) {
-    query = query.where(eq(chapter.comicId, comicId));
+    query = query.where(eq(chapter.comicId, comicId))
   }
 
   if (search) {
-    query = query.where(eq(chapter.title, `%${search}%`));
+    query = query.where(eq(chapter.title, `%${search}%`))
   }
 
   // Apply sorting
   if (sortBy === "chapterNumber") {
     query = query.orderBy(
       sortOrder === "asc" ? asc(chapter.chapterNumber) : desc(chapter.chapterNumber)
-    );
+    )
   } else if (sortBy === "views") {
-    query = query.orderBy(sortOrder === "asc" ? asc(chapter.views) : desc(chapter.views));
+    query = query.orderBy(sortOrder === "asc" ? asc(chapter.views) : desc(chapter.views))
   } else {
-    query = query.orderBy(sortOrder === "asc" ? asc(chapter.createdAt) : desc(chapter.createdAt));
+    query = query.orderBy(sortOrder === "asc" ? asc(chapter.createdAt) : desc(chapter.createdAt))
   }
 
-  const offset = (page - 1) * limit;
-  const chapters = await query.limit(limit).offset(offset);
+  const offset = (page - 1) * limit
+  const chapters = await query.limit(limit).offset(offset)
 
   // Get total count
-  let countQuery = database.select().from(chapter).$dynamic();
+  let countQuery = database.select().from(chapter).$dynamic()
   if (comicId) {
-    countQuery = countQuery.where(eq(chapter.comicId, comicId));
+    countQuery = countQuery.where(eq(chapter.comicId, comicId))
   }
-  const allChapters = await countQuery;
-  const total = allChapters.length;
+  const allChapters = await countQuery
+  const total = allChapters.length
 
   return {
     chapters,
@@ -170,5 +170,5 @@ export async function getAllChapters(filters?: {
     limit,
     total,
     totalPages: Math.ceil(total / limit),
-  };
+  }
 }

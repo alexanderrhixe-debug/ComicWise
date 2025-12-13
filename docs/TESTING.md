@@ -277,23 +277,23 @@ pnpm test:mobile
 ### Test Structure
 
 ```typescript
-import { expect, test } from "@playwright/test";
+import { expect, test } from "@playwright/test"
 
 test.describe("Feature Name", () => {
   test.beforeEach(async ({ page }) => {
     // Setup before each test
-  });
+  })
 
   test("should do something", async ({ page }) => {
-    await page.goto("/path");
+    await page.goto("/path")
 
     // Interact with page
-    await page.getByRole("button", { name: /click me/i }).click();
+    await page.getByRole("button", { name: /click me/i }).click()
 
     // Assert results
-    await expect(page.getByText(/success/i)).toBeVisible();
-  });
-});
+    await expect(page.getByText(/success/i)).toBeVisible()
+  })
+})
 ```
 
 ### Best Practices
@@ -302,45 +302,45 @@ test.describe("Feature Name", () => {
 
 ```typescript
 // ✅ Good - semantic locators
-await page.getByRole("button", { name: /sign in/i });
-await page.getByLabel(/email/i);
-await page.getByText(/welcome/i);
-await page.getByPlaceholder(/search/i);
+await page.getByRole("button", { name: /sign in/i })
+await page.getByLabel(/email/i)
+await page.getByText(/welcome/i)
+await page.getByPlaceholder(/search/i)
 
 // ❌ Avoid - brittle selectors
-await page.locator(".btn-primary");
-await page.locator("#login-button");
+await page.locator(".btn-primary")
+await page.locator("#login-button")
 ```
 
 #### 2. Use Case-Insensitive Regex
 
 ```typescript
 // ✅ Good - flexible matching
-await page.getByText(/sign in|log in|login/i);
+await page.getByText(/sign in|log in|login/i)
 
 // ❌ Avoid - exact matching
-await page.getByText("Sign In");
+await page.getByText("Sign In")
 ```
 
 #### 3. Wait for Elements
 
 ```typescript
 // ✅ Good - explicit waits
-await expect(page.getByText(/success/i)).toBeVisible({ timeout: 5000 });
+await expect(page.getByText(/success/i)).toBeVisible({ timeout: 5000 })
 
 // ❌ Avoid - arbitrary waits
-await page.waitForTimeout(3000);
+await page.waitForTimeout(3000)
 ```
 
 #### 4. Handle Test Data
 
 ```typescript
 // ✅ Good - unique test data
-const uniqueEmail = `test-${Date.now()}@example.com`;
+const uniqueEmail = `test-${Date.now()}@example.com`
 
 // ✅ Good - skip when data unavailable
 if ((await page.locator("a[href*='/comics/']").count()) === 0) {
-  test.skip(true, "No comics available");
+  test.skip(true, "No comics available")
 }
 ```
 
@@ -349,11 +349,11 @@ if ((await page.locator("a[href*='/comics/']").count()) === 0) {
 ```typescript
 test.beforeEach(async ({ page }) => {
   // Login before each test
-  await page.goto("/sign-in");
-  await page.getByLabel(/email/i).fill("user@example.com");
-  await page.getByLabel(/password/i).fill("password");
-  await page.getByRole("button", { name: /sign in/i }).click();
-});
+  await page.goto("/sign-in")
+  await page.getByLabel(/email/i).fill("user@example.com")
+  await page.getByLabel(/password/i).fill("password")
+  await page.getByRole("button", { name: /sign in/i }).click()
+})
 ```
 
 ## Debugging Tests
@@ -483,13 +483,13 @@ pnpm add -D @axe-core/playwright
 Example:
 
 ```typescript
-import { injectAxe, checkA11y } from "axe-playwright";
+import { injectAxe, checkA11y } from "axe-playwright"
 
 test("should not have accessibility violations", async ({ page }) => {
-  await page.goto("/");
-  await injectAxe(page);
-  await checkA11y(page);
-});
+  await page.goto("/")
+  await injectAxe(page)
+  await checkA11y(page)
+})
 ```
 
 ## Test Data Management
@@ -510,26 +510,26 @@ export const TEST_USERS = {
     email: "user@example.com",
     password: "User123!",
   },
-};
+}
 
 export const TEST_COMIC = {
   title: "Test Comic",
   description: "Test Description",
   author: "Test Author",
-};
+}
 ```
 
 Import in tests:
 
 ```typescript
-import { TEST_USERS } from "./fixtures";
+import { TEST_USERS } from "./fixtures"
 
 test("should login as admin", async ({ page }) => {
-  await page.goto("/sign-in");
-  await page.getByLabel(/email/i).fill(TEST_USERS.admin.email);
-  await page.getByLabel(/password/i).fill(TEST_USERS.admin.password);
-  await page.getByRole("button", { name: /sign in/i }).click();
-});
+  await page.goto("/sign-in")
+  await page.getByLabel(/email/i).fill(TEST_USERS.admin.email)
+  await page.getByLabel(/password/i).fill(TEST_USERS.admin.password)
+  await page.getByRole("button", { name: /sign in/i }).click()
+})
 ```
 
 ## Troubleshooting

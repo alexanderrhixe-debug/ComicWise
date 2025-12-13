@@ -1,106 +1,48 @@
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import { deleteAuthor, updateAuthor } from "lib/actions/authors";
-import { revalidatePath } from "next/cache";
-import Image from "next/image";
-import { redirect } from "next/navigation";
+import ClientImageUploader from "components/admin/ClientImageUploader"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { deleteAuthor, updateAuthor } from "lib/actions/authors"
+import { revalidatePath } from "next/cache"
+import Image from "next/image"
+import { redirect } from "next/navigation"
 
-// Small client-only uploader that posts to /api/upload and writes the resulting URL
-// into the hidden input with id provided via `targetInputId`.
-function ClientImageUploader({ targetInputId }: { targetInputId: string }) {
-  "use client";
-  import("sonner").then((m) => m); // ensure toast available at runtime if used elsewhere
-
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("type", "avatar");
-
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Upload failed");
-      const data = await res.json();
-      const el = document.getElementById(targetInputId) as HTMLInputElement | null;
-      if (el) el.value = data.url || "";
-      // show a simple alert as a fallback notification
-      try {
-        const { toast } = await import("sonner");
-        toast.success("Image uploaded");
-      } catch {
-        // ignore
-      }
-    } catch (err) {
-      try {
-        const { toast } = await import("sonner");
-        toast.error((err as Error).message || "Upload failed");
-      } catch {
-        alert((err as Error).message || "Upload failed");
-      }
-    }
-  }
-
-  return (
-    <div className="flex items-center gap-4">
-      <label htmlFor="profile-upload-file" className="sr-only">
-        Upload author profile image
-      </label>
-      <input
-        id="profile-upload-file"
-        type="file"
-        accept="image/*"
-        className="sr-only"
-        onChange={handleUpload}
-        aria-label="Upload author profile image"
-      />
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => document.getElementById("profile-upload-file")?.click()}
-      >
-        Upload Image
-      </Button>
-    </div>
-  );
-}
+// `ClientImageUploader` moved to `src/components/admin/ClientImageUploader`
 
 export default async function EditAuthorForm({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+  const id = Number(params.id)
 
   // Fetch author data on the server to populate defaults
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/authors/${id}`, {
     cache: "no-store",
-  });
+  })
 
   if (!res.ok) {
     // If author not found or API failed, redirect back to list
-    redirect("/admin/authors");
+    redirect("/admin/authors")
   }
 
-  const author = await res.json();
+  const author = await res.json()
 
   async function handleUpdate(formData: FormData) {
     // Delegate to shared server action
-    const result = await updateAuthor(id, formData);
+    const result = await updateAuthor(id, formData)
     if (result.success) {
-      revalidatePath("/admin/authors");
-      revalidatePath(`/admin/authors/${id}`);
-      redirect("/admin/authors");
+      revalidatePath("/admin/authors")
+      revalidatePath(`/admin/authors/${id}`)
+      redirect("/admin/authors")
     }
-    throw new Error(result.error || "Failed to update author");
+    throw new Error(result.error || "Failed to update author")
   }
 
   async function handleDelete() {
-    const result = await deleteAuthor(id);
+    const result = await deleteAuthor(id)
     if (result.success) {
-      revalidatePath("/admin/authors");
-      redirect("/admin/authors");
+      revalidatePath("/admin/authors")
+      redirect("/admin/authors")
     }
-    throw new Error(result.error || "Failed to delete author");
+    throw new Error(result.error || "Failed to delete author")
   }
 
   return (
@@ -159,7 +101,7 @@ export default async function EditAuthorForm({ params }: { params: { id: string 
                 <ClientImageUploader targetInputId="image" />
               </div>
               {author.profileImage && (
-                <div className="relative h-32 w-32 overflow-hidden rounded-lg border mt-2">
+                <div className="relative mt-2 h-32 w-32 overflow-hidden rounded-lg border">
                   <Image
                     src={author.profileImage}
                     alt="Profile preview"
@@ -194,5 +136,5 @@ export default async function EditAuthorForm({ params }: { params: { id: string 
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

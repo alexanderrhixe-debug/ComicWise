@@ -15,17 +15,17 @@ import {
   Preview,
   Section,
   Text,
-} from "@react-email/components";
+} from "@react-email/components"
 
 interface NewChapterEmailProps {
-  userName: string;
-  userEmail: string;
-  comicTitle: string;
-  comicCoverUrl: string;
-  chapterNumber: number;
-  chapterTitle: string;
-  chapterUrl: string;
-  releaseDate: string;
+  userName: string
+  userEmail: string
+  comicTitle: string
+  comicCoverUrl: string
+  chapterNumber: number
+  chapterTitle: string
+  chapterUrl: string
+  releaseDate: string
 }
 
 export const NewChapterEmail = ({
@@ -134,9 +134,9 @@ export const NewChapterEmail = ({
       </Container>
     </Body>
   </Html>
-);
+)
 
-export default NewChapterEmail;
+export default NewChapterEmail
 
 // ═══════════════════════════════════════════════════
 // STYLES
@@ -146,7 +146,7 @@ const main = {
   backgroundColor: "#f6f9fc",
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
+}
 
 const container = {
   backgroundColor: "#ffffff",
@@ -154,17 +154,17 @@ const container = {
   padding: "20px 0 48px",
   marginBottom: "64px",
   maxWidth: "600px",
-};
+}
 
 const header = {
   padding: "32px 40px",
   textAlign: "center" as const,
-};
+}
 
 const logo = {
   margin: "0 auto",
   marginBottom: "16px",
-};
+}
 
 const heading = {
   fontSize: "28px",
@@ -172,18 +172,18 @@ const heading = {
   fontWeight: "700",
   color: "#1a1a1a",
   margin: "0",
-};
+}
 
 const content = {
   padding: "0 40px",
-};
+}
 
 const paragraph = {
   fontSize: "16px",
   lineHeight: "26px",
   color: "#484848",
   margin: "16px 0",
-};
+}
 
 const comicCard = {
   backgroundColor: "#f8fafc",
@@ -191,17 +191,17 @@ const comicCard = {
   padding: "24px",
   margin: "24px 0",
   textAlign: "center" as const,
-};
+}
 
 const coverImage = {
   borderRadius: "8px",
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   margin: "0 auto 16px",
-};
+}
 
 const chapterInfo = {
   textAlign: "center" as const,
-};
+}
 
 const comicTitleStyle = {
   fontSize: "22px",
@@ -209,26 +209,26 @@ const comicTitleStyle = {
   fontWeight: "700",
   color: "#1a1a1a",
   margin: "8px 0",
-};
+}
 
 const chapterMeta = {
   fontSize: "16px",
   lineHeight: "24px",
   color: "#5469d4",
   margin: "8px 0",
-};
+}
 
 const releaseInfo = {
   fontSize: "14px",
   lineHeight: "20px",
   color: "#64748b",
   margin: "4px 0",
-};
+}
 
 const buttonContainer = {
   textAlign: "center" as const,
   margin: "32px 0",
-};
+}
 
 const button = {
   backgroundColor: "#10b981",
@@ -240,7 +240,7 @@ const button = {
   textAlign: "center" as const,
   display: "inline-block",
   padding: "14px 40px",
-};
+}
 
 const tipsBox = {
   backgroundColor: "#f0f9ff",
@@ -248,7 +248,7 @@ const tipsBox = {
   borderRadius: "4px",
   padding: "16px",
   margin: "24px 0",
-};
+}
 
 const tipsHeading = {
   fontSize: "15px",
@@ -256,35 +256,35 @@ const tipsHeading = {
   fontWeight: "600",
   color: "#1e40af",
   margin: "0 0 8px 0",
-};
+}
 
 const tipItem = {
   fontSize: "14px",
   lineHeight: "22px",
   color: "#1e40af",
   margin: "4px 0",
-};
+}
 
 const smallText = {
   fontSize: "13px",
   lineHeight: "20px",
   color: "#64748b",
   margin: "16px 0",
-};
+}
 
 const link = {
   color: "#5469d4",
   textDecoration: "underline",
-};
+}
 
 const hr = {
   borderColor: "#e6ebf1",
   margin: "32px 0",
-};
+}
 
 const footer = {
   padding: "0 40px",
-};
+}
 
 const footerText = {
   fontSize: "12px",
@@ -292,9 +292,9 @@ const footerText = {
   color: "#8898aa",
   margin: "4px 0",
   textAlign: "center" as const,
-};
+}
 
 const footerLink = {
   color: "#8898aa",
   textDecoration: "underline",
-};
+}

@@ -1,4 +1,4 @@
-import { Skeleton } from "components/ui/skeleton";
+import { Skeleton } from "components/ui/skeleton"
 
 export default function TypesLoading() {
   return (
@@ -15,5 +15,5 @@ export default function TypesLoading() {
         <Skeleton className="h-64 w-full" />
       </div>
     </div>
-  );
+  )
 }

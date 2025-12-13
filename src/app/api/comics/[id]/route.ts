@@ -2,11 +2,11 @@
 // COMIC DETAIL API - Get, Update, Delete Single Comic
 // ═══════════════════════════════════════════════════
 
-import { auth } from "auth";
-import { comicIdSchema, updateComicSchema } from "lib/validations/schemas";
-import { NextRequest, NextResponse } from "next/server";
-import { deleteComic, updateComic } from "src/database/mutations/comics";
-import { getComic } from "src/database/queries/comics";
+import { auth } from "auth"
+import { comicIdSchema, updateComicSchema } from "lib/validations/schemas"
+import { NextRequest, NextResponse } from "next/server"
+import { deleteComic, updateComic } from "src/database/mutations/comics"
+import { getComic } from "src/database/queries/comics"
 
 // ═══════════════════════════════════════════════════
 // GET - Get Comic by ID
@@ -14,36 +14,36 @@ import { getComic } from "src/database/queries/comics";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params;
+    const { id } = await params
 
-    const validation = comicIdSchema.safeParse({ id: parseInt(id) });
+    const validation = comicIdSchema.safeParse({ id: parseInt(id) })
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid comic ID", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
-    const comic = await getComic(validation.data.id);
+    const comic = await getComic(validation.data.id)
 
     if (!comic) {
-      return NextResponse.json({ error: "Comic not found" }, { status: 404 });
+      return NextResponse.json({ error: "Comic not found" }, { status: 404 })
     }
 
     return NextResponse.json({
       success: true,
       data: comic,
-    });
+    })
   } catch (error) {
-    console.error("Get comic error:", error);
+    console.error("Get comic error:", error)
     return NextResponse.json(
       {
         error: "Failed to fetch comic",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -53,31 +53,31 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user || session.user.role !== "admin") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { id } = await params;
-    const body = await request.json();
+    const { id } = await params
+    const body = await request.json()
 
-    const idValidation = comicIdSchema.safeParse({ id: parseInt(id) });
+    const idValidation = comicIdSchema.safeParse({ id: parseInt(id) })
 
     if (!idValidation.success) {
       return NextResponse.json(
         { error: "Invalid comic ID", details: idValidation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
-    const validation = updateComicSchema.safeParse(body);
+    const validation = updateComicSchema.safeParse(body)
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid input", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
     const updatedComic = await updateComic(idValidation.data.id, {
@@ -90,26 +90,26 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       artistId: validation.data.artistId,
       typeId: validation.data.typeId,
       genreIds: body.genreIds,
-    });
+    })
 
     if (!updatedComic) {
-      return NextResponse.json({ error: "Comic not found" }, { status: 404 });
+      return NextResponse.json({ error: "Comic not found" }, { status: 404 })
     }
 
     return NextResponse.json({
       success: true,
       data: updatedComic,
       message: "Comic updated successfully",
-    });
+    })
   } catch (error) {
-    console.error("Update comic error:", error);
+    console.error("Update comic error:", error)
     return NextResponse.json(
       {
         error: "Failed to update comic",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -122,41 +122,41 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user || session.user.role !== "admin") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { id } = await params;
+    const { id } = await params
 
-    const validation = comicIdSchema.safeParse({ id: parseInt(id) });
+    const validation = comicIdSchema.safeParse({ id: parseInt(id) })
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid comic ID", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
-    const deletedComic = await deleteComic(validation.data.id);
+    const deletedComic = await deleteComic(validation.data.id)
 
     if (!deletedComic) {
-      return NextResponse.json({ error: "Comic not found" }, { status: 404 });
+      return NextResponse.json({ error: "Comic not found" }, { status: 404 })
     }
 
     return NextResponse.json({
       success: true,
       message: "Comic deleted successfully",
-    });
+    })
   } catch (error) {
-    console.error("Delete comic error:", error);
+    console.error("Delete comic error:", error)
     return NextResponse.json(
       {
         error: "Failed to delete comic",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }

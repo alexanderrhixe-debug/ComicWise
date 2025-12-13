@@ -1,20 +1,20 @@
-import { MenuIcon, SearchIcon } from "lucide-react";
+import { MenuIcon, SearchIcon } from "lucide-react"
 
-import { Button } from "ui/button";
+import { Button } from "ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "ui/dropdown-menu";
+} from "ui/dropdown-menu"
 
-import Logo from "@/components/shadcn-studio/logo";
+import Logo from "@/components/shadcn-studio/logo"
 
 type NavigationItem = {
-  title: string;
-  href: string;
-}[];
+  title: string
+  href: string
+}[]
 
 const Navbar = ({ navigationData }: { navigationData: NavigationItem }) => {
   return (
@@ -63,7 +63,7 @@ const Navbar = ({ navigationData }: { navigationData: NavigationItem }) => {
         </div>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

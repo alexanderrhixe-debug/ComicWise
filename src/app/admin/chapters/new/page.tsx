@@ -1,9 +1,8 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ImageUpload } from "components/admin/ImageUpload";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
+"use client"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ImageUpload } from "components/admin/ImageUpload"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
 import {
   Form,
   FormControl,
@@ -12,22 +11,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "components/ui/form";
-import { Input } from "components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "components/ui/select";
-import { Switch } from "components/ui/switch";
-import { Textarea } from "components/ui/textarea";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+} from "components/ui/form"
+import { Input } from "components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "components/ui/select"
+import { Switch } from "components/ui/switch"
+import { Textarea } from "components/ui/textarea"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
 
 const chapterSchema = z
   .object({
@@ -39,20 +32,20 @@ const chapterSchema = z
     sendNotifications: z.boolean(),
     imageUrls: z.array(z.string().url()).optional(),
   })
-  .strict();
+  .strict()
 
-type ChapterFormValues = z.infer<typeof chapterSchema>;
+type ChapterFormValues = z.infer<typeof chapterSchema>
 
 interface Comic {
-  id: number;
-  title: string;
+  id: number
+  title: string
 }
 
 export default function NewChapterPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [comics, setComics] = useState<Comic[]>([]);
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [comics, setComics] = useState<Comic[]>([])
+  const [uploadedImages, setUploadedImages] = useState<string[]>([])
 
   const form = useForm<ChapterFormValues>({
     resolver: zodResolver(chapterSchema),
@@ -64,38 +57,41 @@ export default function NewChapterPage() {
       sendNotifications: true,
       imageUrls: [],
     },
-  });
+  })
 
   useEffect(() => {
     async function fetchComics() {
       try {
-        const response = await fetch("/api/comics?limit=1000");
-        if (!response.ok) throw new Error("Failed to fetch comics");
-        const data = await response.json();
-        setComics(data.comics || []);
+        const response = await fetch("/api/comics?limit=1000")
+        if (!response.ok) throw new Error("Failed to fetch comics")
+        const data = await response.json()
+        setComics(data.comics || [])
       } catch {
-        toast.error("Failed to load comics");
+        toast.error("Failed to load comics")
       }
     }
-    fetchComics();
-  }, []);
-
-  const handleImageUpload = (url: string) => {
-    setUploadedImages((prev) => [...prev, url]);
-    form.setValue("imageUrls", [...uploadedImages, url]);
-  };
+    fetchComics()
+  }, [])
 
   const handleImageRemove = (url?: string) => {
-    if (!url) return;
-    setUploadedImages((prev) => prev.filter((img) => img !== url));
+    if (!url) return
+    setUploadedImages((prev) => prev.filter((img) => img !== url))
     form.setValue(
       "imageUrls",
       uploadedImages.filter((img) => img !== url)
-    );
-  };
+    )
+  }
+
+  const handleImageUpload = (url: string) => {
+    setUploadedImages((prev) => {
+      const next = [...prev, url]
+      form.setValue("imageUrls", next)
+      return next
+    })
+  }
 
   async function onSubmit(data: ChapterFormValues) {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
       // Create chapter
@@ -106,21 +102,21 @@ export default function NewChapterPage() {
           ...data,
           releaseDate: data.releaseDate ? new Date(data.releaseDate) : new Date(),
         }),
-      });
+      })
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create chapter");
+        const error = await response.json()
+        throw new Error(error.error || "Failed to create chapter")
       }
 
-      const chapter = await response.json();
+      const chapter = await response.json()
 
       // Upload chapter images if any
       if (uploadedImages.length > 0) {
         const imagesPayload = uploadedImages.map((url, index) => ({
           imageUrl: url,
           pageNumber: index + 1,
-        }));
+        }))
 
         await fetch("/api/chapter-images", {
           method: "POST",
@@ -129,20 +125,20 @@ export default function NewChapterPage() {
             chapterId: chapter.id,
             images: imagesPayload,
           }),
-        });
+        })
       }
 
       toast.success(
         data.sendNotifications
           ? "Chapter created and notifications sent!"
           : "Chapter created successfully"
-      );
-      router.push("/admin/chapters");
-      router.refresh();
+      )
+      router.push("/admin/chapters")
+      router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create chapter");
+      toast.error(error instanceof Error ? error.message : "Failed to create chapter")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
@@ -314,5 +310,5 @@ export default function NewChapterPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

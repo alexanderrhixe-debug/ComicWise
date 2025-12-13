@@ -1,12 +1,12 @@
-import ClientDate from "components/ClientDate";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
+import ClientDate from "components/ClientDate"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
 
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Terms of Service | ComicWise",
   description: "Terms and conditions for using ComicWise services.",
-};
+}
 
 // Force dynamic rendering for current date display
 // export const dynamic = "force-dynamic";
@@ -252,5 +252,5 @@ export default function TermsOfServicePage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

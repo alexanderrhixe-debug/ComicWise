@@ -1,65 +1,65 @@
-import { env } from "appConfig";
-import { createCacheClient } from "src/lib/cache";
+import { env } from "appConfig"
+import { createCacheClient } from "src/lib/cache"
 
 // Lazy loader for cache client to avoid forcing dependency at module import
-let clientInstance: ReturnType<typeof createCacheClient> | null = null;
+let clientInstance: ReturnType<typeof createCacheClient> | null = null
 
 export function initCache(rawClient: any) {
-  clientInstance = createCacheClient(rawClient);
-  return clientInstance;
+  clientInstance = createCacheClient(rawClient)
+  return clientInstance
 }
 
 export const cache = {
   async get(key: string) {
-    if (!clientInstance) return null;
-    return clientInstance.get(key);
+    if (!clientInstance) return null
+    return clientInstance.get(key)
   },
   async set(key: string, value: string, ttlSeconds?: number) {
-    if (!clientInstance) return Promise.resolve(null as any);
-    return clientInstance.set(key, value, ttlSeconds);
+    if (!clientInstance) return Promise.resolve(null as any)
+    return clientInstance.set(key, value, ttlSeconds)
   },
   async del(key: string) {
-    if (!clientInstance) return Promise.resolve(null as any);
-    return clientInstance.del(key);
+    if (!clientInstance) return Promise.resolve(null as any)
+    return clientInstance.del(key)
   },
   async clear() {
-    if (!clientInstance) return Promise.resolve(null as any);
-    return clientInstance.clear?.();
+    if (!clientInstance) return Promise.resolve(null as any)
+    return clientInstance.clear?.()
   },
-};
+}
 
-export default cache;
+export default cache
 /**
  * Redis Cache Service
  * Provides caching layer for database database/queries and API responses
  */
 
-import { Redis } from "@upstash/redis";
+import { Redis } from "@upstash/redis"
 
 // Initialize Redis client
 const redis = new Redis({
   url: env.UPSTASH_REDIS_REST_URL || "",
   token: env.UPSTASH_REDIS_REST_TOKEN || "",
-});
+})
 
 export interface CacheOptions {
-  ttl?: number; // Time to live in seconds
-  tags?: string[]; // Cache tags for invalidation
+  ttl?: number // Time to live in seconds
+  tags?: string[] // Cache tags for invalidation
 }
 
 export class CacheService {
-  private readonly defaultTTL = 3600; // 1 hour
+  private readonly defaultTTL = 3600 // 1 hour
 
   /**
    * Get value from cache
    */
   async get<T>(key: string): Promise<T | null> {
     try {
-      const value = await redis.get<T>(key);
-      return value;
+      const value = await redis.get<T>(key)
+      return value
     } catch (error) {
-      console.error(`Cache get error for key ${key}:`, error);
-      return null;
+      console.error(`Cache get error for key ${key}:`, error)
+      return null
     }
   }
 
@@ -68,13 +68,13 @@ export class CacheService {
    */
   async set<T>(key: string, value: T, options?: CacheOptions): Promise<void> {
     try {
-      const ttl = options?.ttl ?? this.defaultTTL;
-      await redis.set(key, JSON.stringify(value), { ex: ttl });
+      const ttl = options?.ttl ?? this.defaultTTL
+      await redis.set(key, JSON.stringify(value), { ex: ttl })
 
       // Note: Tag-based invalidation not supported in Upstash Redis REST API
       // Tags are stored but not used for invalidation
     } catch (error) {
-      console.error(`Cache set error for key ${key}:`, error);
+      console.error(`Cache set error for key ${key}:`, error)
     }
   }
 
@@ -83,9 +83,9 @@ export class CacheService {
    */
   async delete(key: string): Promise<void> {
     try {
-      await redis.del(key);
+      await redis.del(key)
     } catch (error) {
-      console.error(`Cache delete error for key ${key}:`, error);
+      console.error(`Cache delete error for key ${key}:`, error)
     }
   }
 
@@ -94,12 +94,12 @@ export class CacheService {
    */
   async deletePattern(pattern: string): Promise<void> {
     try {
-      const keys = await redis.keys(pattern);
+      const keys = await redis.keys(pattern)
       if (keys.length > 0) {
-        await redis.del(...keys);
+        await redis.del(...keys)
       }
     } catch (error) {
-      console.error(`Cache delete pattern error for ${pattern}:`, error);
+      console.error(`Cache delete pattern error for ${pattern}:`, error)
     }
   }
 
@@ -111,9 +111,9 @@ export class CacheService {
   async invalidateByTag(tag: string): Promise<void> {
     try {
       // Use pattern deletion as workaround
-      await this.deletePattern(`*:${tag}:*`);
+      await this.deletePattern(`*:${tag}:*`)
     } catch (error) {
-      console.error(`Cache invalidate by tag error for ${tag}:`, error);
+      console.error(`Cache invalidate by tag error for ${tag}:`, error)
     }
   }
 
@@ -122,9 +122,9 @@ export class CacheService {
    */
   async clear(): Promise<void> {
     try {
-      await (redis as any).flushdatabase();
+      await (redis as any).flushdatabase()
     } catch (error) {
-      console.error("Cache clear error:", error);
+      console.error("Cache clear error:", error)
     }
   }
 
@@ -133,15 +133,15 @@ export class CacheService {
    */
   async getOrSet<T>(key: string, fn: () => Promise<T>, options?: CacheOptions): Promise<T> {
     // Try to get from cache
-    const cached = await this.get<T>(key);
+    const cached = await this.get<T>(key)
     if (cached !== null) {
-      return cached;
+      return cached
     }
 
     // Execute function and cache result
-    const value = await fn();
-    await this.set(key, value, options);
-    return value;
+    const value = await fn()
+    await this.set(key, value, options)
+    return value
   }
 
   /**
@@ -149,11 +149,11 @@ export class CacheService {
    */
   async exists(key: string): Promise<boolean> {
     try {
-      const result = await redis.exists(key);
-      return result === 1;
+      const result = await redis.exists(key)
+      return result === 1
     } catch (error) {
-      console.error(`Cache exists error for key ${key}:`, error);
-      return false;
+      console.error(`Cache exists error for key ${key}:`, error)
+      return false
     }
   }
 
@@ -162,10 +162,10 @@ export class CacheService {
    */
   async ttl(key: string): Promise<number> {
     try {
-      return await redis.ttl(key);
+      return await redis.ttl(key)
     } catch (error) {
-      console.error(`Cache TTL error for key ${key}:`, error);
-      return -1;
+      console.error(`Cache TTL error for key ${key}:`, error)
+      return -1
     }
   }
 
@@ -174,13 +174,13 @@ export class CacheService {
    */
   async increment(key: string, amount: number = 1): Promise<number> {
     try {
-      const current = await redis.get<number>(key);
-      const newValue = (current || 0) + amount;
-      await redis.set(key, newValue);
-      return newValue;
+      const current = await redis.get<number>(key)
+      const newValue = (current || 0) + amount
+      await redis.set(key, newValue)
+      return newValue
     } catch (error) {
-      console.error(`Cache increment error for key ${key}:`, error);
-      return 0;
+      console.error(`Cache increment error for key ${key}:`, error)
+      return 0
     }
   }
 
@@ -189,19 +189,19 @@ export class CacheService {
    */
   async decrement(key: string, amount: number = 1): Promise<number> {
     try {
-      const current = await redis.get<number>(key);
-      const newValue = (current || 0) - amount;
-      await redis.set(key, newValue);
-      return newValue;
+      const current = await redis.get<number>(key)
+      const newValue = (current || 0) - amount
+      await redis.set(key, newValue)
+      return newValue
     } catch (error) {
-      console.error(`Cache decrement error for key ${key}:`, error);
-      return 0;
+      console.error(`Cache decrement error for key ${key}:`, error)
+      return 0
     }
   }
 }
 
 // Export singleton instance
-export const cacheService = new CacheService();
+export const cacheService = new CacheService()
 
 // Cache key builders
 export const cacheKeys = {
@@ -246,7 +246,7 @@ export const cacheKeys = {
   // Reading Progress
   userReadingProgress: (userId: string, comicId: number) => `reading:${userId}:${comicId}`,
   userReadingHistory: (userId: string) => `reading:history:${userId}`,
-};
+}
 
 // Cache TTL constants (in seconds)
 export const cacheTTL = {
@@ -255,4 +255,4 @@ export const cacheTTL = {
   LONG: 3600, // 1 hour
   VERY_LONG: 86400, // 24 hours
   WEEK: 604800, // 7 days
-};
+}

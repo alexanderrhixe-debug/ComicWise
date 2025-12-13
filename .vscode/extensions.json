@@ -1,5 +1,13 @@
 {
   "recommendations": [
+    "stateful.runme",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "eamodio.gitlens",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode.vscode-typescript-next",
+    "orta.vscode-jest",
     // Essential Code Quality & Formatting
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
@@ -66,6 +74,7 @@
   "unwantedRecommendations": [
     "hookyqr.beautify",
     "dbaeumer.jshint",
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "visualstudioexptteam.vscodeintellicode"
   ]
 }

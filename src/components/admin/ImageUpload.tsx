@@ -2,26 +2,26 @@
 // IMAGE UPLOAD COMPONENT - Reusable Image Upload with Preview
 // ═══════════════════════════════════════════════════
 
-"use client";
+"use client"
 
-import { useImageUpload } from "hooks/useImageUpload";
-import { Loader2, Upload, X } from "lucide-react";
-import Image from "next/image";
-import { Button } from "ui/button";
-import { cn } from "utils";
+import { useImageUpload } from "hooks/useImageUpload"
+import { Loader2, Upload, X } from "lucide-react"
+import Image from "next/image"
+import { Button } from "ui/button"
+import { cn } from "utils"
 
 interface ImageUploadProps {
-  value?: string;
-  onChange?: (url: string) => void;
-  onRemove?: (url?: string) => void;
-  onUploadComplete?: (url: string) => void;
-  disabled?: boolean;
-  className?: string;
-  label?: string;
-  accept?: string;
-  maxSize?: number; // in MB
-  type?: "comic" | "chapter" | "avatar" | "other";
-  uploadType?: "comic" | "chapter" | "avatar" | "other";
+  value?: string
+  onChange?: (url: string) => void
+  onRemove?: (url?: string) => void
+  onUploadComplete?: (url: string) => void
+  disabled?: boolean
+  className?: string
+  label?: string
+  accept?: string
+  maxSize?: number // in MB
+  type?: "comic" | "chapter" | "avatar" | "other"
+  uploadType?: "comic" | "chapter" | "avatar" | "other"
 }
 
 export function ImageUpload({
@@ -42,15 +42,15 @@ export function ImageUpload({
     uploadType: uploadType || type,
     onChange,
     onUploadComplete,
-  });
+  })
 
   const handleRemove = () => {
     if (onRemove) {
-      onRemove(value);
+      onRemove(value)
     } else if (onChange) {
-      onChange("");
+      onChange("")
     }
-  };
+  }
   return (
     <div className={cn("space-y-4", className)}>
       {value ? (
@@ -93,7 +93,7 @@ export function ImageUpload({
           onClick={() => !disabled && fileInputRef.current?.click()}
           onKeyDown={(e) => {
             if (!disabled && (e.key === "Enter" || e.key === " ")) {
-              fileInputRef.current?.click();
+              fileInputRef.current?.click()
             }
           }}
         >
@@ -132,5 +132,5 @@ export function ImageUpload({
         <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>
       )}
     </div>
-  );
+  )
 }

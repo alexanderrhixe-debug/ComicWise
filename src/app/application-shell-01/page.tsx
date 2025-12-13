@@ -17,9 +17,9 @@ import {
   TwitterIcon,
   Undo2Icon,
   UsersIcon,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -27,10 +27,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "components/ui/breadcrumb";
-import { Button } from "components/ui/button";
-import { Card, CardContent } from "components/ui/card";
-import { Separator } from "components/ui/separator";
+} from "components/ui/breadcrumb"
+import { Button } from "components/ui/button"
+import { Card, CardContent } from "components/ui/card"
+import { Separator } from "components/ui/separator"
 import {
   Sidebar,
   SidebarContent,
@@ -43,11 +43,11 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "components/ui/sidebar";
+} from "components/ui/sidebar"
 
-import CurrentYear from "@/components/CurrentYear";
-import LanguageDropdown from "components/shadcn-studio/blocks/dropdown-language";
-import ProfileDropdown from "components/shadcn-studio/blocks/dropdown-profile";
+import CurrentYear from "@/components/CurrentYear"
+import LanguageDropdown from "components/shadcn-studio/blocks/dropdown-language"
+import ProfileDropdown from "components/shadcn-studio/blocks/dropdown-profile"
 
 const ApplicationShell = () => {
   return (
@@ -269,7 +269,7 @@ const ApplicationShell = () => {
         </div>
       </SidebarProvider>
     </div>
-  );
-};
+  )
+}
 
-export default ApplicationShell;
+export default ApplicationShell

@@ -2,13 +2,13 @@
 // PRETTIER CONFIGURATION (Next.js 16 Best Practices)
 // ═══════════════════════════════════════════════════
 
-import type { Config } from "prettier";
+import type { Config } from "prettier"
 
 const config: Config = {
   // ═══════════════════════════════════════════════════
   // Core Formatting Options
   // ═══════════════════════════════════════════════════
-  semi: true,
+  semi: false,
   trailingComma: "es5",
   singleQuote: false,
   printWidth: 100,
@@ -47,6 +47,6 @@ const config: Config = {
   // Ignore Patterns
   // ═══════════════════════════════════════════════════
   // Note: Use .prettierignore file for complex patterns
-};
+}
 
-export default config;
+export default config

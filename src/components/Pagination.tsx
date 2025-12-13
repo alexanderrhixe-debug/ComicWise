@@ -1,38 +1,38 @@
-"use client";
+"use client"
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Button } from "ui/button"
 
 interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  baseUrl?: string;
+  currentPage: number
+  totalPages: number
+  baseUrl?: string
 }
 
 export function Pagination({ currentPage, totalPages, baseUrl = "/comics" }: PaginationProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   const createPageUrl = (page: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", page.toString());
-    return `${baseUrl}?${params.toString()}`;
-  };
+    const params = new URLSearchParams(searchParams)
+    params.set("page", page.toString())
+    return `${baseUrl}?${params.toString()}`
+  }
 
   const goToPage = (page: number) => {
-    router.push(createPageUrl(page));
-  };
+    router.push(createPageUrl(page))
+  }
 
   const renderPageNumbers = () => {
-    const pages = [];
-    const maxVisible = 5;
+    const pages = []
+    const maxVisible = 5
 
-    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    const end = Math.min(totalPages, start + maxVisible - 1);
+    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2))
+    const end = Math.min(totalPages, start + maxVisible - 1)
 
     if (end - start < maxVisible - 1) {
-      start = Math.max(1, end - maxVisible + 1);
+      start = Math.max(1, end - maxVisible + 1)
     }
 
     if (start > 1) {
@@ -45,13 +45,13 @@ export function Pagination({ currentPage, totalPages, baseUrl = "/comics" }: Pag
         >
           1
         </Button>
-      );
+      )
       if (start > 2) {
         pages.push(
           <span key="ellipsis-start" className="px-2">
             ...
           </span>
-        );
+        )
       }
     }
 
@@ -65,7 +65,7 @@ export function Pagination({ currentPage, totalPages, baseUrl = "/comics" }: Pag
         >
           {i}
         </Button>
-      );
+      )
     }
 
     if (end < totalPages) {
@@ -74,7 +74,7 @@ export function Pagination({ currentPage, totalPages, baseUrl = "/comics" }: Pag
           <span key="ellipsis-end" className="px-2">
             ...
           </span>
-        );
+        )
       }
       pages.push(
         <Button
@@ -85,14 +85,14 @@ export function Pagination({ currentPage, totalPages, baseUrl = "/comics" }: Pag
         >
           {totalPages}
         </Button>
-      );
+      )
     }
 
-    return pages;
-  };
+    return pages
+  }
 
   if (totalPages <= 1) {
-    return null;
+    return null
   }
 
   return (
@@ -119,5 +119,5 @@ export function Pagination({ currentPage, totalPages, baseUrl = "/comics" }: Pag
         <ChevronRight className="h-4 w-4" />
       </Button>
     </div>
-  );
+  )
 }

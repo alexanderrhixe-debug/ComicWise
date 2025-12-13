@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { EditorContent, useEditor } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
 import {
   Bold,
   Code,
@@ -13,16 +13,16 @@ import {
   Quote,
   Redo,
   Undo,
-} from "lucide-react";
-import { Button } from "ui/button";
-import { cn } from "utils";
+} from "lucide-react"
+import { Button } from "ui/button"
+import { cn } from "utils"
 
 interface RichTextEditorProps {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  className?: string;
-  disabled?: boolean;
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+  className?: string
+  disabled?: boolean
 }
 
 export function RichTextEditor({
@@ -37,17 +37,17 @@ export function RichTextEditor({
     content: value,
     editable: !disabled,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      onChange(editor.getHTML())
     },
     editorProps: {
       attributes: {
         class: "prose prose-sm max-w-none focus:outline-none min-h-[150px] p-4",
       },
     },
-  });
+  })
 
   if (!editor) {
-    return null;
+    return null
   }
 
   return (
@@ -159,5 +159,5 @@ export function RichTextEditor({
       </div>
       <EditorContent editor={editor} />
     </div>
-  );
+  )
 }

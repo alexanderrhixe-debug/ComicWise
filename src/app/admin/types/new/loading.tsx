@@ -1,4 +1,4 @@
-import { Skeleton } from "components/ui/skeleton";
+import { Skeleton } from "components/ui/skeleton"
 
 export default function NewTypeLoading() {
   return (
@@ -11,5 +11,5 @@ export default function NewTypeLoading() {
         <Skeleton className="h-[400px] w-full" />
       </div>
     </div>
-  );
+  )
 }

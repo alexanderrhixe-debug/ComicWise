@@ -167,11 +167,11 @@ interface Activity {
     | "comic_created"
     | "chapter_uploaded"
     | "user_registered"
-    | "comment_posted";
-  description: string;
-  timestamp: Date;
-  user: string;
-  link?: string;
+    | "comment_posted"
+  description: string
+  timestamp: Date
+  user: string
+  link?: string
 }
 
 // Show last 10 activities
@@ -186,7 +186,7 @@ const quickActions = [
   { label: "Create Comic", href: "/admin/comics/new", icon: Plus },
   { label: "Manage Users", href: "/admin/users", icon: Users },
   { label: "View Reports", href: "/admin/reports", icon: FileText },
-];
+]
 ```
 
 #### 2.4 Alerts & Notifications
@@ -386,10 +386,10 @@ interface MultiStepFormProps {
 // Show/hide fields based on other values:
 interface ConditionalField {
   showIf: {
-    field: string;
-    value: unknown;
-  };
-  fields: FormFieldConfig[];
+    field: string
+    value: unknown
+  }
+  fields: FormFieldConfig[]
 }
 
 // Example: Show "End Date" only if status is "Completed"
@@ -428,10 +428,10 @@ interface ConditionalField {
 
 ```typescript
 // Saved filter presets:
--"Ongoing comics" -
+;-"Ongoing comics" -
   "New users this week" -
   "Pending comments" -
-  "Low-rated comics";
+  "Low-rated comics"
 ```
 
 ---
@@ -571,7 +571,7 @@ mkdir -p src/app/admin/genres/new src/app/admin/genres/[id]
 2. **Create list page** (`src/app/admin/genres/page.tsx`):
 
 ```typescript
-import { DataTable } from "@/components/admin/DataTable";
+import { DataTable } from "@/components/admin/DataTable"
 // Fetch genres from API
 // Display in DataTable
 ```
@@ -579,7 +579,7 @@ import { DataTable } from "@/components/admin/DataTable";
 3. **Create form page** (`src/app/admin/genres/new/page.tsx`):
 
 ```typescript
-import { BaseForm } from "@/components/admin/BaseForm";
+import { BaseForm } from "@/components/admin/BaseForm"
 // Define genre schema and fields
 // Handle form submission
 ```

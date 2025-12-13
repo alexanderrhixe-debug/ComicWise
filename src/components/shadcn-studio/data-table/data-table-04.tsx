@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react"
 
-import { SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react"
 
 import type {
   Column,
@@ -10,7 +10,7 @@ import type {
   ColumnFiltersState,
   RowData,
   SortingState,
-} from "@tanstack/react-table";
+} from "@tanstack/react-table"
 import {
   flexRender,
   getCoreRowModel,
@@ -20,34 +20,34 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from "@tanstack/react-table"
 
-import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar";
-import { Badge } from "ui/badge";
-import { Checkbox } from "ui/checkbox";
-import { Input } from "ui/input";
-import { Label } from "ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table";
+import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar"
+import { Badge } from "ui/badge"
+import { Checkbox } from "ui/checkbox"
+import { Input } from "ui/input"
+import { Label } from "ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table"
 
-import { cn } from "utils";
+import { cn } from "utils"
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: "text" | "range" | "select";
+    filterVariant?: "text" | "range" | "select"
   }
 }
 
 type Item = {
-  id: string;
-  product: string;
-  productImage: string;
-  fallback: string;
-  price: number;
-  availability: "In Stock" | "Out of Stock" | "Limited";
-  rating: number;
-};
+  id: string
+  product: string
+  productImage: string
+  fallback: string
+  price: number
+  availability: "In Stock" | "Out of Stock" | "Limited"
+  rating: number
+}
 
 const columns: ColumnDef<Item>[] = [
   {
@@ -95,7 +95,7 @@ const columns: ColumnDef<Item>[] = [
     header: "Availability",
     accessorKey: "availability",
     cell: ({ row }) => {
-      const availability = row.getValue("availability") as string;
+      const availability = row.getValue("availability") as string
 
       const styles = {
         "In Stock":
@@ -104,13 +104,13 @@ const columns: ColumnDef<Item>[] = [
           "bg-destructive/10 [a&]:hover:bg-destructive/5 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-destructive",
         Limited:
           "bg-amber-600/10 text-amber-600 focus-visible:ring-amber-600/20 dark:bg-amber-400/10 dark:text-amber-400 dark:focus-visible:ring-amber-400/40 [a&]:hover:bg-amber-600/5 dark:[a&]:hover:bg-amber-400/5",
-      }[availability];
+      }[availability]
 
       return (
         <Badge className={(cn("border-none focus-visible:outline-none"), styles)}>
           {row.getValue("availability")}
         </Badge>
-      );
+      )
     },
     enableSorting: false,
     meta: {
@@ -125,7 +125,7 @@ const columns: ColumnDef<Item>[] = [
       filterVariant: "range",
     },
   },
-];
+]
 
 const items: Item[] = [
   {
@@ -200,17 +200,17 @@ const items: Item[] = [
     availability: "Out of Stock",
     rating: 2.4,
   },
-];
+]
 
 const DataTableWithColumnFilterDemo = () => {
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
   const [sorting, setSorting] = useState<SortingState>([
     {
       id: "price",
       desc: false,
     },
-  ]);
+  ])
 
   const table = useReactTable({
     data: items,
@@ -228,7 +228,7 @@ const DataTableWithColumnFilterDemo = () => {
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     onSortingChange: setSorting,
     enableSortingRemoval: false,
-  });
+  })
 
   return (
     <div className="w-full">
@@ -258,7 +258,7 @@ const DataTableWithColumnFilterDemo = () => {
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -289,31 +289,31 @@ const DataTableWithColumnFilterDemo = () => {
         Data table with column filter
       </p>
     </div>
-  );
-};
+  )
+}
 
 function Filter({ column }: { column: Column<any, unknown> }) {
-  const id = useId();
-  const columnFilterValue = column.getFilterValue();
-  const { filterVariant } = column.columnDef.meta ?? {};
-  const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
+  const id = useId()
+  const columnFilterValue = column.getFilterValue()
+  const { filterVariant } = column.columnDef.meta ?? {}
+  const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : ""
 
   const sortedUniqueValues = useMemo(() => {
-    if (filterVariant === "range") return [];
+    if (filterVariant === "range") return []
 
-    const values = Array.from(column.getFacetedUniqueValues().keys());
+    const values = Array.from(column.getFacetedUniqueValues().keys())
 
     const flattenedValues = values.reduce((acc: string[], curr) => {
       if (Array.isArray(curr)) {
-        return [...acc, ...curr];
+        return [...acc, ...curr]
       }
 
-      return [...acc, curr];
-    }, []);
+      return [...acc, curr]
+    }, [])
 
-    return Array.from(new Set(flattenedValues)).sort();
+    return Array.from(new Set(flattenedValues)).sort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [column.getFacetedUniqueValues(), filterVariant]);
+  }, [column.getFacetedUniqueValues(), filterVariant])
 
   if (filterVariant === "range") {
     return (
@@ -350,7 +350,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
           />
         </div>
       </div>
-    );
+    )
   }
 
   if (filterVariant === "select") {
@@ -360,7 +360,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
         <Select
           value={columnFilterValue?.toString() ?? "all"}
           onValueChange={(value) => {
-            column.setFilterValue(value === "all" ? undefined : value);
+            column.setFilterValue(value === "all" ? undefined : value)
           }}
         >
           <SelectTrigger id={`${id}-select`} className="w-full">
@@ -376,7 +376,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
           </SelectContent>
         </Select>
       </div>
-    );
+    )
   }
 
   return (
@@ -396,7 +396,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default DataTableWithColumnFilterDemo;
+export default DataTableWithColumnFilterDemo

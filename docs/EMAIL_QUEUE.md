@@ -132,16 +132,16 @@ The workflow system automatically uses direct email sending. To enable queueing,
 update `workflow.ts`:
 
 ```typescript
-import { queueEmail, queueUrgentEmail, queueNormalEmail } from "./queue";
+import { queueEmail, queueUrgentEmail, queueNormalEmail } from "./queue"
 
 // Instead of:
-const result = await sendEmail({ to, subject, html });
+const result = await sendEmail({ to, subject, html })
 
 // Use:
-const result = await queueEmail({ to, subject, html }, priority);
+const result = await queueEmail({ to, subject, html }, priority)
 // Or use convenience functions:
-await queueUrgentEmail({ to, subject, html }); // Priority 0
-await queueNormalEmail({ to, subject, html }); // Priority 5
+await queueUrgentEmail({ to, subject, html }) // Priority 0
+await queueNormalEmail({ to, subject, html }) // Priority 5
 ```
 
 #### Priority Levels
@@ -152,21 +152,21 @@ await queueUrgentEmail({
   to: "user@example.com",
   subject: "Password Reset Request",
   html: "<html>...</html>",
-});
+})
 
 // Normal (Priority 5) - Default priority
 await queueNormalEmail({
   to: "user@example.com",
   subject: "Welcome to ComicWise!",
   html: "<html>...</html>",
-});
+})
 
 // Low Priority (Priority 10) - Lowest priority
 await queueLowPriorityEmail({
   to: "user@example.com",
   subject: "Weekly Newsletter",
   html: "<html>...</html>",
-});
+})
 ```
 
 ## Monitoring
@@ -174,10 +174,10 @@ await queueLowPriorityEmail({
 ### Get Queue Statistics
 
 ```typescript
-import { getQueueStats } from "@/lib/queue";
+import { getQueueStats } from "@/lib/queue"
 
-const stats = await getQueueStats();
-console.log(stats);
+const stats = await getQueueStats()
+console.log(stats)
 /*
 {
   waiting: 12,    // Emails waiting to be processed
@@ -193,13 +193,13 @@ console.log(stats);
 ### Clear Old Jobs
 
 ```typescript
-import { clearCompletedJobs, clearFailedJobs } from "@/lib/queue";
+import { clearCompletedJobs, clearFailedJobs } from "@/lib/queue"
 
 // Clear completed jobs (older than retention period)
-await clearCompletedJobs();
+await clearCompletedJobs()
 
 // Clear failed jobs (after debugging)
-await clearFailedJobs();
+await clearFailedJobs()
 ```
 
 ## Production Deployment
@@ -245,7 +245,7 @@ const emailWorker = new Worker(
     connection,
     concurrency: 10, // Process 10 emails concurrently
   }
-);
+)
 ```
 
 Or run separate worker processes:
@@ -296,20 +296,20 @@ pnpm add @bull-board/api @bull-board/ui @bull-board/express
 Create `src/app/api/admin/queue/route.ts`:
 
 ```typescript
-import { createBullBoard } from "@bull-board/api";
-import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
-import { ExpressAdapter } from "@bull-board/express";
-import { emailQueue } from "@/lib/queue";
+import { createBullBoard } from "@bull-board/api"
+import { BullMQAdapter } from "@bull-board/api/bullMQAdapter"
+import { ExpressAdapter } from "@bull-board/express"
+import { emailQueue } from "@/lib/queue"
 
-const serverAdapter = new ExpressAdapter();
-serverAdapter.setBasePath("/api/admin/queue");
+const serverAdapter = new ExpressAdapter()
+serverAdapter.setBasePath("/api/admin/queue")
 
 createBullBoard({
   queues: [new BullMQAdapter(emailQueue)],
   serverAdapter,
-});
+})
 
-export { serverAdapter };
+export { serverAdapter }
 ```
 
 Access at: `http://localhost:3000/api/admin/queue`
@@ -321,23 +321,23 @@ Access at: `http://localhost:3000/api/admin/queue`
 Create `src/tests/queue.test.ts`:
 
 ```typescript
-import { queueEmail, getQueueStats } from "@/lib/queue";
+import { queueEmail, getQueueStats } from "@/lib/queue"
 
 // Test email queueing
 const result = await queueEmail({
   to: "test@example.com",
   subject: "Test Email",
   html: "<p>This is a test</p>",
-});
+})
 
-console.log("Job ID:", result.jobId);
+console.log("Job ID:", result.jobId)
 
 // Wait a few seconds for processing
-await new Promise((resolve) => setTimeout(resolve, 5000));
+await new Promise((resolve) => setTimeout(resolve, 5000))
 
 // Check stats
-const stats = await getQueueStats();
-console.log("Queue Stats:", stats);
+const stats = await getQueueStats()
+console.log("Queue Stats:", stats)
 ```
 
 Run: `tsx src/tests/queue.test.ts`

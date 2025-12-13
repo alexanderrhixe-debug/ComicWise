@@ -2,32 +2,78 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "pnpm: dev",
+      "label": "dev",
       "type": "shell",
       "command": "pnpm dev",
-      "group": "build",
-      "presentation": { "reveal": "always" }
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
     },
     {
-      "label": "pnpm: build",
+      "label": "build",
       "type": "shell",
       "command": "pnpm build",
       "group": "build",
-      "presentation": { "reveal": "always" }
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
     },
     {
-      "label": "pnpm: lint",
+      "label": "lint",
       "type": "shell",
-      "command": "pnpm lint",
+      "command": "pnpm lint -- --fix",
       "group": "test",
-      "presentation": { "reveal": "always" }
+      "presentation": { "reveal": "silent" },
+      "problemMatcher": ["$eslint-stylish"]
     },
     {
-      "label": "pnpm: type-check",
+      "label": "type-check",
       "type": "shell",
       "command": "pnpm type-check",
       "group": "test",
-      "presentation": { "reveal": "always" }
+      "presentation": { "reveal": "silent" },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "pnpm test",
+      "group": "test",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "format",
+      "type": "shell",
+      "command": "pnpm format",
+      "presentation": { "reveal": "silent" },
+      "problemMatcher": []
+    },
+    {
+      "label": "ops:refactor",
+      "type": "shell",
+      "command": ".\\scripts\\ops.ps1 -Task refactor",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "ops:full-pipeline",
+      "type": "shell",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -Command \"Write-Host 'Running ops:full (creates transcript log)'; $ok = Read-Host 'Proceed with full ops pipeline? (y/N)'; if ($ok -eq 'y') { $log = Join-Path $PWD 'logs' ; if (-not (Test-Path $log)) { New-Item -ItemType Directory -Path $log | Out-Null } ; $ts = (Get-Date).ToString('yyyyMMdd-HHmmss') ; Start-Transcript -Path (Join-Path $log \"ops-full-$ts.log\") ; .\\scripts\\ops.ps1 -Task full ; Stop-Transcript } else { Write-Host 'Aborting ops:full' }\"",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "codemod:dry",
+      "type": "shell",
+      "command": "npx jscodeshift -t scripts/codemods/replace-upload-with-hook.jscodeshift.js --extensions=ts,tsx src --dry --print",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "codemod:apply",
+      "type": "shell",
+      "command": "npx jscodeshift -t scripts/codemods/replace-upload-with-hook.jscodeshift.js --extensions=ts,tsx src",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
     }
   ]
 }

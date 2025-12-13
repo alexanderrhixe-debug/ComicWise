@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { MoreHorizontal, Pencil, Trash } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { Button } from "ui/button";
+import { MoreHorizontal, Pencil, Trash } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
+import { Button } from "ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,31 +11,31 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "ui/dropdown-menu";
-import { Input } from "ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table";
+} from "ui/dropdown-menu"
+import { Input } from "ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table"
 
 interface Column {
-  accessorKey: string;
-  header: string;
+  accessorKey: string
+  header: string
 }
 
 interface DataTableProps {
-  columns: Column[];
+  columns: Column[]
 
-  data: any[];
-  onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
+  data: any[]
+  onEdit?: (id: number) => void
+  onDelete?: (id: number) => void
 }
 
 export function DataTable({ columns, data, onDelete }: DataTableProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("")
 
   const filteredData = data.filter((item) =>
     Object.values(item).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
-  );
+  )
 
   return (
     <div className="space-y-4">
@@ -105,5 +105,5 @@ export function DataTable({ columns, data, onDelete }: DataTableProps) {
         </Table>
       </div>
     </div>
-  );
+  )
 }

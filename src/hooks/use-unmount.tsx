@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
 /**
  * A React hook that runs a cleanup function when the component unmounts.
@@ -21,20 +21,20 @@ import * as React from "react";
  */
 export function useUnmount(fn: () => void): void {
   if (typeof fn !== "function") {
-    throw new Error("useUnmount expects a function as argument");
+    throw new Error("useUnmount expects a function as argument")
   }
 
-  const fnRef = React.useRef(fn);
+  const fnRef = React.useRef(fn)
 
   React.useEffect(() => {
     // Keep the function reference up to date — update reference after render
-    fnRef.current = fn;
-  }, [fn]);
+    fnRef.current = fn
+  }, [fn])
 
   React.useEffect(() => {
     // Return the cleanup function that will be called on unmount
     return () => {
-      fnRef.current();
-    };
-  }, []);
+      fnRef.current()
+    }
+  }, [])
 }

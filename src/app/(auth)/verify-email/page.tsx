@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
 // ═══════════════════════════════════════════════════
 // VERIFY EMAIL PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { verifyEmailAction } from "actions/auth/index";
-import { Button } from "components/ui/button";
+import { verifyEmailAction } from "actions/auth/index"
+import { Button } from "components/ui/button"
 import {
   Card,
   CardContent,
@@ -13,45 +13,45 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "components/ui/card";
-import { CheckCircle2, Loader2, XCircle } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+} from "components/ui/card"
+import { CheckCircle2, Loader2, XCircle } from "lucide-react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { Suspense, useEffect, useState } from "react"
 
 function VerifyEmailContent() {
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const [errorMessage, setErrorMessage] = useState("");
-  const searchParams = useSearchParams();
+  const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
+  const [errorMessage, setErrorMessage] = useState("")
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const verifyEmail = async () => {
-      const token = searchParams.get("token");
+      const token = searchParams.get("token")
 
       if (!token) {
-        setStatus("error");
-        setErrorMessage("Invalid verification link. Please check your email and try again.");
-        return;
+        setStatus("error")
+        setErrorMessage("Invalid verification link. Please check your email and try again.")
+        return
       }
 
       try {
-        const result = await verifyEmailAction({ token });
+        const result = await verifyEmailAction({ token })
 
         if (!result.success) {
-          setStatus("error");
-          setErrorMessage(result.error || "Verification failed");
+          setStatus("error")
+          setErrorMessage(result.error || "Verification failed")
         } else {
-          setStatus("success");
+          setStatus("success")
         }
       } catch (err) {
-        console.error("Email verification error:", err);
-        setStatus("error");
-        setErrorMessage("An unexpected error occurred. Please try again.");
+        console.error("Email verification error:", err)
+        setStatus("error")
+        setErrorMessage("An unexpected error occurred. Please try again.")
       }
-    };
+    }
 
-    verifyEmail();
-  }, [searchParams]);
+    verifyEmail()
+  }, [searchParams])
 
   if (status === "loading") {
     return (
@@ -64,7 +64,7 @@ function VerifyEmailContent() {
           <CardDescription>Please wait while we verify your email address...</CardDescription>
         </CardHeader>
       </Card>
-    );
+    )
   }
 
   if (status === "error") {
@@ -92,7 +92,7 @@ function VerifyEmailContent() {
           </Link>
         </CardFooter>
       </Card>
-    );
+    )
   }
 
   return (
@@ -125,7 +125,7 @@ function VerifyEmailContent() {
         </Link>
       </CardFooter>
     </Card>
-  );
+  )
 }
 
 export default function VerifyEmailPage() {
@@ -142,5 +142,5 @@ export default function VerifyEmailPage() {
     >
       <VerifyEmailContent />
     </Suspense>
-  );
+  )
 }

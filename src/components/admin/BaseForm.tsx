@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-import { useForm, type UseFormReturn } from "react-hook-form";
-import { toast } from "sonner";
-import { Button } from "ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2 } from "lucide-react"
+import { useForm, type UseFormReturn } from "react-hook-form"
+import { toast } from "sonner"
+import { Button } from "ui/button"
 import {
   Form,
   FormControl,
@@ -13,13 +13,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "ui/form";
-import { Input } from "ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select";
-import { Switch } from "ui/switch";
-import { Textarea } from "ui/textarea";
+} from "ui/form"
+import { Input } from "ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select"
+import { Switch } from "ui/switch"
+import { Textarea } from "ui/textarea"
 
-import type { z } from "zod";
+import type { z } from "zod"
 
 export type FieldType =
   | "text"
@@ -30,27 +30,27 @@ export type FieldType =
   | "select"
   | "switch"
   | "date"
-  | "file";
+  | "file"
 
 export interface FormFieldConfig<T extends z.ZodType<any>> {
-  name: keyof z.infer<T>;
-  label: string;
-  type: FieldType;
-  placeholder?: string;
-  description?: string;
-  options?: { label: string; value: string }[];
-  disabled?: boolean;
-  required?: boolean;
+  name: keyof z.infer<T>
+  label: string
+  type: FieldType
+  placeholder?: string
+  description?: string
+  options?: { label: string; value: string }[]
+  disabled?: boolean
+  required?: boolean
 }
 
 interface BaseFormProps<T extends z.ZodType<any>> {
-  schema: T;
-  fields: FormFieldConfig<T>[];
-  defaultValues: Partial<z.infer<T>>;
-  onSubmit: (values: z.infer<T>) => Promise<void>;
-  submitLabel?: string;
-  isLoading?: boolean;
-  className?: string;
+  schema: T
+  fields: FormFieldConfig<T>[]
+  defaultValues: Partial<z.infer<T>>
+  onSubmit: (values: z.infer<T>) => Promise<void>
+  submitLabel?: string
+  isLoading?: boolean
+  className?: string
 }
 
 export function BaseForm<T extends z.ZodType<any>>({
@@ -62,26 +62,26 @@ export function BaseForm<T extends z.ZodType<any>>({
   isLoading = false,
   className = "",
 }: BaseFormProps<T>) {
-  type FormValues = z.output<T>;
+  type FormValues = z.output<T>
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema as any) as any,
 
     defaultValues: defaultValues as any,
-  });
+  })
 
   const handleSubmit = async (values: FormValues) => {
     try {
-      await onSubmit(values);
-      toast.success("Submitted successfully");
+      await onSubmit(values)
+      toast.success("Submitted successfully")
     } catch (error) {
-      console.error("Form submission error:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to submit");
+      console.error("Form submission error:", error)
+      toast.error(error instanceof Error ? error.message : "Failed to submit")
     }
-  };
+  }
 
   const renderField = (field: FormFieldConfig<T>, formInstance: UseFormReturn<FormValues>) => {
-    const fieldName = field.name as any;
+    const fieldName = field.name as any
 
     switch (field.type) {
       case "textarea":
@@ -105,7 +105,7 @@ export function BaseForm<T extends z.ZodType<any>>({
               </FormItem>
             )}
           />
-        );
+        )
 
       case "date":
         return (
@@ -139,7 +139,7 @@ export function BaseForm<T extends z.ZodType<any>>({
               </FormItem>
             )}
           />
-        );
+        )
 
       case "switch":
         return (
@@ -163,7 +163,7 @@ export function BaseForm<T extends z.ZodType<any>>({
               </FormItem>
             )}
           />
-        );
+        )
 
       case "number":
         return (
@@ -189,7 +189,7 @@ export function BaseForm<T extends z.ZodType<any>>({
               </FormItem>
             )}
           />
-        );
+        )
 
       default:
         return (
@@ -214,9 +214,9 @@ export function BaseForm<T extends z.ZodType<any>>({
               </FormItem>
             )}
           />
-        );
+        )
     }
-  };
+  }
 
   return (
     <Form {...form}>
@@ -228,5 +228,5 @@ export function BaseForm<T extends z.ZodType<any>>({
         </Button>
       </form>
     </Form>
-  );
+  )
 }

@@ -9,15 +9,15 @@
 // - Security headers
 // ═══════════════════════════════════════════════════
 
-import { auth } from "auth";
-import { NextResponse } from "next/server";
+import { auth } from "auth"
+import { NextResponse } from "next/server"
 
 // ═══════════════════════════════════════════════════
 // ROUTE CONFIGURATION
 // ═══════════════════════════════════════════════════
 
 // Protected routes that require authentication
-const protectedRoutes = ["/admin", "/profile", "/dashboard", "/bookmarks"] as const;
+const protectedRoutes = ["/admin", "/profile", "/dashboard", "/bookmarks"] as const
 
 // Auth routes that should redirect to home if already authenticated
 const authRoutes = [
@@ -26,13 +26,13 @@ const authRoutes = [
   "/(auth)/register",
   "/sign-in",
   "/register",
-] as const;
+] as const
 
 // Admin-only routes
-const adminRoutes = ["/admin"] as const;
+const adminRoutes = ["/admin"] as const
 
 // Public API routes that should bypass auth
-const publicApiRoutes = ["/api/health", "/api/webhooks"] as const;
+const publicApiRoutes = ["/api/health", "/api/webhooks"] as const
 
 // Static assets and Next.js internal routes to skip
 const skipPatterns = [
@@ -42,22 +42,22 @@ const skipPatterns = [
   "/sitemap.xml",
   "/static",
   "/public",
-] as const;
+] as const
 
 // ═══════════════════════════════════════════════════
 // HELPER FUNCTIONS
 // ═══════════════════════════════════════════════════
 
 function shouldSkipMiddleware(pathname: string): boolean {
-  return skipPatterns.some((pattern) => pathname.startsWith(pattern));
+  return skipPatterns.some((pattern) => pathname.startsWith(pattern))
 }
 
 function isPublicApiRoute(pathname: string): boolean {
-  return publicApiRoutes.some((route) => pathname.startsWith(route));
+  return publicApiRoutes.some((route) => pathname.startsWith(route))
 }
 
 function matchRoute(pathname: string, routes: readonly string[]): boolean {
-  return routes.some((route) => pathname.startsWith(route));
+  return routes.some((route) => pathname.startsWith(route))
 }
 
 // ═══════════════════════════════════════════════════
@@ -65,23 +65,23 @@ function matchRoute(pathname: string, routes: readonly string[]): boolean {
 // ═══════════════════════════════════════════════════
 
 export default auth((req: any) => {
-  const { pathname } = req.nextUrl;
-  const isAuthenticated = !!req.auth;
+  const { pathname } = req.nextUrl
+  const isAuthenticated = !!req.auth
 
   // Skip middleware for static assets and Next.js internals
   if (shouldSkipMiddleware(pathname)) {
-    return NextResponse.next();
+    return NextResponse.next()
   }
 
   // Skip middleware for public API routes
   if (isPublicApiRoute(pathname)) {
-    return NextResponse.next();
+    return NextResponse.next()
   }
 
   // Check route types
-  const isProtected = matchRoute(pathname, protectedRoutes);
-  const isAuthRoute = matchRoute(pathname, authRoutes);
-  const isAdminRoute = matchRoute(pathname, adminRoutes);
+  const isProtected = matchRoute(pathname, protectedRoutes)
+  const isAuthRoute = matchRoute(pathname, authRoutes)
+  const isAdminRoute = matchRoute(pathname, adminRoutes)
 
   // ═══════════════════════════════════════════════════
   // Authentication Guards
@@ -89,14 +89,14 @@ export default auth((req: any) => {
 
   // Redirect to sign-in if accessing protected route without session
   if (isProtected && !isAuthenticated) {
-    const signInUrl = new URL("/(auth)/sign-in", req.url);
-    signInUrl.searchParams.set("callbackUrl", encodeURIComponent(pathname));
-    return NextResponse.redirect(signInUrl);
+    const signInUrl = new URL("/(auth)/sign-in", req.url)
+    signInUrl.searchParams.set("callbackUrl", encodeURIComponent(pathname))
+    return NextResponse.redirect(signInUrl)
   }
 
   // Redirect to home if accessing auth route with active session
   if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/", req.url))
   }
 
   // ═══════════════════════════════════════════════════
@@ -104,11 +104,11 @@ export default auth((req: any) => {
   // ═══════════════════════════════════════════════════
 
   if (isAdminRoute) {
-    const userRole = req.auth?.user?.role as string | undefined;
+    const userRole = req.auth?.user?.role as string | undefined
 
     // Allow admin and moderator roles
     if (userRole !== "admin" && userRole !== "moderator") {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/", req.url))
     }
   }
 
@@ -116,19 +116,19 @@ export default auth((req: any) => {
   // Security Headers (Next.js 16 Best Practices)
   // ═══════════════════════════════════════════════════
 
-  const response = NextResponse.next();
+  const response = NextResponse.next()
 
   // Add security headers
-  response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("X-Frame-Options", "DENY")
+  response.headers.set("X-Content-Type-Options", "nosniff")
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin")
   response.headers.set(
     "Permissions-Policy",
     "camera=(), microphone=(), geolocation=(), interest-cohort=()"
-  );
+  )
 
-  return response;
-});
+  return response
+})
 
 // ═══════════════════════════════════════════════════
 // MIDDLEWARE CONFIGURATION (Next.js 16.0.7)
@@ -146,4 +146,4 @@ export const config = {
      */
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot)$).*)",
   ],
-};
+}

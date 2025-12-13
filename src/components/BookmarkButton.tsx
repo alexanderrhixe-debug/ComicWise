@@ -1,43 +1,43 @@
-"use client";
+"use client"
 
-import { Bookmark, BookmarkCheck } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useBookmarkStore } from "stores/bookmark.store";
-import { Button } from "ui/button";
+import { Bookmark, BookmarkCheck } from "lucide-react"
+import { useState } from "react"
+import { toast } from "sonner"
+import { useBookmarkStore } from "stores/bookmark.store"
+import { Button } from "ui/button"
 
 interface BookmarkButtonProps {
-  comicId: number;
-  chapterId?: number;
-  onToggle?: (isBookmarked: boolean) => void;
+  comicId: number
+  chapterId?: number
+  onToggle?: (isBookmarked: boolean) => void
 }
 
 export function BookmarkButton({ comicId, onToggle }: Omit<BookmarkButtonProps, "chapterId">) {
-  const { isBookmarked, addBookmark, removeBookmark } = useBookmarkStore();
-  const [isLoading, setIsLoading] = useState(false);
-  const bookmarked = isBookmarked(comicId);
+  const { isBookmarked, addBookmark, removeBookmark } = useBookmarkStore()
+  const [isLoading, setIsLoading] = useState(false)
+  const bookmarked = isBookmarked(comicId)
 
   async function handleToggle() {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
       if (bookmarked) {
-        removeBookmark(comicId);
-        toast.success("Removed from bookmarks");
+        removeBookmark(comicId)
+        toast.success("Removed from bookmarks")
       } else {
-        addBookmark(comicId);
-        toast.success("Added to bookmarks");
+        addBookmark(comicId)
+        toast.success("Added to bookmarks")
       }
-      onToggle?.(!bookmarked);
+      onToggle?.(!bookmarked)
     } catch {
-      toast.error("Failed to update bookmark");
+      toast.error("Failed to update bookmark")
       if (bookmarked) {
-        addBookmark(comicId);
+        addBookmark(comicId)
       } else {
-        removeBookmark(comicId);
+        removeBookmark(comicId)
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
@@ -55,5 +55,5 @@ export function BookmarkButton({ comicId, onToggle }: Omit<BookmarkButtonProps, 
       )}
       {bookmarked ? "Bookmarked" : "Bookmark"}
     </Button>
-  );
+  )
 }

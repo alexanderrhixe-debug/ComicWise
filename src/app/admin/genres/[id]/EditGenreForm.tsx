@@ -1,39 +1,39 @@
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import { deleteGenre, updateGenre } from "lib/actions/genres";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { deleteGenre, updateGenre } from "lib/actions/genres"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export default async function EditGenreForm({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+  const id = Number(params.id)
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/genres/${id}`, {
     cache: "no-store",
-  });
+  })
   if (!res.ok) {
-    redirect("/admin/genres");
+    redirect("/admin/genres")
   }
 
-  const genre = await res.json();
+  const genre = await res.json()
 
   async function handleUpdate(formData: FormData) {
-    const result = await updateGenre(id, formData);
+    const result = await updateGenre(id, formData)
     if (result.success) {
-      revalidatePath("/admin/genres");
-      redirect("/admin/genres");
+      revalidatePath("/admin/genres")
+      redirect("/admin/genres")
     }
-    throw new Error(result.error || "Failed to update genre");
+    throw new Error(result.error || "Failed to update genre")
   }
 
   async function handleDelete() {
-    const result = await deleteGenre(id);
+    const result = await deleteGenre(id)
     if (result.success) {
-      revalidatePath("/admin/genres");
-      redirect("/admin/genres");
+      revalidatePath("/admin/genres")
+      redirect("/admin/genres")
     }
-    throw new Error(result.error || "Failed to delete genre");
+    throw new Error(result.error || "Failed to delete genre")
   }
 
   return (
@@ -96,5 +96,5 @@ export default async function EditGenreForm({ params }: { params: { id: string }
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

@@ -1,29 +1,29 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
-import { Input } from "components/ui/input";
-import { Textarea } from "components/ui/textarea";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form"
+import { Input } from "components/ui/input"
+import { Textarea } from "components/ui/textarea"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
 
 const typeSchema = z
   .object({
     name: z.string().min(1, "Name is required").max(100),
     description: z.string().optional(),
   })
-  .strict();
+  .strict()
 
-type TypeFormValues = z.infer<typeof typeSchema>;
+type TypeFormValues = z.infer<typeof typeSchema>
 
 export default function NewTypePage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<TypeFormValues>({
     resolver: zodResolver(typeSchema),
@@ -31,30 +31,30 @@ export default function NewTypePage() {
       name: "",
       description: "",
     },
-  });
+  })
 
   async function onSubmit(data: TypeFormValues) {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
       const response = await fetch("/api/types", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      });
+      })
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create type");
+        const error = await response.json()
+        throw new Error(error.error || "Failed to create type")
       }
 
-      toast.success("Type created successfully");
-      router.push("/admin/types");
-      router.refresh();
+      toast.success("Type created successfully")
+      router.push("/admin/types")
+      router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create type");
+      toast.error(error instanceof Error ? error.message : "Failed to create type")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
@@ -123,5 +123,5 @@ export default function NewTypePage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

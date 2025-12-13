@@ -1,23 +1,23 @@
-"use server";
+"use server"
 
-import { error } from "actions/utils";
-import { appConfig, checkRateLimit } from "appConfig";
-import * as mutations from "database/mutations";
-import { revalidatePath } from "next/cache";
-import type { ActionResponse } from "src/types";
-import z from "zod";
+import { error } from "actions/utils"
+import { appConfig, checkRateLimit } from "appConfig"
+import * as mutations from "database/mutations"
+import { revalidatePath } from "next/cache"
+import type { ActionResponse } from "src/types"
+import z from "zod"
 const commentSchema = z
   .object({
     content: z.string().min(1, "Comment cannot be empty").max(1000, "Comment too long"),
     chapterId: z.coerce.number().int().positive(),
   })
-  .strict();
+  .strict()
 
 const updateCommentSchema = z
   .object({
     content: z.string().min(1, "Comment cannot be empty").max(1000, "Comment too long"),
   })
-  .strict();
+  .strict()
 
 export async function createComment(
   userId: string,
@@ -25,32 +25,32 @@ export async function createComment(
 ): Promise<ActionResponse<{ id: number }>> {
   try {
     // Rate limiting
-    const rateLimit = checkRateLimit(`comment:${userId}`, appConfig.rateLimit.default);
+    const rateLimit = checkRateLimit(`comment:${userId}`, appConfig.rateLimit.default)
     if (!rateLimit.allowed) {
-      return error("Too many comments. Please try again later.");
+      return error("Too many comments. Please try again later.")
     }
 
     const data = commentSchema.parse({
       content: formData.get("content"),
       chapterId: formData.get("chapterId"),
-    });
+    })
 
     const comment = await mutations.createComment({
       ...data,
       userId,
-    });
+    })
     if (!comment) {
-      return error("Failed to create comment");
+      return error("Failed to create comment")
     }
 
-    revalidatePath(`/comics/[id]/chapters/[chapterId]`);
-    return { success: true, data: { id: comment.id } };
+    revalidatePath(`/comics/[id]/chapters/[chapterId]`)
+    return { success: true, data: { id: comment.id } }
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return error(err.issues[0]?.message || "Validation error");
+      return error(err.issues[0]?.message || "Validation error")
     }
-    console.error("Create comment error:", err);
-    return error("Failed to create comment");
+    console.error("Create comment error:", err)
+    return error("Failed to create comment")
   }
 }
 
@@ -61,29 +61,29 @@ export async function updateComment(
   try {
     const data = updateCommentSchema.parse({
       content: formData.get("content"),
-    });
+    })
 
-    await mutations.updateComment(commentId, data);
-    revalidatePath(`/comics/[id]/chapters/[chapterId]`);
+    await mutations.updateComment(commentId, data)
+    revalidatePath(`/comics/[id]/chapters/[chapterId]`)
 
-    return { success: true };
+    return { success: true }
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return error(err.issues[0]?.message || "Validation error");
+      return error(err.issues[0]?.message || "Validation error")
     }
-    console.error("Update comment error:", err);
-    return error("Failed to update comment");
+    console.error("Update comment error:", err)
+    return error("Failed to update comment")
   }
 }
 
 export async function deleteComment(commentId: number): Promise<ActionResponse> {
   try {
-    await mutations.deleteComment(commentId);
-    revalidatePath(`/comics/[id]/chapters/[chapterId]`);
+    await mutations.deleteComment(commentId)
+    revalidatePath(`/comics/[id]/chapters/[chapterId]`)
 
-    return { success: true };
+    return { success: true }
   } catch (err) {
-    console.error("Delete comment error:", err);
-    return error("Failed to delete comment");
+    console.error("Delete comment error:", err)
+    return error("Failed to delete comment")
   }
 }

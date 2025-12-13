@@ -9,17 +9,17 @@ import {
   Preview,
   Section,
   Text,
-} from "@react-email/components";
-import { appConfig } from "appConfig";
+} from "@react-email/components"
+import { appConfig } from "appConfig"
 
 interface PasswordResetEmailProps {
-  name: string;
-  email: string;
-  token: string;
+  name: string
+  email: string
+  token: string
 }
 
 export default function PasswordResetEmail({ name, email, token }: PasswordResetEmailProps) {
-  const resetUrl = `${appConfig.url}/reset-password?token=${token}`;
+  const resetUrl = `${appConfig.url}/reset-password?token=${token}`
 
   return (
     <Html>
@@ -78,13 +78,13 @@ export default function PasswordResetEmail({ name, email, token }: PasswordReset
         </Container>
       </Body>
     </Html>
-  );
+  )
 }
 
 const main = {
   backgroundColor: "#f6f9fc",
   fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',
-};
+}
 
 const container = {
   backgroundColor: "#ffffff",
@@ -92,12 +92,12 @@ const container = {
   padding: "20px 0 48px",
   marginBottom: "64px",
   maxWidth: "600px",
-};
+}
 
 const header = {
   padding: "32px 24px",
   textAlign: "center" as const,
-};
+}
 
 const h1 = {
   color: "#1f2937",
@@ -105,23 +105,23 @@ const h1 = {
   fontWeight: "bold",
   margin: "0",
   padding: "0",
-};
+}
 
 const content = {
   padding: "0 48px",
-};
+}
 
 const paragraph = {
   color: "#374151",
   fontSize: "16px",
   lineHeight: "26px",
   margin: "16px 0",
-};
+}
 
 const buttonContainer = {
   textAlign: "center" as const,
   margin: "32px 0",
-};
+}
 
 const button = {
   backgroundColor: "#ef4444",
@@ -133,7 +133,7 @@ const button = {
   textAlign: "center" as const,
   display: "inline-block",
   padding: "12px 32px",
-};
+}
 
 const note = {
   backgroundColor: "#f3f4f6",
@@ -144,7 +144,7 @@ const note = {
   lineHeight: "22px",
   padding: "16px",
   margin: "24px 0",
-};
+}
 
 const warningBox = {
   backgroundColor: "#fef2f2",
@@ -152,37 +152,37 @@ const warningBox = {
   borderRadius: "6px",
   padding: "16px",
   margin: "24px 0",
-};
+}
 
 const warningTitle = {
   color: "#991b1b",
   fontSize: "14px",
   fontWeight: "bold",
   margin: "0 0 8px 0",
-};
+}
 
 const warningText = {
   color: "#7f1d1d",
   fontSize: "14px",
   lineHeight: "22px",
   margin: "0",
-};
+}
 
 const footerSection = {
   borderTop: "1px solid #e5e7eb",
   marginTop: "32px",
   padding: "24px 48px",
-};
+}
 
 const footerText = {
   color: "#9ca3af",
   fontSize: "12px",
   lineHeight: "20px",
   textAlign: "center" as const,
-};
+}
 
 const link = {
   color: "#3b82f6",
   textDecoration: "underline",
   wordBreak: "break-all" as const,
-};
+}

@@ -1,16 +1,16 @@
-import { env, isDevelopment } from "appConfig";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { env, isDevelopment } from "appConfig"
+import { drizzle } from "drizzle-orm/postgres-js"
+import postgres from "postgres"
 
 if (!env.DATABASE_URL) {
-  console.warn("DATABASE_URL not set — database connections may fail in runtime.");
+  console.warn("DATABASE_URL not set — database connections may fail in runtime.")
 }
 
 // Using node-postgres replacement 'postgres' (postgres-js client)
 export const sql = postgres(env.DATABASE_URL ?? "", {
   host: undefined,
   max: 10,
-});
+})
 
 // ═══════════════════════════════════════════════════
 // DATABASE CLIENT (Next.js 16.0.7 Optimized)
@@ -23,9 +23,9 @@ export const sql = postgres(env.DATABASE_URL ?? "", {
 // - Connection caching for serverless environments
 // ═══════════════════════════════════════════════════
 
-import * as schema from "database/schema";
+import * as schema from "database/schema"
 
-import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import type { PostgresJsDatabase } from "drizzle-orm/postgres-js"
 
 // ═══════════════════════════════════════════════════
 // VALIDATION
@@ -34,7 +34,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 if (!env.DATABASE_URL) {
   throw new Error(
     "DATABASE_URL environment variable is not set. Please check your .env.local file."
-  );
+  )
 }
 
 // ═══════════════════════════════════════════════════
@@ -47,30 +47,30 @@ const connectionConfig = {
   connect_timeout: 10, // Connection timeout in seconds
   prepare: false, // Disable prepared statements for serverless
   onnotice: isDevelopment ? undefined : () => {}, // Silence notices in production
-} as const;
+} as const
 
 // ═══════════════════════════════════════════════════
 // CLIENT INITIALIZATION
 // ═══════════════════════════════════════════════════
 
 // Create postgres client with optimized settings
-const client = postgres(env.DATABASE_URL, connectionConfig);
+const client = postgres(env.DATABASE_URL, connectionConfig)
 
 // Export typed Drizzle instance
 export const db: PostgresJsDatabase<typeof schema> = drizzle(client, {
   schema,
   logger: isDevelopment, // Enable query logging in development
-});
+})
 
 // Export client for advanced use cases
-export { client };
+export { client }
 
 // ═══════════════════════════════════════════════════
 // TYPE EXPORTS
 // ═══════════════════════════════════════════════════
 
-export type Database = typeof db;
-export type Schema = typeof schema;
+export type Database = typeof db
+export type Schema = typeof schema
 
 // ═══════════════════════════════════════════════════
 // CONNECTION HELPERS
@@ -82,11 +82,11 @@ export type Schema = typeof schema;
  */
 export async function testConnection(): Promise<boolean> {
   try {
-    await client`SELECT 1`;
-    return true;
+    await client`SELECT 1`
+    return true
   } catch (error) {
-    console.error("Database connection test failed:", error);
-    return false;
+    console.error("Database connection test failed:", error)
+    return false
   }
 }
 
@@ -95,7 +95,7 @@ export async function testConnection(): Promise<boolean> {
  * Useful for cleanup in tests or scripts
  */
 export async function closeConnection(): Promise<void> {
-  await client.end({ timeout: 5 });
+  await client.end({ timeout: 5 })
 }
 
 // ═══════════════════════════════════════════════════
@@ -104,6 +104,6 @@ export async function closeConnection(): Promise<void> {
 
 if (typeof process !== "undefined") {
   process.on("beforeExit", async () => {
-    await closeConnection();
-  });
+    await closeConnection()
+  })
 }

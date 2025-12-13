@@ -1,6 +1,6 @@
-import { database } from "database";
-import { comicToGenre } from "database/schema";
-import { eq } from "drizzle-orm";
+import { database } from "database"
+import { comicToGenre } from "database/schema"
+import { eq } from "drizzle-orm"
 
 export async function getComicGenres(comicId: number) {
   return await database.query.comicToGenre.findMany({
@@ -8,7 +8,7 @@ export async function getComicGenres(comicId: number) {
     with: {
       genre: true,
     },
-  });
+  })
 }
 
 export async function getGenreComics(genreId: number) {
@@ -17,5 +17,5 @@ export async function getGenreComics(genreId: number) {
     with: {
       comic: true,
     },
-  });
+  })
 }

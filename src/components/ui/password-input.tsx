@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
 import {
   createContext,
   useContext,
@@ -12,13 +12,13 @@ import {
   type ChangeEvent,
   type ComponentProps,
   type ReactNode,
-} from "react";
-import { Input } from "ui/input";
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "ui/input-group";
-import { Tooltip, TooltipContent, TooltipTrigger } from "ui/tooltip";
-import { cn } from "utils";
+} from "react"
+import { Input } from "ui/input"
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "ui/input-group"
+import { Tooltip, TooltipContent, TooltipTrigger } from "ui/tooltip"
+import { cn } from "utils"
 
-const PasswordInputContext = createContext<{ password: string } | null>(null);
+const PasswordInputContext = createContext<{ password: string } | null>(null)
 
 export function PasswordInput({
   children,
@@ -27,18 +27,18 @@ export function PasswordInput({
   defaultValue,
   ...props
 }: Omit<ComponentProps<typeof Input>, "type"> & {
-  children?: ReactNode;
+  children?: ReactNode
 }) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState(defaultValue ?? "");
+  const [showPassword, setShowPassword] = useState(false)
+  const [password, setPassword] = useState(defaultValue ?? "")
 
-  const Icon = showPassword ? EyeOffIcon : EyeIcon;
-  const currentValue = value ?? password;
+  const Icon = showPassword ? EyeOffIcon : EyeIcon
+  const currentValue = value ?? password
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    onChange?.(e);
-  };
+    setPassword(e.target.value)
+    onChange?.(e)
+  }
 
   return (
     <PasswordInputContext value={{ password: currentValue.toString() }}>
@@ -61,28 +61,28 @@ export function PasswordInput({
         {children}
       </div>
     </PasswordInputContext>
-  );
+  )
 }
 
 export function PasswordInputStrengthChecker() {
-  const [optionsLoaded, setOptionsLoaded] = useState(false);
-  const [errorLoadingOptions, setErrorLoadingOptions] = useState(false);
+  const [optionsLoaded, setOptionsLoaded] = useState(false)
+  const [errorLoadingOptions, setErrorLoadingOptions] = useState(false)
 
-  const { password } = usePasswordInput();
-  const deferredPassword = useDeferredValue(password);
+  const { password } = usePasswordInput()
+  const deferredPassword = useDeferredValue(password)
   const strengthResult = useMemo(() => {
     if (!optionsLoaded || deferredPassword.length === 0) {
-      return { score: 0, feedatabaseack: { warning: undefined } } as const;
+      return { score: 0, feedatabaseack: { warning: undefined } } as const
     }
 
-    return zxcvbn(deferredPassword);
-  }, [optionsLoaded, deferredPassword]);
+    return zxcvbn(deferredPassword)
+  }, [optionsLoaded, deferredPassword])
 
   useEffect(() => {
     Promise.all([import("@zxcvbn-ts/language-common"), import("@zxcvbn-ts/language-en")])
       .then(([common, english]) => {
         // Guard for variations in language package exports
-        const setOpts = (zxcvbnOptions as any)?.setOptions;
+        const setOpts = (zxcvbnOptions as any)?.setOptions
         if (typeof setOpts === "function") {
           setOpts({
             translations: (english as any).translations,
@@ -92,36 +92,36 @@ export function PasswordInputStrengthChecker() {
               ...((common as any).dictionary || {}),
               ...((english as any).dictionary || {}),
             },
-          });
+          })
         }
-        setOptionsLoaded(true);
+        setOptionsLoaded(true)
       })
-      .catch(() => setErrorLoadingOptions(true));
-  }, []);
+      .catch(() => setErrorLoadingOptions(true))
+  }, [])
 
   function getLabel() {
-    if (deferredPassword.length === 0) return "Password strength";
-    if (!optionsLoaded) return "Loading strength checker";
+    if (deferredPassword.length === 0) return "Password strength"
+    if (!optionsLoaded) return "Loading strength checker"
 
-    const score = strengthResult.score;
+    const score = strengthResult.score
     switch (score) {
       case 0:
       case 1:
-        return "Very weak";
+        return "Very weak"
       case 2:
-        return "Weak";
+        return "Weak"
       case 3:
-        return "Strong";
+        return "Strong"
       case 4:
-        return "Very strong";
+        return "Very strong"
       default:
-        throw new Error(`Invalid score: ${score satisfies never}`);
+        throw new Error(`Invalid score: ${score satisfies never}`)
     }
   }
 
-  const label = getLabel();
+  const label = getLabel()
 
-  if (errorLoadingOptions) return null;
+  if (errorLoadingOptions) return null
 
   return (
     <div className="space-y-0.5">
@@ -135,7 +135,7 @@ export function PasswordInputStrengthChecker() {
         className="flex gap-1"
       >
         {Array.from({ length: 4 }).map((_, i) => {
-          const color = strengthResult.score >= 3 ? "bg-primary" : "bg-destructive";
+          const color = strengthResult.score >= 3 ? "bg-primary" : "bg-destructive"
 
           return (
             <div
@@ -145,7 +145,7 @@ export function PasswordInputStrengthChecker() {
                 strengthResult.score > i ? color : "bg-secondary"
               )}
             />
-          );
+          )
         })}
       </div>
       <div className="flex justify-end text-sm text-muted-foreground">
@@ -161,13 +161,13 @@ export function PasswordInputStrengthChecker() {
         )}
       </div>
     </div>
-  );
+  )
 }
 
 const usePasswordInput = () => {
-  const context = useContext(PasswordInputContext);
+  const context = useContext(PasswordInputContext)
   if (!context) {
-    throw new Error("usePasswordInput must be used within a PasswordInputContext");
+    throw new Error("usePasswordInput must be used within a PasswordInputContext")
   }
-  return context;
-};
+  return context
+}

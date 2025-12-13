@@ -3,120 +3,120 @@
  * Enhanced logging for seed operations
  */
 
-export type LogLevel = "info" | "success" | "warn" | "error" | "debug";
+export type LogLevel = "info" | "success" | "warn" | "error" | "debug"
 
 class SeedLogger {
-  private verboseMode = false;
+  private verboseMode = false
 
   setVerbose(verbose: boolean) {
-    this.verboseMode = verbose;
+    this.verboseMode = verbose
   }
 
   header(text: string) {
-    console.log("\n" + "═".repeat(60));
-    console.log(`  ${text}`);
-    console.log("═".repeat(60) + "\n");
+    console.log("\n" + "═".repeat(60))
+    console.log(`  ${text}`)
+    console.log("═".repeat(60) + "\n")
   }
 
   section(text: string) {
-    console.log("\n" + "─".repeat(60));
-    console.log(`  ${text}`);
-    console.log("─".repeat(60));
+    console.log("\n" + "─".repeat(60))
+    console.log(`  ${text}`)
+    console.log("─".repeat(60))
   }
 
   footer() {
-    console.log("═".repeat(60) + "\n");
+    console.log("═".repeat(60) + "\n")
   }
 
   info(message: string) {
-    console.log(`ℹ️  ${message}`);
+    console.log(`ℹ️  ${message}`)
   }
 
   success(message: string) {
-    console.log(`✅ ${message}`);
+    console.log(`✅ ${message}`)
   }
 
   warn(message: string) {
-    console.warn(`⚠️  ${message}`);
+    console.warn(`⚠️  ${message}`)
   }
 
   error(message: string) {
-    console.error(`❌ ${message}`);
+    console.error(`❌ ${message}`)
   }
 
   debug(message: string) {
     if (this.verboseMode) {
-      console.log(`🔍 ${message}`);
+      console.log(`🔍 ${message}`)
     }
   }
 
   stat(label: string, value: string | number) {
-    console.log(`   ${label}: ${value}`);
+    console.log(`   ${label}: ${value}`)
   }
 }
 
-export const logger = new SeedLogger();
+export const logger = new SeedLogger()
 
 /**
  * Progress tracker for batch operations
  */
 export class ProgressTracker {
-  private current = 0;
-  private readonly total: number;
-  private readonly name: string;
-  private readonly startTime: number;
-  private created = 0;
-  private updated = 0;
-  private skipped = 0;
-  private errors = 0;
+  private current = 0
+  private readonly total: number
+  private readonly name: string
+  private readonly startTime: number
+  private created = 0
+  private updated = 0
+  private skipped = 0
+  private errors = 0
 
   constructor(name: string, total: number) {
-    this.name = name;
-    this.total = total;
-    this.startTime = Date.now();
+    this.name = name
+    this.total = total
+    this.startTime = Date.now()
   }
 
   incrementCreated(message?: string) {
-    this.current++;
-    this.created++;
-    this.log("Created", message);
+    this.current++
+    this.created++
+    this.log("Created", message)
   }
 
   incrementUpdated(message?: string) {
-    this.current++;
-    this.updated++;
-    this.log("Updated", message);
+    this.current++
+    this.updated++
+    this.log("Updated", message)
   }
 
   incrementSkipped(message?: string) {
-    this.current++;
-    this.skipped++;
-    this.log("Skipped", message);
+    this.current++
+    this.skipped++
+    this.log("Skipped", message)
   }
 
   incrementError(message?: string) {
-    this.current++;
-    this.errors++;
-    this.log("Error", message);
+    this.current++
+    this.errors++
+    this.log("Error", message)
   }
 
   private log(status: string, message?: string) {
-    const percentage = Math.round((this.current / this.total) * 100);
-    const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(1);
-    const msg = message ? ` - ${message}` : "";
+    const percentage = Math.round((this.current / this.total) * 100)
+    const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(1)
+    const msg = message ? ` - ${message}` : ""
     console.log(
       `[${this.name}] ${this.current}/${this.total} (${percentage}%) - ${elapsed}s - ${status}${msg}`
-    );
+    )
   }
 
   complete() {
-    const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(2);
-    console.log(`\n[${this.name}] Summary:`);
-    console.log(`   Created:  ${this.created}`);
-    console.log(`   Updated:  ${this.updated}`);
-    console.log(`   Skipped:  ${this.skipped}`);
-    console.log(`   Errors:   ${this.errors}`);
-    console.log(`   Time:     ${elapsed}s`);
-    console.log(`   Total:    ${this.total}`);
+    const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(2)
+    console.log(`\n[${this.name}] Summary:`)
+    console.log(`   Created:  ${this.created}`)
+    console.log(`   Updated:  ${this.updated}`)
+    console.log(`   Skipped:  ${this.skipped}`)
+    console.log(`   Errors:   ${this.errors}`)
+    console.log(`   Time:     ${elapsed}s`)
+    console.log(`   Total:    ${this.total}`)
   }
 }

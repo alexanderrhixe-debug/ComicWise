@@ -2,16 +2,68 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Next (pnpm dev)",
+      "name": "Next: Dev (pnpm)",
       "type": "pwa-node",
       "request": "launch",
-      "command": "pnpm",
-      "args": ["dev"],
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
       "console": "integratedTerminal",
       "autoAttachChildProcesses": true,
-      "env": {}
+      "env": {
+        "NODE_OPTIONS": "--enable-source-maps"
+      }
+    },
+    {
+      "name": "Next: Dev (inspect)",
+      "type": "pwa-node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pwsh",
+      "runtimeArgs": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "pnpm dev -- --inspect=0.0.0.0:9229"
+      ],
+      "console": "integratedTerminal",
+      "autoAttachChildProcesses": true,
+      "env": {
+        "NODE_OPTIONS": "--enable-source-maps --inspect=9229"
+      }
+    },
+    {
+      "name": "Attach to Next (9229)",
+      "type": "pwa-node",
+      "request": "attach",
+      "port": 9229,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "${workspaceFolder}",
+      "restart": true
+    },
+    {
+      "name": "Attach to Node",
+      "type": "pwa-node",
+      "request": "attach",
+      "processId": "${command:PickProcess}",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Run Tests (node)",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "-r", "test/setup.ts"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Dev + Attach",
+      "configurations": ["Next: Dev (pnpm)", "Attach to Node"]
     }
   ]
 }

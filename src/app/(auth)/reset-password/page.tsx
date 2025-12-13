@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
 // ═══════════════════════════════════════════════════
 // RESET PASSWORD PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { resetPasswordAction } from "actions/auth/index";
-import { Alert, AlertDescription } from "components/ui/alert";
-import { Button } from "components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { resetPasswordAction } from "actions/auth/index"
+import { Alert, AlertDescription } from "components/ui/alert"
+import { Button } from "components/ui/button"
 import {
   Card,
   CardContent,
@@ -15,24 +15,24 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "components/ui/card";
-import { Label } from "components/ui/label";
-import { PasswordInput } from "components/ui/password-input";
-import { resetPasswordSchema, type ResetPasswordInput } from "lib/validations/schemas";
-import { CheckCircle2, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+} from "components/ui/card"
+import { Label } from "components/ui/label"
+import { PasswordInput } from "components/ui/password-input"
+import { resetPasswordSchema, type ResetPasswordInput } from "lib/validations/schemas"
+import { CheckCircle2, Loader2 } from "lucide-react"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useEffect, useState, useTransition } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 function ResetPasswordForm() {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [token, setToken] = useState<string | null>(null)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   const {
     register,
@@ -45,52 +45,52 @@ function ResetPasswordForm() {
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   useEffect(() => {
-    const tokenParam = searchParams.get("token");
+    const tokenParam = searchParams.get("token")
     if (!tokenParam) {
-      toast.error("Invalid reset link");
-      router.push("/forgot-password");
-      return;
+      toast.error("Invalid reset link")
+      router.push("/forgot-password")
+      return
     }
     // Use startTransition to avoid cascading renders
     startTransition(() => {
-      setToken(tokenParam);
-    });
-  }, [searchParams, router]);
+      setToken(tokenParam)
+    })
+  }, [searchParams, router])
 
   const onSubmit = async (data: Omit<ResetPasswordInput, "token">) => {
     if (!token) {
-      setError("Invalid reset token");
-      return;
+      setError("Invalid reset token")
+      return
     }
 
-    setError(null);
+    setError(null)
 
     startTransition(async () => {
       try {
         const result = await resetPasswordAction({
           ...data,
           token,
-        });
+        })
 
         if (!result.success) {
-          setError(result.error || "Failed to reset password");
-          toast.error(result.error || "Failed to reset password");
+          setError(result.error || "Failed to reset password")
+          toast.error(result.error || "Failed to reset password")
         } else {
-          setIsSuccess(true);
-          toast.success("Password reset successfully!");
+          setIsSuccess(true)
+          toast.success("Password reset successfully!")
         }
       } catch (err) {
-        console.error("Reset password error:", err);
-        setError("An unexpected error occurred. Please try again.");
-        toast.error("Failed to reset password");
+        console.error("Reset password error:", err)
+        setError("An unexpected error occurred. Please try again.")
+        toast.error("Failed to reset password")
       }
-    });
-  };
+    })
+  }
 
-  const isLoading = isSubmitting || isPending;
+  const isLoading = isSubmitting || isPending
 
   if (isSuccess) {
     return (
@@ -114,7 +114,7 @@ function ResetPasswordForm() {
           </Link>
         </CardFooter>
       </Card>
-    );
+    )
   }
 
   return (
@@ -168,7 +168,7 @@ function ResetPasswordForm() {
         </CardFooter>
       </form>
     </Card>
-  );
+  )
 }
 
 export default function ResetPasswordPage() {
@@ -185,5 +185,5 @@ export default function ResetPasswordPage() {
     >
       <ResetPasswordForm />
     </Suspense>
-  );
+  )
 }

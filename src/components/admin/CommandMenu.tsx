@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { BookOpen, FileText, FolderOpen, Palette, Tag, UserCircle, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
-import * as React from "react";
+import { BookOpen, FileText, FolderOpen, Palette, Tag, UserCircle, Users } from "lucide-react"
+import { useRouter } from "next/navigation"
+import * as React from "react"
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,7 +10,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "ui/command";
+} from "ui/command"
 
 const navigationItems = [
   { title: "Dashboard", href: "/admin", icon: FileText },
@@ -24,28 +24,28 @@ const navigationItems = [
   { title: "Create Comic", href: "/admin/comics/new", icon: BookOpen },
   { title: "Create Chapter", href: "/admin/chapters/new", icon: FileText },
   { title: "Create User", href: "/admin/users/new", icon: Users },
-];
+]
 
 export function CommandMenu() {
-  const router = useRouter();
-  const [open, setOpen] = React.useState(false);
+  const router = useRouter()
+  const [open, setOpen] = React.useState(false)
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
+        e.preventDefault()
+        setOpen((open) => !open)
       }
-    };
+    }
 
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, []);
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [])
 
   const runCommand = React.useCallback((command: () => unknown) => {
-    setOpen(false);
-    command();
-  }, []);
+    setOpen(false)
+    command()
+  }, [])
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
@@ -54,21 +54,21 @@ export function CommandMenu() {
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Navigation">
           {navigationItems.map((item) => {
-            const Icon = item.icon;
+            const Icon = item.icon
             return (
               <CommandItem
                 key={item.href}
                 onSelect={() => {
-                  runCommand(() => router.push(item.href));
+                  runCommand(() => router.push(item.href))
                 }}
               >
                 <Icon className="mr-2 h-4 w-4" />
                 <span>{item.title}</span>
               </CommandItem>
-            );
+            )
           })}
         </CommandGroup>
       </CommandList>
     </CommandDialog>
-  );
+  )
 }

@@ -11,15 +11,15 @@ export function createSlug(text: string): string {
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
-    .trim();
+    .trim()
 }
 
 /**
  * Extract chapter number from chapter name
  */
 export function extractChapterNumber(chapterName: string): number {
-  const match = chapterName.match(/chapter\s*(\d+)/i);
-  return match && match[1] ? parseInt(match[1], 10) : 0;
+  const match = chapterName.match(/chapter\s*(\d+)/i)
+  return match && match[1] ? parseInt(match[1], 10) : 0
 }
 
 /**
@@ -27,16 +27,16 @@ export function extractChapterNumber(chapterName: string): number {
  */
 export function normalizeDate(dateStr: string | Date | null | undefined): Date {
   if (!dateStr) {
-    return new Date();
+    return new Date()
   }
   if (dateStr instanceof Date) {
-    return dateStr;
+    return dateStr
   }
 
   // Try standard parsing
-  const date = new Date(dateStr);
+  const date = new Date(dateStr)
   if (!isNaN(date.getTime())) {
-    return date;
+    return date
   }
 
   // Handle "August 14th 2025" format
@@ -53,35 +53,35 @@ export function normalizeDate(dateStr: string | Date | null | undefined): Date {
     october: 9,
     november: 10,
     december: 11,
-  };
+  }
 
-  const match = dateStr.match(/(\w+)\s+(\d+)(?:st|nd|rd|th)?\s+(\d{4})/i);
+  const match = dateStr.match(/(\w+)\s+(\d+)(?:st|nd|rd|th)?\s+(\d{4})/i)
   if (match) {
-    const [, month, day, year] = match;
+    const [, month, day, year] = match
     if (month && day && year) {
-      const monthNum = monthMap[month.toLowerCase()];
+      const monthNum = monthMap[month.toLowerCase()]
       if (monthNum !== undefined) {
-        return new Date(parseInt(year), monthNum, parseInt(day));
+        return new Date(parseInt(year), monthNum, parseInt(day))
       }
     }
   }
 
-  return new Date();
+  return new Date()
 }
 
 /**
  * Deduplicate array by key function
  */
 export function deduplicateByKey<T>(items: T[], keyFn: (item: T) => string): T[] {
-  const seen = new Set<string>();
+  const seen = new Set<string>()
   return items.filter((item) => {
-    const key = keyFn(item);
+    const key = keyFn(item)
     if (seen.has(key)) {
-      return false;
+      return false
     }
-    seen.add(key);
-    return true;
-  });
+    seen.add(key)
+    return true
+  })
 }
 
 /**
@@ -92,29 +92,29 @@ export async function batchProcess<T, R>(
   processor: (item: T, index: number) => Promise<R>,
   batchSize: number = 50
 ): Promise<R[]> {
-  const results: R[] = [];
+  const results: R[] = []
 
   for (let i = 0; i < items.length; i += batchSize) {
-    const batch = items.slice(i, i + batchSize);
+    const batch = items.slice(i, i + batchSize)
     const batchResults = await Promise.allSettled(
       batch.map((item, idx) => processor(item, i + idx))
-    );
+    )
 
     for (const result of batchResults) {
       if (result.status === "fulfilled") {
-        results.push(result.value);
+        results.push(result.value)
       } else {
-        console.error("Batch processing error:", result.reason);
+        console.error("Batch processing error:", result.reason)
       }
     }
   }
 
-  return results;
+  return results
 }
 
 /**
  * Sleep for specified milliseconds
  */
 export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }

@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
-import { ChevronLeftIcon, ChevronRightIcon, EllipsisVerticalIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, EllipsisVerticalIcon } from "lucide-react"
 
-import type { ColumnDef, PaginationState } from "@tanstack/react-table";
+import type { ColumnDef, PaginationState } from "@tanstack/react-table"
 import {
   flexRender,
   getCoreRowModel,
@@ -12,33 +12,33 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from "@tanstack/react-table"
 
-import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar";
-import { Badge } from "ui/badge";
-import { Button } from "ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar"
+import { Badge } from "ui/badge"
+import { Button } from "ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "ui/dropdown-menu";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "ui/pagination";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table";
+} from "ui/dropdown-menu"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "ui/pagination"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table"
 
-import { usePagination } from "src/hooks/use-pagination";
+import { usePagination } from "src/hooks/use-pagination"
 
 export type Item = {
-  id: string;
-  avatar: string;
-  avatarFallback: string;
-  name: string;
-  email: string;
-  amount: number;
-  status: "pending" | "processing" | "paid" | "failed";
-  paidBy: "mastercard" | "visa";
-};
+  id: string
+  avatar: string
+  avatarFallback: string
+  name: string
+  email: string
+  amount: number
+  status: "pending" | "processing" | "paid" | "failed"
+  paidBy: "mastercard" | "visa"
+}
 
 export const columns: ColumnDef<Item>[] = [
   {
@@ -61,14 +61,14 @@ export const columns: ColumnDef<Item>[] = [
     accessorKey: "amount",
     header: "Amount",
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
+      const amount = parseFloat(row.getValue("amount"))
 
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(amount);
+      }).format(amount)
 
-      return <span>{formatted}</span>;
+      return <span>{formatted}</span>
     },
   },
   {
@@ -102,15 +102,15 @@ export const columns: ColumnDef<Item>[] = [
     size: 60,
     enableHiding: false,
   },
-];
+]
 
 const TransactionDatatable = ({ data }: { data: Item[] }) => {
-  const pageSize = 5;
+  const pageSize = 5
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: pageSize,
-  });
+  })
 
   const table = useReactTable({
     data,
@@ -123,13 +123,13 @@ const TransactionDatatable = ({ data }: { data: Item[] }) => {
     state: {
       pagination,
     },
-  });
+  })
 
   const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
     currentPage: table.getState().pagination.pageIndex + 1,
     totalPages: table.getPageCount(),
     paginationItemsToDisplay: 2,
-  });
+  })
 
   return (
     <div className="w-full">
@@ -145,7 +145,7 @@ const TransactionDatatable = ({ data }: { data: Item[] }) => {
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -212,7 +212,7 @@ const TransactionDatatable = ({ data }: { data: Item[] }) => {
               )}
 
               {pages.map((page) => {
-                const isActive = page === table.getState().pagination.pageIndex + 1;
+                const isActive = page === table.getState().pagination.pageIndex + 1
 
                 return (
                   <PaginationItem key={page}>
@@ -225,7 +225,7 @@ const TransactionDatatable = ({ data }: { data: Item[] }) => {
                       {page}
                     </Button>
                   </PaginationItem>
-                );
+                )
               })}
 
               {showRightEllipsis && (
@@ -251,10 +251,10 @@ const TransactionDatatable = ({ data }: { data: Item[] }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TransactionDatatable;
+export default TransactionDatatable
 
 function RowActions() {
   return (
@@ -280,5 +280,5 @@ function RowActions() {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

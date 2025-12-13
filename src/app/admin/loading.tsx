@@ -1,4 +1,4 @@
-import { AdminTableSkeleton } from "components/ui/skeletons";
+import { AdminTableSkeleton } from "components/ui/skeletons"
 
 export default function Loading() {
   return (
@@ -8,5 +8,5 @@ export default function Loading() {
       </div>
       <AdminTableSkeleton rows={15} />
     </div>
-  );
+  )
 }

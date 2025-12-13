@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import EditChapterForm from "./EditChapterForm";
+import { Suspense } from "react"
+import EditChapterForm from "src/app/admin/chapters/[id]/EditChapterForm"
 
 export default function EditChapterPage({ params }: { params: { id: string } }) {
   return (
@@ -13,5 +13,5 @@ export default function EditChapterPage({ params }: { params: { id: string } }) 
         <EditChapterForm params={params} />
       </Suspense>
     </div>
-  );
+  )
 }

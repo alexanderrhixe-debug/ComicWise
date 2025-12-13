@@ -1,9 +1,9 @@
-import { DataTable } from "components/admin/DataTable";
-import { Suspense } from "react";
-import { database, user } from "src/database";
+import { DataTable } from "components/admin/DataTable"
+import { Suspense } from "react"
+import { database, user } from "src/database"
 
 async function UsersTable() {
-  const users = await database.select().from(user);
+  const users = await database.select().from(user)
 
   const columns = [
     {
@@ -26,9 +26,9 @@ async function UsersTable() {
       accessorKey: "createdAt",
       header: "Created At",
     },
-  ];
+  ]
 
-  return <DataTable columns={columns} data={users} />;
+  return <DataTable columns={columns} data={users} />
 }
 
 function UsersHeader() {
@@ -37,7 +37,7 @@ function UsersHeader() {
       <h1 className="text-3xl font-bold tracking-tight">Users Management</h1>
       <p className="text-muted-foreground">Manage all users in the platform</p>
     </div>
-  );
+  )
 }
 
 export default function AdminUsersPage() {
@@ -49,5 +49,5 @@ export default function AdminUsersPage() {
         <UsersTable />
       </Suspense>
     </div>
-  );
+  )
 }

@@ -1,5 +1,5 @@
 /* eslint-disable zod/require-strict */
-import { z } from "zod";
+import { z } from "zod"
 
 // ═══════════════════════════════════════════════════
 // ENVIRONMENT SCHEMA (Next.js 16 Optimized)
@@ -90,13 +90,13 @@ const envSchema = z.object({
   AUTH_GITHUB_CLIENT_ID: z.string().optional(),
   AUTH_GITHUB_CLIENT_SECRET: z.string().optional(),
   CUSTOM_PASSWORD: z.string().optional(),
-});
+})
 
 // ═══════════════════════════════════════════════════
 // TYPE EXPORTS
 // ═══════════════════════════════════════════════════
 
-export type Env = z.infer<typeof envSchema>;
+export type Env = z.infer<typeof envSchema>
 
 // ═══════════════════════════════════════════════════
 // ENVIRONMENT VALIDATION
@@ -115,24 +115,24 @@ function validateEnv(): Env {
       EMAIL_FROM: process.env.EMAIL_FROM || process.env.SMTP_FROM || "noreply@comicwise.com",
       EMAIL_SECURE: process.env.EMAIL_SECURE || process.env.SMTP_SECURE || "false",
       NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-    });
+    })
 
-    return parsedEnv;
+    return parsedEnv
   } catch (error) {
     if (error instanceof z.ZodError) {
       const missingVars = error.issues
         .filter((issue) => {
-          const path = issue.path[0]?.toString() || "";
+          const path = issue.path[0]?.toString() || ""
           // Filter out optional and legacy SMTP variables
           return (
             !path.startsWith("SMTP_") && !path.includes("OPTIONAL") && issue.code === "invalid_type"
-          );
+          )
         })
         .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
-        .join("\n  ");
+        .join("\n  ")
 
       if (missingVars) {
-        console.warn(`⚠️  Environment validation warnings:\n  ${missingVars}\n`);
+        console.warn(`⚠️  Environment validation warnings:\n  ${missingVars}\n`)
       }
 
       // Return with defaults for non-critical vars
@@ -152,9 +152,9 @@ function validateEnv(): Env {
         NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
         NODE_ENV: process.env.NODE_ENV || "development",
         UPLOAD_PROVIDER: process.env.UPLOAD_PROVIDER || "local",
-      });
+      })
     }
-    throw error;
+    throw error
   }
 }
 
@@ -162,7 +162,7 @@ function validateEnv(): Env {
 // VALIDATED ENVIRONMENT
 // ═══════════════════════════════════════════════════
 
-export const env = validateEnv();
+export const env = validateEnv()
 
 // ═══════════════════════════════════════════════════
 // HELPER FUNCTIONS
@@ -172,27 +172,27 @@ export const env = validateEnv();
  * Check if a specific environment variable is set
  */
 export function hasEnv(key: keyof Env): boolean {
-  return !!env[key];
+  return !!env[key]
 }
 
 /**
  * Get environment variable with type safety
  */
 export function getEnv<K extends keyof Env>(key: K, defaultValue?: Env[K]): Env[K] {
-  return env[key] ?? (defaultValue as Env[K]);
+  return env[key] ?? (defaultValue as Env[K])
 }
 
 /**
  * Check if running in production
  */
-export const isProduction = env.NODE_ENV === "production";
+export const isProduction = env.NODE_ENV === "production"
 
 /**
  * Check if running in development
  */
-export const isDevelopment = env.NODE_ENV === "development";
+export const isDevelopment = env.NODE_ENV === "development"
 
 /**
  * Check if running in test
  */
-export const isTest = env.NODE_ENV === "test";
+export const isTest = env.NODE_ENV === "test"

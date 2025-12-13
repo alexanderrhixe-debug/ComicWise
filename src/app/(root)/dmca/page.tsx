@@ -1,13 +1,13 @@
-import ClientDate from "components/ClientDate";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
+import ClientDate from "components/ClientDate"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
 
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "DMCA Notice | ComicWise",
   description:
     "Digital Millennium Copyright Act (DMCA) notice and copyright infringement policy for ComicWise.",
-};
+}
 
 // Force dynamic rendering for current date display
 // export const dynamic = "force-dynamic";
@@ -125,5 +125,5 @@ export default function DMCAPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

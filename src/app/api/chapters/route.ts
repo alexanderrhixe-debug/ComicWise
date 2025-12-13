@@ -2,14 +2,14 @@
 // CHAPTERS API - Full CRUD with Filtering & Pagination
 // ═══════════════════════════════════════════════════
 
-import { env } from "appConfig";
-import { auth } from "auth";
-import { createChapter } from "database/mutations/chapters";
-import { getUsersBookmarkedComic } from "database/queries/bookmarks";
-import { getAllChapters } from "database/queries/chapters";
-import { sendNewChapterNotification } from "lib/email";
-import { chapterFilterSchema, createChapterSchema } from "lib/validations/schemas";
-import { NextRequest, NextResponse } from "next/server";
+import { env } from "appConfig"
+import { auth } from "auth"
+import { createChapter } from "database/mutations/chapters"
+import { getUsersBookmarkedComic } from "database/queries/bookmarks"
+import { getAllChapters } from "database/queries/chapters"
+import { sendNewChapterNotification } from "lib/email"
+import { chapterFilterSchema, createChapterSchema } from "lib/validations/schemas"
+import { NextRequest, NextResponse } from "next/server"
 
 // ═══════════════════════════════════════════════════
 // GET - List Chapters with Filtering & Pagination
@@ -17,7 +17,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = new URL(request.url).searchParams;
+    const searchParams = new URL(request.url).searchParams
 
     const filters = {
       comicId: searchParams.get("comicId") ? parseInt(searchParams.get("comicId")!) : undefined,
@@ -26,18 +26,18 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get("limit") ? parseInt(searchParams.get("limit")!) : 12,
       sortBy: searchParams.get("sortBy") || "chapterNumber",
       sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || "asc",
-    };
+    }
 
-    const validation = chapterFilterSchema.safeParse(filters);
+    const validation = chapterFilterSchema.safeParse(filters)
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid filters", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
-    const result = await getAllChapters(validation.data);
+    const result = await getAllChapters(validation.data)
 
     return NextResponse.json({
       success: true,
@@ -48,16 +48,16 @@ export async function GET(request: NextRequest) {
         total: result.total,
         totalPages: result.totalPages,
       },
-    });
+    })
   } catch (error) {
-    console.error("Get chapters error:", error);
+    console.error("Get chapters error:", error)
     return NextResponse.json(
       {
         error: "Failed to fetch chapters",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -67,22 +67,22 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session?.user || session.user.role !== "admin") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json();
+    const body = await request.json()
 
     // Validate input
-    const validation = createChapterSchema.safeParse(body);
+    const validation = createChapterSchema.safeParse(body)
 
     if (!validation.success) {
       return NextResponse.json(
         { error: "Invalid input", details: validation.error.issues },
         { status: 400 }
-      );
+      )
     }
 
     const newChapter = await createChapter({
@@ -90,16 +90,16 @@ export async function POST(request: NextRequest) {
       chapterNumber: validation.data.chapterNumber,
       releaseDate: validation.data.releaseDate,
       comicId: validation.data.comicId,
-    });
+    })
 
     if (!newChapter) {
-      return NextResponse.json({ error: "Failed to create chapter" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to create chapter" }, { status: 500 })
     }
 
     // Send email notifications to users who bookmarked this comic
     if (body.sendNotifications !== false) {
       try {
-        const bookmarkedUsers = await getUsersBookmarkedComic(validation.data.comicId);
+        const bookmarkedUsers = await getUsersBookmarkedComic(validation.data.comicId)
 
         // Send notifications asynchronously
         Promise.all(
@@ -113,9 +113,9 @@ export async function POST(request: NextRequest) {
               chapterUrl: `${env.NEXT_PUBLIC_APP_URL}/comics/${validation.data.comicId}/chapters/${newChapter.id}`,
             })
           )
-        ).catch((err) => console.error("Failed to send notifications:", err));
+        ).catch((err) => console.error("Failed to send notifications:", err))
       } catch (emailError) {
-        console.error("Email notification error:", emailError);
+        console.error("Email notification error:", emailError)
         // Don't fail the request if emails fail
       }
     }
@@ -127,15 +127,15 @@ export async function POST(request: NextRequest) {
         message: "Chapter created successfully",
       },
       { status: 201 }
-    );
+    )
   } catch (error) {
-    console.error("Create chapter error:", error);
+    console.error("Create chapter error:", error)
     return NextResponse.json(
       {
         error: "Failed to create chapter",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
-    );
+    )
   }
 }

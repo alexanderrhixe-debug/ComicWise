@@ -1,14 +1,14 @@
-"use server";
+"use server"
 
 // ═══════════════════════════════════════════════════
 // CHAPTERS CRUD SERVER ACTIONS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { appConfig } from "appConfig";
-import { database } from "database";
-import { chapter, chapterImage, comic } from "database/schema";
-import { and, desc, eq, sql } from "drizzle-orm";
-import slugify from "lib/utils/slugify";
+import { appConfig } from "appConfig"
+import { database } from "database"
+import { chapter, chapterImage, comic } from "database/schema"
+import { and, desc, eq, sql } from "drizzle-orm"
+import slugify from "lib/utils/slugify"
 import {
   chapterFilterSchema,
   createChapterSchema,
@@ -16,13 +16,13 @@ import {
   type ChapterFilterInput,
   type CreateChapterInput,
   type UpdateChapterInput,
-} from "lib/validations/schemas";
-import { revalidatePath } from "next/cache";
-type ParsedCreateChapter = CreateChapterInput & { slug?: string };
+} from "lib/validations/schemas"
+import { revalidatePath } from "next/cache"
+type ParsedCreateChapter = CreateChapterInput & { slug?: string }
 
 export type ActionResult<T = unknown> =
   | { success: true; data: T; message?: string }
-  | { success: false; error: string };
+  | { success: false; error: string }
 
 // ═══════════════════════════════════════════════════
 // CREATE CHAPTER
@@ -32,18 +32,18 @@ export async function createChapter(
   input: CreateChapterInput
 ): Promise<ActionResult<typeof chapter.$inferSelect>> {
   try {
-    const validated = createChapterSchema.parse(input) as ParsedCreateChapter;
+    const validated = createChapterSchema.parse(input) as ParsedCreateChapter
 
     // Check if comic exists
     const comicRecord = await database.query.comic.findFirst({
       where: eq(comic.id, validated.comicId),
-    });
+    })
 
     if (!comicRecord) {
-      return { success: false, error: "Comic not found" };
+      return { success: false, error: "Comic not found" }
     }
 
-    const slug = validated.slug ?? slugify(validated.title);
+    const slug = validated.slug ?? slugify(validated.title)
 
     const [newChapter] = await database
       .insert(chapter)
@@ -52,32 +52,32 @@ export async function createChapter(
         slug,
         views: 0,
       })
-      .returning();
+      .returning()
 
     if (!newChapter) {
-      return { success: false, error: "Failed to create chapter" };
+      return { success: false, error: "Failed to create chapter" }
     }
 
     // Send notifications to users who bookmarked this comic (async)
     if (appConfig.features.email) {
       // This would query bookmarks and send emails - implement as needed
-      console.log(`New chapter ${newChapter.id} created for comic ${comicRecord.id}`);
+      console.log(`New chapter ${newChapter.id} created for comic ${comicRecord.id}`)
     }
 
-    revalidatePath("/admin/chapters");
-    revalidatePath(`/comics/${validated.comicId}`);
+    revalidatePath("/admin/chapters")
+    revalidatePath(`/comics/${validated.comicId}`)
 
     return {
       success: true,
       data: newChapter,
       message: "Chapter created successfully",
-    };
+    }
   } catch (error) {
-    console.error("Create chapter error:", error);
+    console.error("Create chapter error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to create chapter",
-    };
+    }
   }
 }
 
@@ -90,7 +90,7 @@ export async function updateChapter(
   input: UpdateChapterInput
 ): Promise<ActionResult<typeof chapter.$inferSelect>> {
   try {
-    const validated = updateChapterSchema.parse(input);
+    const validated = updateChapterSchema.parse(input)
 
     const [updatedChapter] = await database
       .update(chapter)
@@ -98,27 +98,27 @@ export async function updateChapter(
         ...validated,
       })
       .where(eq(chapter.id, id))
-      .returning();
+      .returning()
 
     if (!updatedChapter) {
-      return { success: false, error: "Chapter not found" };
+      return { success: false, error: "Chapter not found" }
     }
 
-    revalidatePath("/admin/chapters");
-    revalidatePath(`/comics/${updatedChapter.comicId}`);
-    revalidatePath(`/read/${id}`);
+    revalidatePath("/admin/chapters")
+    revalidatePath(`/comics/${updatedChapter.comicId}`)
+    revalidatePath(`/read/${id}`)
 
     return {
       success: true,
       data: updatedChapter,
       message: "Chapter updated successfully",
-    };
+    }
   } catch (error) {
-    console.error("Update chapter error:", error);
+    console.error("Update chapter error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to update chapter",
-    };
+    }
   }
 }
 
@@ -130,28 +130,28 @@ export async function deleteChapter(id: number): Promise<ActionResult<void>> {
   try {
     const existingChapter = await database.query.chapter.findFirst({
       where: eq(chapter.id, id),
-    });
+    })
 
     if (!existingChapter) {
-      return { success: false, error: "Chapter not found" };
+      return { success: false, error: "Chapter not found" }
     }
 
-    await database.delete(chapter).where(eq(chapter.id, id));
+    await database.delete(chapter).where(eq(chapter.id, id))
 
-    revalidatePath("/admin/chapters");
-    revalidatePath(`/comics/${existingChapter.comicId}`);
+    revalidatePath("/admin/chapters")
+    revalidatePath(`/comics/${existingChapter.comicId}`)
 
     return {
       success: true,
       data: undefined,
       message: "Chapter deleted successfully",
-    };
+    }
   } catch (error) {
-    console.error("Delete chapter error:", error);
+    console.error("Delete chapter error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to delete chapter",
-    };
+    }
   }
 }
 
@@ -171,25 +171,25 @@ export async function getChapterById(id: number) {
           },
         },
       },
-    });
+    })
 
     if (!result) {
-      return { success: false, error: "Chapter not found" };
+      return { success: false, error: "Chapter not found" }
     }
 
     // Increment view count
     await database
       .update(chapter)
       .set({ views: sql`${chapter.views} + 1` })
-      .where(eq(chapter.id, id));
+      .where(eq(chapter.id, id))
 
-    return { success: true, data: result };
+    return { success: true, data: result }
   } catch (error) {
-    console.error("Get chapter error:", error);
+    console.error("Get chapter error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get chapter",
-    };
+    }
   }
 }
 
@@ -199,31 +199,31 @@ export async function getChapterById(id: number) {
 
 export async function listChapters(input?: ChapterFilterInput) {
   try {
-    const validated = chapterFilterSchema.parse(input || {});
+    const validated = chapterFilterSchema.parse(input || {})
     const {
       page = 1,
       limit = appConfig.pagination.chaptersPerPage,
       comicId,
       sortBy = "chapterNumber",
       sortOrder = "asc",
-    } = validated;
+    } = validated
 
-    const offset = (page - 1) * limit;
+    const offset = (page - 1) * limit
 
-    const conditions = [];
+    const conditions = []
     if (comicId) {
-      conditions.push(eq(chapter.comicId, comicId));
+      conditions.push(eq(chapter.comicId, comicId))
     }
 
-    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 
     // Get total count
     const [countResult] = await database
       .select({ count: sql<number>`count(*)` })
       .from(chapter)
-      .where(whereClause);
+      .where(whereClause)
 
-    const total = countResult?.count || 0;
+    const total = countResult?.count || 0
 
     // Get chapters
     const results = await database.query.chapter.findMany({
@@ -234,17 +234,17 @@ export async function listChapters(input?: ChapterFilterInput) {
       limit,
       offset,
       orderBy: (chapters: any, { desc: descOrder, asc }: any) => {
-        const order = sortOrder === "desc" ? descOrder : asc;
+        const order = sortOrder === "desc" ? descOrder : asc
         switch (sortBy) {
           case "releaseDate":
-            return [order(chapters.releaseDate)];
+            return [order(chapters.releaseDate)]
           case "views":
-            return [order(chapters.views)];
+            return [order(chapters.views)]
           default:
-            return [order(chapters.chapterNumber)];
+            return [order(chapters.chapterNumber)]
         }
       },
-    });
+    })
 
     return {
       success: true,
@@ -257,13 +257,13 @@ export async function listChapters(input?: ChapterFilterInput) {
           totalPages: Math.ceil(total / limit),
         },
       },
-    };
+    }
   } catch (error) {
-    console.error("List chapters error:", error);
+    console.error("List chapters error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to list chapters",
-    };
+    }
   }
 }
 
@@ -276,15 +276,15 @@ export async function getChaptersByComic(comicId: number) {
     const results = await database.query.chapter.findMany({
       where: eq(chapter.comicId, comicId),
       orderBy: [desc(chapter.chapterNumber)],
-    });
+    })
 
-    return { success: true, data: results };
+    return { success: true, data: results }
   } catch (error) {
-    console.error("Get chapters by comic error:", error);
+    console.error("Get chapters by comic error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get chapters",
-    };
+    }
   }
 }
 
@@ -300,14 +300,14 @@ export async function addChapterImages(
     // Verify chapter exists
     const chapterRecord = await database.query.chapter.findFirst({
       where: eq(chapter.id, chapterId),
-    });
+    })
 
     if (!chapterRecord) {
-      return { success: false, error: "Chapter not found" };
+      return { success: false, error: "Chapter not found" }
     }
 
     // Delete existing images
-    await database.delete(chapterImage).where(eq(chapterImage.chapterId, chapterId));
+    await database.delete(chapterImage).where(eq(chapterImage.chapterId, chapterId))
 
     // Insert new images
     if (images.length > 0) {
@@ -317,22 +317,22 @@ export async function addChapterImages(
           imageUrl: img.imageUrl,
           pageNumber: img.pageNumber,
         }))
-      );
+      )
     }
 
-    revalidatePath(`/read/${chapterId}`);
+    revalidatePath(`/read/${chapterId}`)
 
     return {
       success: true,
       data: undefined,
       message: "Chapter images updated successfully",
-    };
+    }
   } catch (error) {
-    console.error("Add chapter images error:", error);
+    console.error("Add chapter images error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to add images",
-    };
+    }
   }
 }
 
@@ -345,15 +345,15 @@ export async function getChapterImages(chapterId: number) {
     const images = await database.query.chapterImage.findMany({
       where: eq(chapterImage.chapterId, chapterId),
       orderBy: [desc(chapterImage.pageNumber)],
-    });
+    })
 
-    return { success: true, data: images };
+    return { success: true, data: images }
   } catch (error) {
-    console.error("Get chapter images error:", error);
+    console.error("Get chapter images error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get images",
-    };
+    }
   }
 }
 
@@ -373,15 +373,15 @@ export async function getLatestChapters(limit = 20) {
       },
       limit,
       orderBy: [desc(chapter.releaseDate)],
-    });
+    })
 
-    return { success: true, data: results };
+    return { success: true, data: results }
   } catch (error) {
-    console.error("Get latest chapters error:", error);
+    console.error("Get latest chapters error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get latest chapters",
-    };
+    }
   }
 }
 
@@ -393,10 +393,10 @@ export async function getAdjacentChapters(chapterId: number) {
   try {
     const currentChapter = await database.query.chapter.findFirst({
       where: eq(chapter.id, chapterId),
-    });
+    })
 
     if (!currentChapter) {
-      return { success: false, error: "Chapter not found" };
+      return { success: false, error: "Chapter not found" }
     }
 
     // Get next chapter (higher chapter number)
@@ -410,7 +410,7 @@ export async function getAdjacentChapters(chapterId: number) {
         )
       )
       .orderBy(chapter.chapterNumber)
-      .limit(1);
+      .limit(1)
 
     // Get previous chapter (lower chapter number)
     const [prevChapter] = await database
@@ -423,7 +423,7 @@ export async function getAdjacentChapters(chapterId: number) {
         )
       )
       .orderBy(desc(chapter.chapterNumber))
-      .limit(1);
+      .limit(1)
 
     return {
       success: true,
@@ -432,12 +432,12 @@ export async function getAdjacentChapters(chapterId: number) {
         next: nextChapter || null,
         previous: prevChapter || null,
       },
-    };
+    }
   } catch (error) {
-    console.error("Get adjacent chapters error:", error);
+    console.error("Get adjacent chapters error:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to get adjacent chapters",
-    };
+    }
   }
 }

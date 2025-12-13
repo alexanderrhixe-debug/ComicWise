@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { BellIcon, ChevronDownIcon, HelpCircleIcon } from "lucide-react";
-import * as React from "react";
-import { useEffect, useRef, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar";
-import { Badge } from "ui/badge";
-import { Button } from "ui/button";
+import { BellIcon, ChevronDownIcon, HelpCircleIcon } from "lucide-react"
+import * as React from "react"
+import { useEffect, useRef, useState } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "ui/avatar"
+import { Badge } from "ui/badge"
+import { Button } from "ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,15 +13,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "ui/dropdown-menu";
+} from "ui/dropdown-menu"
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "ui/navigation-menu";
-import { Popover, PopoverContent, PopoverTrigger } from "ui/popover";
-import { cn } from "utils";
+} from "ui/navigation-menu"
+import { Popover, PopoverContent, PopoverTrigger } from "ui/popover"
+import { cn } from "utils"
 
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
@@ -53,8 +53,8 @@ const Logo = (props: React.SVGAttributes<SVGElement>) => {
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 
 // Hamburger icon component
 const HamburgerIcon = ({ className, ...props }: React.SVGAttributes<SVGElement>) => (
@@ -84,7 +84,7 @@ const HamburgerIcon = ({ className, ...props }: React.SVGAttributes<SVGElement>)
       className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
     />
   </svg>
-);
+)
 
 // Info Menu Component
 const InfoMenu = ({ onItemClick }: { onItemClick?: (item: string) => void }) => (
@@ -108,15 +108,15 @@ const InfoMenu = ({ onItemClick }: { onItemClick?: (item: string) => void }) => 
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
-);
+)
 
 // Notification Menu Component
 const NotificationMenu = ({
   notificationCount = 3,
   onItemClick,
 }: {
-  notificationCount?: number;
-  onItemClick?: (item: string) => void;
+  notificationCount?: number
+  onItemClick?: (item: string) => void
 }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -157,7 +157,7 @@ const NotificationMenu = ({
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
-);
+)
 
 // User Menu Component
 const UserMenu = ({
@@ -166,10 +166,10 @@ const UserMenu = ({
   userAvatar,
   onItemClick,
 }: {
-  userName?: string;
-  userEmail?: string;
-  userAvatar?: string;
-  onItemClick?: (item: string) => void;
+  userName?: string
+  userEmail?: string
+  userAvatar?: string
+  onItemClick?: (item: string) => void
 }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -205,26 +205,26 @@ const UserMenu = ({
       <DropdownMenuItem onClick={() => onItemClick?.("logout")}>Log out</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
-);
+)
 
 // Types
 export interface Navbar05NavItem {
-  href?: string;
-  label: string;
+  href?: string
+  label: string
 }
 
 export interface Navbar05Props extends React.HTMLAttributes<HTMLElement> {
-  logo?: React.ReactNode;
-  logoHref?: string;
-  navigationLinks?: Navbar05NavItem[];
-  userName?: string;
-  userEmail?: string;
-  userAvatar?: string;
-  notificationCount?: number;
-  onNavItemClick?: (href: string) => void;
-  onInfoItemClick?: (item: string) => void;
-  onNotificationItemClick?: (item: string) => void;
-  onUserItemClick?: (item: string) => void;
+  logo?: React.ReactNode
+  logoHref?: string
+  navigationLinks?: Navbar05NavItem[]
+  userName?: string
+  userEmail?: string
+  userAvatar?: string
+  notificationCount?: number
+  onNavItemClick?: (href: string) => void
+  onInfoItemClick?: (item: string) => void
+  onNotificationItemClick?: (item: string) => void
+  onUserItemClick?: (item: string) => void
 }
 
 // Default navigation links
@@ -233,7 +233,7 @@ const defaultNavigationLinks: Navbar05NavItem[] = [
   { href: "#", label: "Features" },
   { href: "#", label: "Pricing" },
   { href: "#", label: "About" },
-];
+]
 
 export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
   (
@@ -254,41 +254,41 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
     },
     ref
   ) => {
-    const [isMobile, setIsMobile] = useState(false);
-    const containerRef = useRef<HTMLElement>(null);
+    const [isMobile, setIsMobile] = useState(false)
+    const containerRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
       const checkWidth = () => {
         if (containerRef.current) {
-          const width = containerRef.current.offsetWidth;
-          setIsMobile(width < 768); // 768px is md breakpoint
+          const width = containerRef.current.offsetWidth
+          setIsMobile(width < 768) // 768px is md breakpoint
         }
-      };
+      }
 
-      checkWidth();
+      checkWidth()
 
-      const resizeObserver = new ResizeObserver(checkWidth);
+      const resizeObserver = new ResizeObserver(checkWidth)
       if (containerRef.current) {
-        resizeObserver.observe(containerRef.current);
+        resizeObserver.observe(containerRef.current)
       }
 
       return () => {
-        resizeObserver.disconnect();
-      };
-    }, []);
+        resizeObserver.disconnect()
+      }
+    }, [])
 
     // Combine refs
     const combinedRef = React.useCallback(
       (node: HTMLElement | null) => {
-        containerRef.current = node;
+        containerRef.current = node
         if (typeof ref === "function") {
-          ref(node);
+          ref(node)
         } else if (ref) {
-          ref.current = node;
+          ref.current = node
         }
       },
       [ref]
-    );
+    )
 
     return (
       <header
@@ -321,8 +321,8 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
                         <NavigationMenuItem key={index} className="w-full">
                           <button
                             onClick={(e) => {
-                              e.preventDefault();
-                              if (onNavItemClick && link.href) onNavItemClick(link.href);
+                              e.preventDefault()
+                              if (onNavItemClick && link.href) onNavItemClick(link.href)
                             }}
                             className="flex w-full cursor-pointer items-center rounded-md px-3 py-2 text-sm font-medium no-underline transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                           >
@@ -353,8 +353,8 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
                         <NavigationMenuLink
                           href={link.href}
                           onClick={(e) => {
-                            e.preventDefault();
-                            if (onNavItemClick && link.href) onNavItemClick(link.href);
+                            e.preventDefault()
+                            if (onNavItemClick && link.href) onNavItemClick(link.href)
                           }}
                           className="group inline-flex h-10 w-max cursor-pointer items-center justify-center rounded-md bg-background px-4 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                         >
@@ -388,10 +388,10 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
           </div>
         </div>
       </header>
-    );
+    )
   }
-);
+)
 
-Navbar05.displayName = "Navbar05";
+Navbar05.displayName = "Navbar05"
 
-export { HamburgerIcon, InfoMenu, Logo, NotificationMenu, UserMenu };
+export { HamburgerIcon, InfoMenu, Logo, NotificationMenu, UserMenu }

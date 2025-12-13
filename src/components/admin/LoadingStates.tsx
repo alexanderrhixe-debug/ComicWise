@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader } from "ui/card";
-import { Skeleton } from "ui/skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table";
+import { Card, CardContent, CardHeader } from "ui/card"
+import { Skeleton } from "ui/skeleton"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui/table"
 
 export function TableSkeleton({ columns = 5, rows = 10 }: { columns?: number; rows?: number }) {
   return (
@@ -37,7 +37,7 @@ export function TableSkeleton({ columns = 5, rows = 10 }: { columns?: number; ro
         </Table>
       </div>
     </div>
-  );
+  )
 }
 
 export function FormSkeleton({ fields = 5 }: { fields?: number }) {
@@ -54,7 +54,7 @@ export function FormSkeleton({ fields = 5 }: { fields?: number }) {
         <Skeleton className="h-10 w-[100px]" />
       </div>
     </div>
-  );
+  )
 }
 
 export function StatCardSkeleton() {
@@ -69,7 +69,7 @@ export function StatCardSkeleton() {
         <Skeleton className="mt-1 h-3 w-[120px]" />
       </CardContent>
     </Card>
-  );
+  )
 }
 
 export function DashboardSkeleton() {
@@ -122,7 +122,7 @@ export function DashboardSkeleton() {
         </Card>
       </div>
     </div>
-  );
+  )
 }
 
 export function CardGridSkeleton({ count = 12 }: { count?: number }) {
@@ -138,5 +138,5 @@ export function CardGridSkeleton({ count = 12 }: { count?: number }) {
         </Card>
       ))}
     </div>
-  );
+  )
 }

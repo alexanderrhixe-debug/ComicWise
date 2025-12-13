@@ -1,10 +1,10 @@
-import { Button } from "ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card";
-import { Separator } from "ui/separator";
+import { Button } from "ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card"
+import { Separator } from "ui/separator"
 
-import RegisterForm from "@/components/shadcn-studio/blocks/register-01/register-form";
-import Logo from "@/components/shadcn-studio/logo";
-import AuthBackgroundShape from "assets/svg/auth-background-shape";
+import RegisterForm from "@/components/shadcn-studio/blocks/register-01/register-form"
+import Logo from "@/components/shadcn-studio/logo"
+import AuthBackgroundShape from "assets/svg/auth-background-shape"
 
 const Register = () => {
   return (
@@ -50,7 +50,7 @@ const Register = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

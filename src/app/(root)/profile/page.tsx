@@ -1,33 +1,33 @@
-import { auth } from "auth";
-import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
-import { Button } from "components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Label } from "components/ui/label";
-import { BookMarked, Mail, User } from "lucide-react";
-import { redirect } from "next/navigation";
-import { getBookmarkCount } from "src/database/queries";
+import { auth } from "auth"
+import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Label } from "components/ui/label"
+import { BookMarked, Mail, User } from "lucide-react"
+import { redirect } from "next/navigation"
+import { getBookmarkCount } from "src/database/queries"
 
 export const metadata = {
   title: "Profile - ComicWise",
   description: "Manage your account and preferences",
-};
+}
 
 export default async function ProfilePage() {
-  const session = await auth();
+  const session = await auth()
 
   if (!session?.user) {
-    redirect("/sign-in?callbackUrl=/profile");
+    redirect("/sign-in?callbackUrl=/profile")
   }
 
-  const bookmarkCount = await getBookmarkCount(session.user.id);
+  const bookmarkCount = await getBookmarkCount(session.user.id)
 
   const initials =
     session.user.name
       ?.split(" ")
       .map((n: any) => n[0])
       .join("")
-      .toUpperCase() || "U";
+      .toUpperCase() || "U"
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -126,5 +126,5 @@ export default async function ProfilePage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

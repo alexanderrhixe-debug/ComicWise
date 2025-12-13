@@ -1,6 +1,6 @@
-import { database } from "database";
-import { bookmark } from "database/schema";
-import { and, eq } from "drizzle-orm";
+import { database } from "database"
+import { bookmark } from "database/schema"
+import { and, eq } from "drizzle-orm"
 
 export async function addBookmark(userId: string, comicId: number, chapterId?: number) {
   const [newBookmark] = await database
@@ -17,18 +17,18 @@ export async function addBookmark(userId: string, comicId: number, chapterId?: n
         updatedAt: new Date(),
       },
     })
-    .returning();
+    .returning()
 
-  return newBookmark;
+  return newBookmark
 }
 
 export async function removeBookmark(userId: string, comicId: number) {
   const [deleted] = await database
     .delete(bookmark)
     .where(and(eq(bookmark.userId, userId), eq(bookmark.comicId, comicId)))
-    .returning();
+    .returning()
 
-  return deleted;
+  return deleted
 }
 
 export async function updateReadingProgress(userId: string, comicId: number, chapterId: number) {
@@ -39,9 +39,9 @@ export async function updateReadingProgress(userId: string, comicId: number, cha
       updatedAt: new Date(),
     })
     .where(and(eq(bookmark.userId, userId), eq(bookmark.comicId, comicId)))
-    .returning();
+    .returning()
 
-  return updated;
+  return updated
 }
 
 export async function updateBookmarkNotes(userId: string, comicId: number, notes: string) {
@@ -52,7 +52,7 @@ export async function updateBookmarkNotes(userId: string, comicId: number, notes
       updatedAt: new Date(),
     })
     .where(and(eq(bookmark.userId, userId), eq(bookmark.comicId, comicId)))
-    .returning();
+    .returning()
 
-  return updated;
+  return updated
 }

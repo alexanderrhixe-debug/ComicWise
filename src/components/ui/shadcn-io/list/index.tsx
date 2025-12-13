@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   DndContext,
@@ -6,45 +6,45 @@ import {
   rectIntersection,
   useDraggable,
   useDroppable,
-} from "@dnd-kit/core";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import type { ReactNode } from "react";
-import { cn } from "utils";
+} from "@dnd-kit/core"
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
+import type { ReactNode } from "react"
+import { cn } from "utils"
 
-export type { DragEndEvent } from "@dnd-kit/core";
+export type { DragEndEvent } from "@dnd-kit/core"
 
 type Status = {
-  id: string;
-  name: string;
-  color: string;
-};
+  id: string
+  name: string
+  color: string
+}
 
 type Feature = {
-  id: string;
-  name: string;
-  startAt: Date;
-  endAt: Date;
-  status: Status;
-};
+  id: string
+  name: string
+  startAt: Date
+  endAt: Date
+  status: Status
+}
 
 export type ListItemsProps = {
-  children: ReactNode;
-  className?: string;
-};
+  children: ReactNode
+  className?: string
+}
 
 export const ListItems = ({ children, className }: ListItemsProps) => (
   <div className={cn("flex flex-1 flex-col gap-2 p-3", className)}>{children}</div>
-);
+)
 
 export type ListHeaderProps =
   | {
-      children: ReactNode;
+      children: ReactNode
     }
   | {
-      name: Status["name"];
-      color: Status["color"];
-      className?: string;
-    };
+      name: Status["name"]
+      color: Status["color"]
+      className?: string
+    }
 
 export const ListHeader = (props: ListHeaderProps) =>
   "children" in props ? (
@@ -54,16 +54,16 @@ export const ListHeader = (props: ListHeaderProps) =>
       <div className="h-2 w-2 rounded-full" style={{ backgroundColor: props.color }} />
       <p className="m-0 text-sm font-semibold">{props.name}</p>
     </div>
-  );
+  )
 
 export type ListGroupProps = {
-  id: Status["id"];
-  children: ReactNode;
-  className?: string;
-};
+  id: Status["id"]
+  children: ReactNode
+  className?: string
+}
 
 export const ListGroup = ({ id, children, className }: ListGroupProps) => {
-  const { setNodeRef, isOver } = useDroppable({ id });
+  const { setNodeRef, isOver } = useDroppable({ id })
 
   return (
     <div
@@ -72,21 +72,21 @@ export const ListGroup = ({ id, children, className }: ListGroupProps) => {
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
 export type ListItemProps = Pick<Feature, "id" | "name"> & {
-  readonly index: number;
-  readonly parent: string;
-  readonly children?: ReactNode;
-  readonly className?: string;
-};
+  readonly index: number
+  readonly parent: string
+  readonly children?: ReactNode
+  readonly className?: string
+}
 
 export const ListItem = ({ id, name, index, parent, children, className }: ListItemProps) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id,
     data: { index, parent },
-  });
+  })
 
   return (
     <div
@@ -104,14 +104,14 @@ export const ListItem = ({ id, name, index, parent, children, className }: ListI
     >
       {children ?? <p className="m-0 text-sm font-medium">{name}</p>}
     </div>
-  );
-};
+  )
+}
 
 export type ListProviderProps = {
-  children: ReactNode;
-  onDragEnd: (event: DragEndEvent) => void;
-  className?: string;
-};
+  children: ReactNode
+  onDragEnd: (event: DragEndEvent) => void
+  className?: string
+}
 
 export const ListProvider = ({ children, onDragEnd, className }: ListProviderProps) => (
   <DndContext
@@ -121,4 +121,4 @@ export const ListProvider = ({ children, onDragEnd, className }: ListProviderPro
   >
     <div className={cn("flex size-full flex-col", className)}>{children}</div>
   </DndContext>
-);
+)

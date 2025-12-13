@@ -3,51 +3,51 @@
  * Provides efficient batch processing for large datasets
  */
 
-import { logger } from "database/seed/logger";
+import { logger } from "database/seed/logger"
 
 export interface BatchProcessorOptions {
-  batchSize?: number;
-  concurrency?: number;
-  onProgress?: (processed: number, total: number) => void;
-  onError?: (error: unknown, item: unknown) => void;
+  batchSize?: number
+  concurrency?: number
+  onProgress?: (processed: number, total: number) => void
+  onError?: (error: unknown, item: unknown) => void
 }
 
 export class BatchProcessor<T, R = void> {
-  private readonly batchSize: number;
-  private readonly concurrency: number;
-  private readonly onProgress?: (processed: number, total: number) => void;
-  private readonly onError?: (error: unknown, item: T) => void;
+  private readonly batchSize: number
+  private readonly concurrency: number
+  private readonly onProgress?: (processed: number, total: number) => void
+  private readonly onError?: (error: unknown, item: T) => void
 
   constructor(options: BatchProcessorOptions = {}) {
-    this.batchSize = options.batchSize ?? 100;
-    this.concurrency = options.concurrency ?? 5;
-    this.onProgress = options.onProgress;
-    this.onError = options.onError;
+    this.batchSize = options.batchSize ?? 100
+    this.concurrency = options.concurrency ?? 5
+    this.onProgress = options.onProgress
+    this.onError = options.onError
   }
 
   /**
    * Process items in batches with concurrency control
    */
   async process(items: T[], processor: (item: T) => Promise<R>): Promise<R[]> {
-    const results: R[] = [];
-    const batches: T[][] = this.createBatches(items);
+    const results: R[] = []
+    const batches: T[][] = this.createBatches(items)
 
-    logger.info(`Processing ${items.length} items in ${batches.length} batches`);
+    logger.info(`Processing ${items.length} items in ${batches.length} batches`)
 
     for (let i = 0; i < batches.length; i++) {
-      const batch: T[] | undefined = batches[i];
+      const batch: T[] | undefined = batches[i]
       if (!batch) {
-        continue;
+        continue
       }
-      logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} items)`);
+      logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} items)`)
 
-      const batchResults = await this.processBatch(batch, processor);
-      results.push(...batchResults);
+      const batchResults = await this.processBatch(batch, processor)
+      results.push(...batchResults)
 
-      this.onProgress?.(results.length, items.length);
+      this.onProgress?.(results.length, items.length)
     }
 
-    return results;
+    return results
   }
 
   /**
@@ -57,81 +57,81 @@ export class BatchProcessor<T, R = void> {
     items: T[],
     processor: (batch: T[]) => Promise<TResult>
   ): Promise<TResult[]> {
-    const batches = this.createBatches(items);
-    const results: TResult[] = [];
+    const batches = this.createBatches(items)
+    const results: TResult[] = []
 
-    logger.info(`Processing ${items.length} items in ${batches.length} batches (transactional)`);
+    logger.info(`Processing ${items.length} items in ${batches.length} batches (transactional)`)
 
     for (let i = 0; i < batches.length; i++) {
-      const batch = batches[i];
+      const batch = batches[i]
       if (!batch) {
-        continue;
+        continue
       }
-      logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} items)`);
+      logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} items)`)
 
       try {
-        const result = await processor(batch);
-        results.push(result);
-        this.onProgress?.((i + 1) * this.batchSize, items.length);
+        const result = await processor(batch)
+        results.push(result)
+        this.onProgress?.((i + 1) * this.batchSize, items.length)
       } catch (error) {
-        logger.error(`Batch ${i + 1} failed: ${error}`);
-        throw error;
+        logger.error(`Batch ${i + 1} failed: ${error}`)
+        throw error
       }
     }
 
-    return results;
+    return results
   }
 
   /**
    * Process a single batch with concurrency control
    */
   private async processBatch(batch: T[], processor: (item: T) => Promise<R>): Promise<R[]> {
-    const results: R[] = [];
-    const chunks = this.createConcurrentChunks(batch);
+    const results: R[] = []
+    const chunks = this.createConcurrentChunks(batch)
 
     for (const chunk of chunks) {
-      const chunkResults = await Promise.allSettled(chunk.map(processor));
+      const chunkResults = await Promise.allSettled(chunk.map(processor))
 
       for (let i = 0; i < chunkResults.length; i++) {
-        const result = chunkResults[i];
+        const result = chunkResults[i]
         if (!result) {
-          continue;
+          continue
         }
 
         if (result.status === "fulfilled") {
-          results.push(result.value);
+          results.push(result.value)
         } else {
-          const item = chunk[i];
+          const item = chunk[i]
           if (item !== undefined) {
-            this.onError?.(result.reason, item);
+            this.onError?.(result.reason, item)
           }
         }
       }
     }
 
-    return results;
+    return results
   }
 
   /**
    * Create batches from items
    */
   private createBatches(items: T[]): T[][] {
-    const batches: T[][] = [];
+    const batches: T[][] = []
     for (let i = 0; i < items.length; i += this.batchSize) {
-      batches.push(items.slice(i, i + this.batchSize));
+      batches.push(items.slice(i, i + this.batchSize))
     }
-    return batches;
+    return batches
   }
 
   /**
    * Create concurrent chunks for processing
    */
   private createConcurrentChunks(items: T[]): T[][] {
-    const chunks: T[][] = [];
+    const chunks: T[][] = []
     for (let i = 0; i < items.length; i += this.concurrency) {
-      chunks.push(items.slice(i, i + this.concurrency));
+      chunks.push(items.slice(i, i + this.concurrency))
     }
-    return chunks;
+    return chunks
   }
 }
 
@@ -143,8 +143,8 @@ export async function processBatch<T, R = void>(
   processor: (item: T) => Promise<R>,
   options?: BatchProcessorOptions
 ): Promise<R[]> {
-  const batchProcessor = new BatchProcessor<T, R>(options);
-  return batchProcessor.process(items, processor);
+  const batchProcessor = new BatchProcessor<T, R>(options)
+  return batchProcessor.process(items, processor)
 }
 
 /**
@@ -155,6 +155,6 @@ export async function processBatchInTransaction<T, R>(
   processor: (batch: T[]) => Promise<R>,
   options?: BatchProcessorOptions
 ): Promise<R[]> {
-  const batchProcessor = new BatchProcessor<T, R>(options);
-  return batchProcessor.processInTransaction(items, processor);
+  const batchProcessor = new BatchProcessor<T, R>(options)
+  return batchProcessor.processInTransaction(items, processor)
 }

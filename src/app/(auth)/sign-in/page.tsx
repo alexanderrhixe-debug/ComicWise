@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
 // ═══════════════════════════════════════════════════
 // SIGN IN PAGE (Next.js 16 + React 19)
 // ═══════════════════════════════════════════════════
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, AlertDescription } from "components/ui/alert";
-import { Button } from "components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Alert, AlertDescription } from "components/ui/alert"
+import { Button } from "components/ui/button"
 import {
   Card,
   CardContent,
@@ -14,23 +14,23 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "components/ui/card";
-import { Input } from "components/ui/input";
-import { Label } from "components/ui/label";
-import { PasswordInput } from "components/ui/password-input";
-import { signInSchema, type SignInInput } from "lib/validations/schemas";
-import { Loader2 } from "lucide-react";
-import { signIn } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+} from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Label } from "components/ui/label"
+import { PasswordInput } from "components/ui/password-input"
+import { signInSchema, type SignInInput } from "lib/validations/schemas"
+import { Loader2 } from "lucide-react"
+import { signIn } from "next-auth/react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export default function SignInPage() {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const {
     register,
@@ -42,10 +42,10 @@ export default function SignInPage() {
       email: "",
       password: "",
     },
-  });
+  })
 
   const onSubmit = async (data: SignInInput) => {
-    setError(null);
+    setError(null)
 
     startTransition(async () => {
       try {
@@ -53,35 +53,35 @@ export default function SignInPage() {
           email: data.email,
           password: data.password,
           redirect: false,
-        });
+        })
 
         if (result?.error) {
-          setError("Invalid email or password. Please try again.");
-          toast.error("Invalid credentials");
+          setError("Invalid email or password. Please try again.")
+          toast.error("Invalid credentials")
         } else {
-          toast.success("Welcome back!");
-          router.push("/");
-          router.refresh();
+          toast.success("Welcome back!")
+          router.push("/")
+          router.refresh()
         }
       } catch (err) {
-        console.error("Sign in error:", err);
-        setError("An unexpected error occurred. Please try again.");
-        toast.error("Failed to sign in");
+        console.error("Sign in error:", err)
+        setError("An unexpected error occurred. Please try again.")
+        toast.error("Failed to sign in")
       }
-    });
-  };
+    })
+  }
 
   const handleGoogleSignIn = () => {
     startTransition(async () => {
       try {
-        await signIn("google", { callbackUrl: "/" });
+        await signIn("google", { callbackUrl: "/" })
       } catch {
-        toast.error("Failed to sign in with Google");
+        toast.error("Failed to sign in with Google")
       }
-    });
-  };
+    })
+  }
 
-  const isLoading = isSubmitting || isPending;
+  const isLoading = isSubmitting || isPending
 
   return (
     <Card className="w-full max-w-md">
@@ -185,5 +185,5 @@ export default function SignInPage() {
         </CardFooter>
       </form>
     </Card>
-  );
+  )
 }

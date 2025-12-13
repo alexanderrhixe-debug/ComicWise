@@ -1,4 +1,4 @@
-import { signInSchema, signUpSchema } from "lib/validations/auth";
+import { signInSchema, signUpSchema } from "lib/validations/auth"
 import {
   createBookmarkSchema,
   createChapterSchema,
@@ -10,8 +10,8 @@ import {
   updateComicSchema,
   updateCommentSchema,
   verifyEmailSchema,
-} from "lib/validations/index";
-import { describe, expect, it } from "vitest";
+} from "lib/validator"
+import { describe, expect, it } from "vitest"
 
 describe("Authentication Validation Schemas", () => {
   describe("signUpSchema", () => {
@@ -20,148 +20,148 @@ describe("Authentication Validation Schemas", () => {
         name: "John Doe",
         email: "john@example.com",
         password: "SecurePass123!",
-      };
+      }
 
-      const result = signUpSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = signUpSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject empty name", () => {
       const invalidData = {
         name: "",
         email: "john@example.com",
         password: "SecurePass123!",
-      };
+      }
 
-      const result = signUpSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = signUpSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject invalid email", () => {
       const invalidData = {
         name: "John Doe",
         email: "not-an-email",
         password: "SecurePass123!",
-      };
+      }
 
-      const result = signUpSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = signUpSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject short password", () => {
       const invalidData = {
         name: "John Doe",
         email: "john@example.com",
         password: "123",
-      };
+      }
 
-      const result = signUpSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = signUpSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject password without uppercase", () => {
       const invalidData = {
         name: "John Doe",
         email: "john@example.com",
         password: "securepass123!",
-      };
+      }
 
-      const result = signUpSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = signUpSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject password without lowercase", () => {
       const invalidData = {
         name: "John Doe",
         email: "john@example.com",
         password: "SECUREPASS123!",
-      };
+      }
 
-      const result = signUpSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = signUpSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject password without number", () => {
       const invalidData = {
         name: "John Doe",
         email: "john@example.com",
         password: "SecurePass!",
-      };
+      }
 
-      const result = signUpSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = signUpSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should trim whitespace from inputs", () => {
       const dataWithSpaces = {
         name: "  John Doe  ",
         email: "  john@example.com  ",
         password: "SecurePass123!",
-      };
-
-      const result = signUpSchema.safeParse(dataWithSpaces);
-      expect(result.success).toBe(true);
-      if (result.success) {
-        expect(result.data.name).toBe("John Doe");
-        expect(result.data.email).toBe("john@example.com");
       }
-    });
-  });
+
+      const result = signUpSchema.safeParse(dataWithSpaces)
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.name).toBe("John Doe")
+        expect(result.data.email).toBe("john@example.com")
+      }
+    })
+  })
 
   describe("signInSchema", () => {
     it("should validate correct signin data", () => {
       const validData = {
         email: "john@example.com",
         password: "SecurePass123!",
-      };
+      }
 
-      const result = signInSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = signInSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject invalid email", () => {
       const invalidData = {
         email: "invalid-email",
         password: "SecurePass123!",
-      };
+      }
 
-      const result = signInSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = signInSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject empty password", () => {
       const invalidData = {
         email: "john@example.com",
         password: "",
-      };
+      }
 
-      const result = signInSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
-  });
+      const result = signInSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
+  })
 
   describe("forgotPasswordSchema", () => {
     it("should validate correct email", () => {
-      const validData = { email: "john@example.com" };
+      const validData = { email: "john@example.com" }
 
-      const result = forgotPasswordSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = forgotPasswordSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject invalid email", () => {
-      const invalidData = { email: "not-an-email" };
+      const invalidData = { email: "not-an-email" }
 
-      const result = forgotPasswordSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = forgotPasswordSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject empty email", () => {
-      const invalidData = { email: "" };
+      const invalidData = { email: "" }
 
-      const result = forgotPasswordSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
-  });
+      const result = forgotPasswordSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
+  })
 
   describe("resetPasswordSchema", () => {
     it("should validate correct reset password data", () => {
@@ -169,62 +169,62 @@ describe("Authentication Validation Schemas", () => {
         token: "valid-token-123",
         password: "NewSecurePass123!",
         confirmPassword: "NewSecurePass123!",
-      };
+      }
 
-      const result = resetPasswordSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = resetPasswordSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject mismatched passwords", () => {
       const invalidData = {
         token: "valid-token-123",
         password: "NewSecurePass123!",
         confirmPassword: "DifferentPass123!",
-      };
+      }
 
-      const result = resetPasswordSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = resetPasswordSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject weak password", () => {
       const invalidData = {
         token: "valid-token-123",
         password: "weak",
         confirmPassword: "weak",
-      };
+      }
 
-      const result = resetPasswordSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = resetPasswordSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject empty token", () => {
       const invalidData = {
         token: "",
         password: "NewSecurePass123!",
         confirmPassword: "NewSecurePass123!",
-      };
+      }
 
-      const result = resetPasswordSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
-  });
+      const result = resetPasswordSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
+  })
 
   describe("verifyEmailSchema", () => {
     it("should validate correct token", () => {
-      const validData = { token: "valid-verification-token" };
+      const validData = { token: "valid-verification-token" }
 
-      const result = verifyEmailSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = verifyEmailSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject empty token", () => {
-      const invalidData = { token: "" };
+      const invalidData = { token: "" }
 
-      const result = verifyEmailSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
-  });
-});
+      const result = verifyEmailSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
+  })
+})
 
 describe("Comic Validation Schemas", () => {
   describe("createComicSchema", () => {
@@ -236,11 +236,11 @@ describe("Comic Validation Schemas", () => {
         status: "ongoing",
         coverImage: "https://example.com/cover.jpg",
         genres: ["action", "adventure"],
-      };
+      }
 
-      const result = createComicSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = createComicSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject empty title", () => {
       const invalidData = {
@@ -248,11 +248,11 @@ describe("Comic Validation Schemas", () => {
         description: "A test comic description",
         author: "Test Author",
         status: "ongoing",
-      };
+      }
 
-      const result = createComicSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createComicSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject title that's too long", () => {
       const invalidData = {
@@ -260,11 +260,11 @@ describe("Comic Validation Schemas", () => {
         description: "A test comic description",
         author: "Test Author",
         status: "ongoing",
-      };
+      }
 
-      const result = createComicSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createComicSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject empty description", () => {
       const invalidData = {
@@ -272,11 +272,11 @@ describe("Comic Validation Schemas", () => {
         description: "",
         author: "Test Author",
         status: "ongoing",
-      };
+      }
 
-      const result = createComicSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createComicSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject invalid status", () => {
       const invalidData = {
@@ -284,14 +284,14 @@ describe("Comic Validation Schemas", () => {
         description: "A test comic description",
         author: "Test Author",
         status: "invalid-status",
-      };
+      }
 
-      const result = createComicSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createComicSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should accept valid status values", () => {
-      const statuses = ["ongoing", "completed", "hiatus", "cancelled"];
+      const statuses = ["ongoing", "completed", "hiatus", "cancelled"]
 
       statuses.forEach((status) => {
         const data = {
@@ -299,41 +299,41 @@ describe("Comic Validation Schemas", () => {
           description: "A test comic description",
           author: "Test Author",
           status,
-        };
+        }
 
-        const result = createComicSchema.safeParse(data);
-        expect(result.success).toBe(true);
-      });
-    });
-  });
+        const result = createComicSchema.safeParse(data)
+        expect(result.success).toBe(true)
+      })
+    })
+  })
 
   describe("updateComicSchema", () => {
     it("should validate partial comic updates", () => {
       const validData = {
         title: "Updated Title",
-      };
+      }
 
-      const result = updateComicSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = updateComicSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should allow empty updates", () => {
-      const validData = {};
+      const validData = {}
 
-      const result = updateComicSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = updateComicSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject invalid field values", () => {
       const invalidData = {
         status: "invalid-status",
-      };
+      }
 
-      const result = updateComicSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
-  });
-});
+      const result = updateComicSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
+  })
+})
 
 describe("Chapter Validation Schemas", () => {
   describe("createChapterSchema", () => {
@@ -343,11 +343,11 @@ describe("Chapter Validation Schemas", () => {
         chapterNumber: 1,
         content: "Chapter content here",
         comicId: "comic-123",
-      };
+      }
 
-      const result = createChapterSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = createChapterSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject empty title", () => {
       const invalidData = {
@@ -355,11 +355,11 @@ describe("Chapter Validation Schemas", () => {
         chapterNumber: 1,
         content: "Chapter content here",
         comicId: "comic-123",
-      };
+      }
 
-      const result = createChapterSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createChapterSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject negative chapter number", () => {
       const invalidData = {
@@ -367,11 +367,11 @@ describe("Chapter Validation Schemas", () => {
         chapterNumber: -1,
         content: "Chapter content here",
         comicId: "comic-123",
-      };
+      }
 
-      const result = createChapterSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createChapterSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject zero chapter number", () => {
       const invalidData = {
@@ -379,11 +379,11 @@ describe("Chapter Validation Schemas", () => {
         chapterNumber: 0,
         content: "Chapter content here",
         comicId: "comic-123",
-      };
+      }
 
-      const result = createChapterSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createChapterSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should accept decimal chapter numbers", () => {
       const validData = {
@@ -391,31 +391,31 @@ describe("Chapter Validation Schemas", () => {
         chapterNumber: 1.5,
         content: "Chapter content here",
         comicId: "comic-123",
-      };
+      }
 
-      const result = createChapterSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
-  });
+      const result = createChapterSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
+  })
 
   describe("updateChapterSchema", () => {
     it("should validate partial chapter updates", () => {
       const validData = {
         title: "Updated Chapter Title",
-      };
+      }
 
-      const result = updateChapterSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = updateChapterSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should allow empty updates", () => {
-      const validData = {};
+      const validData = {}
 
-      const result = updateChapterSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
-  });
-});
+      const result = updateChapterSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
+  })
+})
 
 describe("Comment Validation Schemas", () => {
   describe("createCommentSchema", () => {
@@ -423,93 +423,93 @@ describe("Comment Validation Schemas", () => {
       const validData = {
         content: "This is a test comment",
         comicId: "comic-123",
-      };
+      }
 
-      const result = createCommentSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = createCommentSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject empty content", () => {
       const invalidData = {
         content: "",
         comicId: "comic-123",
-      };
+      }
 
-      const result = createCommentSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createCommentSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should reject content that's too long", () => {
       const invalidData = {
         content: "A".repeat(2001),
         comicId: "comic-123",
-      };
+      }
 
-      const result = createCommentSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createCommentSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should accept comment with chapter reference", () => {
       const validData = {
         content: "Great chapter!",
         comicId: "comic-123",
         chapterId: "chapter-456",
-      };
+      }
 
-      const result = createCommentSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
-  });
+      const result = createCommentSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
+  })
 
   describe("updateCommentSchema", () => {
     it("should validate comment content update", () => {
       const validData = {
         content: "Updated comment text",
-      };
+      }
 
-      const result = updateCommentSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = updateCommentSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject empty content", () => {
       const invalidData = {
         content: "",
-      };
+      }
 
-      const result = updateCommentSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
-  });
-});
+      const result = updateCommentSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
+  })
+})
 
 describe("Bookmark Validation Schemas", () => {
   describe("createBookmarkSchema", () => {
     it("should validate correct bookmark data", () => {
       const validData = {
         comicId: "comic-123",
-      };
+      }
 
-      const result = createBookmarkSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
+      const result = createBookmarkSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
 
     it("should reject empty comicId", () => {
       const invalidData = {
         comicId: "",
-      };
+      }
 
-      const result = createBookmarkSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
+      const result = createBookmarkSchema.safeParse(invalidData)
+      expect(result.success).toBe(false)
+    })
 
     it("should accept bookmark with current chapter", () => {
       const validData = {
         comicId: "comic-123",
         currentChapterId: "chapter-456",
-      };
+      }
 
-      const result = createBookmarkSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
-  });
-});
+      const result = createBookmarkSchema.safeParse(validData)
+      expect(result.success).toBe(true)
+    })
+  })
+})

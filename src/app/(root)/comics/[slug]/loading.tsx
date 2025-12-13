@@ -1,5 +1,5 @@
-import { ComicDetailSkeleton } from "components/ui/skeletons";
+import { ComicDetailSkeleton } from "components/ui/skeletons"
 
 export default function Loading() {
-  return <ComicDetailSkeleton />;
+  return <ComicDetailSkeleton />
 }

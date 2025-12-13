@@ -1,20 +1,20 @@
-import { env } from "appConfig";
-import { DataTable } from "components/admin/DataTable";
-import { Button } from "components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
+import { env } from "appConfig"
+import { DataTable } from "components/admin/DataTable"
+import { Button } from "components/ui/button"
+import { Plus } from "lucide-react"
+import Link from "next/link"
+import { Suspense } from "react"
 
 async function getArtists() {
-  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const response = await fetch(`${baseUrl}/api/artists?limit=100`);
+  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  const response = await fetch(`${baseUrl}/api/artists?limit=100`)
 
   if (!response.ok) {
-    throw new Error("Failed to fetch artists");
+    throw new Error("Failed to fetch artists")
   }
 
-  const data = await response.json();
-  return data.artists || [];
+  const data = await response.json()
+  return data.artists || []
 }
 
 function ArtistsHeader() {
@@ -31,11 +31,11 @@ function ArtistsHeader() {
         </Link>
       </Button>
     </div>
-  );
+  )
 }
 
 async function ArtistsTable() {
-  const artists = await getArtists();
+  const artists = await getArtists()
 
   const columns = [
     {
@@ -54,9 +54,9 @@ async function ArtistsTable() {
       accessorKey: "createdAt",
       header: "Created",
     },
-  ];
+  ]
 
-  return <DataTable columns={columns} data={artists} />;
+  return <DataTable columns={columns} data={artists} />
 }
 
 export default function ArtistsPage() {
@@ -68,5 +68,5 @@ export default function ArtistsPage() {
         <ArtistsTable />
       </Suspense>
     </div>
-  );
+  )
 }

@@ -1,13 +1,13 @@
-import { appConfig, env } from "appConfig";
-import nodemailer from "nodemailer";
+import { appConfig, env } from "appConfig"
+import nodemailer from "nodemailer"
 
-import type { MailOptions, Transporter } from "nodemailer";
+import type { MailOptions, Transporter } from "nodemailer"
 
 // ═══════════════════════════════════════════════════
 // TRANSPORTER CONFIGURATION
 // ═══════════════════════════════════════════════════
 
-let transporter: Transporter | null = null;
+let transporter: Transporter | null = null
 
 function createTransporter(): Transporter {
   if (!transporter) {
@@ -22,9 +22,9 @@ function createTransporter(): Transporter {
               pass: appConfig.email.password,
             }
           : undefined,
-    });
+    })
   }
-  return transporter;
+  return transporter
 }
 
 // ═══════════════════════════════════════════════════
@@ -32,17 +32,17 @@ function createTransporter(): Transporter {
 // ═══════════════════════════════════════════════════
 
 export interface EmailOptions {
-  to: string | string[];
-  subject: string;
-  html?: string;
-  text?: string;
-  from?: string;
+  to: string | string[]
+  subject: string
+  html?: string
+  text?: string
+  from?: string
 }
 
 export interface EmailResult {
-  success: boolean;
-  messageId?: string;
-  error?: string;
+  success: boolean
+  messageId?: string
+  error?: string
 }
 
 // ═══════════════════════════════════════════════════
@@ -51,7 +51,7 @@ export interface EmailResult {
 
 export async function sendEmail(options: EmailOptions): Promise<EmailResult> {
   try {
-    const transporter = createTransporter();
+    const transporter = createTransporter()
 
     const mailOptions: MailOptions = {
       from: options.from || appConfig.email.from,
@@ -59,17 +59,17 @@ export async function sendEmail(options: EmailOptions): Promise<EmailResult> {
       subject: options.subject,
       html: options.html,
       text: options.text,
-    };
+    }
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✉️ Email sent:", info.messageId);
-    return { success: true, messageId: info.messageId };
+    const info = await transporter.sendMail(mailOptions)
+    console.log("✉️ Email sent:", info.messageId)
+    return { success: true, messageId: info.messageId }
   } catch (error) {
-    console.error("❌ Error sending email:", error);
+    console.error("❌ Error sending email:", error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to send email",
-    };
+    }
   }
 }
 
@@ -118,7 +118,7 @@ function getEmailTemplate(title: string, content: string): string {
       </div>
     </body>
     </html>
-  `;
+  `
 }
 
 // ═══════════════════════════════════════════════════
@@ -130,7 +130,7 @@ export async function sendVerificationEmail(
   name: string,
   token: string
 ): Promise<EmailResult> {
-  const verificationUrl = `${env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
+  const verificationUrl = `${env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`
 
   const content = `
     <h2>Welcome to ComicWise, ${name}! 🎉</h2>
@@ -144,14 +144,14 @@ export async function sendVerificationEmail(
     </div>
     <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
     <p style="word-break: break-all; color: #667eea; font-size: 14px;">${verificationUrl}</p>
-  `;
+  `
 
   return sendEmail({
     to: email,
     subject: "Verify your ComicWise email address",
     html: getEmailTemplate("Verify Email", content),
     text: `Welcome to ComicWise, ${name}!\n\nPlease verify your email by visiting: ${verificationUrl}\n\nThis link will expire in 24 hours.`,
-  });
+  })
 }
 
 export async function sendPasswordResetEmail(
@@ -159,7 +159,7 @@ export async function sendPasswordResetEmail(
   name: string,
   token: string
 ): Promise<EmailResult> {
-  const resetUrl = `${env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;
+  const resetUrl = `${env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`
 
   const content = `
     <h2>Password Reset Request</h2>
@@ -175,14 +175,14 @@ export async function sendPasswordResetEmail(
     </div>
     <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
     <p style="word-break: break-all; color: #667eea; font-size: 14px;">${resetUrl}</p>
-  `;
+  `
 
   return sendEmail({
     to: email,
     subject: "Reset your ComicWise password",
     html: getEmailTemplate("Password Reset", content),
     text: `Hi ${name},\n\nWe received a request to reset your password.\n\nReset your password by visiting: ${resetUrl}\n\nThis link will expire in 1 hour.`,
-  });
+  })
 }
 
 export async function sendWelcomeEmail(email: string, name: string): Promise<EmailResult> {
@@ -202,14 +202,14 @@ export async function sendWelcomeEmail(email: string, name: string): Promise<Ema
     </div>
     <div class="divider"></div>
     <p>If you have any questions or need assistance, feel free to reach out to our support team.</p>
-  `;
+  `
 
   return sendEmail({
     to: email,
     subject: "Welcome to ComicWise!",
     html: getEmailTemplate("Welcome", content),
     text: `Welcome to ComicWise, ${name}!\n\nYour email has been verified. Start exploring comics at: ${env.NEXT_PUBLIC_APP_URL}/comics`,
-  });
+  })
 }
 
 export async function sendPasswordChangedEmail(email: string, name: string): Promise<EmailResult> {
@@ -224,14 +224,14 @@ export async function sendPasswordChangedEmail(email: string, name: string): Pro
     <div style="text-align: center; margin-top: 20px;">
       <a href="${env.NEXT_PUBLIC_APP_URL}/profile" class="button">Go to Profile</a>
     </div>
-  `;
+  `
 
   return sendEmail({
     to: email,
     subject: "Your ComicWise password has been changed",
     html: getEmailTemplate("Password Changed", content),
     text: `Hi ${name},\n\nYour password has been successfully changed.\n\nIf you didn't make this change, please contact support immediately.`,
-  });
+  })
 }
 
 export async function sendNewComicNotification(
@@ -240,7 +240,7 @@ export async function sendNewComicNotification(
   comicTitle: string,
   comicId: number
 ): Promise<EmailResult> {
-  const comicUrl = `${env.NEXT_PUBLIC_APP_URL}/comics/${comicId}`;
+  const comicUrl = `${env.NEXT_PUBLIC_APP_URL}/comics/${comicId}`
 
   const content = `
     <h2>New Comic Available! 📚</h2>
@@ -253,14 +253,14 @@ export async function sendNewComicNotification(
     <div style="text-align: center;">
       <a href="${comicUrl}" class="button">Read Now</a>
     </div>
-  `;
+  `
 
   return sendEmail({
     to: email,
     subject: `New Comic: ${comicTitle}`,
     html: getEmailTemplate("New Comic", content),
     text: `Hi ${name},\n\nA new comic "${comicTitle}" is now available on ComicWise!\n\nRead it at: ${comicUrl}`,
-  });
+  })
 }
 
 export async function sendNewChapterNotification(
@@ -271,7 +271,7 @@ export async function sendNewChapterNotification(
   comicId: number,
   chapterId: number
 ): Promise<EmailResult> {
-  const chapterUrl = `${env.NEXT_PUBLIC_APP_URL}/comics/${comicId}/read/${chapterId}`;
+  const chapterUrl = `${env.NEXT_PUBLIC_APP_URL}/comics/${comicId}/read/${chapterId}`
 
   const content = `
     <h2>New Chapter Released! 📖</h2>
@@ -284,14 +284,14 @@ export async function sendNewChapterNotification(
     <div style="text-align: center;">
       <a href="${chapterUrl}" class="button">Read Chapter</a>
     </div>
-  `;
+  `
 
   return sendEmail({
     to: email,
     subject: `New Chapter: ${comicTitle} - ${chapterTitle}`,
     html: getEmailTemplate("New Chapter", content),
     text: `Hi ${name},\n\nNew chapter for "${comicTitle}": ${chapterTitle}\n\nRead it at: ${chapterUrl}`,
-  });
+  })
 }
 
 // ═══════════════════════════════════════════════════
@@ -306,6 +306,6 @@ export const emailService = {
   sendPasswordChangedEmail,
   sendNewComicNotification,
   sendNewChapterNotification,
-};
+}
 
-export default emailService;
+export default emailService

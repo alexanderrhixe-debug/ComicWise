@@ -7,10 +7,10 @@ declare module "database" {
   // The runtime `database` object (Drizzle client) — use the exported
   // `Database` type from `database/db` so consumers see the proper
   // `query` helpers and table bindings.
-  export const database: import("../database/db").Database;
+  export const database: import("../database/db").Database
   // export const client: import("../database/db").client;
-  export const tables: import("../database/db").Schema;
+  export const tables: import("../database/db").Schema
 
-  export type Database = import("../database/db").Database;
-  export type Schema = import("../database/db").Schema;
+  export type Database = import("../database/db").Database
+  export type Schema = import("../database/db").Schema
 }

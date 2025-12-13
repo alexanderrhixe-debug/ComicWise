@@ -2,7 +2,7 @@
 // COMPREHENSIVE ZOD VALIDATION SCHEMAS (Next.js 16)
 // ═══════════════════════════════════════════════════
 
-import { z } from "zod";
+import { z } from "zod"
 
 // ═══════════════════════════════════════════════════
 // AUTHENTICATION SCHEMAS
@@ -20,7 +20,7 @@ export const signInSchema = z
       .min(8, "Password must be at least 8 characters")
       .max(100, "Password must not exceed 100 characters"),
   })
-  .strict();
+  .strict()
 
 export const signUpSchema = z
   .object({
@@ -48,7 +48,7 @@ export const signUpSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  });
+  })
 
 export const forgotPasswordSchema = z
   .object({
@@ -58,7 +58,7 @@ export const forgotPasswordSchema = z
       .trim()
       .toLowerCase(),
   })
-  .strict();
+  .strict()
 
 export const resetPasswordSchema = z
   .object({
@@ -77,13 +77,13 @@ export const resetPasswordSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  });
+  })
 
 export const verifyEmailSchema = z
   .object({
     token: z.string({ error: "Token is required" }),
   })
-  .strict();
+  .strict()
 
 export const resendVerificationEmailSchema = z
   .object({
@@ -93,7 +93,7 @@ export const resendVerificationEmailSchema = z
       .trim()
       .toLowerCase(),
   })
-  .strict();
+  .strict()
 
 export const updateProfileSchema = z
   .object({
@@ -105,7 +105,7 @@ export const updateProfileSchema = z
       .optional(),
     image: z.string().url("Invalid image URL").optional(),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // USER SCHEMAS
@@ -129,7 +129,7 @@ export const createUserSchema = z
     role: z.enum(["user", "admin", "moderator"]).default("user"),
     image: z.string().url().optional(),
   })
-  .strict();
+  .strict()
 
 export const updateUserSchema = z
   .object({
@@ -139,13 +139,13 @@ export const updateUserSchema = z
     image: z.string().url().optional(),
     emailVerified: z.date().optional(),
   })
-  .strict();
+  .strict()
 
 export const userIdSchema = z
   .object({
     id: z.string().uuid("Invalid user ID"),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // COMIC SCHEMAS
@@ -176,21 +176,21 @@ export const createComicSchema = z
     artistId: z.coerce.number().int().positive().optional(),
     typeId: z.coerce.number().int().positive().optional(),
   })
-  .strict();
+  .strict()
 
-export const updateComicSchema = createComicSchema.partial();
+export const updateComicSchema = createComicSchema.partial()
 
 export const comicIdSchema = z
   .object({
     id: z.coerce.number().int().positive("Invalid comic ID"),
   })
-  .strict();
+  .strict()
 
 export const comicSlugSchema = z
   .object({
     slug: z.string().min(1, "Slug is required"),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // CHAPTER SCHEMAS
@@ -211,17 +211,17 @@ export const createChapterSchema = z
     comicId: z.coerce.number({ error: "Comic ID is required" }).int().positive(),
     views: z.coerce.number().int().min(0).default(0),
   })
-  .strict();
+  .strict()
 
 export const updateChapterSchema = createChapterSchema.partial().extend({
   comicId: z.coerce.number().int().positive().optional(),
-});
+})
 
 export const chapterIdSchema = z
   .object({
     id: z.coerce.number().int().positive("Invalid chapter ID"),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // AUTHOR/ARTIST SCHEMAS
@@ -237,19 +237,19 @@ export const createAuthorSchema = z
     bio: z.string().max(2000, "Bio must not exceed 2000 characters").trim().optional(),
     image: z.string().url("Invalid image URL").optional(),
   })
-  .strict();
+  .strict()
 
-export const updateAuthorSchema = createAuthorSchema.partial();
+export const updateAuthorSchema = createAuthorSchema.partial()
 
 export const authorIdSchema = z
   .object({
     id: z.coerce.number().int().positive("Invalid author ID"),
   })
-  .strict();
+  .strict()
 
-export const createArtistSchema = createAuthorSchema;
-export const updateArtistSchema = updateAuthorSchema;
-export const artistIdSchema = authorIdSchema;
+export const createArtistSchema = createAuthorSchema
+export const updateArtistSchema = updateAuthorSchema
+export const artistIdSchema = authorIdSchema
 
 // ═══════════════════════════════════════════════════
 // GENRE SCHEMAS
@@ -268,15 +268,15 @@ export const createGenreSchema = z
       .trim()
       .optional(),
   })
-  .strict();
+  .strict()
 
-export const updateGenreSchema = createGenreSchema.partial();
+export const updateGenreSchema = createGenreSchema.partial()
 
 export const genreIdSchema = z
   .object({
     id: z.coerce.number().int().positive("Invalid genre ID"),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // TYPE SCHEMAS
@@ -295,15 +295,15 @@ export const createTypeSchema = z
       .trim()
       .optional(),
   })
-  .strict();
+  .strict()
 
-export const updateTypeSchema = createTypeSchema.partial();
+export const updateTypeSchema = createTypeSchema.partial()
 
 export const typeIdSchema = z
   .object({
     id: z.coerce.number().int().positive("Invalid type ID"),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // BOOKMARK SCHEMAS
@@ -316,21 +316,21 @@ export const createBookmarkSchema = z
     lastReadChapterId: z.coerce.number().int().positive().optional(),
     notes: z.string().max(1000, "Notes must not exceed 1000 characters").optional(),
   })
-  .strict();
+  .strict()
 
 export const updateBookmarkSchema = z
   .object({
     lastReadChapterId: z.coerce.number().int().positive().optional(),
     notes: z.string().max(1000).optional(),
   })
-  .strict();
+  .strict()
 
 export const bookmarkIdSchema = z
   .object({
     userId: z.string().uuid(),
     comicId: z.coerce.number().int().positive(),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // COMMENT SCHEMAS
@@ -346,7 +346,7 @@ export const createCommentSchema = z
     userId: z.string({ error: "User ID is required" }).uuid(),
     chapterId: z.coerce.number({ error: "Chapter ID is required" }).int().positive(),
   })
-  .strict();
+  .strict()
 
 export const updateCommentSchema = z
   .object({
@@ -356,13 +356,13 @@ export const updateCommentSchema = z
       .max(2000, "Content must not exceed 2000 characters")
       .trim(),
   })
-  .strict();
+  .strict()
 
 export const commentIdSchema = z
   .object({
     id: z.coerce.number().int().positive("Invalid comment ID"),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // IMAGE SCHEMAS
@@ -374,17 +374,17 @@ export const createChapterImageSchema = z
     imageUrl: z.string({ error: "Image URL is required" }).url("Invalid image URL"),
     pageNumber: z.coerce.number({ error: "Page number is required" }).int().positive(),
   })
-  .strict();
+  .strict()
 
 export const updateChapterImageSchema = createChapterImageSchema.partial().extend({
   chapterId: z.coerce.number().int().positive().optional(),
-});
+})
 
 export const chapterImageIdSchema = z
   .object({
     id: z.coerce.number().int().positive("Invalid chapter image ID"),
   })
-  .strict();
+  .strict()
 
 export const createComicImageSchema = z
   .object({
@@ -392,17 +392,17 @@ export const createComicImageSchema = z
     imageUrl: z.string({ error: "Image URL is required" }).url("Invalid image URL"),
     imageOrder: z.coerce.number({ error: "Image order is required" }).int().min(0),
   })
-  .strict();
+  .strict()
 
 export const updateComicImageSchema = createComicImageSchema.partial().extend({
   comicId: z.coerce.number().int().positive().optional(),
-});
+})
 
 export const comicImageIdSchema = z
   .object({
     id: z.coerce.number().int().positive("Invalid comic image ID"),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // COMIC TO GENRE SCHEMAS
@@ -413,9 +413,9 @@ export const createComicToGenreSchema = z
     comicId: z.coerce.number().int().positive(),
     genreId: z.coerce.number().int().positive(),
   })
-  .strict();
+  .strict()
 
-export const comicToGenreIdSchema = createComicToGenreSchema;
+export const comicToGenreIdSchema = createComicToGenreSchema
 
 // ═══════════════════════════════════════════════════
 // PAGINATION & FILTERING SCHEMAS
@@ -428,7 +428,7 @@ export const paginationSchema = z
     sortBy: z.string().optional(),
     sortOrder: z.enum(["asc", "desc"]).default("desc"),
   })
-  .strict();
+  .strict()
 
 export const comicFilterSchema = paginationSchema.extend({
   search: z.string().optional(),
@@ -438,46 +438,46 @@ export const comicFilterSchema = paginationSchema.extend({
   authorId: z.coerce.number().int().positive().optional(),
   artistId: z.coerce.number().int().positive().optional(),
   minRating: z.coerce.number().min(0).max(10).optional(),
-});
+})
 
 export const chapterFilterSchema = paginationSchema.extend({
   comicId: z.coerce.number().int().positive().optional(),
   search: z.string().optional(),
-});
+})
 
 export const userFilterSchema = paginationSchema.extend({
   search: z.string().optional(),
   role: z.enum(["user", "admin", "moderator"]).optional(),
   emailVerified: z.boolean().optional(),
-});
+})
 
 export const commentFilterSchema = paginationSchema.extend({
   chapterId: z.coerce.number().int().positive().optional(),
   comicId: z.coerce.number().int().positive().optional(),
   userId: z.string().uuid().optional(),
   search: z.string().optional(),
-});
+})
 
 export const bookmarkFilterSchema = paginationSchema.extend({
   userId: z.string().uuid().optional(),
   search: z.string().optional(),
-});
+})
 
 export const authorFilterSchema = paginationSchema.extend({
   search: z.string().optional(),
-});
+})
 
 export const artistFilterSchema = paginationSchema.extend({
   search: z.string().optional(),
-});
+})
 
 export const genreFilterSchema = paginationSchema.extend({
   search: z.string().optional(),
-});
+})
 
 export const typeFilterSchema = paginationSchema.extend({
   search: z.string().optional(),
-});
+})
 
 // ═══════════════════════════════════════════════════
 // BATCH OPERATION SCHEMAS
@@ -487,7 +487,7 @@ export const batchDeleteSchema = z
   .object({
     ids: z.array(z.number().int().positive()).min(1, "At least one ID is required"),
   })
-  .strict();
+  .strict()
 
 export const batchUpdateComicImagesSchema = z
   .object({
@@ -500,7 +500,7 @@ export const batchUpdateComicImagesSchema = z
         .strict()
     ),
   })
-  .strict();
+  .strict()
 
 export const batchUpdateChapterImagesSchema = z
   .object({
@@ -513,7 +513,7 @@ export const batchUpdateChapterImagesSchema = z
         .strict()
     ),
   })
-  .strict();
+  .strict()
 
 export const batchCreateChapterImagesSchema = z
   .object({
@@ -529,7 +529,7 @@ export const batchCreateChapterImagesSchema = z
       )
       .min(1),
   })
-  .strict();
+  .strict()
 
 export const batchCreateComicImagesSchema = z
   .object({
@@ -545,14 +545,14 @@ export const batchCreateComicImagesSchema = z
       )
       .min(1),
   })
-  .strict();
+  .strict()
 
 export const bulkAssignGenresSchema = z
   .object({
     comicId: z.coerce.number().int().positive(),
     genreIds: z.array(z.number().int().positive()).min(1),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // EMAIL SCHEMAS
@@ -565,83 +565,311 @@ export const sendEmailSchema = z
     html: z.string().min(1, "Email content is required"),
     from: z.string().email().optional(),
   })
-  .strict();
+  .strict()
 
 // ═══════════════════════════════════════════════════
 // TYPE EXPORTS
 // ═══════════════════════════════════════════════════
+// Keep unique auth-specific schema that isn't present in `schemas.ts`.
+export const updatePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(8),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      .regex(/[0-9]/, "Password must contain at least one number"),
+    confirmPassword: z.string(),
+  })
+  .strict()
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
 
-export type SignInInput = z.infer<typeof signInSchema>;
-export type SignUpInput = z.infer<typeof signUpSchema>;
-export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
-export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
-export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
-export type ResendVerificationEmailInput = z.infer<typeof resendVerificationEmailSchema>;
-export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+// ═══════════════════════════════════════════════════
+// USER VALIDATION SCHEMAS
+// ═══════════════════════════════════════════════════
 
-export type CreateUserInput = z.infer<typeof createUserSchema>;
-export type UpdateUserInput = z.infer<typeof updateUserSchema>;
-export type UserIdInput = z.infer<typeof userIdSchema>;
+export const userSeedSchema = z
+  .object({
+    id: z.string().uuid().optional(),
+    name: z.string().min(1),
+    email: z.string().email(),
+    emailVerified: z.coerce.date().nullable().optional(),
+    image: z.string().nullable().optional(),
+    password: z.string().optional(),
+    role: z.enum(["user", "admin", "moderator"]).default("user"),
+    status: z.boolean().optional(),
+    createdAt: z.coerce.date().optional(),
+    updatedAt: z.coerce.date().optional(),
+    lastActivityDate: z.coerce.date().nullable().optional(),
+  })
+  .strict()
 
-export type CreateComicInput = z.infer<typeof createComicSchema>;
-export type UpdateComicInput = z.infer<typeof updateComicSchema>;
-export type ComicIdInput = z.infer<typeof comicIdSchema>;
-export type ComicSlugInput = z.infer<typeof comicSlugSchema>;
+export const userArraySchema = z.array(userSeedSchema)
 
-export type CreateChapterInput = z.infer<typeof createChapterSchema>;
-export type UpdateChapterInput = z.infer<typeof updateChapterSchema>;
-export type ChapterIdInput = z.infer<typeof chapterIdSchema>;
+// ═══════════════════════════════════════════════════
+// METADATA VALIDATION SCHEMAS
+// ═══════════════════════════════════════════════════
 
-export type CreateAuthorInput = z.infer<typeof createAuthorSchema>;
-export type UpdateAuthorInput = z.infer<typeof updateAuthorSchema>;
-export type AuthorIdInput = z.infer<typeof authorIdSchema>;
+export const typeSeedSchema = z
+  .object({
+    name: z.string().min(1),
+    description: z.string().nullable().optional(),
+  })
+  .strict()
 
-export type CreateArtistInput = z.infer<typeof createArtistSchema>;
-export type UpdateArtistInput = z.infer<typeof updateArtistSchema>;
-export type ArtistIdInput = z.infer<typeof artistIdSchema>;
+export const authorSeedSchema = z
+  .object({
+    name: z.string().min(1),
+    bio: z.string().nullable().optional(),
+    image: z.string().nullable().optional(),
+  })
+  .strict()
 
-export type CreateGenreInput = z.infer<typeof createGenreSchema>;
-export type UpdateGenreInput = z.infer<typeof updateGenreSchema>;
-export type GenreIdInput = z.infer<typeof genreIdSchema>;
+export const artistSeedSchema = z
+  .object({
+    name: z.string().min(1),
+    bio: z.string().nullable().optional(),
+    image: z.string().nullable().optional(),
+  })
+  .strict()
 
-export type CreateTypeInput = z.infer<typeof createTypeSchema>;
-export type UpdateTypeInput = z.infer<typeof updateTypeSchema>;
-export type TypeIdInput = z.infer<typeof typeIdSchema>;
+export const genreSeedSchema = z
+  .object({
+    name: z.string().min(1),
+    description: z.string().nullable().optional(),
+  })
+  .strict()
 
-export type CreateBookmarkInput = z.infer<typeof createBookmarkSchema>;
-export type UpdateBookmarkInput = z.infer<typeof updateBookmarkSchema>;
-export type BookmarkIdInput = z.infer<typeof bookmarkIdSchema>;
+// ═══════════════════════════════════════════════════
+// COMIC VALIDATION SCHEMAS
+// ═══════════════════════════════════════════════════
 
-export type CreateCommentInput = z.infer<typeof createCommentSchema>;
-export type UpdateCommentInput = z.infer<typeof updateCommentSchema>;
-export type CommentIdInput = z.infer<typeof commentIdSchema>;
+export const imageSchema = z
+  .object({
+    url: z.string().url(),
+    path: z.string().optional(),
+    checksum: z.string().optional(),
+    status: z.string().optional(),
+  })
+  .strict()
 
-export type CreateChapterImageInput = z.infer<typeof createChapterImageSchema>;
-export type UpdateChapterImageInput = z.infer<typeof updateChapterImageSchema>;
-export type ChapterImageIdInput = z.infer<typeof chapterImageIdSchema>;
+export const comicSeedSchema = z
+  .object({
+    title: z.string().min(1),
+    slug: z.string().optional(),
+    description: z.string().default(""),
+    serialization: z.string().optional(),
+    author: z
+      .union([
+        z.string(),
+        z
+          .object({
+            name: z.string(),
+          })
+          .strict(),
+      ])
+      .optional(),
+    artist: z
+      .union([
+        z.string(),
+        z
+          .object({
+            name: z.string(),
+          })
+          .strict(),
+      ])
+      .optional(),
+    rating: z.coerce.number().min(0).max(10).optional(),
+    status: z.enum(["Ongoing", "Hiatus", "Completed", "Dropped", "Coming Soon"]).default("Ongoing"),
+    category: z.string().optional(),
+    type: z
+      .union([
+        z.string(),
+        z
+          .object({
+            name: z.string(),
+          })
+          .strict(),
+      ])
+      .optional(),
+    genres: z
+      .array(
+        z.union([
+          z.string(),
+          z
+            .object({
+              name: z.string(),
+            })
+            .strict(),
+        ])
+      )
+      .default([]),
+    updated_at: z.coerce.date().optional(),
+    updatedAt: z.coerce.date().optional(),
+    url: z.string().url().optional(),
+    image_urls: z.array(z.string().url()).optional(),
+    images: z
+      .array(
+        z.union([
+          imageSchema,
+          z
+            .object({
+              url: z.string().url(),
+            })
+            .strict(),
+        ])
+      )
+      .optional(),
+    numchapters: z.number().optional(),
+    publicationDate: z.coerce.date().optional(),
+    coverImage: z.string().optional(),
+    spider: z.string().optional(),
+  })
+  .strict()
 
-export type CreateComicImageInput = z.infer<typeof createComicImageSchema>;
-export type UpdateComicImageInput = z.infer<typeof updateComicImageSchema>;
-export type ComicImageIdInput = z.infer<typeof comicImageIdSchema>;
+export const comicArraySchema = z.array(comicSeedSchema)
 
-export type CreateComicToGenreInput = z.infer<typeof createComicToGenreSchema>;
-export type ComicToGenreIdInput = z.infer<typeof comicToGenreIdSchema>;
+// ═══════════════════════════════════════════════════
+// CHAPTER VALIDATION SCHEMAS
+// ═══════════════════════════════════════════════════
 
-export type PaginationInput = z.infer<typeof paginationSchema>;
-export type ComicFilterInput = z.infer<typeof comicFilterSchema>;
-export type ChapterFilterInput = z.infer<typeof chapterFilterSchema>;
-export type UserFilterInput = z.infer<typeof userFilterSchema>;
-export type CommentFilterInput = z.infer<typeof commentFilterSchema>;
-export type BookmarkFilterInput = z.infer<typeof bookmarkFilterSchema>;
-export type AuthorFilterInput = z.infer<typeof authorFilterSchema>;
-export type ArtistFilterInput = z.infer<typeof artistFilterSchema>;
-export type GenreFilterInput = z.infer<typeof genreFilterSchema>;
-export type TypeFilterInput = z.infer<typeof typeFilterSchema>;
+export const chapterSeedSchema = z
+  .object({
+    url: z.string().url().optional(),
+    name: z.string().optional(),
+    title: z.string().optional(),
+    chaptertitle: z.string().optional(),
+    chaptername: z.string().optional(),
+    chapterslug: z.string().optional(),
+    updated_at: z.coerce.date().optional(),
+    updatedAt: z.coerce.date().optional(),
+    spider: z.string().optional(),
+    releaseDate: z.coerce.date().optional(),
+    comic: z
+      .union([
+        z
+          .object({
+            title: z.string(),
+            slug: z.string().optional(),
+          })
+          .strict(),
+        z
+          .object({
+            comictitle: z.string(),
+            comicslug: z.string().optional(),
+          })
+          .strict(),
+      ])
+      .optional(),
+    comictitle: z.string().optional(),
+    comicslug: z.string().optional(),
+    image_urls: z.array(z.string().url()).optional(),
+    images: z
+      .array(
+        z.union([
+          imageSchema,
+          z
+            .object({
+              url: z.string().url(),
+            })
+            .strict(),
+        ])
+      )
+      .optional(),
+  })
+  .strict()
 
-export type SendEmailInput = z.infer<typeof sendEmailSchema>;
-export type BatchDeleteInput = z.infer<typeof batchDeleteSchema>;
-export type BatchUpdateComicImagesInput = z.infer<typeof batchUpdateComicImagesSchema>;
-export type BatchUpdateChapterImagesInput = z.infer<typeof batchUpdateChapterImagesSchema>;
-export type BatchCreateChapterImagesInput = z.infer<typeof batchCreateChapterImagesSchema>;
-export type BatchCreateComicImagesInput = z.infer<typeof batchCreateComicImagesSchema>;
-export type BulkAssignGenresInput = z.infer<typeof bulkAssignGenresSchema>;
+export const chapterArraySchema = z.array(chapterSeedSchema)
+
+// ═══════════════════════════════════════════════════
+// TYPE GUARDS
+// ═══════════════════════════════════════════════════
+
+export type UserSeed = z.infer<typeof userSeedSchema>
+export type ComicSeed = z.infer<typeof comicSeedSchema>
+export type ChapterSeed = z.infer<typeof chapterSeedSchema>
+export type TypeSeed = z.infer<typeof typeSeedSchema>
+export type AuthorSeed = z.infer<typeof authorSeedSchema>
+export type ArtistSeed = z.infer<typeof artistSeedSchema>
+export type GenreSeed = z.infer<typeof genreSeedSchema>
+
+export type UpdatePasswordInput = z.infer<typeof updatePasswordSchema>
+
+export type SignInInput = z.infer<typeof signInSchema>
+export type SignUpInput = z.infer<typeof signUpSchema>
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>
+export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>
+export type ResendVerificationEmailInput = z.infer<typeof resendVerificationEmailSchema>
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>
+
+export type CreateUserInput = z.infer<typeof createUserSchema>
+export type UpdateUserInput = z.infer<typeof updateUserSchema>
+export type UserIdInput = z.infer<typeof userIdSchema>
+
+export type CreateComicInput = z.infer<typeof createComicSchema>
+export type UpdateComicInput = z.infer<typeof updateComicSchema>
+export type ComicIdInput = z.infer<typeof comicIdSchema>
+export type ComicSlugInput = z.infer<typeof comicSlugSchema>
+
+export type CreateChapterInput = z.infer<typeof createChapterSchema>
+export type UpdateChapterInput = z.infer<typeof updateChapterSchema>
+export type ChapterIdInput = z.infer<typeof chapterIdSchema>
+
+export type CreateAuthorInput = z.infer<typeof createAuthorSchema>
+export type UpdateAuthorInput = z.infer<typeof updateAuthorSchema>
+export type AuthorIdInput = z.infer<typeof authorIdSchema>
+
+export type CreateArtistInput = z.infer<typeof createArtistSchema>
+export type UpdateArtistInput = z.infer<typeof updateArtistSchema>
+export type ArtistIdInput = z.infer<typeof artistIdSchema>
+
+export type CreateGenreInput = z.infer<typeof createGenreSchema>
+export type UpdateGenreInput = z.infer<typeof updateGenreSchema>
+export type GenreIdInput = z.infer<typeof genreIdSchema>
+
+export type CreateTypeInput = z.infer<typeof createTypeSchema>
+export type UpdateTypeInput = z.infer<typeof updateTypeSchema>
+export type TypeIdInput = z.infer<typeof typeIdSchema>
+
+export type CreateBookmarkInput = z.infer<typeof createBookmarkSchema>
+export type UpdateBookmarkInput = z.infer<typeof updateBookmarkSchema>
+export type BookmarkIdInput = z.infer<typeof bookmarkIdSchema>
+
+export type CreateCommentInput = z.infer<typeof createCommentSchema>
+export type UpdateCommentInput = z.infer<typeof updateCommentSchema>
+export type CommentIdInput = z.infer<typeof commentIdSchema>
+
+export type CreateChapterImageInput = z.infer<typeof createChapterImageSchema>
+export type UpdateChapterImageInput = z.infer<typeof updateChapterImageSchema>
+export type ChapterImageIdInput = z.infer<typeof chapterImageIdSchema>
+
+export type CreateComicImageInput = z.infer<typeof createComicImageSchema>
+export type UpdateComicImageInput = z.infer<typeof updateComicImageSchema>
+export type ComicImageIdInput = z.infer<typeof comicImageIdSchema>
+
+export type CreateComicToGenreInput = z.infer<typeof createComicToGenreSchema>
+export type ComicToGenreIdInput = z.infer<typeof comicToGenreIdSchema>
+
+export type PaginationInput = z.infer<typeof paginationSchema>
+export type ComicFilterInput = z.infer<typeof comicFilterSchema>
+export type ChapterFilterInput = z.infer<typeof chapterFilterSchema>
+export type UserFilterInput = z.infer<typeof userFilterSchema>
+export type CommentFilterInput = z.infer<typeof commentFilterSchema>
+export type BookmarkFilterInput = z.infer<typeof bookmarkFilterSchema>
+export type AuthorFilterInput = z.infer<typeof authorFilterSchema>
+export type ArtistFilterInput = z.infer<typeof artistFilterSchema>
+export type GenreFilterInput = z.infer<typeof genreFilterSchema>
+export type TypeFilterInput = z.infer<typeof typeFilterSchema>
+
+export type SendEmailInput = z.infer<typeof sendEmailSchema>
+export type BatchDeleteInput = z.infer<typeof batchDeleteSchema>
+export type BatchUpdateComicImagesInput = z.infer<typeof batchUpdateComicImagesSchema>
+export type BatchUpdateChapterImagesInput = z.infer<typeof batchUpdateChapterImagesSchema>
+export type BatchCreateChapterImagesInput = z.infer<typeof batchCreateChapterImagesSchema>
+export type BatchCreateComicImagesInput = z.infer<typeof batchCreateComicImagesSchema>
+export type BulkAssignGenresInput = z.infer<typeof bulkAssignGenresSchema>

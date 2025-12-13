@@ -1,20 +1,20 @@
-import { env } from "appConfig";
-import { DataTable } from "components/admin/DataTable";
-import { Button } from "components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
+import { env } from "appConfig"
+import { DataTable } from "components/admin/DataTable"
+import { Button } from "components/ui/button"
+import { Plus } from "lucide-react"
+import Link from "next/link"
+import { Suspense } from "react"
 
 async function getTypes() {
-  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const response = await fetch(`${baseUrl}/api/types?limit=100`);
+  const baseUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  const response = await fetch(`${baseUrl}/api/types?limit=100`)
 
   if (!response.ok) {
-    throw new Error("Failed to fetch types");
+    throw new Error("Failed to fetch types")
   }
 
-  const data = await response.json();
-  return data.types || [];
+  const data = await response.json()
+  return data.types || []
 }
 
 function TypesHeader() {
@@ -31,11 +31,11 @@ function TypesHeader() {
         </Link>
       </Button>
     </div>
-  );
+  )
 }
 
 async function TypesTable() {
-  const types = await getTypes();
+  const types = await getTypes()
 
   const columns = [
     {
@@ -54,9 +54,9 @@ async function TypesTable() {
       accessorKey: "createdAt",
       header: "Created",
     },
-  ];
+  ]
 
-  return <DataTable columns={columns} data={types} />;
+  return <DataTable columns={columns} data={types} />
 }
 
 export default function TypesPage() {
@@ -70,5 +70,5 @@ export default function TypesPage() {
         <TypesTable />
       </Suspense>
     </div>
-  );
+  )
 }

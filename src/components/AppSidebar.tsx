@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { ThemeToggle } from "components/admin/ThemeToggle";
+import { ThemeToggle } from "components/admin/ThemeToggle"
 import {
   BookOpen,
   FileText,
@@ -10,9 +10,9 @@ import {
   Tag,
   UserCircle,
   Users,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+} from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   Sidebar,
   SidebarContent,
@@ -24,7 +24,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "ui/sidebar";
+} from "ui/sidebar"
 
 const menuItems = [
   {
@@ -67,10 +67,10 @@ const menuItems = [
     icon: Tag,
     href: "/admin/types",
   },
-];
+]
 
 export function AppSidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <Sidebar>
@@ -110,5 +110,5 @@ export function AppSidebar() {
         </div>
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

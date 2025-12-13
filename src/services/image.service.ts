@@ -1,36 +1,36 @@
-import crypto from "crypto";
-import fs from "fs/promises";
-import path from "path";
+import crypto from "crypto"
+import fs from "fs/promises"
+import path from "path"
 
 export interface ImageDownloadResult {
-  success: boolean;
-  localPath?: string;
-  url: string;
-  error?: string;
+  success: boolean
+  localPath?: string
+  url: string
+  error?: string
 }
 
 export class ImageService {
-  private readonly publicDir: string;
-  private readonly downloadedImages = new Map<string, string>();
+  private readonly publicDir: string
+  private readonly downloadedImages = new Map<string, string>()
 
   constructor(publicDir: string = "public") {
-    this.publicDir = publicDir;
+    this.publicDir = publicDir
   }
 
   /**
    * Generate a hash for the image URL to use as filename
    */
   private generateHash(url: string): string {
-    return crypto.createHash("md5").update(url).digest("hex");
+    return crypto.createHash("md5").update(url).digest("hex")
   }
 
   /**
    * Get file extension from URL
    */
   private getExtension(url: string): string {
-    const urlPath = new URL(url).pathname;
-    const ext = path.extname(urlPath);
-    return ext || ".webp";
+    const urlPath = new URL(url).pathname
+    const ext = path.extname(urlPath)
+    return ext || ".webp"
   }
 
   /**
@@ -38,10 +38,10 @@ export class ImageService {
    */
   private async imageExists(filePath: string): Promise<boolean> {
     try {
-      await fs.access(filePath);
-      return true;
+      await fs.access(filePath)
+      return true
     } catch {
-      return false;
+      return false
     }
   }
 
@@ -56,29 +56,29 @@ export class ImageService {
           success: true,
           localPath: this.downloadedImages.get(url)!,
           url,
-        };
+        }
       }
 
       // Generate unique filename
-      const hash = this.generateHash(url);
-      const ext = this.getExtension(url);
-      const fileName = `${hash}${ext}`;
+      const hash = this.generateHash(url)
+      const ext = this.getExtension(url)
+      const fileName = `${hash}${ext}`
 
       // Create directory structure
-      const uploadDir = path.join(this.publicDir, subDirectory);
-      await fs.mkdir(uploadDir, { recursive: true });
+      const uploadDir = path.join(this.publicDir, subDirectory)
+      await fs.mkdir(uploadDir, { recursive: true })
 
-      const filePath = path.join(uploadDir, fileName);
-      const publicPath = `/${subDirectory}/${fileName}`;
+      const filePath = path.join(uploadDir, fileName)
+      const publicPath = `/${subDirectory}/${fileName}`
 
       // Check if file already exists
       if (await this.imageExists(filePath)) {
-        this.downloadedImages.set(url, publicPath);
+        this.downloadedImages.set(url, publicPath)
         return {
           success: true,
           localPath: publicPath,
           url,
-        };
+        }
       }
 
       // Download the image
@@ -86,28 +86,28 @@ export class ImageService {
         headers: {
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         },
-      });
+      })
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
 
-      const buffer = await response.arrayBuffer();
-      await fs.writeFile(filePath, Buffer.from(buffer));
+      const buffer = await response.arrayBuffer()
+      await fs.writeFile(filePath, Buffer.from(buffer))
 
-      this.downloadedImages.set(url, publicPath);
+      this.downloadedImages.set(url, publicPath)
 
       return {
         success: true,
         localPath: publicPath,
         url,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         url,
         error: error instanceof Error ? error.message : "Unknown error",
-      };
+      }
     }
   }
 
@@ -119,17 +119,17 @@ export class ImageService {
     subDirectory: string = "uploads",
     concurrency: number = 5
   ): Promise<ImageDownloadResult[]> {
-    const results: ImageDownloadResult[] = [];
+    const results: ImageDownloadResult[] = []
 
     for (let i = 0; i < urls.length; i += concurrency) {
-      const batch = urls.slice(i, i + concurrency);
+      const batch = urls.slice(i, i + concurrency)
       const batchResults = await Promise.all(
         batch.map((url) => this.downloadImage(url, subDirectory))
-      );
-      results.push(...batchResults);
+      )
+      results.push(...batchResults)
     }
 
-    return results;
+    return results
   }
 
   /**
@@ -140,17 +140,17 @@ export class ImageService {
     subDirectory: string = "uploads"
   ): Promise<string | null> {
     if (!url) {
-      return null;
+      return null
     }
 
     // If it's already a local path, return as-is
     if (url.startsWith("/")) {
-      return url;
+      return url
     }
 
     // Download remote image
-    const result = await this.downloadImage(url, subDirectory);
-    return result.success ? result.localPath! : null;
+    const result = await this.downloadImage(url, subDirectory)
+    return result.success ? result.localPath! : null
   }
 
   /**
@@ -163,16 +163,16 @@ export class ImageService {
         url,
         path,
       })),
-    };
+    }
   }
 
   /**
    * Clear the cache
    */
   clearCache() {
-    this.downloadedImages.clear();
+    this.downloadedImages.clear()
   }
 }
 
 // Export singleton instance
-export const imageService = new ImageService();
+export const imageService = new ImageService()

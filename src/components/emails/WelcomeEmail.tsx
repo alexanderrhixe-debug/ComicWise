@@ -9,12 +9,12 @@ import {
   Preview,
   Section,
   Text,
-} from "@react-email/components";
-import { appConfig } from "appConfig";
+} from "@react-email/components"
+import { appConfig } from "appConfig"
 
 interface WelcomeEmailProps {
-  name: string;
-  email: string;
+  name: string
+  email: string
 }
 
 export default function WelcomeEmail({ name }: WelcomeEmailProps) {
@@ -75,13 +75,13 @@ export default function WelcomeEmail({ name }: WelcomeEmailProps) {
         </Container>
       </Body>
     </Html>
-  );
+  )
 }
 
 const main = {
   backgroundColor: "#f6f9fc",
   fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',
-};
+}
 
 const container = {
   backgroundColor: "#ffffff",
@@ -89,12 +89,12 @@ const container = {
   padding: "20px 0 48px",
   marginBottom: "64px",
   maxWidth: "600px",
-};
+}
 
 const header = {
   padding: "32px 24px",
   textAlign: "center" as const,
-};
+}
 
 const h1 = {
   color: "#1f2937",
@@ -102,18 +102,18 @@ const h1 = {
   fontWeight: "bold",
   margin: "0",
   padding: "0",
-};
+}
 
 const content = {
   padding: "0 48px",
-};
+}
 
 const paragraph = {
   color: "#374151",
   fontSize: "16px",
   lineHeight: "26px",
   margin: "16px 0",
-};
+}
 
 const list = {
   color: "#374151",
@@ -121,16 +121,16 @@ const list = {
   lineHeight: "26px",
   margin: "16px 0",
   paddingLeft: "20px",
-};
+}
 
 const listItem = {
   marginBottom: "8px",
-};
+}
 
 const buttonContainer = {
   textAlign: "center" as const,
   margin: "32px 0",
-};
+}
 
 const button = {
   backgroundColor: "#3b82f6",
@@ -142,29 +142,29 @@ const button = {
   textAlign: "center" as const,
   display: "inline-block",
   padding: "12px 32px",
-};
+}
 
 const footer = {
   color: "#6b7280",
   fontSize: "14px",
   lineHeight: "24px",
   marginTop: "32px",
-};
+}
 
 const footerSection = {
   borderTop: "1px solid #e5e7eb",
   marginTop: "32px",
   padding: "24px 48px",
-};
+}
 
 const footerText = {
   color: "#9ca3af",
   fontSize: "12px",
   lineHeight: "20px",
   textAlign: "center" as const,
-};
+}
 
 const link = {
   color: "#3b82f6",
   textDecoration: "underline",
-};
+}

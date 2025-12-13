@@ -1,16 +1,16 @@
-import Link from "next/link";
-import { Button } from "ui/button";
-import { Card, CardContent } from "ui/card";
+import Link from "next/link"
+import { Button } from "ui/button"
+import { Card, CardContent } from "ui/card"
 
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react"
 
 interface EmptyStateProps {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  actionLabel?: string;
-  actionHref?: string;
-  onAction?: () => void;
+  icon: LucideIcon
+  title: string
+  description: string
+  actionLabel?: string
+  actionHref?: string
+  onAction?: () => void
 }
 
 export function EmptyState({
@@ -42,5 +42,5 @@ export function EmptyState({
         )}
       </CardContent>
     </Card>
-  );
+  )
 }

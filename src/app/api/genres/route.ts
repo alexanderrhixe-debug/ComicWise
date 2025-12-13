@@ -2,18 +2,18 @@
 // GENRES API - Full CRUD
 // ═══════════════════════════════════════════════════
 
-import { createGenericEntity, listGenericEntity, zodToValidationResult } from "lib/generic-crud";
-import { createGenreSchema, genreFilterSchema } from "lib/validations/schemas";
-import { NextRequest } from "next/server";
-import { createGenre } from "src/database/mutations/genres";
-import { getAllGenres } from "src/database/queries/genres";
+import { createGenericEntity, listGenericEntity, zodToValidationResult } from "lib/generic-crud"
+import { createGenreSchema, genreFilterSchema } from "lib/validations/schemas"
+import { NextRequest } from "next/server"
+import { createGenre } from "src/database/mutations/genres"
+import { getAllGenres } from "src/database/queries/genres"
 
 export async function GET(request: NextRequest) {
   return listGenericEntity(request, {
     listFn: getAllGenres,
     validateFn: zodToValidationResult(genreFilterSchema),
     entityName: "genres",
-  });
+  })
 }
 
 export async function POST(request: NextRequest) {
@@ -21,5 +21,5 @@ export async function POST(request: NextRequest) {
     createFn: createGenre,
     validateFn: zodToValidationResult(createGenreSchema),
     entityName: "genre",
-  });
+  })
 }

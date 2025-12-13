@@ -1,15 +1,15 @@
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react"
 
-import { Button } from "ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ui/card";
+import { Button } from "ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ui/card"
 
 type BlogCard = {
-  img: string;
-  alt: string;
-  title: string;
-  description: string;
-  blogLink: string;
-}[];
+  img: string
+  alt: string
+  title: string
+  description: string
+  blogLink: string
+}[]
 
 const Blog = ({ blogCards }: { blogCards: BlogCard }) => {
   return (
@@ -56,7 +56,7 @@ const Blog = ({ blogCards }: { blogCards: BlogCard }) => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog

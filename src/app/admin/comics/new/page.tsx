@@ -1,23 +1,23 @@
-import ComicForm from "@/app/admin/comics/comic-form";
-import { auth } from "auth";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+import ComicForm from "@/app/admin/comics/comic-form"
+import { auth } from "auth"
+import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Create Comic | Admin",
   description: "Add a new comic to the platform",
-};
+}
 
 async function ProtectedComicForm() {
-  const session = await auth();
+  const session = await auth()
 
   if (!session?.user || session.user.role !== "admin") {
-    redirect("/");
+    redirect("/")
   }
 
-  return <ComicForm />;
+  return <ComicForm />
 }
 
 export default function NewComicPage() {
@@ -32,5 +32,5 @@ export default function NewComicPage() {
         <ProtectedComicForm />
       </Suspense>
     </div>
-  );
+  )
 }

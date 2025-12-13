@@ -1,43 +1,43 @@
-"use client";
+"use client"
 
-import { Bookmark, BookOpen, LogOut, Menu, Search, User } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
-import { Button } from "ui/button";
-import { Input } from "ui/input";
-import { cn } from "utils";
+import { Bookmark, BookOpen, LogOut, Menu, Search, User } from "lucide-react"
+import { signOut, useSession } from "next-auth/react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { useState, type FormEvent } from "react"
+import { Button } from "ui/button"
+import { Input } from "ui/input"
+import { cn } from "utils"
 
 export function AppNavbar() {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname()
+  const router = useRouter()
 
-  const { data: _session, status } = useSession();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { data: _session, status } = useSession()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
 
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/comics", label: "Browse" },
     { href: "/bookmarks", label: "Bookmarks", protected: true },
-  ];
+  ]
 
   const isActive = (href: string) => {
     if (href === "/") {
-      return pathname === href;
+      return pathname === href
     }
-    return pathname.startsWith(href);
-  };
+    return pathname.startsWith(href)
+  }
 
   const handleSearch = (e: FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (searchQuery.trim()) {
-      router.push(`/comics?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery("");
-      setIsMobileMenuOpen(false);
+      router.push(`/comics?search=${encodeURIComponent(searchQuery.trim())}`)
+      setSearchQuery("")
+      setIsMobileMenuOpen(false)
     }
-  };
+  }
 
   return (
     <nav
@@ -57,7 +57,7 @@ export function AppNavbar() {
         <div className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => {
             if (link.protected && status !== "authenticated") {
-              return null;
+              return null
             }
             return (
               <Link
@@ -70,7 +70,7 @@ export function AppNavbar() {
               >
                 {link.label}
               </Link>
-            );
+            )
           })}
         </div>
 
@@ -166,7 +166,7 @@ export function AppNavbar() {
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => {
                 if (link.protected && status !== "authenticated") {
-                  return null;
+                  return null
                 }
                 return (
                   <Link
@@ -182,7 +182,7 @@ export function AppNavbar() {
                   >
                     {link.label}
                   </Link>
-                );
+                )
               })}
 
               {status === "authenticated" ? (
@@ -201,8 +201,8 @@ export function AppNavbar() {
                     variant="ghost"
                     className="justify-start"
                     onClick={() => {
-                      signOut();
-                      setIsMobileMenuOpen(false);
+                      signOut()
+                      setIsMobileMenuOpen(false)
                     }}
                   >
                     Sign Out
@@ -227,5 +227,5 @@ export function AppNavbar() {
         </div>
       )}
     </nav>
-  );
+  )
 }

@@ -1,31 +1,31 @@
-import { ChapterReader } from "components/ChapterReader";
-import { incrementChapterViews } from "database/mutations";
-import { getChapter, getNextChapter, getPreviousChapter } from "database/queries";
-import { notFound } from "next/navigation";
+import { ChapterReader } from "components/ChapterReader"
+import { incrementChapterViews } from "database/mutations"
+import { getChapter, getNextChapter, getPreviousChapter } from "database/queries"
+import { notFound } from "next/navigation"
 
 interface PageProps {
-  params: Promise<{ id: string; chapterId: string }>;
+  params: Promise<{ id: string; chapterId: string }>
 }
 
 export default async function ChapterReaderPage({ params }: PageProps) {
-  const { chapterId } = await params;
-  const chapterIdNum = parseInt(chapterId);
+  const { chapterId } = await params
+  const chapterIdNum = parseInt(chapterId)
 
   if (isNaN(chapterIdNum)) {
-    notFound();
+    notFound()
   }
 
-  const chapter = await getChapter(chapterIdNum);
+  const chapter = await getChapter(chapterIdNum)
 
   if (!chapter || !chapter.comic) {
-    notFound();
+    notFound()
   }
 
   const [nextChapter, prevChapter] = await Promise.all([
     getNextChapter(chapterIdNum),
     getPreviousChapter(chapterIdNum),
     incrementChapterViews(chapterIdNum),
-  ]);
+  ])
 
   return (
     <ChapterReader
@@ -35,5 +35,5 @@ export default async function ChapterReaderPage({ params }: PageProps) {
       prevChapter={prevChapter}
       nextChapter={nextChapter}
     />
-  );
+  )
 }

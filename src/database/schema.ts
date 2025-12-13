@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { sql } from "drizzle-orm"
 import {
   boolean,
   index,
@@ -11,7 +11,7 @@ import {
   text,
   timestamp,
   varchar,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/pg-core"
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -20,7 +20,7 @@ export const users = pgTable("users", {
   passwordHash: text("password_hash"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+})
 
 export const comics = pgTable("comics", {
   id: serial("id").primaryKey(),
@@ -31,7 +31,7 @@ export const comics = pgTable("comics", {
   published: boolean("published").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+})
 
 export const chapters = pgTable("chapters", {
   id: serial("id").primaryKey(),
@@ -45,7 +45,7 @@ export const chapters = pgTable("chapters", {
   published: boolean("published").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+})
 
 // ═══════════════════════════════════════════════════
 // CUSTOM SQL TYPES FOR FULL-TEXT SEARCH
@@ -53,21 +53,21 @@ export const chapters = pgTable("chapters", {
 
 // tsvector type for PostgreSQL full-text search
 export const tsvector = (name: string) => {
-  return sql<string>`${sql.raw(name)} tsvector`;
-};
+  return sql<string>`${sql.raw(name)} tsvector`
+}
 
 // ═══════════════════════════════════════════════════
 // ENUMS
 // ═══════════════════════════════════════════════════
 
-export const userRole = pgEnum("user_role", ["user", "admin", "moderator"]);
+export const userRole = pgEnum("user_role", ["user", "admin", "moderator"])
 export const comicStatus = pgEnum("comic_status", [
   "Ongoing",
   "Hiatus",
   "Completed",
   "Dropped",
   "Coming Soon",
-]);
+])
 
 // ═══════════════════════════════════════════════════
 // AUTHENTICATION TABLES
@@ -90,7 +90,7 @@ export const user = pgTable(
     updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
   },
   (table) => [index("user_email_idx").on(table.email), index("user_role_idx").on(table.role)]
-);
+)
 
 export const account = pgTable(
   "account",
@@ -112,7 +112,7 @@ export const account = pgTable(
   (table) => ({
     pk: primaryKey({ columns: [table.provider, table.providerAccountId] }),
   })
-);
+)
 
 export const session = pgTable("session", {
   sessionToken: text("sessionToken").primaryKey().notNull(),
@@ -120,7 +120,7 @@ export const session = pgTable("session", {
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
-});
+})
 
 export const verificationToken = pgTable(
   "verificationToken",
@@ -132,7 +132,7 @@ export const verificationToken = pgTable(
   (table) => ({
     pk: primaryKey({ columns: [table.identifier, table.token] }),
   })
-);
+)
 
 export const authenticator = pgTable(
   "authenticator",
@@ -151,7 +151,7 @@ export const authenticator = pgTable(
   (table) => ({
     pk: primaryKey({ columns: [table.userId, table.credentialID] }),
   })
-);
+)
 
 export const passwordResetToken = pgTable("passwordResetToken", {
   id: text("id")
@@ -160,7 +160,7 @@ export const passwordResetToken = pgTable("passwordResetToken", {
   email: text("email").notNull(),
   token: text("token").notNull().unique(),
   expires: timestamp("expires", { mode: "date" }).notNull(),
-});
+})
 
 // ═══════════════════════════════════════════════════
 // COMIC CONTENT TABLES (ORDERED FOR REFERENCES)
@@ -171,7 +171,7 @@ export const type = pgTable("type", {
   name: text("name").notNull().unique(),
   description: text("description"),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-});
+})
 
 export const author = pgTable("author", {
   id: serial("id").primaryKey(),
@@ -180,7 +180,7 @@ export const author = pgTable("author", {
   image: text("image"),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   search_vector: text("search_vector"),
-});
+})
 
 export const artist = pgTable("artist", {
   id: serial("id").primaryKey(),
@@ -189,14 +189,14 @@ export const artist = pgTable("artist", {
   image: text("image"),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   search_vector: text("search_vector"),
-});
+})
 
 export const genre = pgTable("genre", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
   description: text("description"),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-});
+})
 
 export const comic = pgTable(
   "comic",
@@ -228,7 +228,7 @@ export const comic = pgTable(
     index("comic_type_idx").on(table.typeId),
     index("comic_created_at_idx").on(table.createdAt),
   ]
-);
+)
 
 export const chapter = pgTable(
   "chapter",
@@ -251,7 +251,7 @@ export const chapter = pgTable(
     index("chapter_release_date_idx").on(table.releaseDate),
     index("chapter_comic_chapter_idx").on(table.comicId, table.chapterNumber),
   ]
-);
+)
 
 export const comicImage = pgTable("comicImage", {
   id: serial("id").primaryKey(),
@@ -261,7 +261,7 @@ export const comicImage = pgTable("comicImage", {
   imageUrl: text("imageUrl").notNull(),
   imageOrder: integer("imageOrder").notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-});
+})
 
 export const chapterImage = pgTable(
   "chapterImage",
@@ -278,7 +278,7 @@ export const chapterImage = pgTable(
     index("chapter_image_chapter_id_idx").on(table.chapterId),
     index("chapter_image_page_number_idx").on(table.pageNumber),
   ]
-);
+)
 
 export const comicToGenre = pgTable(
   "comicToGenre",
@@ -293,7 +293,7 @@ export const comicToGenre = pgTable(
   (table) => ({
     pk: primaryKey({ columns: [table.comicId, table.genreId] }),
   })
-);
+)
 
 // ═══════════════════════════════════════════════════
 // USER INTERACTION TABLES
@@ -318,7 +318,7 @@ export const bookmark = pgTable(
     index("bookmark_user_id_idx").on(table.userId),
     index("bookmark_comic_id_idx").on(table.comicId),
   ]
-);
+)
 
 export const comment = pgTable(
   "comment",
@@ -339,7 +339,7 @@ export const comment = pgTable(
     index("comment_chapter_id_idx").on(table.chapterId),
     index("comment_created_at_idx").on(table.createdAt),
   ]
-);
+)
 
 export const readingProgress = pgTable(
   "reading_progress",
@@ -370,4 +370,4 @@ export const readingProgress = pgTable(
     index("reading_progress_last_read_idx").on(table.lastReadAt),
     index("reading_progress_user_comic_idx").on(table.userId, table.comicId),
   ]
-);
+)

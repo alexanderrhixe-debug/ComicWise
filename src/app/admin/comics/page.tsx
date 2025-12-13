@@ -1,10 +1,10 @@
-import { DataTable } from "components/admin/DataTable";
-import { Button } from "components/ui/button";
-import { artist, author, comic, database, type } from "database";
-import { eq } from "drizzle-orm";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
+import { DataTable } from "components/admin/DataTable"
+import { Button } from "components/ui/button"
+import { artist, author, comic, database, type } from "database"
+import { eq } from "drizzle-orm"
+import { Plus } from "lucide-react"
+import Link from "next/link"
+import { Suspense } from "react"
 
 async function ComicsTable() {
   const comics = await database
@@ -24,7 +24,7 @@ async function ComicsTable() {
     .from(comic)
     .leftJoin(author, eq(comic.authorId, author.id))
     .leftJoin(artist, eq(comic.artistId, artist.id))
-    .leftJoin(type, eq(comic.typeId, type.id));
+    .leftJoin(type, eq(comic.typeId, type.id))
 
   const columns = [
     {
@@ -55,9 +55,9 @@ async function ComicsTable() {
       accessorKey: "views",
       header: "Views",
     },
-  ];
+  ]
 
-  return <DataTable columns={columns} data={comics} />;
+  return <DataTable columns={columns} data={comics} />
 }
 
 function ComicsHeader() {
@@ -74,7 +74,7 @@ function ComicsHeader() {
         </Button>
       </Link>
     </div>
-  );
+  )
 }
 
 export default function AdminComicsPage() {
@@ -86,5 +86,5 @@ export default function AdminComicsPage() {
         <ComicsTable />
       </Suspense>
     </div>
-  );
+  )
 }
