@@ -117,7 +117,8 @@
     ".next/types/**/*.ts",
     "src/**/*",
     "tests/**/*",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    "backupeslint"
   ],
   "exclude": ["node_modules", ".next", "out", "build", "dist", "coverage"]
 }

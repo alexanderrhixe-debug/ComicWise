@@ -1,2 +1,2 @@
 // Consolidated validations entrypoint — re-export canonical schemas
-export * from "./schemas"
+export * from "./schemas";

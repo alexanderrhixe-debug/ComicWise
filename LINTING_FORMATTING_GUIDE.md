@@ -73,7 +73,7 @@
 **Plugins**:
 
 ```typescript
-plugins: ["prettier-plugin-tailwindcss", "prettier-plugin-organize-imports"]
+plugins: ["prettier-plugin-tailwindcss", "prettier-plugin-organize-imports"];
 ```
 
 ---
@@ -192,11 +192,11 @@ Some issues require manual fixes:
 
 ```typescript
 // ❌ Bad
-const unused = 5
+const unused = 5;
 
 // ✅ Good
-const used = 5
-console.log(used)
+const used = 5;
+console.log(used);
 ```
 
 ### **Issue: Missing Return Type**
@@ -206,12 +206,12 @@ console.log(used)
 ```typescript
 // ❌ Bad
 function getValue() {
-  return 42
+  return 42;
 }
 
 // ✅ Good
 function getValue(): number {
-  return 42
+  return 42;
 }
 ```
 
@@ -237,10 +237,10 @@ pnpm format
 
 ```typescript
 // ❌ Bad
-console.log("Debug message")
+console.log("Debug message");
 
 // ✅ Good (if needed)
-console.error("Error occurred")
+console.error("Error occurred");
 
 // ✅ Good (silent)
 // Remove the log entirely

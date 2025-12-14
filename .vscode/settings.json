@@ -1,8 +1,6 @@
 {
-  "terminal.integrated.shellIntegration.enabled": "true",
+  "terminal.integrated.shellIntegration.enabled": true,
   "makefile.configureOnOpen": true,
-  //-------- Code Spell Checker Configuration --------
-  "cSpell.enabled": true,
   "chat.mcp.gallery.enabled": true,
   "chat.agent.maxRequests": 1000,
   "github.copilot.nextEditSuggestions.enabled": true,
@@ -15,13 +13,6 @@
   "terminal.integrated.suggest.enabled": true,
   "terminal.integrated.stickyScroll.enabled": false,
   "workbench.productIconTheme": "icons-carbon",
-  "mssql.connectionGroups": [
-    {
-      "name": "ROOT",
-      "id": "9FF20BDD-3B66-4F21-A728-0DDCD768DD8D"
-    }
-  ],
-  "vscode-edge-devtools.webhintInstallNotification": true,
   "redhat.telemetry.enabled": true,
   "workbench.editor.enablePreview": false,
   // ═══════════════════════════════════════════════════
@@ -53,7 +44,7 @@
     "source.removeUnusedImports": "explicit",
     "source.addMissingImports": "explicit"
   },
-  "editor.minimap.enabled": false,
+  "editor.minimap.enabled": true,
   "editor.stickyScroll.enabled": true,
   "editor.accessibilitySupport": "off",
   "editor.lineNumbers": "on",

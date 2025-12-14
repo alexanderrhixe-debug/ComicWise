@@ -1,23 +1,23 @@
 // keep auth options loosely typed here to avoid hard dependency on a specific Auth type
-import bcrypt from "bcryptjs"
-import { user } from "database/schema"
-import type { Database } from "db"
-import { db } from "db"
-import { eq } from "drizzle-orm"
-import createDrizzleAdapter from "lib/authAdapter"
-import getOAuthProviders, { authOptions } from "lib/authConfig"
-import { signInSchema } from "lib/validator"
-import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
+import bcrypt from "bcryptjs";
+import { user } from "database/schema";
+import type { Database } from "db";
+import { db } from "db";
+import { eq } from "drizzle-orm";
+import createDrizzleAdapter from "lib/authAdapter";
+import getOAuthProviders, { authOptions } from "lib/authConfig";
+import { signInSchema } from "lib/validator";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
 // Helper to obtain typed auth options for use in app routes
 export function getAuthOptions(): unknown {
-  return authOptions as unknown
+  return authOptions as unknown;
 }
 
-export default getAuthOptions
+export default getAuthOptions;
 
-const oauthProviders = getOAuthProviders()
+const oauthProviders = getOAuthProviders();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: createDrizzleAdapter(db as unknown as Database),
@@ -41,20 +41,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials: Partial<Record<"email" | "password", unknown>> | undefined) {
         try {
-          const { email, password } = signInSchema.parse(credentials)
+          const { email, password } = signInSchema.parse(credentials);
 
           const existingUser = await db.query.user.findFirst({
             where: eq(user.email, email),
-          })
+          });
 
           if (!existingUser?.password) {
-            return null
+            return null;
           }
 
-          const passwordMatch = await bcrypt.compare(password, existingUser.password)
+          const passwordMatch = await bcrypt.compare(password, existingUser.password);
 
           if (!passwordMatch) {
-            return null
+            return null;
           }
 
           return {
@@ -63,9 +63,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             name: existingUser.name,
             image: existingUser.image,
             role: existingUser.role,
-          }
+          };
         } catch {
-          return null
+          return null;
         }
       },
     }),
@@ -75,17 +75,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }: { token: Record<string, unknown>; user?: any }) {
       if (user?.id) {
-        token.role = user.role
-        token.id = user.id
+        token.role = user.role;
+        token.id = user.id;
       }
-      return token
+      return token;
     },
     async session({ session, token }: { session: any; token: Record<string, unknown> }) {
       if (session.user && token.id) {
-        session.user.role = token.role as "user" | "admin" | "moderator"
-        session.user.id = token.id as string
+        session.user.role = token.role as "user" | "admin" | "moderator";
+        session.user.id = token.id as string;
       }
-      return session
+      return session;
     },
   },
-})
+});

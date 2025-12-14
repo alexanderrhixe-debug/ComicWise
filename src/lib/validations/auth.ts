@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 // Keep unique auth-specific schema that isn't present in `schemas.ts`.
 export const updatePasswordSchema = z
@@ -16,6 +16,6 @@ export const updatePasswordSchema = z
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  })
+  });
 
-export type UpdatePasswordInput = z.infer<typeof updatePasswordSchema>
+export type UpdatePasswordInput = z.infer<typeof updatePasswordSchema>;

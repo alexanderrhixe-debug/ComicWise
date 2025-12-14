@@ -22,32 +22,32 @@
  *   CONTINUE_ON_ERROR=1 - Continue even if a command fails
  */
 
-import { execSync } from "child_process"
+import { execSync } from "child_process";
 
 // ═══════════════════════════════════════════════════════════════════════════
 // TYPE DEFINITIONS
 // ═══════════════════════════════════════════════════════════════════════════
 
 interface Task {
-  id: string
-  name: string
-  description: string
-  commands: string[]
-  acceptance: string[]
-  priority: "P0" | "P1" | "P2" | "P3" | "Enhancement"
-  estimatedHours: number
-  completed: boolean
-  dependsOn?: string[]
+  id: string;
+  name: string;
+  description: string;
+  commands: string[];
+  acceptance: string[];
+  priority: "P0" | "P1" | "P2" | "P3" | "Enhancement";
+  estimatedHours: number;
+  completed: boolean;
+  dependsOn?: string[];
 }
 
 interface PriorityGroup {
-  level: "P0" | "P1" | "P2" | "P3" | "Enhancement"
-  name: string
-  description: string
-  icon: string
-  color: string
-  totalHours: number
-  tasks: Task[]
+  level: "P0" | "P1" | "P2" | "P3" | "Enhancement";
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  totalHours: number;
+  tasks: Task[];
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -59,7 +59,7 @@ const ENV = {
   dryRun: process.env.DRY_RUN === "1",
   verbose: process.env.VERBOSE === "1",
   continueOnError: process.env.CONTINUE_ON_ERROR === "1",
-}
+};
 
 const PRIORITY_SYSTEM: Record<string, PriorityGroup> = {
   P0: {
@@ -386,53 +386,53 @@ const PRIORITY_SYSTEM: Record<string, PriorityGroup> = {
       },
     ],
   },
-}
+};
 
 // ═══════════════════════════════════════════════════════════════════════════
 // UTILITY FUNCTIONS
 // ═══════════════════════════════════════════════════════════════════════════
 
 function getAllTasks(): Task[] {
-  return Object.values(PRIORITY_SYSTEM).flatMap((group) => group.tasks)
+  return Object.values(PRIORITY_SYSTEM).flatMap((group) => group.tasks);
 }
 
 function getTaskById(id: string): Task | undefined {
-  return getAllTasks().find((task) => task.id === id)
+  return getAllTasks().find((task) => task.id === id);
 }
 
 function canRunTask(task: Task, allTasks: Task[]): boolean {
-  if (!task.dependsOn || task.dependsOn.length === 0) return true
+  if (!task.dependsOn || task.dependsOn.length === 0) return true;
   return task.dependsOn.every((depId) => {
-    const depTask = allTasks.find((t) => t.id === depId)
-    return depTask?.completed
-  })
+    const depTask = allTasks.find((t) => t.id === depId);
+    return depTask?.completed;
+  });
 }
 
 function colorText(text: string, color: string): string {
-  return `${color}${text}\x1b[0m`
+  return `${color}${text}\x1b[0m`;
 }
 
 function logVerbose(message: string): void {
   if (ENV.verbose) {
-    console.log(colorText(`  [VERBOSE] ${message}`, "\x1b[90m"))
+    console.log(colorText(`  [VERBOSE] ${message}`, "\x1b[90m"));
   }
 }
 
 function executeCommand(cmd: string): { success: boolean; output?: string } {
-  logVerbose(`Executing: ${cmd}`)
+  logVerbose(`Executing: ${cmd}`);
   if (ENV.dryRun) {
-    console.log(colorText(`   [DRY RUN] ${cmd}`, "\x1b[33m"))
-    return { success: true }
+    console.log(colorText(`   [DRY RUN] ${cmd}`, "\x1b[33m"));
+    return { success: true };
   }
   try {
-    const output = execSync(cmd, { encoding: "utf-8", stdio: "pipe" })
-    return { success: true, output }
+    const output = execSync(cmd, { encoding: "utf-8", stdio: "pipe" });
+    return { success: true, output };
   } catch (error) {
     if (ENV.continueOnError) {
-      console.error(colorText(`   ⚠️  Command failed (continuing): ${cmd}`, "\x1b[33m"))
-      return { success: false }
+      console.error(colorText(`   ⚠️  Command failed (continuing): ${cmd}`, "\x1b[33m"));
+      return { success: false };
     }
-    throw error
+    throw error;
   }
 }
 
@@ -441,60 +441,62 @@ function executeCommand(cmd: string): { success: boolean; output?: string } {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function listTasks(): void {
-  console.log("\n" + colorText("═══════════════════════════════════════════════════", "\x1b[36m"))
-  console.log(colorText("ComicWise Priority System - Task List", "\x1b[1m"))
-  console.log(colorText("═══════════════════════════════════════════════════\n", "\x1b[36m"))
+  console.log("\n" + colorText("═══════════════════════════════════════════════════", "\x1b[36m"));
+  console.log(colorText("ComicWise Priority System - Task List", "\x1b[1m"));
+  console.log(colorText("═══════════════════════════════════════════════════\n", "\x1b[36m"));
 
-  const allTasks = getAllTasks()
+  const allTasks = getAllTasks();
 
   for (const [, group] of Object.entries(PRIORITY_SYSTEM)) {
-    const completed = group.tasks.filter((t) => t.completed).length
-    const total = group.tasks.length
-    const progress = total > 0 ? Math.round((completed / total) * 100) : 0
+    const completed = group.tasks.filter((t) => t.completed).length;
+    const total = group.tasks.length;
+    const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-    console.log(colorText(`\n${group.icon} ${group.level}: ${group.name}`, group.color + "\x1b[1m"))
-    console.log(`   ${group.description}`)
+    console.log(
+      colorText(`\n${group.icon} ${group.level}: ${group.name}`, group.color + "\x1b[1m")
+    );
+    console.log(`   ${group.description}`);
     console.log(
       `   Progress: ${completed}/${total} (${progress}%) | Est. ${group.totalHours}h total\n`
-    )
+    );
 
     for (const task of group.tasks) {
-      const status = task.completed ? "✅" : "⭕"
-      const depends = task.dependsOn ? ` [depends: ${task.dependsOn.join(", ")}]` : ""
-      console.log(`   ${status} ${task.id}: ${task.name}${depends}`)
-      console.log(`      ${task.description} (${task.estimatedHours}h)`)
+      const status = task.completed ? "✅" : "⭕";
+      const depends = task.dependsOn ? ` [depends: ${task.dependsOn.join(", ")}]` : "";
+      console.log(`   ${status} ${task.id}: ${task.name}${depends}`);
+      console.log(`      ${task.description} (${task.estimatedHours}h)`);
     }
   }
 
-  const totalCompleted = allTasks.filter((t) => t.completed).length
-  const totalTasks = allTasks.length
-  const totalProgress = Math.round((totalCompleted / totalTasks) * 100)
+  const totalCompleted = allTasks.filter((t) => t.completed).length;
+  const totalTasks = allTasks.length;
+  const totalProgress = Math.round((totalCompleted / totalTasks) * 100);
 
   console.log(
     colorText(
       `\n\n📊 OVERALL PROGRESS: ${totalCompleted}/${totalTasks} tasks (${totalProgress}%)`,
       "\x1b[33m\x1b[1m"
     )
-  )
-  console.log(colorText("═══════════════════════════════════════════════════\n", "\x1b[36m"))
+  );
+  console.log(colorText("═══════════════════════════════════════════════════\n", "\x1b[36m"));
 }
 
 function showStatus(): void {
-  const allTasks = getAllTasks()
-  const completed = allTasks.filter((t) => t.completed).length
-  const total = allTasks.length
+  const allTasks = getAllTasks();
+  const completed = allTasks.filter((t) => t.completed).length;
+  const total = allTasks.length;
 
-  console.log("\n" + colorText("Priority System Status", "\x1b[1m"))
-  console.log(colorText("═══════════════════════════════════════════════════\n", "\x1b[36m"))
+  console.log("\n" + colorText("Priority System Status", "\x1b[1m"));
+  console.log(colorText("═══════════════════════════════════════════════════\n", "\x1b[36m"));
 
   for (const [, group] of Object.entries(PRIORITY_SYSTEM)) {
-    const groupCompleted = group.tasks.filter((t) => t.completed).length
-    const groupTotal = group.tasks.length
-    const percent = groupTotal > 0 ? Math.round((groupCompleted / groupTotal) * 100) : 0
+    const groupCompleted = group.tasks.filter((t) => t.completed).length;
+    const groupTotal = group.tasks.length;
+    const percent = groupTotal > 0 ? Math.round((groupCompleted / groupTotal) * 100) : 0;
 
     console.log(
       `${group.icon} ${group.level}: ${groupCompleted}/${groupTotal} (${percent}%) complete`
-    )
+    );
   }
 
   console.log(
@@ -502,33 +504,33 @@ function showStatus(): void {
       `\n📊 TOTAL: ${completed}/${total} (${Math.round((completed / total) * 100)}%) complete`,
       "\x1b[33m"
     )
-  )
-  console.log(colorText("═══════════════════════════════════════════════════\n", "\x1b[36m"))
+  );
+  console.log(colorText("═══════════════════════════════════════════════════\n", "\x1b[36m"));
 
   if (ENV.dryRun) {
-    console.log(colorText("⚠️  Running in DRY RUN mode - no commands executed", "\x1b[33m"))
+    console.log(colorText("⚠️  Running in DRY RUN mode - no commands executed", "\x1b[33m"));
   }
   if (ENV.continueOnError) {
     console.log(
       colorText("⚠️  Running with CONTINUE_ON_ERROR - will skip failed commands", "\x1b[33m")
-    )
+    );
   }
 }
 
 function runTasks(priority: string): void {
-  const group = PRIORITY_SYSTEM[priority]
+  const group = PRIORITY_SYSTEM[priority];
   if (!group) {
-    console.error(`❌ Invalid priority: ${priority}`)
-    console.log("Valid priorities: P0, P1, P2, P3, Enhancement")
-    process.exit(1)
+    console.error(`❌ Invalid priority: ${priority}`);
+    console.log("Valid priorities: P0, P1, P2, P3, Enhancement");
+    process.exit(1);
   }
 
-  const allTasks = getAllTasks()
-  const readyTasks = group.tasks.filter((t) => !t.completed && canRunTask(t, allTasks))
+  const allTasks = getAllTasks();
+  const readyTasks = group.tasks.filter((t) => !t.completed && canRunTask(t, allTasks));
 
   if (readyTasks.length === 0) {
-    console.log(colorText(`\n✅ All ${group.level} tasks completed!`, "\x1b[32m"))
-    return
+    console.log(colorText(`\n✅ All ${group.level} tasks completed!`, "\x1b[32m"));
+    return;
   }
 
   console.log(
@@ -536,33 +538,33 @@ function runTasks(priority: string): void {
       `\n\n${group.icon} Running ${group.level} tasks (${readyTasks.length} task(s))\n`,
       group.color + "\x1b[1m"
     )
-  )
+  );
 
-  let tasksFailed = 0
+  let tasksFailed = 0;
 
   for (const task of readyTasks) {
-    console.log(colorText(`\n▶️  ${task.name}`, group.color + "\x1b[1m"))
-    console.log(`   ${task.description}\n`)
+    console.log(colorText(`\n▶️  ${task.name}`, group.color + "\x1b[1m"));
+    console.log(`   ${task.description}\n`);
 
-    logVerbose(`Running ${task.id}`)
+    logVerbose(`Running ${task.id}`);
 
     for (const cmd of task.commands) {
-      console.log(colorText(`   $ ${cmd}`, "\x1b[90m"))
-      const result = executeCommand(cmd)
+      console.log(colorText(`   $ ${cmd}`, "\x1b[90m"));
+      const result = executeCommand(cmd);
       if (!result.success) {
-        tasksFailed++
+        tasksFailed++;
         if (!ENV.continueOnError) {
-          throw new Error(`Command failed: ${cmd}`)
+          throw new Error(`Command failed: ${cmd}`);
         }
       }
       if (result.output && ENV.verbose) {
-        console.log(result.output)
+        console.log(result.output);
       }
     }
 
-    console.log(colorText(`\n   Acceptance Criteria:`, "\x1b[36m"))
+    console.log(colorText(`\n   Acceptance Criteria:`, "\x1b[36m"));
     for (const criterion of task.acceptance) {
-      console.log(`   ☐ ${criterion}`)
+      console.log(`   ☐ ${criterion}`);
     }
 
     if (!ENV.skipValidation && !ENV.dryRun) {
@@ -571,74 +573,74 @@ function runTasks(priority: string): void {
           `\n   ⏸️  Verify acceptance criteria above are met, then press Enter...`,
           "\x1b[33m"
         )
-      )
-      console.log(colorText(`      or set SKIP_VALIDATION=1 to auto-mark complete`, "\x1b[33m"))
+      );
+      console.log(colorText(`      or set SKIP_VALIDATION=1 to auto-mark complete`, "\x1b[33m"));
     }
 
-    task.completed = true
-    console.log(colorText(`   ✅ Task marked complete`, "\x1b[32m"))
+    task.completed = true;
+    console.log(colorText(`   ✅ Task marked complete`, "\x1b[32m"));
   }
 
   if (tasksFailed > 0) {
-    console.log(colorText(`\n⚠️  ${tasksFailed} task(s) had command failures`, "\x1b[33m"))
+    console.log(colorText(`\n⚠️  ${tasksFailed} task(s) had command failures`, "\x1b[33m"));
   }
 
-  console.log(colorText("\n✅ Priority level tasks completed!", "\x1b[32m\x1b[1m"))
+  console.log(colorText("\n✅ Priority level tasks completed!", "\x1b[32m\x1b[1m"));
 }
 
 function completeTask(taskId: string): void {
-  const task = getTaskById(taskId)
+  const task = getTaskById(taskId);
   if (!task) {
-    console.error(`❌ Task not found: ${taskId}`)
-    process.exit(1)
+    console.error(`❌ Task not found: ${taskId}`);
+    process.exit(1);
   }
 
-  task.completed = true
-  const allTasks = getAllTasks()
-  const completed = allTasks.filter((t) => t.completed).length
-  const total = allTasks.length
+  task.completed = true;
+  const allTasks = getAllTasks();
+  const completed = allTasks.filter((t) => t.completed).length;
+  const total = allTasks.length;
 
-  console.log(colorText(`\n✅ Task marked complete: ${taskId}`, "\x1b[32m\x1b[1m"))
-  console.log(`📊 Progress: ${completed}/${total} (${Math.round((completed / total) * 100)}%)\n`)
+  console.log(colorText(`\n✅ Task marked complete: ${taskId}`, "\x1b[32m\x1b[1m"));
+  console.log(`📊 Progress: ${completed}/${total} (${Math.round((completed / total) * 100)}%)\n`);
   console.log(
     colorText("Note: Progress is tracked in-memory. For persistent tracking,", "\x1b[90m")
-  )
+  );
   console.log(
     colorText("update PRIORITY_SYSTEM_CHECKLIST.md manually or use git tracking.", "\x1b[90m\n")
-  )
+  );
 }
 
 function completeAllRemaining(): void {
-  const allTasks = getAllTasks()
-  const remaining = allTasks.filter((t) => !t.completed)
+  const allTasks = getAllTasks();
+  const remaining = allTasks.filter((t) => !t.completed);
 
   if (remaining.length === 0) {
-    console.log(colorText("\n✅ All tasks already completed!", "\x1b[32m\x1b[1m"))
-    return
+    console.log(colorText("\n✅ All tasks already completed!", "\x1b[32m\x1b[1m"));
+    return;
   }
 
   console.log(
     colorText(`\n\n🚀 Running ALL REMAINING TASKS (${remaining.length} tasks)\n`, "\x1b[35m\x1b[1m")
-  )
+  );
 
-  const groups = ["P0", "P1", "P2", "P3", "Enhancement"]
+  const groups = ["P0", "P1", "P2", "P3", "Enhancement"];
   for (const priority of groups) {
-    const group = PRIORITY_SYSTEM[priority]
-    if (!group) continue
+    const group = PRIORITY_SYSTEM[priority];
+    if (!group) continue;
 
-    const tasksToRun = group.tasks.filter((t) => !t.completed)
-    if (tasksToRun.length === 0) continue
+    const tasksToRun = group.tasks.filter((t) => !t.completed);
+    if (tasksToRun.length === 0) continue;
 
     console.log(
       colorText(
         `\n\n${group.icon} ${group.level} (${tasksToRun.length} task(s))`,
         group.color + "\x1b[1m"
       )
-    )
-    runTasks(priority)
+    );
+    runTasks(priority);
   }
 
-  showStatus()
+  showStatus();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -646,49 +648,49 @@ function completeAllRemaining(): void {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function main(): void {
-  const args = process.argv.slice(2)
-  const command = args[0] || "list"
+  const args = process.argv.slice(2);
+  const command = args[0] || "list";
 
   switch (command.toLowerCase()) {
     case "list":
-      listTasks()
-      break
+      listTasks();
+      break;
     case "status":
-      showStatus()
-      break
+      showStatus();
+      break;
     case "run": {
-      const priority = args[1]
+      const priority = args[1];
       if (!priority) {
-        console.error("❌ Priority level required: p0, p1, p2, p3, or enhancement")
-        process.exit(1)
+        console.error("❌ Priority level required: p0, p1, p2, p3, or enhancement");
+        process.exit(1);
       }
-      runTasks(priority.toUpperCase())
-      break
+      runTasks(priority.toUpperCase());
+      break;
     }
     case "complete": {
-      const taskId = args[1]
+      const taskId = args[1];
       if (!taskId) {
-        completeAllRemaining()
+        completeAllRemaining();
       } else {
-        completeTask(taskId)
+        completeTask(taskId);
       }
-      break
+      break;
     }
     default:
-      console.error(`❌ Unknown command: ${command}`)
-      console.log("\nUsage: pnpm priority [command] [options]")
-      console.log("\nCommands:")
-      console.log("  list                - List all tasks by priority")
-      console.log("  status              - Show status of all priorities")
-      console.log("  run <priority>      - Run tasks for a priority level")
-      console.log("  complete [task-id]  - Mark a task complete or run all remaining")
-      console.log("\nEnvironment Variables:")
-      console.log("  SKIP_VALIDATION=1   - Skip acceptance criteria validation")
-      console.log("  DRY_RUN=1          - Show commands without executing")
-      console.log("  VERBOSE=1          - Detailed logging")
-      console.log("  CONTINUE_ON_ERROR=1 - Continue even if a command fails")
-      process.exit(1)
+      console.error(`❌ Unknown command: ${command}`);
+      console.log("\nUsage: pnpm priority [command] [options]");
+      console.log("\nCommands:");
+      console.log("  list                - List all tasks by priority");
+      console.log("  status              - Show status of all priorities");
+      console.log("  run <priority>      - Run tasks for a priority level");
+      console.log("  complete [task-id]  - Mark a task complete or run all remaining");
+      console.log("\nEnvironment Variables:");
+      console.log("  SKIP_VALIDATION=1   - Skip acceptance criteria validation");
+      console.log("  DRY_RUN=1          - Show commands without executing");
+      console.log("  VERBOSE=1          - Detailed logging");
+      console.log("  CONTINUE_ON_ERROR=1 - Continue even if a command fails");
+      process.exit(1);
   }
 }
 
-main()
+main();

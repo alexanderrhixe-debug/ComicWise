@@ -64,12 +64,12 @@ pnpm type-check
 ```typescript
 // ❌ Error: Parameter 'x' implicitly has an 'any' type
 function getValue(x) {
-  return x * 2
+  return x * 2;
 }
 
 // ✅ Fix: Add explicit type
 function getValue(x: number): number {
-  return x * 2
+  return x * 2;
 }
 ```
 
@@ -90,12 +90,12 @@ grep -r "any" src/ --include="*.ts" --include="*.tsx"
 ```typescript
 // ❌ Error: Missing return type on function
 export async function fetchData() {
-  return await api.get("/data")
+  return await api.get("/data");
 }
 
 // ✅ Fix: Add return type
 export async function fetchData(): Promise<DataType[]> {
-  return await api.get("/data")
+  return await api.get("/data");
 }
 ```
 
@@ -111,21 +111,21 @@ export async function fetchData(): Promise<DataType[]> {
 
 ```typescript
 // ❌ Error: Property 'email' does not exist on type
-const user = { name: "John" }
-console.log(user.email) // Error!
+const user = { name: "John" };
+console.log(user.email); // Error!
 
 // ✅ Fix 1: Add to object
 const user: { name: string; email: string } = {
   name: "John",
   email: "john@example.com",
-}
+};
 
 // ✅ Fix 2: Use interface
 interface User {
-  name: string
-  email: string
+  name: string;
+  email: string;
 }
-const user: User = { name: "John", email: "john@example.com" }
+const user: User = { name: "John", email: "john@example.com" };
 ```
 
 **Steps**:
@@ -140,19 +140,19 @@ const user: User = { name: "John", email: "john@example.com" }
 
 ```typescript
 // ❌ Error: Object is possibly 'null'
-const value = getData() // returns string | null
-console.log(value.toUpperCase()) // Error!
+const value = getData(); // returns string | null
+console.log(value.toUpperCase()); // Error!
 
 // ✅ Fix 1: Type guard
 if (value !== null) {
-  console.log(value.toUpperCase())
+  console.log(value.toUpperCase());
 }
 
 // ✅ Fix 2: Optional chaining
-console.log(value?.toUpperCase())
+console.log(value?.toUpperCase());
 
 // ✅ Fix 3: Nullish coalescing
-console.log((value ?? "default").toUpperCase())
+console.log((value ?? "default").toUpperCase());
 ```
 
 ---
@@ -161,12 +161,12 @@ console.log((value ?? "default").toUpperCase())
 
 ```typescript
 // ❌ Error: Generic type must have X type arguments
-const items: Array = [] // Error!
+const items: Array = []; // Error!
 
 // ✅ Fix: Specify type
-const items: Array<string> = []
-const items: string[] = []
-const items: Array<{ id: number; name: string }> = []
+const items: Array<string> = [];
+const items: string[] = [];
+const items: Array<{ id: number; name: string }> = [];
 ```
 
 ---
@@ -211,18 +211,18 @@ pnpm lint
 
 ```typescript
 // ❌ Warning: Unexpected console statement
-console.log("Debug message")
+console.log("Debug message");
 
 // ✅ Fix 1: Remove it
 // (if it's just for debugging)
 
 // ✅ Fix 2: Use proper method
-console.error("An error occurred")
-console.warn("Warning message")
+console.error("An error occurred");
+console.warn("Warning message");
 
 // ✅ Fix 3: Use logger
-import { logger } from "@/lib/logger"
-logger.debug("Debug message")
+import { logger } from "@/lib/logger";
+logger.debug("Debug message");
 ```
 
 **Action**:
@@ -241,13 +241,13 @@ logger.debug("Debug message")
 ```typescript
 // ❌ Warning: useEffect has missing dependencies
 useEffect(() => {
-  console.log(userId) // Using userId
-}, []) // Missing userId in dependencies!
+  console.log(userId); // Using userId
+}, []); // Missing userId in dependencies!
 
 // ✅ Fix: Add dependencies
 useEffect(() => {
-  console.log(userId)
-}, [userId])
+  console.log(userId);
+}, [userId]);
 ```
 
 **Action**:
@@ -264,13 +264,13 @@ useEffect(() => {
 
 ```typescript
 // ❌ Warning: Variable declared but never used
-const oldFunction = () => {}
+const oldFunction = () => {};
 
 // ✅ Fix: Remove it
 // (If not needed)
 
 // ✅ Fix: Use it
-oldFunction()
+oldFunction();
 ```
 
 **Action**:
@@ -310,10 +310,10 @@ const html = `<div>${userInput}</div>`
 
 ```typescript
 // ❌ Warning: Object injection detected
-const query = `SELECT * FROM users WHERE id = ${id}`
+const query = `SELECT * FROM users WHERE id = ${id}`;
 
 // ✅ Fix: Use parameterized queries
-const users = await db.select().from(users).where(eq(users.id, id))
+const users = await db.select().from(users).where(eq(users.id, id));
 ```
 
 ---

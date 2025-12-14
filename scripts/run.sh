@@ -1,15 +1,39 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run the built production server (prefers pnpm)
+# Production server runner for ComicWise
+# Usage: ./run.sh [--preview] [--port PORT]
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$(dirname "$SCRIPT_DIR")"
+
+PREVIEW=false
+PORT=3000
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --preview) PREVIEW=true; shift ;;
+        --port) PORT="$2"; shift 2 ;;
+        *) echo "Unknown option: $1"; exit 1 ;;
+    esac
+done
+
+# Detect package manager
 if command -v pnpm >/dev/null 2>&1; then
-  if pnpm -v >/dev/null 2>&1; then
-    if pnpm start --version >/dev/null 2>&1 2>/dev/null; then
-      exec pnpm start
-    else
-      exec pnpm preview || pnpm start || npm run start
-    fi
-  fi
+    PM="pnpm"
+elif command -v npm >/dev/null 2>&1; then
+    PM="npm run"
 else
-  exec npm run start || npm run preview
+    echo "✗ pnpm or npm not found"
+    exit 1
+fi
+
+export PORT=$PORT
+
+if [ "$PREVIEW" = true ]; then
+    echo "ℹ Starting preview server on port $PORT..."
+    exec $PM preview
+else
+    echo "ℹ Starting production server on port $PORT..."
+    exec $PM start:prod
 fi

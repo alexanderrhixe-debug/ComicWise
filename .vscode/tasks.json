@@ -2,14 +2,112 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "dev",
+      "label": "ESLint: Fix All",
       "type": "shell",
-      "command": "pnpm dev",
+      "command": "pnpm lint:fix",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": ["$eslint-stylish"],
+      "isBackground": false
+    },
+    {
+      "label": "ESLint: Check Strict",
+      "type": "shell",
+      "command": "pnpm lint:strict",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": ["$eslint-stylish"],
+      "isBackground": false
+    },
+    {
+      "label": "ESLint: Format & Lint",
+      "type": "shell",
+      "command": "pnpm format && pnpm lint:fix",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Format: Prettier",
+      "type": "shell",
+      "command": "pnpm format",
+      "presentation": { "reveal": "silent" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Format: Check",
+      "type": "shell",
+      "command": "pnpm format:check",
+      "group": "test",
       "presentation": { "reveal": "always" },
       "problemMatcher": []
     },
     {
-      "label": "build",
+      "label": "Validate: Full Pipeline",
+      "type": "shell",
+      "command": "pnpm validate",
+      "group": "test",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "TypeCheck: Strict",
+      "type": "shell",
+      "command": "pnpm type-check",
+      "group": "test",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "TypeCheck: Watch",
+      "type": "shell",
+      "command": "pnpm type-check:watch",
+      "group": "test",
+      "presentation": { "reveal": "always" },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^([^\\\\s].*)\\\\((\\\\d+),(\\\\d+)\\\\): (error) (TS\\\\d+): (.*)$",
+          "file": 1,
+          "location": 2,
+          "endLocation": 3,
+          "message": 6
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^\\\\s*$",
+          "endsPattern": "Found \\\\d+ error"
+        }
+      }
+    },
+    {
+      "label": "Spell Check: All Files",
+      "type": "shell",
+      "command": "pnpm cspell",
+      "group": "test",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev: Start",
+      "type": "shell",
+      "command": "pnpm dev",
+      "group": "build",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "Dev: Debug",
+      "type": "shell",
+      "command": "pnpm dev:debug",
+      "group": "build",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "Build: Prod",
       "type": "shell",
       "command": "pnpm build",
       "group": "build",
@@ -17,23 +115,31 @@
       "problemMatcher": []
     },
     {
-      "label": "lint",
+      "label": "Build: Analyze",
       "type": "shell",
-      "command": "pnpm lint -- --fix",
-      "group": "test",
-      "presentation": { "reveal": "silent" },
-      "problemMatcher": ["$eslint-stylish"]
+      "command": "pnpm build:analyze",
+      "group": "build",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
     },
     {
-      "label": "type-check",
+      "label": "Test: Unit",
       "type": "shell",
-      "command": "pnpm type-check",
+      "command": "pnpm test:unit:run",
       "group": "test",
-      "presentation": { "reveal": "silent" },
-      "problemMatcher": ["$tsc"]
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
     },
     {
-      "label": "test",
+      "label": "Test: Unit Coverage",
+      "type": "shell",
+      "command": "pnpm test:unit:coverage",
+      "group": "test",
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: E2E",
       "type": "shell",
       "command": "pnpm test",
       "group": "test",
@@ -41,39 +147,37 @@
       "problemMatcher": []
     },
     {
-      "label": "format",
+      "label": "DB: Push Schema",
       "type": "shell",
-      "command": "pnpm format",
-      "presentation": { "reveal": "silent" },
-      "problemMatcher": []
-    },
-    {
-      "label": "ops:refactor",
-      "type": "shell",
-      "command": ".\\scripts\\ops.ps1 -Task refactor",
+      "command": "pnpm db:push",
+      "group": "build",
       "presentation": { "reveal": "always" },
       "problemMatcher": []
     },
     {
-      "label": "ops:full-pipeline",
+      "label": "DB: Seed Data",
       "type": "shell",
-      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -Command \"Write-Host 'Running ops:full (creates transcript log)'; $ok = Read-Host 'Proceed with full ops pipeline? (y/N)'; if ($ok -eq 'y') { $log = Join-Path $PWD 'logs' ; if (-not (Test-Path $log)) { New-Item -ItemType Directory -Path $log | Out-Null } ; $ts = (Get-Date).ToString('yyyyMMdd-HHmmss') ; Start-Transcript -Path (Join-Path $log \"ops-full-$ts.log\") ; .\\scripts\\ops.ps1 -Task full ; Stop-Transcript } else { Write-Host 'Aborting ops:full' }\"",
+      "command": "pnpm db:seed",
+      "group": "build",
       "presentation": { "reveal": "always" },
       "problemMatcher": []
     },
     {
-      "label": "codemod:dry",
+      "label": "Setup: Clean Install",
       "type": "shell",
-      "command": "npx jscodeshift -t scripts/codemods/replace-upload-with-hook.jscodeshift.js --extensions=ts,tsx src --dry --print",
+      "command": "pnpm setup:clean",
+      "group": "build",
       "presentation": { "reveal": "always" },
       "problemMatcher": []
     },
     {
-      "label": "codemod:apply",
+      "label": "CI: Full Pipeline",
       "type": "shell",
-      "command": "npx jscodeshift -t scripts/codemods/replace-upload-with-hook.jscodeshift.js --extensions=ts,tsx src",
+      "command": "pnpm ci:full",
+      "group": "test",
       "presentation": { "reveal": "always" },
       "problemMatcher": []
     }
   ]
 }
+

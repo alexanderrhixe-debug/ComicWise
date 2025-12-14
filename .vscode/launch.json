@@ -12,7 +12,8 @@
       "autoAttachChildProcesses": true,
       "env": {
         "NODE_OPTIONS": "--enable-source-maps"
-      }
+      },
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "Next: Dev (inspect)",
@@ -31,7 +32,8 @@
       "autoAttachChildProcesses": true,
       "env": {
         "NODE_OPTIONS": "--enable-source-maps --inspect=9229"
-      }
+      },
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "Attach to Next (9229)",
@@ -41,29 +43,73 @@
       "address": "localhost",
       "localRoot": "${workspaceFolder}",
       "remoteRoot": "${workspaceFolder}",
-      "restart": true
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
     },
     {
-      "name": "Attach to Node",
+      "name": "Attach to Node (8888)",
+      "type": "pwa-node",
+      "request": "attach",
+      "port": 8888,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "${workspaceFolder}",
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Attach to Process",
       "type": "pwa-node",
       "request": "attach",
       "processId": "${command:PickProcess}",
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
+      "skipFiles": ["<node_internals>/**"]
     },
     {
-      "name": "Run Tests (node)",
+      "name": "Unit Tests (vitest)",
       "type": "pwa-node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
-      "args": ["run", "-r", "test/setup.ts"],
+      "args": ["run"],
       "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Unit Tests (vitest watch)",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["watch"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "isBackground": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "E2E Tests (playwright)",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
+      "args": ["test"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
     }
   ],
   "compounds": [
     {
-      "name": "Dev + Attach",
-      "configurations": ["Next: Dev (pnpm)", "Attach to Node"]
+      "name": "Dev + Node Attach",
+      "configurations": ["Next: Dev (pnpm)", "Attach to Process"]
+    },
+    {
+      "name": "Dev (inspect) + Attach",
+      "configurations": ["Next: Dev (inspect)", "Attach to Next (9229)"]
+    },
+    {
+      "name": "Full Test Suite",
+      "configurations": ["Unit Tests (vitest)", "E2E Tests (playwright)"]
     }
   ]
 }
+

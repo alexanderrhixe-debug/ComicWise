@@ -5,11 +5,10 @@
     
 .DESCRIPTION
     Comprehensive setup for ComicWise project including:
-    - Dependency installation
-    - Environment configuration
-    - Database initialization
-    - Code quality checks
-    - GitHub Copilot prompts
+    - Dependency installation with pnpm
+    - Environment file configuration
+    - Database initialization and seeding
+    - Code quality validation
     
 .PARAMETER SkipInstall
     Skip pnpm install step
@@ -36,7 +35,7 @@
     ComicWise Development Team
     
 .VERSION
-    1.0.0
+    2.0.0
 #>
 
 param(
@@ -47,7 +46,145 @@ param(
     [switch]$DockerMode
 )
 
-# ═══════════════════════════════════════════════════════════════════════════
+# Error handling
+$ErrorActionPreference = "Stop"
+$InformationPreference = "Continue"
+
+# Colors
+$colors = @{
+    Success = @{ ForegroundColor = 'Green'; BackgroundColor = 'Black' }
+    Error   = @{ ForegroundColor = 'Red'; BackgroundColor = 'Black' }
+    Warning = @{ ForegroundColor = 'Yellow'; BackgroundColor = 'Black' }
+    Info    = @{ ForegroundColor = 'Cyan'; BackgroundColor = 'Black' }
+}
+
+function Write-Header {
+    param([string]$Message)
+    Write-Host "`n╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+    Write-Host "║ $Message".PadRight(63) + "║" -ForegroundColor Cyan
+    Write-Host "╚═══════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
+}
+
+function Write-Success {
+    param([string]$Message)
+    Write-Host "✓ $Message" @($colors.Success)
+}
+
+function Write-Error-Custom {
+    param([string]$Message)
+    Write-Host "✗ $Message" @($colors.Error)
+}
+
+function Write-Warning-Custom {
+    param([string]$Message)
+    Write-Host "⚠ $Message" @($colors.Warning)
+}
+
+function Write-Info {
+    param([string]$Message)
+    Write-Host "ℹ $Message" @($colors.Info)
+}
+
+function Test-CommandExists {
+    param([string]$Command)
+    $null = Get-Command $Command -ErrorAction SilentlyContinue
+    return $?
+}
+
+function Invoke-Safely {
+    param(
+        [string]$Description,
+        [scriptblock]$ScriptBlock
+    )
+    
+    try {
+        Write-Info $Description
+        & $ScriptBlock
+        Write-Success "$Description - Complete"
+        return $true
+    }
+    catch {
+        Write-Error-Custom "$Description - Failed: $_"
+        return $false
+    }
+}
+
+# Main setup
+Write-Header "ComicWise Development Environment Setup"
+
+# Check prerequisites
+Write-Info "Checking prerequisites..."
+
+if (-not (Test-CommandExists "pnpm")) {
+    Write-Error-Custom "pnpm not found. Install from https://pnpm.io"
+    exit 1
+}
+Write-Success "pnpm found"
+
+if (-not (Test-CommandExists "node")) {
+    Write-Error-Custom "Node.js not found. Install from https://nodejs.org"
+    exit 1
+}
+Write-Success "Node.js found"
+
+# Install dependencies
+if (-not $SkipInstall) {
+    Invoke-Safely "Installing dependencies with pnpm" {
+        pnpm install
+    } | Out-Null
+}
+
+# Setup environment
+Invoke-Safely "Setting up environment files" {
+    if (-not (Test-Path ".env")) {
+        Copy-Item ".env.example" ".env" -ErrorAction SilentlyContinue
+        Write-Warning-Custom ".env file created - please configure with your settings"
+    }
+} | Out-Null
+
+# Database setup
+if (-not $SkipDatabase) {
+    if ($DockerMode) {
+        Write-Info "Using Docker for database..."
+        Invoke-Safely "Starting Docker containers" {
+            docker compose -f docker-compose.dev.yml up -d
+        } | Out-Null
+    }
+    
+    Invoke-Safely "Pushing database schema" {
+        pnpm db:push
+    } | Out-Null
+    
+    Invoke-Safely "Seeding database" {
+        pnpm db:seed
+    } | Out-Null
+}
+
+# Validation
+if (-not $SkipValidation) {
+    Write-Info "Running validation checks..."
+    Invoke-Safely "Type checking" {
+        pnpm type-check
+    } | Out-Null
+    
+    Invoke-Safely "Linting" {
+        pnpm lint:strict
+    } | Out-Null
+    
+    Invoke-Safely "Formatting check" {
+        pnpm format:check
+    } | Out-Null
+}
+
+# Start development server
+if ($DevMode) {
+    Write-Header "Starting Development Server"
+    pnpm dev
+}
+else {
+    Write-Success "`nSetup complete!"
+    Write-Info "Run 'pnpm dev' to start the development server"
+}
 # CONFIGURATION
 # ═══════════════════════════════════════════════════════════════════════════
 

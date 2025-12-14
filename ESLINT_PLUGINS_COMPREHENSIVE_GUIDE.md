@@ -567,28 +567,28 @@ settings: {
 
 ```javascript
 // JavaScript files
-files: ["**/*.js", "**/*.jsx"]
+files: ["**/*.js", "**/*.jsx"];
 
 // Test files
-files: ["**/*.test.ts", "**/*.spec.ts"]
+files: ["**/*.test.ts", "**/*.spec.ts"];
 
 // E2E tests
-files: ["**/tests/**/*.ts", "**/e2e/**/*.ts"]
+files: ["**/tests/**/*.ts", "**/e2e/**/*.ts"];
 
 // Type definitions
-files: ["**/*.d.ts"]
+files: ["**/*.d.ts"];
 
 // Config files
-files: ["*.config.{js,ts}"]
+files: ["*.config.{js,ts}"];
 
 // JSON files
-files: ["**/*.json", "**/*.jsonc"]
+files: ["**/*.json", "**/*.jsonc"];
 
 // Markdown
-files: ["**/*.md"]
+files: ["**/*.md"];
 
 // CSS
-files: ["**/*.css"]
+files: ["**/*.css"];
 ```
 
 ---
@@ -626,12 +626,12 @@ pnpm build
 ```typescript
 // ❌ ERROR: Missing return type
 export async function fetchUser(id: string) {
-  return api.get(`/users/${id}`)
+  return api.get(`/users/${id}`);
 }
 
 // ✅ FIXED: Added return type
 export async function fetchUser(id: string): Promise<User> {
-  return api.get(`/users/${id}`)
+  return api.get(`/users/${id}`);
 }
 ```
 
@@ -649,25 +649,25 @@ export async function fetchUser(id: string): Promise<User> {
 
 ```typescript
 // ❌ ERROR: No WHERE clause
-database.delete(users)
+database.delete(users);
 
 // ✅ FIXED: Added WHERE
-database.delete(users).where(eq(users.id, userId))
+database.delete(users).where(eq(users.id, userId));
 ```
 
 ### **Example 4: Unused Import**
 
 ```typescript
 // ❌ ERROR: Unused import
-import { User } from "@/types"
-import { getUser } from "@/lib"
+import { User } from "@/types";
+import { getUser } from "@/lib";
 
-export default getUser
+export default getUser;
 
 // ✅ FIXED: Removed unused
-import { getUser } from "@/lib"
+import { getUser } from "@/lib";
 
-export default getUser
+export default getUser;
 ```
 
 ### **Example 5: React Hook Dependency**
@@ -675,13 +675,13 @@ export default getUser
 ```typescript
 // ❌ WARNING: Missing dependency
 useEffect(() => {
-  console.log(userId)
-}, []) // Missing userId!
+  console.log(userId);
+}, []); // Missing userId!
 
 // ✅ FIXED: Added dependency
 useEffect(() => {
-  console.log(userId)
-}, [userId])
+  console.log(userId);
+}, [userId]);
 ```
 
 ---
@@ -708,10 +708,10 @@ useEffect(() => {
 
 ```typescript
 // ✅ PREFERRED
-import type { User } from "@/types"
+import type { User } from "@/types";
 
 // ✅ ALSO OK
-import { type User } from "@/types"
+import { type User } from "@/types";
 ```
 
 ### **Avoid**
