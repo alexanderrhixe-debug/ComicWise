@@ -2,13 +2,15 @@
 
 ## Updated: 2025-12-13T23:55:34Z
 
-Complete configuration of all 15 ESLint plugins with rules, settings, and extends in `eslint.config.ts`.
+Complete configuration of all 15 ESLint plugins with rules, settings, and
+extends in `eslint.config.ts`.
 
 ---
 
 ## 📦 Installed ESLint Plugins (15 Total)
 
 ### 1. **@eslint/js** (Core)
+
 - **Status**: ✅ Configured
 - **Extends**: `js/recommended`
 - **Purpose**: Core JavaScript linting rules
@@ -19,17 +21,20 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 
 ---
 
-### 2. **@typescript-eslint** 
+### 2. **@typescript-eslint**
+
 - **Status**: ✅ Configured
 - **Extends**: `typescript-eslint/configs.recommended`
 - **Purpose**: TypeScript-specific linting
 - **Key Rules** (45+ rules):
   - `@typescript-eslint/no-unused-vars` - Ignore args starting with `_`
   - `@typescript-eslint/no-explicit-any` - Warn on `any` type
-  - `@typescript-eslint/explicit-module-boundary-types` - Warn on function returns
+  - `@typescript-eslint/explicit-module-boundary-types` - Warn on function
+    returns
   - `@typescript-eslint/no-floating-promises` - Error on unhandled promises
   - `@typescript-eslint/no-misused-promises` - Prevent promise misuse
-  - `@typescript-eslint/consistent-type-definitions` - Enforce `interface` over `type`
+  - `@typescript-eslint/consistent-type-definitions` - Enforce `interface` over
+    `type`
   - `@typescript-eslint/consistent-type-imports` - Use `import type` for types
   - `@typescript-eslint/naming-convention` - Enforce naming conventions
   - `@typescript-eslint/no-unsafe-*` - Comprehensive type safety checks
@@ -39,6 +44,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 3. **@next/eslint-plugin-next**
+
 - **Status**: ✅ Configured
 - **Extends**: `next/recommended` rules
 - **Purpose**: Next.js best practices
@@ -55,6 +61,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 4. **eslint-plugin-react**
+
 - **Status**: ✅ Configured
 - **Extends**: `react/recommended` flat config
 - **Purpose**: React-specific linting
@@ -83,6 +90,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 5. **eslint-plugin-react-hooks**
+
 - **Status**: ✅ Configured
 - **Extends**: `react-hooks/recommended`, `react-hooks/recommended-latest`
 - **Purpose**: React Hooks best practices
@@ -98,6 +106,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 6. **eslint-plugin-jsx-a11y** ⭐ **(NEW - Added)**
+
 - **Status**: ✅ Newly Configured
 - **Purpose**: Accessibility best practices
 - **Key Rules**:
@@ -112,6 +121,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 7. **eslint-plugin-import**
+
 - **Status**: ✅ Configured
 - **Purpose**: Import/export best practices
 - **Key Rules** (20+ rules):
@@ -141,6 +151,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 8. **eslint-plugin-simple-import-sort**
+
 - **Status**: ✅ Configured
 - **Purpose**: Organize imports alphabetically
 - **Key Rules**:
@@ -150,6 +161,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 9. **eslint-plugin-unused-imports**
+
 - **Status**: ✅ Configured
 - **Purpose**: Detect and remove unused imports
 - **Key Rules**:
@@ -159,6 +171,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 10. **eslint-plugin-prettier**
+
 - **Status**: ✅ Configured
 - **Purpose**: Format code with Prettier
 - **Key Rules**:
@@ -173,13 +186,15 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
     - `endOfLine: "lf"`
     - `bracketSpacing: true`
     - `bracketSameLine: false`
-    - **Plugins**: `prettier-plugin-tailwindcss`, `prettier-plugin-organize-imports`
+    - **Plugins**: `prettier-plugin-tailwindcss`,
+      `prettier-plugin-organize-imports`
 
 ---
 
 ### 11. **eslint-plugin-better-tailwindcss**
+
 - **Status**: ✅ Configured
-- **Extends**: 
+- **Extends**:
   - `better-tailwindcss/recommended-warn`
   - `better-tailwindcss/correctness-warn`
   - `better-tailwindcss/stylistic-warn`
@@ -190,7 +205,21 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
     "entryPoint": "src/styles/globals.css",
     "tailwindConfig": "",
     "attributes": ["class", "className"],
-    "callees": ["cc", "clb", "clsx", "cn", "cnb", "ctl", "cva", "cx", "dcnb", "objstr", "tv", "twJoin", "twMerge"],
+    "callees": [
+      "cc",
+      "clb",
+      "clsx",
+      "cn",
+      "cnb",
+      "ctl",
+      "cva",
+      "cx",
+      "dcnb",
+      "objstr",
+      "tv",
+      "twJoin",
+      "twMerge"
+    ],
     "variables": ["className", "classNames", "classes", "style", "styles"],
     "tags": ["myTag"]
   }
@@ -206,15 +235,19 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 12. **eslint-plugin-drizzle**
+
 - **Status**: ✅ Configured
 - **Purpose**: Drizzle ORM best practices
 - **Key Rules**:
-  - `drizzle/enforce-delete-with-where` - Error (drizzleObjectName: ["database", "db"])
-  - `drizzle/enforce-update-with-where` - Error (drizzleObjectName: ["database", "db"])
+  - `drizzle/enforce-delete-with-where` - Error (drizzleObjectName: ["database",
+    "db"])
+  - `drizzle/enforce-update-with-where` - Error (drizzleObjectName: ["database",
+    "db"])
 
 ---
 
 ### 13. **eslint-plugin-zod**
+
 - **Status**: ✅ Configured
 - **Purpose**: Zod validation schema best practices
 - **Key Rules**:
@@ -224,6 +257,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 14. **eslint-plugin-security**
+
 - **Status**: ✅ Configured
 - **Purpose**: Security vulnerability detection
 - **Key Rules** (9 rules):
@@ -240,6 +274,7 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ---
 
 ### 15. **eslint-plugin-sonarjs** ⭐ **(NEW - Added)**
+
 - **Status**: ✅ Newly Configured
 - **Extends**: `sonarjs/recommended`
 - **Purpose**: Code quality and cognitive complexity detection
@@ -267,28 +302,32 @@ Complete configuration of all 15 ESLint plugins with rules, settings, and extend
 ## 🎯 Core ESLint Configs (4 Total)
 
 ### 1. **@eslint/js** (Core)
+
 - Base JavaScript rules
 
 ### 2. **@eslint/json**
+
 - JSON file linting for `*.json`, `*.jsonc`, `*.json5`
 
 ### 3. **@eslint/markdown**
+
 - Markdown file linting for `*.md`
 
 ### 4. **@eslint/css**
+
 - CSS file linting for `*.css`
 
 ---
 
 ## ⚙️ Configuration Files
 
-| File Type | Configuration |
-|-----------|---|
-| `.json` | `json/recommended` extends |
-| `.jsonc` | `json/jsonc` language with `json/recommended` extends |
-| `.json5` | `json/json5` language with `json/recommended` extends |
-| `.md` | `markdown/commonmark` language with `markdown/recommended` extends |
-| `.css` | `css/css` language with `css/recommended` extends |
+| File Type | Configuration                                                      |
+| --------- | ------------------------------------------------------------------ |
+| `.json`   | `json/recommended` extends                                         |
+| `.jsonc`  | `json/jsonc` language with `json/recommended` extends              |
+| `.json5`  | `json/json5` language with `json/recommended` extends              |
+| `.md`     | `markdown/commonmark` language with `markdown/recommended` extends |
+| `.css`    | `css/css` language with `css/recommended` extends                  |
 
 ---
 
@@ -332,56 +371,64 @@ src/styles/globals.css
 ## 📝 File-Specific Rule Overrides
 
 ### 1. **JavaScript Files** (`**/*.js`, `**/*.jsx`, `**/*.mjs`, `**/*.cjs`)
+
 - TypeScript rules disabled
 - JavaScript-specific `no-unused-vars` enabled
 
 ### 2. **Test Files** (`**/*.test.ts`, `**/*.spec.ts`, `**/*.tsx`, `**/*.spec.tsx`)
+
 - `@typescript-eslint/no-explicit-any` - Warn
 - Type checking disabled (`project: null`)
 
 ### 3. **E2E/Playwright Tests** (`**/tests/**/*.ts`, `**/e2e/**/*.ts`)
+
 - React hooks rules - Warn
 - `@typescript-eslint/no-explicit-any` - Warn
 - Type checking disabled
 
 ### 4. **Type Definition Files** (`**/*.d.ts`)
+
 - `@typescript-eslint/no-explicit-any` - Warn
 - `@typescript-eslint/triple-slash-reference` - Warn
 
 ### 5. **TypeScript Source Files** (`**/*.{ts,tsx,mts,cts}`)
+
 - Full type-aware rules enabled
 - `@typescript-eslint/` rules applied
 
 ### 6. **Config Files** (`*.config.{js,ts,mjs,cjs}`)
+
 - `import/no-default-export` - Off
 - `import/order` - Off
 - `@typescript-eslint/no-var-requires` - Warn
 
 ### 7. **Type Stubs** (`src/types/**`, `**/*.d.ts`)
+
 - All `@typescript-eslint/no-explicit-any` rules - Off
 - Type checking disabled
 
 ### 8. **Hook Utilities** (`src/hooks/**`)
+
 - Type checking disabled (`project: null`)
 
 ---
 
 ## 📊 Rules Summary
 
-| Category | Count | Details |
-|----------|-------|---------|
-| Core JS Rules | 20+ | Covered by @eslint/js |
-| TypeScript Rules | 45+ | Comprehensive type safety |
-| React Rules | 20+ | Component best practices |
-| React Hooks | 7 | Hook compliance rules |
-| Import Rules | 22+ | Module resolution & organization |
-| Accessibility | 7 | JSX A11y standards |
-| Drizzle ORM | 2 | Database safety rules |
-| Zod Validation | 2 | Schema validation rules |
-| Security | 9 | Vulnerability detection |
-| Code Quality | 16+ | SonarJS complexity rules |
-| Formatting | 1 | Prettier integration |
-| Tailwind CSS | 5+ | Utility class best practices |
+| Category         | Count | Details                          |
+| ---------------- | ----- | -------------------------------- |
+| Core JS Rules    | 20+   | Covered by @eslint/js            |
+| TypeScript Rules | 45+   | Comprehensive type safety        |
+| React Rules      | 20+   | Component best practices         |
+| React Hooks      | 7     | Hook compliance rules            |
+| Import Rules     | 22+   | Module resolution & organization |
+| Accessibility    | 7     | JSX A11y standards               |
+| Drizzle ORM      | 2     | Database safety rules            |
+| Zod Validation   | 2     | Schema validation rules          |
+| Security         | 9     | Vulnerability detection          |
+| Code Quality     | 16+   | SonarJS complexity rules         |
+| Formatting       | 1     | Prettier integration             |
+| Tailwind CSS     | 5+    | Utility class best practices     |
 
 **Total Configured Rules**: 155+
 

@@ -38,6 +38,7 @@
 - **mcp.json** - Enhanced with ESLint & tools
 
 **Features:**
+
 - ✅ Format on save (Prettier)
 - ✅ Auto-fix on save (ESLint)
 - ✅ TypeScript optimized
@@ -63,6 +64,7 @@
 ## 🎯 Key Features
 
 ### ESLint (150+ Rules)
+
 ```
 ✅ All 12+ plugins configured
 ✅ Type-aware TypeScript linting
@@ -77,6 +79,7 @@
 ```
 
 ### VS Code (21 Tasks)
+
 ```
 ✅ ESLint: Fix/Check/Strict (3)
 ✅ Format & Validate (5)
@@ -88,6 +91,7 @@
 ```
 
 ### Debugging (8 + 3)
+
 ```
 ✅ Next.js Dev (standard & inspect)
 ✅ Attach to Debugger (ports 9229, 8888, auto-pick)
@@ -97,6 +101,7 @@
 ```
 
 ### Extensions (41)
+
 ```
 ✅ ESLint, Prettier, TypeScript
 ✅ React, Tailwind, Next.js
@@ -132,29 +137,29 @@ Ctrl+Shift+Alt+E
 
 ## ⌨️ Essential Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+Shift+B` | Show all tasks |
-| `F5` | Start debugging |
-| `Shift+Alt+F` | Format document |
-| `Ctrl+.` | Quick fix (ESLint) |
-| `Ctrl+Shift+P` | Command palette |
-| `Ctrl+Shift+Alt+E` | Copilot Chat |
+| Shortcut           | Action             |
+| ------------------ | ------------------ |
+| `Ctrl+Shift+B`     | Show all tasks     |
+| `F5`               | Start debugging    |
+| `Shift+Alt+F`      | Format document    |
+| `Ctrl+.`           | Quick fix (ESLint) |
+| `Ctrl+Shift+P`     | Command palette    |
+| `Ctrl+Shift+Alt+E` | Copilot Chat       |
 
 ---
 
 ## 📊 Statistics
 
-| Category | Count |
-|----------|-------|
-| **ESLint Plugins** | 12+ |
-| **ESLint Rules** | 150+ |
-| **VS Code Settings** | 400+ |
-| **Tasks** | 21 |
-| **Debug Configs** | 8 + 3 |
-| **Extensions** | 41 |
-| **Documentation Files** | 7 |
-| **Documentation Lines** | 2,500+ |
+| Category                      | Count  |
+| ----------------------------- | ------ |
+| **ESLint Plugins**            | 12+    |
+| **ESLint Rules**              | 150+   |
+| **VS Code Settings**          | 400+   |
+| **Tasks**                     | 21     |
+| **Debug Configs**             | 8 + 3  |
+| **Extensions**                | 41     |
+| **Documentation Files**       | 7      |
+| **Documentation Lines**       | 2,500+ |
 | **Total Configuration Lines** | 3,000+ |
 
 ---
@@ -204,7 +209,7 @@ Ctrl+Shift+Alt+E
 ✅ **GitHub Copilot integration**  
 ✅ **MCP server support**  
 ✅ **Full documentation** (2,500+ lines)  
-✅ **Production-ready setup**  
+✅ **Production-ready setup**
 
 ---
 

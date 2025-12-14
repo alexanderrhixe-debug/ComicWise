@@ -5,59 +5,60 @@
 // 12+ Plugins: ESLint, TypeScript, React, Next.js, Import, A11y, Tailwind, Drizzle, Zod, Security, SonarJS, Prettier
 // ═══════════════════════════════════════════════════════════════════════════
 
-import css from "@eslint/css"
-import { FlatCompat } from "@eslint/eslintrc"
-import js from "@eslint/js"
-import json from "@eslint/json"
-import markdown from "@eslint/markdown"
-import eslintNextPlugin from "@next/eslint-plugin-next"
-import typescript from "@typescript-eslint/eslint-plugin"
-import typescriptParser from "@typescript-eslint/parser"
-import nextVitals from "eslint-config-next/core-web-vitals"
-import nextTs from "eslint-config-next/typescript"
-import prettierConfig from "eslint-config-prettier/flat"
-import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss"
-import * as drizzle from "eslint-plugin-drizzle"
-import importPlugin from "eslint-plugin-import"
-import jsxA11y from "eslint-plugin-jsx-a11y"
-import pluginPrettier from "eslint-plugin-prettier"
-import pluginReact from "eslint-plugin-react"
-import pluginReactHooks from "eslint-plugin-react-hooks"
-import security from "eslint-plugin-security"
-import sonarjs from "eslint-plugin-sonarjs"
-import pluginSimpleImportSort from "eslint-plugin-simple-import-sort"
-import unusedImports from "eslint-plugin-unused-imports"
-import * as zod from "eslint-plugin-zod"
-import { defineConfig, globalIgnores } from "eslint/config"
-import globals from "globals"
-import { dirname } from "path"
-import tseslint from "typescript-eslint"
-import { fileURLToPath } from "url"
+import css from "@eslint/css";
+import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import json from "@eslint/json";
+import markdown from "@eslint/markdown";
+import eslintNextPlugin from "@next/eslint-plugin-next";
+import typescript from "@typescript-eslint/eslint-plugin";
+import typescriptParser from "@typescript-eslint/parser";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+import prettierConfig from "eslint-config-prettier/flat";
+import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
+import * as drizzle from "eslint-plugin-drizzle";
+import importPlugin from "eslint-plugin-import";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import pluginPrettier from "eslint-plugin-prettier";
+import pluginReact from "eslint-plugin-react";
+import pluginReactHooks from "eslint-plugin-react-hooks";
+import security from "eslint-plugin-security";
+import pluginSimpleImportSort from "eslint-plugin-simple-import-sort";
+import sonarjs from "eslint-plugin-sonarjs";
+import unusedImports from "eslint-plugin-unused-imports";
+import * as zod from "eslint-plugin-zod";
+import { defineConfig, globalIgnores } from "eslint/config";
+import globals from "globals";
+import { dirname } from "path";
+import tseslint from "typescript-eslint";
+import { fileURLToPath } from "url";
 
-const rootDir = dirname(fileURLToPath(import.meta.url))
+const rootDir = dirname(fileURLToPath(import.meta.url));
 
 export const compat = new FlatCompat({
   baseDirectory: rootDir,
   resolvePluginsRelativeTo: rootDir,
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
-})
+});
 
 const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
+  nextVitals,
+  nextTs,
   js.configs.recommended,
   tseslint.configs.recommended,
   sonarjs.configs.recommended,
-  ...compat.plugins("react-hooks"),
+  compat.plugins("react-hooks"),
   {
     ...pluginReact.configs.flat.recommended,
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     plugins: {
+      js,
       next: eslintNextPlugin,
       "@typescript-eslint": typescript as any,
       react: pluginReact,
-      "react-hooks": pluginReactHooks,
+      "react-hooks": pluginReactHooks as any,
       "jsx-a11y": jsxA11y,
       "simple-import-sort": pluginSimpleImportSort,
       "better-tailwindcss": pluginBetterTailwindcss,
@@ -69,10 +70,7 @@ const eslintConfig = defineConfig([
       security,
       sonarjs,
     },
-    extends: [
-      "js/recommended",
-      "sonarjs/recommended",
-    ],
+    extends: ["js/recommended", "sonarjs/recommended"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -160,8 +158,8 @@ const eslintConfig = defineConfig([
       "no-setter-return": "error",
       "no-async-promise-executor": "error",
       "no-compare-neg-zero": "error",
-      "eqeqeq": ["error", "always"],
-      "curly": ["error", "all"],
+      eqeqeq: ["error", "always"],
+      curly: ["error", "all"],
       "consistent-return": "warn",
       "prefer-const": ["warn", { destructuring: "all" }],
       "prefer-arrow-callback": ["warn", { allowNamedFunctions: false, allowUnboundThis: true }],
@@ -174,13 +172,20 @@ const eslintConfig = defineConfig([
       "no-whitespace-before-property": "error",
       "prefer-spread": "warn",
       "prefer-template": "warn",
-      "radix": ["error", "as-needed"],
+      radix: ["error", "as-needed"],
       "space-before-blocks": "error",
-      "space-before-function-paren": ["error", { anonymous: "always", named: "never", asyncArrow: "always" }],
+      "space-before-function-paren": [
+        "error",
+        { anonymous: "always", named: "never", asyncArrow: "always" },
+      ],
       "space-in-parens": ["error", "never"],
       "space-infix-ops": "error",
       "space-unary-ops": "error",
-      "spaced-comment": ["warn", "always", { line: { exceptions: ["-", "+"] }, block: { exceptions: ["*"] } }],
+      "spaced-comment": [
+        "warn",
+        "always",
+        { line: { exceptions: ["-", "+"] }, block: { exceptions: ["*"] } },
+      ],
       "switch-colon-spacing": "error",
       "template-curly-spacing": ["error", "never"],
       "comma-dangle": ["warn", "es5"],
@@ -193,8 +198,8 @@ const eslintConfig = defineConfig([
       "no-mixed-operators": "warn",
       "no-mixed-spaces-and-tabs": "error",
       "no-tabs": "error",
-      "quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
-      "semi": ["error", "never"],
+      quotes: ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
+      semi: ["error", "never"],
       "arrow-parens": ["error", "always"],
       "arrow-spacing": "error",
       "rest-spread-spacing": "error",
@@ -229,7 +234,10 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/explicit-module-boundary-types": "warn",
       "@typescript-eslint/no-floating-promises": "warn",
-      "@typescript-eslint/no-misused-promises": ["warn", { checksVoidReturn: false, checksConditionals: false }],
+      "@typescript-eslint/no-misused-promises": [
+        "warn",
+        { checksVoidReturn: false, checksConditionals: false },
+      ],
       "@typescript-eslint/no-unsafe-assignment": "warn",
       "@typescript-eslint/no-unsafe-call": "warn",
       "@typescript-eslint/no-unsafe-member-access": "warn",
@@ -361,7 +369,11 @@ const eslintConfig = defineConfig([
       "import/no-dynamic-require": "warn",
       "import/no-commonjs": "off",
       "import/no-restricted-paths": "off",
-      "import/extensions": ["error", "ignorePackages", { ts: "never", tsx: "never", js: "never", jsx: "never" }],
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        { ts: "never", tsx: "never", js: "never", jsx: "never" },
+      ],
       "import/newline-after-import": "warn",
       "import/no-amd": "error",
       "import/no-webpack-loader-syntax": "error",
@@ -393,9 +405,9 @@ const eslintConfig = defineConfig([
       // ═══════════════════════════════════════════════════════════════════════
       // 10. BETTER TAILWINDCSS PLUGIN (eslint-plugin-better-tailwindcss)
       // ═══════════════════════════════════════════════════════════════════════
-      ...pluginBetterTailwindcss.configs["recommended-warn"]?.rules || {},
-      ...pluginBetterTailwindcss.configs["correctness-warn"]?.rules || {},
-      ...pluginBetterTailwindcss.configs["stylistic-warn"]?.rules || {},
+      ...(pluginBetterTailwindcss.configs["recommended-warn"]?.rules || {}),
+      ...(pluginBetterTailwindcss.configs["correctness-warn"]?.rules || {}),
+      ...(pluginBetterTailwindcss.configs["stylistic-warn"]?.rules || {}),
       "better-tailwindcss/no-conflicting-classes": "warn",
       "better-tailwindcss/no-unregistered-classes": "warn",
       "better-tailwindcss/enforce-consistent-class-order": "warn",
@@ -529,7 +541,7 @@ const eslintConfig = defineConfig([
       "@typescript-eslint": typescript as any,
     },
     rules: {
-      ...typescript.configs.recommended?.rules || {},
+      ...(typescript.configs.recommended?.rules || {}),
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
         "warn",
@@ -628,6 +640,6 @@ const eslintConfig = defineConfig([
     "src/styles/globals.css",
     "**/docs/**",
   ]),
-])
+]);
 
-export default eslintConfig
+export default eslintConfig;

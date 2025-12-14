@@ -190,6 +190,7 @@ DEBUG=*
 ## 📋 Script Reference
 
 ### PowerShell Scripts
+
 ```bash
 .\scripts\setup.ps1 [-Clean] [-DockerDB] [-Dev] [-SkipValidation]
 .\scripts\dev.ps1 [-Debug] [-Port 4000] [-Https]
@@ -203,6 +204,7 @@ DEBUG=*
 ```
 
 ### Bash Scripts
+
 ```bash
 bash scripts/setup.sh [--clean] [--docker-db] [--dev] [--skip-validation]
 bash scripts/dev.sh [--debug] [--port 4000] [--https]
@@ -218,12 +220,14 @@ bash scripts/cleanup.sh [--full]
 ## 🔧 Common Workflows
 
 ### Fresh Development Setup
+
 ```bash
 pnpm setup:clean
 pnpm dev
 ```
 
 ### Fix All Issues
+
 ```bash
 pnpm lint:fix
 pnpm format
@@ -231,6 +235,7 @@ pnpm type-check
 ```
 
 ### Complete Quality Check
+
 ```bash
 pnpm validate       # lint + format + type-check
 pnpm test:unit:run  # unit tests
@@ -238,6 +243,7 @@ pnpm test           # e2e tests
 ```
 
 ### Production Ready
+
 ```bash
 pnpm clean
 pnpm install
@@ -247,6 +253,7 @@ pnpm build
 ```
 
 ### Docker Deployment
+
 ```bash
 pnpm docker:clean     # Clean old containers
 pnpm docker:build     # Build images
@@ -291,17 +298,18 @@ pnpm test:ui          # Test UI mode
 
 ## ❓ Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| Port in use | Use different port: `pnpm dev --port 4000` |
-| Module not found | `pnpm install` |
-| Type errors | `pnpm clean && pnpm install` |
-| DB connection error | Check `DATABASE_URL` in `.env` |
-| Tests timeout | Increase timeout in `playwright.config.ts` |
+| Problem             | Solution                                   |
+| ------------------- | ------------------------------------------ |
+| Port in use         | Use different port: `pnpm dev --port 4000` |
+| Module not found    | `pnpm install`                             |
+| Type errors         | `pnpm clean && pnpm install`               |
+| DB connection error | Check `DATABASE_URL` in `.env`             |
+| Tests timeout       | Increase timeout in `playwright.config.ts` |
 
 ## 📖 Full Documentation
 
 For detailed information, see:
+
 - **SCRIPTS_GUIDE.md** - Complete script documentation
 - **SCRIPTS_OPTIMIZATION_REPORT.md** - Optimization details
 - **package.json** - All available npm scripts

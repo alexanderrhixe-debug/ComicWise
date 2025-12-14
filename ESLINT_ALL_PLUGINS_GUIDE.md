@@ -2,7 +2,8 @@
 
 ## 🎯 Overview
 
-This document provides a comprehensive guide to all 15 ESLint plugins configured in `eslint.config.ts`.
+This document provides a comprehensive guide to all 15 ESLint plugins configured
+in `eslint.config.ts`.
 
 ---
 
@@ -11,6 +12,7 @@ This document provides a comprehensive guide to all 15 ESLint plugins configured
 ### Tier 1: Core Linting (4 Plugins)
 
 #### 1. **@eslint/js** ⭐ Foundation
+
 ```typescript
 // Imported as: js
 import js from "@eslint/js";
@@ -21,9 +23,11 @@ rules: {
   ...js.configs.recommended.rules,
 }
 ```
+
 **What it does**: Provides core JavaScript linting rules  
 **Rules Count**: 20+  
 **Examples**:
+
 - `no-unused-vars`, `no-console`, `no-debugger`
 - `no-duplicate-case`, `no-fallthrough`
 - `no-self-assign`, `no-self-compare`
@@ -31,6 +35,7 @@ rules: {
 ---
 
 #### 2. **@typescript-eslint/eslint-plugin** ⭐ TypeScript
+
 ```typescript
 // Imported as: typescript, typescriptParser
 import typescript from "@typescript-eslint/eslint-plugin";
@@ -52,9 +57,11 @@ rules: {
   // 40+ more rules
 }
 ```
+
 **What it does**: Type-safe linting for TypeScript  
 **Rules Count**: 45+  
 **Key Features**:
+
 - Type-aware rules
 - Strict null checks
 - Import/export validation
@@ -63,6 +70,7 @@ rules: {
 ---
 
 #### 3. **@next/eslint-plugin-next** ⭐ Next.js
+
 ```typescript
 // Imported as: eslintNextPlugin
 import eslintNextPlugin from "@next/eslint-plugin-next";
@@ -77,9 +85,11 @@ rules: {
   "@next/next/no-sync-scripts": "error",
 }
 ```
+
 **What it does**: Enforce Next.js best practices  
 **Rules Count**: 8+  
 **Examples**:
+
 - `no-html-link-for-pages` - Use Next.js Link
 - `no-img-element` - Use Image component
 - `no-css-tags` - Use CSS imports
@@ -88,6 +98,7 @@ rules: {
 ---
 
 #### 4. **eslint-plugin-import** ⭐ Import/Export
+
 ```typescript
 // Imported as: importPlugin
 import importPlugin from "eslint-plugin-import";
@@ -111,9 +122,11 @@ rules: {
   "import/default": "error",
 }
 ```
+
 **What it does**: Validate and organize imports  
 **Rules Count**: 22+  
 **Key Features**:
+
 - Import resolution
 - No circular dependencies
 - Extension consistency
@@ -124,6 +137,7 @@ rules: {
 ### Tier 2: Framework & UI (5 Plugins)
 
 #### 5. **eslint-plugin-react** ⭐ React
+
 ```typescript
 // Imported as: pluginReact
 import pluginReact from "eslint-plugin-react";
@@ -143,9 +157,11 @@ rules: {
   "react/jsx-no-duplicate-props": "error",
 }
 ```
+
 **What it does**: React component best practices  
 **Rules Count**: 20+  
 **Examples**:
+
 - Component lifecycle warnings
 - Key management
 - Fragment optimization
@@ -154,6 +170,7 @@ rules: {
 ---
 
 #### 6. **eslint-plugin-react-hooks** ⭐ React Hooks
+
 ```typescript
 // Imported as: pluginReactHooks
 import pluginReactHooks from "eslint-plugin-react-hooks";
@@ -168,15 +185,18 @@ rules: {
   "react-hooks/set-state-in-effect": "warn",
 }
 ```
+
 **What it does**: Enforce React Hooks rules  
 **Rules Count**: 7  
 **Critical Rules**:
+
 - `rules-of-hooks` - Hooks called at top level
 - `exhaustive-deps` - Effect dependencies complete
 
 ---
 
 #### 7. **eslint-plugin-jsx-a11y** ⭐ Accessibility
+
 ```typescript
 // Imported as: jsxA11y
 import jsxA11y from "eslint-plugin-jsx-a11y";
@@ -191,9 +211,11 @@ rules: {
   "jsx-a11y/role-has-required-aria-props": "warn",
 }
 ```
+
 **What it does**: Enforce accessibility standards  
 **Rules Count**: 7+  
 **Examples**:
+
 - ARIA attributes
 - Keyboard events
 - Valid semantics
@@ -202,6 +224,7 @@ rules: {
 ---
 
 #### 8. **eslint-plugin-better-tailwindcss** ⭐ Tailwind CSS
+
 ```typescript
 // Imported as: pluginBetterTailwindcss
 import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
@@ -226,9 +249,11 @@ rules: {
   "better-tailwindcss/no-duplicate-classes": "warn",
 }
 ```
+
 **What it does**: Tailwind CSS best practices  
 **Rules Count**: 5+  
 **Examples**:
+
 - Conflicting classes
 - Duplicate classes
 - Class ordering
@@ -237,6 +262,7 @@ rules: {
 ---
 
 #### 9. **eslint-plugin-drizzle** ⭐ Drizzle ORM
+
 ```typescript
 // Imported as: drizzle
 import * as drizzle from "eslint-plugin-drizzle";
@@ -256,9 +282,11 @@ rules: {
   ],
 }
 ```
+
 **What it does**: Drizzle ORM safety checks  
 **Rules Count**: 2  
 **Features**:
+
 - Prevent accidental full deletes
 - Require WHERE clauses
 
@@ -267,6 +295,7 @@ rules: {
 ### Tier 3: Code Quality & Formatting (4 Plugins)
 
 #### 10. **eslint-plugin-simple-import-sort** ⭐ Import Sorting
+
 ```typescript
 // Imported as: pluginSimpleImportSort
 import pluginSimpleImportSort from "eslint-plugin-simple-import-sort";
@@ -280,9 +309,11 @@ rules: {
   "simple-import-sort/exports": "warn",
 }
 ```
+
 **What it does**: Automatically sort imports  
 **Rules Count**: 2  
 **Features**:
+
 - Alphabetical sorting
 - Grouped imports
 - Export ordering
@@ -290,6 +321,7 @@ rules: {
 ---
 
 #### 11. **eslint-plugin-unused-imports** ⭐ Unused Code
+
 ```typescript
 // Imported as: unusedImports
 import unusedImports from "eslint-plugin-unused-imports";
@@ -306,15 +338,18 @@ rules: {
   ],
 }
 ```
+
 **What it does**: Remove unused imports/variables  
 **Rules Count**: 2  
 **Features**:
+
 - Auto-fix unused imports
 - Underscore pattern support
 
 ---
 
 #### 12. **eslint-plugin-prettier** ⭐ Code Formatting
+
 ```typescript
 // Imported as: pluginPrettier
 import pluginPrettier from "eslint-plugin-prettier";
@@ -340,15 +375,18 @@ rules: {
   ],
 }
 ```
+
 **What it does**: Enforce Prettier formatting  
 **Rules Count**: 1 (with comprehensive options)  
 **Prettier Plugins**:
+
 - `prettier-plugin-tailwindcss` - Sort Tailwind classes
 - `prettier-plugin-organize-imports` - Organize imports
 
 ---
 
 #### 13. **eslint-plugin-zod** ⭐ Zod Validation
+
 ```typescript
 // Imported as: zod
 import * as zod from "eslint-plugin-zod";
@@ -362,9 +400,11 @@ rules: {
   "zod/require-strict": "warn",
 }
 ```
+
 **What it does**: Zod schema validation best practices  
 **Rules Count**: 2  
 **Features**:
+
 - Enum preference
 - Strict mode enforcement
 
@@ -373,6 +413,7 @@ rules: {
 ### Tier 4: Security & Analysis (2 Plugins)
 
 #### 14. **eslint-plugin-security** ⭐ Security
+
 ```typescript
 // Imported as: security
 import security from "eslint-plugin-security";
@@ -388,9 +429,11 @@ rules: {
   "security/detect-unsafe-regex": "warn",
 }
 ```
+
 **What it does**: Detect security vulnerabilities  
 **Rules Count**: 9  
 **Examples**:
+
 - Object injection
 - Unsafe regex
 - Child processes
@@ -400,6 +443,7 @@ rules: {
 ---
 
 #### 15. **eslint-plugin-sonarjs** ⭐ Code Quality
+
 ```typescript
 // Imported as: sonarjs
 import sonarjs from "eslint-plugin-sonarjs";
@@ -415,9 +459,11 @@ rules: {
   "sonarjs/no-duplicated-branches": "warn",
 }
 ```
+
 **What it does**: Advanced code quality analysis  
 **Rules Count**: 16+  
 **Examples**:
+
 - Cognitive complexity
 - Duplicated branches
 - Identical expressions
@@ -429,11 +475,13 @@ rules: {
 ## 🔌 How Plugins are Integrated
 
 ### Step 1: Import
+
 ```typescript
 import pluginName from "eslint-plugin-name";
 ```
 
 ### Step 2: Add to plugins object
+
 ```typescript
 plugins: {
   "plugin-key": pluginName,
@@ -441,6 +489,7 @@ plugins: {
 ```
 
 ### Step 3: Extend recommended configs (if available)
+
 ```typescript
 extends: [
   "plugin-key/recommended",
@@ -448,6 +497,7 @@ extends: [
 ```
 
 ### Step 4: Configure specific rules
+
 ```typescript
 rules: {
   "plugin-key/rule-name": "warn",
@@ -455,6 +505,7 @@ rules: {
 ```
 
 ### Step 5: Add settings (if needed)
+
 ```typescript
 settings: {
   "plugin-key": {
@@ -467,24 +518,24 @@ settings: {
 
 ## 📊 Plugin Statistics
 
-| Plugin | Type | Rules | Extends |
-|--------|------|-------|---------|
-| @eslint/js | Core | 20+ | Yes |
-| @typescript-eslint | Type Safety | 45+ | Yes |
-| @next/eslint-plugin-next | Framework | 8+ | Yes |
-| eslint-plugin-react | UI Library | 20+ | Yes |
-| eslint-plugin-react-hooks | Hooks | 7 | Yes |
-| eslint-plugin-jsx-a11y | Accessibility | 7+ | No |
-| eslint-plugin-import | Imports | 22+ | No |
-| eslint-plugin-simple-import-sort | Formatting | 2 | No |
-| eslint-plugin-unused-imports | Code Quality | 2 | No |
-| eslint-plugin-better-tailwindcss | CSS | 5+ | Yes |
-| eslint-plugin-drizzle | Database | 2 | No |
-| eslint-plugin-zod | Validation | 2 | No |
-| eslint-plugin-prettier | Formatting | 1 | No |
-| eslint-plugin-security | Security | 9 | No |
-| eslint-plugin-sonarjs | Quality | 16+ | Yes |
-| **Total** | **15 plugins** | **155+** | **8 extends** |
+| Plugin                           | Type           | Rules    | Extends       |
+| -------------------------------- | -------------- | -------- | ------------- |
+| @eslint/js                       | Core           | 20+      | Yes           |
+| @typescript-eslint               | Type Safety    | 45+      | Yes           |
+| @next/eslint-plugin-next         | Framework      | 8+       | Yes           |
+| eslint-plugin-react              | UI Library     | 20+      | Yes           |
+| eslint-plugin-react-hooks        | Hooks          | 7        | Yes           |
+| eslint-plugin-jsx-a11y           | Accessibility  | 7+       | No            |
+| eslint-plugin-import             | Imports        | 22+      | No            |
+| eslint-plugin-simple-import-sort | Formatting     | 2        | No            |
+| eslint-plugin-unused-imports     | Code Quality   | 2        | No            |
+| eslint-plugin-better-tailwindcss | CSS            | 5+       | Yes           |
+| eslint-plugin-drizzle            | Database       | 2        | No            |
+| eslint-plugin-zod                | Validation     | 2        | No            |
+| eslint-plugin-prettier           | Formatting     | 1        | No            |
+| eslint-plugin-security           | Security       | 9        | No            |
+| eslint-plugin-sonarjs            | Quality        | 16+      | Yes           |
+| **Total**                        | **15 plugins** | **155+** | **8 extends** |
 
 ---
 
@@ -550,7 +601,9 @@ npx eslint --format json 2>/dev/null | grep '"ruleId"'
 ## ✨ Advanced Features
 
 ### 1. Type-Aware Rules
+
 Enabled for `.ts` and `.tsx` files with:
+
 ```typescript
 parserOptions: {
   project: ["./tsconfig.json"],
@@ -558,21 +611,27 @@ parserOptions: {
 ```
 
 ### 2. File-Specific Overrides
+
 Different rules for:
+
 - Test files (relaxed type checking)
 - Config files (allow requires)
 - Type stubs (no strict any checking)
 - Hooks directory (project: null)
 
 ### 3. Global Ignores
+
 Excludes these patterns:
+
 - `**/.next/**` - Next.js build
 - `**/node_modules/**` - Dependencies
 - `**/dist/**` - Build output
 - `**/docs/**` - Documentation
 
 ### 4. Prettier Integration
+
 Fully configured with:
+
 - Tailwind class sorting
 - Import organization
 - 100 character line width
@@ -583,6 +642,7 @@ Fully configured with:
 ## 🚀 Implementation Complete
 
 All 15 ESLint plugins are now fully configured with:
+
 - ✅ Proper imports
 - ✅ Plugin registration
 - ✅ Config extends

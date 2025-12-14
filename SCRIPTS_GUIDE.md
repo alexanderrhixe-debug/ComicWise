@@ -1,6 +1,7 @@
 # ComicWise Scripts Guide
 
-Complete guide to all available scripts for project development, building, and deployment.
+Complete guide to all available scripts for project development, building, and
+deployment.
 
 ## Table of Contents
 
@@ -374,23 +375,25 @@ pnpm dev
 
 1. **Use pnpm** instead of npm for faster installs
 2. **Enable Turbopack** for faster dev builds (enabled by default)
-3. **Run Playwright tests only when needed**: `pnpm test:unit:run` for quick feedback
+3. **Run Playwright tests only when needed**: `pnpm test:unit:run` for quick
+   feedback
 4. **Use watch mode for development**: `tsc --noEmit --watch`
 5. **Check dependencies**: `pnpm check-updates` regularly
 
 ### Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Port already in use | Use `--port` flag or kill process: `lsof -ti:3000 \| xargs kill -9` |
-| Database connection error | Check `DATABASE_URL` in `.env` |
-| Module not found | Run `pnpm install` |
-| Type errors after update | Run `pnpm clean && pnpm install` |
-| Playwright tests fail | Run `npx playwright install` |
+| Issue                     | Solution                                                            |
+| ------------------------- | ------------------------------------------------------------------- |
+| Port already in use       | Use `--port` flag or kill process: `lsof -ti:3000 \| xargs kill -9` |
+| Database connection error | Check `DATABASE_URL` in `.env`                                      |
+| Module not found          | Run `pnpm install`                                                  |
+| Type errors after update  | Run `pnpm clean && pnpm install`                                    |
+| Playwright tests fail     | Run `npx playwright install`                                        |
 
 ### Package Manager Detection
 
-All scripts automatically detect and use pnpm if available, otherwise fall back to npm. To force npm:
+All scripts automatically detect and use pnpm if available, otherwise fall back
+to npm. To force npm:
 
 ```bash
 npm install  # Instead of pnpm install
@@ -399,17 +402,17 @@ npm run dev  # Instead of pnpm dev
 
 ## Script Reference Table
 
-| Script | Purpose | Options |
-|--------|---------|---------|
-| setup | Full project setup | -Clean, -DockerDB, -Dev, -SkipValidation |
-| dev | Start dev server | -Debug, -Port, -Https |
-| build | Build for production | -Debug, -Analyze |
-| run | Run production server | -Preview, -Port |
-| lint | Run ESLint | -Fix, -Strict, -FixType |
-| format | Format with Prettier | -Check |
-| type-check | TypeScript checking | -Watch |
-| test | Run test suite | --Unit, --E2E, --Watch, --UI, --Coverage |
-| cleanup | Remove artifacts | -Full |
+| Script     | Purpose               | Options                                  |
+| ---------- | --------------------- | ---------------------------------------- |
+| setup      | Full project setup    | -Clean, -DockerDB, -Dev, -SkipValidation |
+| dev        | Start dev server      | -Debug, -Port, -Https                    |
+| build      | Build for production  | -Debug, -Analyze                         |
+| run        | Run production server | -Preview, -Port                          |
+| lint       | Run ESLint            | -Fix, -Strict, -FixType                  |
+| format     | Format with Prettier  | -Check                                   |
+| type-check | TypeScript checking   | -Watch                                   |
+| test       | Run test suite        | --Unit, --E2E, --Watch, --UI, --Coverage |
+| cleanup    | Remove artifacts      | -Full                                    |
 
 ---
 

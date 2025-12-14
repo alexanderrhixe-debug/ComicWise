@@ -7,9 +7,11 @@
 
 ## 📋 Executive Summary
 
-Successfully configured and installed **all 15 ESLint plugins** with comprehensive rules, settings, and extends in `eslint.config.ts`. 
+Successfully configured and installed **all 15 ESLint plugins** with
+comprehensive rules, settings, and extends in `eslint.config.ts`.
 
 **Total Configuration**:
+
 - ✅ 15 ESLint plugins fully integrated
 - ✅ 155+ linting rules configured
 - ✅ 8 recommended extends applied
@@ -31,7 +33,8 @@ Successfully configured and installed **all 15 ESLint plugins** with comprehensi
 
 5. **eslint-plugin-react** - React component rules (20+ rules)
 6. **eslint-plugin-react-hooks** - React Hooks compliance (7 rules)
-7. **eslint-plugin-jsx-a11y** - Accessibility standards (7+ rules) **[NEWLY ADDED]**
+7. **eslint-plugin-jsx-a11y** - Accessibility standards (7+ rules) **[NEWLY
+   ADDED]**
 8. **eslint-plugin-better-tailwindcss** - Tailwind CSS optimization (5+ rules)
 9. **eslint-plugin-drizzle** - Drizzle ORM safety (2 rules)
 
@@ -45,7 +48,8 @@ Successfully configured and installed **all 15 ESLint plugins** with comprehensi
 ### ✅ Tier 4: Security & Analysis
 
 14. **eslint-plugin-security** - Security vulnerability detection (9 rules)
-15. **eslint-plugin-sonarjs** - Code quality & complexity analysis (16+ rules) **[NEWLY ADDED]**
+15. **eslint-plugin-sonarjs** - Code quality & complexity analysis (16+ rules)
+    **[NEWLY ADDED]**
 
 ---
 
@@ -54,6 +58,7 @@ Successfully configured and installed **all 15 ESLint plugins** with comprehensi
 ### File: `eslint.config.ts`
 
 #### Imports (29 total)
+
 ```typescript
 // Core configs
 import js from "@eslint/js";
@@ -89,6 +94,7 @@ import globals from "globals";
 ```
 
 #### Plugins Object (15 entries)
+
 ```typescript
 plugins: {
   next: eslintNextPlugin,
@@ -110,6 +116,7 @@ plugins: {
 ```
 
 #### Extends Array (8 configs)
+
 ```typescript
 extends: [
   "js/recommended",              // Core JS
@@ -123,6 +130,7 @@ extends: [
 ```
 
 #### Settings Object
+
 ```typescript
 settings: {
   react: { version: "detect" },
@@ -146,45 +154,54 @@ settings: {
 #### Rules (155+ total configured)
 
 **Core JS** (20 rules):
+
 - `no-unused-vars`, `no-console`, `no-debugger`, `no-undef`
 - `no-redeclare`, `no-empty`, `no-cond-assign`, `no-duplicate-case`
 - `no-fallthrough`, `no-self-assign`, `no-self-compare`, etc.
 
 **TypeScript** (45 rules):
+
 - Type safety: `no-explicit-any`, `no-unsafe-*`, `await-thenable`
 - Imports: `consistent-type-imports`, `no-require-imports`
 - Naming: `naming-convention` (4 configurations)
 - Best practices: `prefer-nullish-coalescing`, `prefer-optional-chain`
 
 **React** (20 rules):
+
 - Hooks: `react-hooks/rules-of-hooks`, `exhaustive-deps`
 - Components: `jsx-key`, `jsx-no-duplicate-props`, `no-array-index-key`
 - Best practices: `self-closing-comp`, `prop-types`, `display-name`
 
 **Accessibility (NEW)** (7 rules):
+
 - `jsx-a11y/anchor-is-valid`, `click-events-have-key-events`
 - `jsx-a11y/role-has-required-aria-props`, `label-has-associated-control`
 
 **Import** (22 rules):
+
 - Resolution: `no-unresolved`, `named`, `default`, `export`
 - Organization: `no-duplicates`, `first`, `newline-after-import`
 - Style: `no-absolute-path`, `no-dynamic-require`, `extensions`
 
 **Quality (NEW - SonarJS)** (16 rules):
+
 - Complexity: `cognitive-complexity` (max 30)
 - Duplicates: `no-identical-conditions`, `no-identical-expressions`
 - Best practices: `prefer-switch`, `prefer-single-boolean-return`
 
 **Security** (9 rules):
+
 - `detect-non-literal-regexp`, `detect-child-process`
 - `detect-non-literal-fs-filename`, `detect-unsafe-regex`
 
 **Formatting**:
+
 - `prettier/prettier` - Full Prettier config with plugins
 - `simple-import-sort/imports` & `/exports`
 - `unused-imports/no-unused-imports` & `/no-unused-vars`
 
 **CSS/DB/Schema**:
+
 - `better-tailwindcss/*` (5 rules)
 - `drizzle/enforce-delete-with-where`, `/enforce-update-with-where`
 - `zod/prefer-enum`, `/require-strict`
@@ -193,7 +210,8 @@ settings: {
 
 ## 📁 File-Specific Configurations
 
-### 1. JavaScript Files (*.js, *.jsx, *.mjs, *.cjs)
+### 1. JavaScript Files (_.js, _.jsx, _.mjs, _.cjs)
+
 ```typescript
 // TypeScript rules disabled for JS
 rules: {
@@ -202,7 +220,8 @@ rules: {
 }
 ```
 
-### 2. Test Files (*.test.ts, *.spec.ts, etc.)
+### 2. Test Files (_.test.ts, _.spec.ts, etc.)
+
 ```typescript
 // Relaxed type checking
 languageOptions: {
@@ -214,6 +233,7 @@ rules: {
 ```
 
 ### 3. E2E Tests (**/tests/**, **/e2e/**)
+
 ```typescript
 // Hooks rules as warnings
 rules: {
@@ -222,7 +242,8 @@ rules: {
 }
 ```
 
-### 4. Type Definition Files (*.d.ts)
+### 4. Type Definition Files (\*.d.ts)
+
 ```typescript
 // Relaxed any checking
 rules: {
@@ -230,7 +251,8 @@ rules: {
 }
 ```
 
-### 5. TypeScript Source Files (*.ts, *.tsx)
+### 5. TypeScript Source Files (_.ts, _.tsx)
+
 ```typescript
 // Full type-aware rules
 languageOptions: {
@@ -240,7 +262,8 @@ languageOptions: {
 plugins: { "@typescript-eslint": typescript }
 ```
 
-### 6. Config Files (*.config.ts, *.config.js)
+### 6. Config Files (_.config.ts, _.config.js)
+
 ```typescript
 // Allow defaults and various imports
 rules: {
@@ -250,7 +273,8 @@ rules: {
 }
 ```
 
-### 7. Type Stubs (src/types/**, *.d.ts)
+### 7. Type Stubs (src/types/\*_, _.d.ts)
+
 ```typescript
 // No strict type checking
 rules: {
@@ -259,15 +283,19 @@ rules: {
 }
 ```
 
-### 8. Hook Utilities (src/hooks/**)
+### 8. Hook Utilities (src/hooks/\*\*)
+
 ```typescript
 // Project: null to avoid tsconfig issues
 languageOptions: {
-  parserOptions: { project: null }
+  parserOptions: {
+    project: null;
+  }
 }
 ```
 
 ### 9. JSON/JSONC Files
+
 ```typescript
 plugins: { json },
 language: "json/jsonc",
@@ -275,6 +303,7 @@ extends: ["json/recommended"],
 ```
 
 ### 10. Markdown Files
+
 ```typescript
 plugins: { markdown },
 language: "markdown/commonmark",
@@ -282,6 +311,7 @@ extends: ["markdown/recommended"],
 ```
 
 ### 11. CSS Files
+
 ```typescript
 plugins: { css },
 language: "css/css",
@@ -293,11 +323,13 @@ extends: ["css/recommended"],
 ## 🌍 Global Configuration
 
 ### Parser
+
 - **Primary**: `@typescript-eslint/parser`
 - **Language Options**: Latest ECMAVersion, Module sourceType, JSX enabled
 - **Project**: `./tsconfig.json` (for type-aware rules)
 
 ### Globals
+
 ```typescript
 {
   ...globals.browser,      // DOM APIs
@@ -308,6 +340,7 @@ extends: ["css/recommended"],
 ```
 
 ### Global Ignores
+
 ```
 **/.next/**              // Next.js build
 **/node_modules/**       // Dependencies
@@ -324,41 +357,46 @@ src/styles/globals.css   // Global styles
 
 ## 📊 Configuration Statistics
 
-| Category | Count |
-|----------|-------|
-| ESLint Plugins | 15 |
-| Total Rules Configured | 155+ |
-| Recommended Extends | 8 |
-| File-Specific Configs | 11 |
-| Import Statements | 29 |
-| Plugin Registrations | 15 |
-| Rule Categories | 13 |
-| Lines of Configuration | 500+ |
+| Category               | Count |
+| ---------------------- | ----- |
+| ESLint Plugins         | 15    |
+| Total Rules Configured | 155+  |
+| Recommended Extends    | 8     |
+| File-Specific Configs  | 11    |
+| Import Statements      | 29    |
+| Plugin Registrations   | 15    |
+| Rule Categories        | 13    |
+| Lines of Configuration | 500+  |
 
 ---
 
 ## ✨ New Additions
 
 ### 1. **eslint-plugin-jsx-a11y**
+
 - **Added**: Accessibility rules
 - **Status**: Fully configured
 - **Rules**: 7 accessibility rules
 - **Purpose**: Enforce WCAG compliance
 
 ### 2. **eslint-plugin-sonarjs**
+
 - **Added**: Code quality analysis
 - **Status**: Fully configured
 - **Rules**: 16+ quality rules
 - **Purpose**: Detect complexity and duplicates
 
 ### Enhanced **plugins** object:
+
 - Added `"jsx-a11y": jsxA11y` entry
 - Added `sonarjs` entry
 
 ### Enhanced **extends** array:
+
 - Added `"sonarjs/recommended"` config
 
 ### Enhanced **rules** object:
+
 - Added 7 `jsx-a11y/*` rules
 - Added 16 `sonarjs/*` rules
 
@@ -433,12 +471,12 @@ pnpm format:check
 
 ## 🔍 File Locations
 
-| File | Path |
-|------|------|
-| Main Config | `C:\Users\Alexa\Desktop\SandBox\comicwise\eslint.config.ts` |
+| File        | Path                                                                               |
+| ----------- | ---------------------------------------------------------------------------------- |
+| Main Config | `C:\Users\Alexa\Desktop\SandBox\comicwise\eslint.config.ts`                        |
 | Summary Doc | `C:\Users\Alexa\Desktop\SandBox\comicwise\ESLINT_PLUGINS_CONFIGURATION_SUMMARY.md` |
-| Guide Doc | `C:\Users\Alexa\Desktop\SandBox\comicwise\ESLINT_ALL_PLUGINS_GUIDE.md` |
-| Report Doc | `C:\Users\Alexa\Desktop\SandBox\comicwise\ESLINT_CONFIGURATION_COMPLETE_REPORT.md` |
+| Guide Doc   | `C:\Users\Alexa\Desktop\SandBox\comicwise\ESLINT_ALL_PLUGINS_GUIDE.md`             |
+| Report Doc  | `C:\Users\Alexa\Desktop\SandBox\comicwise\ESLINT_CONFIGURATION_COMPLETE_REPORT.md` |
 
 ---
 
@@ -453,7 +491,8 @@ pnpm format:check
 
 ## 📝 Summary
 
-**All 15 ESLint plugins have been successfully configured** with comprehensive rules, settings, and extends. The configuration includes:
+**All 15 ESLint plugins have been successfully configured** with comprehensive
+rules, settings, and extends. The configuration includes:
 
 - ✅ Complete plugin integration
 - ✅ 155+ linting rules
