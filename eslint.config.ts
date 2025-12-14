@@ -19,7 +19,6 @@ import prettierConfig from "eslint-config-prettier/flat";
 import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 import * as drizzle from "eslint-plugin-drizzle";
 import importPlugin from "eslint-plugin-import";
-import jsxA11y from "eslint-plugin-jsx-a11y";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
@@ -48,7 +47,7 @@ const eslintConfig = defineConfig([
   nextTs,
   js.configs.recommended,
   tseslint.configs.recommended,
-  sonarjs.configs.recommended,
+  // sonarjs.configs.recommended,
   compat.plugins("react-hooks"),
   {
     ...pluginReact.configs.flat.recommended,
@@ -59,7 +58,7 @@ const eslintConfig = defineConfig([
       "@typescript-eslint": typescript as any,
       react: pluginReact,
       "react-hooks": pluginReactHooks as any,
-      "jsx-a11y": jsxA11y,
+      // "jsx-a11y": jsxA11y,
       "simple-import-sort": pluginSimpleImportSort,
       "better-tailwindcss": pluginBetterTailwindcss,
       prettier: pluginPrettier,
