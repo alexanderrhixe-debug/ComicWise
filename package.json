@@ -15,7 +15,7 @@
     "build:debug": "next build --debug",
     "build:debug:prerender": "next build --debug-prerender",
     "build:profile": "next build --profile",
-    "postbuild": "pnpm dlx next-sitemap --config next-sitemap.config.cjs",
+    "postbuild": "pnpm dlx next-sitemap --config next-sitemap.config.ts",
     "start": "next start",
     "start:prod": "NODE_ENV=production next start -p 3000",
     "preview": "pnpm build && pnpm start",

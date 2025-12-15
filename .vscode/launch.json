@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "Next: Dev (pnpm)",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
@@ -17,7 +17,7 @@
     },
     {
       "name": "Next: Dev (inspect)",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pwsh",
@@ -37,7 +37,7 @@
     },
     {
       "name": "Attach to Next (9229)",
-      "type": "pwa-node",
+      "type": "node",
       "request": "attach",
       "port": 9229,
       "address": "localhost",
@@ -48,7 +48,7 @@
     },
     {
       "name": "Attach to Node (8888)",
-      "type": "pwa-node",
+      "type": "node",
       "request": "attach",
       "port": 8888,
       "address": "localhost",
@@ -59,7 +59,7 @@
     },
     {
       "name": "Attach to Process",
-      "type": "pwa-node",
+      "type": "node",
       "request": "attach",
       "processId": "${command:PickProcess}",
       "cwd": "${workspaceFolder}",
@@ -67,7 +67,7 @@
     },
     {
       "name": "Unit Tests (vitest)",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
       "args": ["run"],
@@ -77,18 +77,17 @@
     },
     {
       "name": "Unit Tests (vitest watch)",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
       "args": ["watch"],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "isBackground": true,
       "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "E2E Tests (playwright)",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
       "args": ["test"],

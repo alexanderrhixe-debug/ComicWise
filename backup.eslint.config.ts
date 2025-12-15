@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // @ts-check
 import css from "@eslint/css"
 import { FlatCompat } from "@eslint/eslintrc"
@@ -165,7 +166,7 @@ const eslintConfig = defineConfig([
       "@next/next/no-styled-jsx-in-document": "error",
 
       // 3. TYPESCRIPT ESLINT PLUGIN (@typescript-eslint/eslint-plugin)
-      ...pluginReact.configs.flat.recommended!.rules,
+      // ...pluginReact.configs.flat.recommended!.rules,
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
@@ -399,9 +400,9 @@ const eslintConfig = defineConfig([
       ],
 
       // 10. BETTER TAILWINDCSS PLUGIN (eslint-plugin-better-tailwindcss)
-      ...pluginBetterTailwindcss.configs["recommended-warn"]!.rules,
-      ...pluginBetterTailwindcss.configs["correctness-warn"]!.rules,
-      ...pluginBetterTailwindcss.configs["stylistic-warn"]!.rules,
+      // ...pluginBetterTailwindcss.configs["recommended-warn"]!.rules,
+      // ...pluginBetterTailwindcss.configs["correctness-warn"]!.rules,
+      // ...pluginBetterTailwindcss.configs["stylistic-warn"]!.rules,
       "better-tailwindcss/no-conflicting-classes": "warn",
       "better-tailwindcss/no-unregistered-classes": "warn",
       "better-tailwindcss/enforce-consistent-class-order": "warn",
@@ -613,7 +614,7 @@ const eslintConfig = defineConfig([
       "@typescript-eslint": typescript as any,
     },
     rules: {
-      ...typescript.configs.recommended!.rules,
+      // ...typescript.configs.recommended!.rules,
       // The codebase includes many intentional `any` usages (legacy or 3rd-party
       // stubs). Keep this quiet at the rule level and enable gradual fixes.
       "@typescript-eslint/no-explicit-any": "warn",

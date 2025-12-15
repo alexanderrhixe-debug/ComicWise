@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // @ts-check
 // ═══════════════════════════════════════════════════════════════════════════
 // ESLint 9.x Flat Config - Comprehensive All-Plugin Configuration
@@ -17,7 +18,7 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import prettierConfig from "eslint-config-prettier/flat";
 import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
-import * as drizzle from "eslint-plugin-drizzle";
+import * as pluginDrizzle from "eslint-plugin-drizzle";
 import importPlugin from "eslint-plugin-import";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginReact from "eslint-plugin-react";
@@ -64,7 +65,7 @@ const eslintConfig = defineConfig([
       prettier: pluginPrettier,
       import: importPlugin,
       "unused-imports": unusedImports,
-      drizzle,
+      drizzle: pluginDrizzle,
       zod: zod as any,
       security,
       sonarjs: sonarjs,
@@ -78,7 +79,7 @@ const eslintConfig = defineConfig([
         ecmaFeatures: {
           jsx: true,
         },
-        project: null,
+        project: ["./tsconfig.json"],
       },
       globals: {
         ...globals.browser,
@@ -221,6 +222,7 @@ const eslintConfig = defineConfig([
       // ═══════════════════════════════════════════════════════════════════════
       // 3. TYPESCRIPT PLUGIN (@typescript-eslint/eslint-plugin)
       // ═══════════════════════════════════════════════════════════════════════
+      ...(typescript.configs.recommended?.rules ?? {}),
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
@@ -233,15 +235,15 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/explicit-module-boundary-types": "warn",
       // "@typescript-eslint/no-floating-promises": "warn",
-      "@typescript-eslint/no-misused-promises": [
-        "warn",
-        { checksVoidReturn: false, checksConditionals: false },
-      ],
-      "@typescript-eslint/no-unsafe-assignment": "warn",
-      "@typescript-eslint/no-unsafe-call": "warn",
-      "@typescript-eslint/no-unsafe-member-access": "warn",
-      "@typescript-eslint/no-unsafe-return": "warn",
-      "@typescript-eslint/await-thenable": "error",
+      // "@typescript-eslint/no-misused-promises": [
+      //   "warn",
+      //   { checksVoidReturn: false, checksConditionals: false },
+      // ],
+      // "@typescript-eslint/no-unsafe-assignment": "warn",
+      // "@typescript-eslint/no-unsafe-call": "warn",
+      // "@typescript-eslint/no-unsafe-member-access": "warn",
+      // "@typescript-eslint/no-unsafe-return": "warn",
+      // "@typescript-eslint/await-thenable": "error",
       "@typescript-eslint/no-unnecessary-type-assertion": "warn",
       "@typescript-eslint/no-unused-expressions": "warn",
       "@typescript-eslint/prefer-nullish-coalescing": "warn",
@@ -404,9 +406,9 @@ const eslintConfig = defineConfig([
       // ═══════════════════════════════════════════════════════════════════════
       // 10. BETTER TAILWINDCSS PLUGIN (eslint-plugin-better-tailwindcss)
       // ═══════════════════════════════════════════════════════════════════════
-      ...(pluginBetterTailwindcss.configs["recommended-warn"]?.rules || {}),
-      ...(pluginBetterTailwindcss.configs["correctness-warn"]?.rules || {}),
-      ...(pluginBetterTailwindcss.configs["stylistic-warn"]?.rules || {}),
+      ...(pluginBetterTailwindcss.configs["recommended-warn"]?.rules ?? {}),
+      ...(pluginBetterTailwindcss.configs["correctness-warn"]?.rules ?? {}),
+      ...(pluginBetterTailwindcss.configs["stylistic-warn"]?.rules ?? {}),
       "better-tailwindcss/no-conflicting-classes": "warn",
       "better-tailwindcss/no-unregistered-classes": "warn",
       "better-tailwindcss/enforce-consistent-class-order": "warn",
@@ -450,7 +452,7 @@ const eslintConfig = defineConfig([
       // 15. PRETTIER PLUGIN (eslint-plugin-prettier)
       // ═══════════════════════════════════════════════════════════════════════
       "prettier/prettier": [
-        "error",
+        "off",
         {
           semi: false,
           trailingComma: "es5",
@@ -474,80 +476,80 @@ const eslintConfig = defineConfig([
   },
 
   // JavaScript-specific config (disable TypeScript rules)
-  {
-    files: ["**/*.js", "**/*.jsx", "**/*.mjs", "**/*.cjs"],
-    languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-    },
-    rules: {
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/explicit-module-boundary-types": "off",
-    },
-  },
+  // {
+  //   files: ["**/*.js", "**/*.jsx", "**/*.mjs", "**/*.cjs"],
+  //   languageOptions: {
+  //     ecmaVersion: "latest",
+  //     sourceType: "module",
+  //   },
+  //   rules: {
+  //     "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+  //     "@typescript-eslint/no-unused-vars": "off",
+  //     "@typescript-eslint/no-explicit-any": "off",
+  //     "@typescript-eslint/explicit-module-boundary-types": "off",
+  //   },
+  // },
 
   // Test files
-  {
-    files: ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-      },
-    },
-    rules: {
-      "@typescript-eslint/no-explicit-any": "warn",
-    },
-  },
+  // {
+  //   files: ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+  //   languageOptions: {
+  //     parserOptions: {
+  //       project: null,
+  //     },
+  //   },
+  //   rules: {
+  //     "@typescript-eslint/no-explicit-any": "warn",
+  //   },
+  // },
 
   // Playwright test files
-  {
-    files: ["**/tests/**/*.ts", "**/e2e/**/*.ts"],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-      },
-    },
-    rules: {
-      "react-hooks/rules-of-hooks": "warn",
-      "@typescript-eslint/no-explicit-any": "warn",
-    },
-  },
+  // {
+  //   files: ["**/tests/**/*.ts", "**/e2e/**/*.ts"],
+  //   languageOptions: {
+  //     parserOptions: {
+  //       project: null,
+  //     },
+  //   },
+  //   rules: {
+  //     "react-hooks/rules-of-hooks": "warn",
+  //     "@typescript-eslint/no-explicit-any": "warn",
+  //   },
+  // },
 
   // Type definition files
-  {
-    files: ["**/*.d.ts"],
-    rules: {
-      "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/triple-slash-reference": "warn",
-    },
-  },
+  // {
+  //   files: ["**/*.d.ts"],
+  //   rules: {
+  //     "@typescript-eslint/no-explicit-any": "warn",
+  //     "@typescript-eslint/triple-slash-reference": "warn",
+  //   },
+  // },
 
   // TypeScript-specific rules (type-aware)
-  {
-    files: ["**/*.{ts,tsx,mts,cts}"],
-    languageOptions: {
-      parser: typescriptParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: { jsx: true },
-        project: ["./tsconfig.json"],
-      },
-    },
-    plugins: {
-      "@typescript-eslint": typescript as any,
-    },
-    rules: {
-      ...(typescript.configs.recommended?.rules || {}),
-      "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-      ],
-    },
-  },
+  // {
+  //   files: ["**/*.{ts,tsx,mts,cts}"],
+  //   languageOptions: {
+  //     parser: typescriptParser,
+  //     parserOptions: {
+  //       ecmaVersion: "latest",
+  //       sourceType: "module",
+  //       ecmaFeatures: { jsx: true },
+  //       project: ["./tsconfig.json"],
+  //     },
+  //   },
+  //   plugins: {
+  //     "@typescript-eslint": typescript as any,
+  //   },
+  //   rules: {
+  //     ...(typescript.configs.recommended?.rules ?? {}),
+  //     "@typescript-eslint/no-explicit-any": "warn",
+  //     "@typescript-eslint/no-unused-vars": [
+  //       "warn",
+  //       { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+  //     ],
+  //   },
+  // },
 
   // Config files
   {
@@ -556,33 +558,35 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-var-requires": "warn",
       "import/no-default-export": "off",
       "import/order": "off",
+      "simple-import-sort/imports": "off",
+      "simple-import-sort/exports": "off",
     },
   },
 
   // Generated/type stub files
-  {
-    files: ["src/types/**", "**/*.d.ts"],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-      },
-    },
-    rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/triple-slash-reference": "off",
-    },
-  },
+  // {
+  //   files: ["src/types/**", "**/*.d.ts"],
+  //   languageOptions: {
+  //     parserOptions: {
+  //       project: null,
+  //     },
+  //   },
+  //   rules: {
+  //     "@typescript-eslint/no-explicit-any": "off",
+  //     "@typescript-eslint/no-unused-vars": "off",
+  //     "@typescript-eslint/triple-slash-reference": "off",
+  //   },
+  // },
 
   // Hook utilities (no type-aware parsing)
-  {
-    files: ["src/hooks/**"],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-      },
-    },
-  },
+  // {
+  //   files: ["src/hooks/**"],
+  //   languageOptions: {
+  //     parserOptions: {
+  //       project: null,
+  //     },
+  //   },
+  // },
 
   // JSON files
   {

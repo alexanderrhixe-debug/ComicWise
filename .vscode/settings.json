@@ -40,11 +40,11 @@
 
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "never",
+    "source.organizeImports": "explicit",
     "source.removeUnusedImports": "explicit",
     "source.addMissingImports": "explicit"
   },
-  "editor.minimap.enabled": true,
+  "editor.minimap.enabled": false,
   "editor.stickyScroll.enabled": true,
   "editor.accessibilitySupport": "off",
   "editor.lineNumbers": "on",

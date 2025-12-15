@@ -109,6 +109,7 @@ highp
 htmlcov
 icns
 icontxt
+Idents
 ilike
 imagekit
 imagekitio
@@ -240,6 +241,7 @@ shadcn
 Shadcn
 signup
 simplewebauthn
+sonarjs
 sonner
 specfile
 sslmode
@@ -291,5 +293,6 @@ Winget
 wrap-break-word
 wscript
 Xvvvm
+zindex
 zodplugin
 zxcvbn
