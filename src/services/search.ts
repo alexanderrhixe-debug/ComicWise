@@ -28,7 +28,7 @@ export interface SearchOptions {
 export interface SearchResult {
   success: boolean;
   data?: {
-    results: any[];
+    results: unknown[];
     total: number;
     page: number;
     totalPages: number;
@@ -355,7 +355,7 @@ export async function getSearchSuggestions(
       .where(ilike(comic.title, searchPattern))
       .limit(limit);
 
-    const suggestions = results.map((r: { title: any }) => r.title);
+    const suggestions = results.map((r: { title: unknown }) => r.title);
 
     return {
       success: true,

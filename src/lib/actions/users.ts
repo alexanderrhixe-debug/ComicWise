@@ -7,7 +7,7 @@ import crypto from "crypto";
 import * as mutations from "database/mutations";
 import * as queries from "database/queries";
 import { sendPasswordResetEmail, sendWelcomeEmail } from "lib/nodemailer";
-import { registerSchema } from "lib/validator";
+import { signUpSchema } from "lib/validator";
 import { revalidatePath } from "next/cache";
 import type { ActionResponse } from "src/types";
 import { z } from "zod";
@@ -30,7 +30,7 @@ export async function registerUser(formData: FormData): Promise<ActionResponse<{
       return error("Too many registration attempts. Please try again later.");
     }
 
-    const data = registerSchema.parse({
+    const data = signUpSchema.parse({
       name: formData.get("name"),
       email: formData.get("email"),
       password: formData.get("password"),

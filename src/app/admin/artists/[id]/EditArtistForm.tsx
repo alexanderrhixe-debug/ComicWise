@@ -1,3 +1,4 @@
+import ClientImageUploader from "components/admin/ClientImageUploader";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
 import { Input } from "components/ui/input";
@@ -7,59 +8,7 @@ import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-function ClientImageUploader({ targetInputId }: { targetInputId: string }) {
-  "use client";
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("type", "avatar");
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Upload failed");
-      const data = await res.json();
-      const el = document.getElementById(targetInputId) as HTMLInputElement | null;
-      if (el) el.value = data.url || "";
-      try {
-        const { toast } = await import("sonner");
-        toast.success("Image uploaded");
-      } catch {
-        // ignore
-      }
-    } catch (err) {
-      try {
-        const { toast } = await import("sonner");
-        toast.error((err as Error).message || "Upload failed");
-      } catch {
-        alert((err as Error).message || "Upload failed");
-      }
-    }
-  }
-
-  return (
-    <div className="flex items-center gap-4">
-      <label htmlFor="artist-profile-upload-file" className="sr-only">
-        Upload artist profile image
-      </label>
-      <input
-        id="artist-profile-upload-file"
-        type="file"
-        accept="image/*"
-        className="sr-only"
-        onChange={handleUpload}
-        aria-label="Upload artist profile image"
-      />
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => document.getElementById("artist-profile-upload-file")?.click()}
-      >
-        Upload Image
-      </Button>
-    </div>
-  );
-}
+// `ClientImageUploader` moved to `src/components/admin/ClientImageUploader`
 
 export default async function EditArtistForm({ params }: { params: { id: string } }) {
   const id = Number(params.id);

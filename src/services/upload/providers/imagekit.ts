@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 // ═══════════════════════════════════════════════════
 // IMAGEKIT UPLOAD PROVIDER
 // Next.js 16.0.7 + ImageKit Integration
@@ -158,8 +159,28 @@ export class ImageKitProvider implements UploadProvider {
     const transformationArray: Array<{ [key: string]: string }> = [];
     const transformObj: { [key: string]: string } = {};
 
-    for (const [key, value] of Object.entries(transformation)) {
-      transformObj[key] = String(value);
+    const allowedKeys = [
+      "width",
+      "height",
+      "quality",
+      "format",
+      "cropMode",
+      "focus",
+      "radius",
+      "background",
+      "border",
+      "rotation",
+      "blur",
+      "named",
+    ];
+    for (const allowedKey of allowedKeys) {
+      if (
+        Object.prototype.hasOwnProperty.call(transformation, allowedKey) &&
+        typeof transformation[allowedKey] !== "object" &&
+        typeof transformation[allowedKey] !== "function"
+      ) {
+        transformObj[allowedKey] = String(transformation[allowedKey]);
+      }
     }
 
     transformationArray.push(transformObj);

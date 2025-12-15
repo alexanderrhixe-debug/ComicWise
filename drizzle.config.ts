@@ -1,8 +1,9 @@
 import * as dotenv from "dotenv";
+import type { Config } from "drizzle-kit";
 import { defineConfig } from "drizzle-kit";
 
 // Load .env files when running migrations locally
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
 dotenv.config();
 
 // Get DATABASE_URL with fallback to NEON_DATABASE_URL
@@ -12,12 +13,11 @@ const getDatabaseUrl = (): string => {
   if (!url) {
     try {
       // Try to read validated env from the project's env helper (if present)
-      // Prefer dynamic import, but keep a fallback to `require` for runtime
-      // compatibility. Disable the specific rule for this line because the
-      // helper may be authored as CommonJS and the import might fail.
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const envModule = require("./src/app-config/env");
-      if (envModule && envModule.env && envModule.env.DATABASE_URL) {
+      // Prefer dynamic import for compatibility and type safety
+      const envModule = import("./src/app-config/env") as {
+        env?: { DATABASE_URL?: string };
+      };
+      if (envModule?.env?.DATABASE_URL) {
         url = envModule.env.DATABASE_URL;
       }
     } catch {
@@ -53,6 +53,6 @@ const cfg = {
   },
   verbose: true,
   strict: true,
-} as any;
+} as Config;
 
 export default defineConfig(cfg);

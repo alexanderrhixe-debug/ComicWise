@@ -6,9 +6,9 @@ import { db } from "db";
 import { eq } from "drizzle-orm";
 import createDrizzleAdapter from "lib/authAdapter";
 import getOAuthProviders, { authOptions } from "lib/authConfig";
+import { signInSchema } from "lib/validator";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { z } from "zod";
 
 // Helper to obtain typed auth options for use in app routes
 export function getAuthOptions(): unknown {
@@ -16,13 +16,6 @@ export function getAuthOptions(): unknown {
 }
 
 export default getAuthOptions;
-
-const signInSchema = z
-  .object({
-    email: z.string().email(),
-    password: z.string().min(8),
-  })
-  .strict();
 
 const oauthProviders = getOAuthProviders();
 
@@ -54,7 +47,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             where: eq(user.email, email),
           });
 
-          if (!existingUser || !existingUser.password) {
+          if (!existingUser?.password) {
             return null;
           }
 
@@ -81,9 +74,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }: { token: Record<string, unknown>; user?: any }) {
-      if (user && (user as any).id) {
-        token.role = (user as any).role;
-        token.id = (user as any).id;
+      if (user?.id) {
+        token.role = user.role;
+        token.id = user.id;
       }
       return token;
     },

@@ -78,6 +78,13 @@ declare module "react-fast-marquee" {
 declare module "react-medium-image-zoom" {
   import type { ComponentType, ReactNode } from "react";
 
+  // Fallback for HTMLElementTagNameMap if not present (for non-DOM environments)
+  // Remove this if your tsconfig includes "dom" in the "lib" array.
+
+  type HTMLElementTagNameMap = typeof globalThis extends { HTMLElementTagNameMap: infer T }
+    ? T
+    : Record<string, any>;
+
   export interface ZoomProps {
     children?: ReactNode;
     zoomMargin?: number;
@@ -87,7 +94,9 @@ declare module "react-medium-image-zoom" {
     transitionDuration?: number;
     closeText?: string;
     openText?: string;
-    wrapElement?: keyof HTMLElementTagNameMap;
+    wrapElement?: keyof (HTMLElementTagNameMap extends undefined
+      ? Record<string, any>
+      : HTMLElementTagNameMap);
     wrapStyle?: React.CSSProperties;
     zoomZindex?: number;
     defaultStyles?: {
@@ -309,6 +318,12 @@ declare module "input-otp" {
 // React Resizable Panels
 declare module "react-resizable-panels" {
   import type { ComponentType, HTMLAttributes, ReactNode } from "react";
+
+  // Fallback for HTMLElementTagNameMap if not present (for non-DOM environments)
+  // Remove this if your tsconfig includes "dom" in the "lib" array.
+  type HTMLElementTagNameMap = typeof globalThis extends { HTMLElementTagNameMap: infer T }
+    ? T
+    : Record<string, any>;
 
   export interface PanelProps extends HTMLAttributes<HTMLDivElement> {
     children?: ReactNode;

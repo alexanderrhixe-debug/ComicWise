@@ -16,6 +16,11 @@ export const database: any = db;
 // Also export a simple object containing schema tables for convenience
 export const tables: any = schema;
 
+// Typed aliases for incremental hardening. Use these in new/updated modules
+// to opt into strict Drizzle typings without forcing a global change.
+export const databaseTyped: Database = db;
+export const tablesTyped: Schema = schema;
+
 // Re-export the concrete Database and Schema types from the DB implementation
 export type Database = DrizzleDatabase;
 export type Schema = DrizzleSchema;

@@ -38,7 +38,6 @@ describe("Auth Actions", () => {
       const formData = new FormData();
       formData.append("email", validEmail);
       formData.append("password", validPassword);
-
       (ratelimitLib.checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 4,
@@ -63,7 +62,6 @@ describe("Auth Actions", () => {
       const formData = new FormData();
       formData.append("email", validEmail);
       formData.append("password", validPassword);
-
       (ratelimitLib.checkRateLimit as Mock).mockReturnValue({
         allowed: false,
         remaining: 0,
@@ -82,7 +80,6 @@ describe("Auth Actions", () => {
       const formData = new FormData();
       formData.append("email", validEmail);
       formData.append("password", validPassword);
-
       (ratelimitLib.checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 4,
@@ -187,7 +184,6 @@ describe("Auth Actions", () => {
       const formData = new FormData();
       formData.append("email", validEmail);
       formData.append("password", validPassword);
-
       (ratelimitLib.checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 4,

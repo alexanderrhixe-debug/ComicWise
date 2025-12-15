@@ -1,4 +1,3 @@
-import { signInSchema, signUpSchema } from "lib/validations/auth";
 import {
   createBookmarkSchema,
   createChapterSchema,
@@ -6,11 +5,13 @@ import {
   createCommentSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  signInSchema,
+  signUpSchema,
   updateChapterSchema,
   updateComicSchema,
   updateCommentSchema,
   verifyEmailSchema,
-} from "lib/validations/index";
+} from "lib/validator";
 import { describe, expect, it } from "vitest";
 
 describe("Authentication Validation Schemas", () => {

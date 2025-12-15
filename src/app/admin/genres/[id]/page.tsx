@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import EditGenreForm from "./EditGenreForm";
+import EditGenreForm from "src/app/admin/genres/[id]/EditGenreForm";
 
 export default function EditGenrePage({ params }: { params: { id: string } }) {
   return (

@@ -12,8 +12,8 @@ interface CreateChapterData {
 
 export async function createChapter(data: CreateChapterData) {
   const { slug: providedSlug, title } = data as { slug?: string; title: string };
-  const slugModule = await import("lib/utils/slugify");
-  const slugify = slugModule.default ?? slugModule.slugify;
+  const slugModule = await import("lib/utils");
+  const slugify = slugModule.slugify;
   const slug = providedSlug ?? slugify(title);
 
   const [newChapter] = await database

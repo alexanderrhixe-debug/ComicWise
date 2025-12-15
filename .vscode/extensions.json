@@ -1,52 +1,36 @@
 {
   "recommendations": [
-    // Essential Code Quality & Formatting
+    "stateful.runme",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "eamodio.gitlens",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode.vscode-typescript-next",
+    "orta.vscode-jest",
     "streetsidesoftware.code-spell-checker",
     "usernamehw.errorlens",
-
-    // React, Next.js & TypeScript
     "formulahendry.auto-rename-tag",
     "dsznajder.es7-react-js-snippets",
     "burkeholland.simple-react-snippets",
     "yoavbls.pretty-ts-errors",
-
-    // Tailwind CSS
-    "bradlc.vscode-tailwindcss",
-
-    // Database & ORM
     "drizzle-team.drizzle-vscode",
     "cweijan.vscode-postgresql-client2",
-
-    // Productivity & Navigation
     "christian-kohler.path-intellisense",
     "christian-kohler.npm-intellisense",
     "gruntfuggly.todo-tree",
     "aaron-bond.better-comments",
     "wayou.vscode-todo-highlight",
-
-    // Git
-    "eamodio.gitlens",
     "mhutchie.git-graph",
     "donjayamanne.githistory",
-
-    // API & Testing
     "humao.rest-client",
     "ms-playwright.playwright",
     "vitest.explorer",
-
-    // Docker & DevOps
-    "ms-azuretools.vscode-docker",
     "ms-vscode-remote.remote-containers",
-
-    // Icons & Visual
     "pkief.material-icon-theme",
     "antfu.icons-carbon",
     "oderwat.indent-rainbow",
     "naumovs.color-highlight",
-
-    // Utilities
     "mikestead.dotenv",
     "editorconfig.editorconfig",
     "github.copilot",
@@ -56,16 +40,13 @@
     "yzhang.markdown-all-in-one",
     "redhat.vscode-yaml",
     "tamasfe.even-better-toml",
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint",
-    "ms-azuretools.vscode-docker",
-    "eamodio.gitlens",
-    "ms-vscode.vscode-typescript-next",
-    "orta.vscode-jest"
+    "ms-vscode.powershell"
   ],
   "unwantedRecommendations": [
     "hookyqr.beautify",
     "dbaeumer.jshint",
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "visualstudioexptteam.vscodeintellicode",
+    "liuji-jim.lua"
   ]
 }

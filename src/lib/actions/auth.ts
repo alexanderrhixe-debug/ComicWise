@@ -11,14 +11,13 @@ import { error } from "actions/utils";
 import { appConfig } from "appConfig";
 import { signIn, signOut } from "auth";
 import { checkRateLimit } from "lib/ratelimit";
-import { loginSchema } from "lib/validator";
-import { z } from "zod";
-
+import { signInSchema } from "lib/validator";
 import type { ActionResponse } from "src/types";
+import { z } from "zod";
 
 export async function signInWithCredentials(formData: FormData): Promise<ActionResponse> {
   try {
-    const data = loginSchema.parse({
+    const data = signInSchema.parse({
       email: formData.get("email"),
       password: formData.get("password"),
     });

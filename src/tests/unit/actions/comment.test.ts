@@ -43,7 +43,6 @@ describe("Comment Actions", () => {
       const formData = new FormData();
       formData.append("content", "This is a test comment");
       formData.append("chapterId", mockChapterId.toString());
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 9,
@@ -73,7 +72,6 @@ describe("Comment Actions", () => {
       const formData = new FormData();
       formData.append("content", "Test comment");
       formData.append("chapterId", mockChapterId.toString());
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: false,
         remaining: 0,
@@ -92,7 +90,6 @@ describe("Comment Actions", () => {
       const formData = new FormData();
       formData.append("content", "");
       formData.append("chapterId", mockChapterId.toString());
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 9,
@@ -110,7 +107,6 @@ describe("Comment Actions", () => {
       const formData = new FormData();
       formData.append("content", longContent);
       formData.append("chapterId", mockChapterId.toString());
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 9,
@@ -126,7 +122,6 @@ describe("Comment Actions", () => {
     it("should return error when chapterId is missing", async () => {
       const formData = new FormData();
       formData.append("content", "Test comment");
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 9,
@@ -143,7 +138,6 @@ describe("Comment Actions", () => {
       const formData = new FormData();
       formData.append("content", "Test comment");
       formData.append("chapterId", "invalid");
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 9,
@@ -160,7 +154,6 @@ describe("Comment Actions", () => {
       const formData = new FormData();
       formData.append("content", "Test comment");
       formData.append("chapterId", "-1");
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 9,
@@ -177,7 +170,6 @@ describe("Comment Actions", () => {
       const formData = new FormData();
       formData.append("content", "Test comment");
       formData.append("chapterId", mockChapterId.toString());
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 9,
@@ -196,7 +188,6 @@ describe("Comment Actions", () => {
       const formData = new FormData();
       formData.append("content", "Test comment");
       formData.append("chapterId", mockChapterId.toString());
-
       (checkRateLimit as Mock).mockReturnValue({
         allowed: true,
         remaining: 9,
@@ -220,7 +211,6 @@ describe("Comment Actions", () => {
     it("should successfully update a comment with valid data", async () => {
       const formData = new FormData();
       formData.append("content", "Updated comment content");
-
       (mutations.updateComment as Mock).mockResolvedValue(undefined);
 
       const result = await updateComment(mockCommentId, formData);
@@ -267,7 +257,6 @@ describe("Comment Actions", () => {
     it("should handle database errors gracefully", async () => {
       const formData = new FormData();
       formData.append("content", "Updated content");
-
       (mutations.updateComment as Mock).mockRejectedValue(new Error("Database error"));
 
       const result = await updateComment(mockCommentId, formData);
@@ -281,7 +270,6 @@ describe("Comment Actions", () => {
     it("should handle non-existent comment updates", async () => {
       const formData = new FormData();
       formData.append("content", "Updated content");
-
       (mutations.updateComment as Mock).mockRejectedValue(new Error("Comment not found"));
 
       const result = await updateComment(999999, formData);

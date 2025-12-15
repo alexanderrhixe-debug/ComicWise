@@ -32,19 +32,23 @@ export const truncate = (str: string, length: number): string => {
 };
 
 export const slugify = (str: string): string => {
+  if (!str) return "";
   return str
+    .toString()
+    .normalize("NFKD")
+    .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 200);
 };
 
 export const debounce = <T extends (...args: unknown[]) => unknown>(
   fn: T,
   delay: number
 ): ((...args: Parameters<T>) => void) => {
-  let timeoutId: NodeJS.Timeout;
+  let timeoutId: ReturnType<typeof setTimeout>;
   return (...args: Parameters<T>) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => fn(...args), delay);
@@ -53,3 +57,24 @@ export const debounce = <T extends (...args: unknown[]) => unknown>(
 
 export const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
+
+export function isString(v: unknown): v is string {
+  return typeof v === "string";
+}
+
+export function isNumber(v: unknown): v is number {
+  return typeof v === "number" && !Number.isNaN(v);
+}
+
+export function isRegExpMatch(match: RegExpExecArray | null | undefined, index = 0): boolean {
+  return !!(match && match.length > index && typeof match[index] === "string");
+}
+
+export function safeGet<T, K extends keyof T>(
+  obj: T | null | undefined,
+  key: K,
+  fallback?: T[K]
+): T[K] | undefined {
+  if (!obj) return fallback;
+  return obj[key] ?? fallback;
+}

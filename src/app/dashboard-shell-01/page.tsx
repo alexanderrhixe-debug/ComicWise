@@ -565,11 +565,11 @@ const DashboardShell = () => {
                   percentage={10}
                   comparisonText="Compare to last year ($84,325)"
                   earningData={earningData}
-                  className="justify-between gap-5 sm:min-w-0 [&>[data-slot=card-content]]:space-y-7"
+                  className="justify-between gap-5 *:data-[slot=card-content]:space-y-7 sm:min-w-0"
                 />
               </div>
 
-              <SalesMetricsCard className="col-span-full xl:col-span-2 [&>[data-slot=card-content]]:space-y-6" />
+              <SalesMetricsCard className="col-span-full *:data-[slot=card-content]:space-y-6 xl:col-span-2" />
 
               <Card className="col-span-full w-full py-0">
                 <TransactionDatatable data={transactionData} />
