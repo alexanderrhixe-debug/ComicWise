@@ -1,40 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // @ts-check
-import css from "@eslint/css"
-import { FlatCompat } from "@eslint/eslintrc"
-import js from "@eslint/js"
-import json from "@eslint/json"
-import markdown from "@eslint/markdown"
-import eslintNextPlugin from "@next/eslint-plugin-next"
-import typescript from "@typescript-eslint/eslint-plugin"
-import typescriptParser from "@typescript-eslint/parser"
-import nextVitals from "eslint-config-next/core-web-vitals"
-import nextTs from "eslint-config-next/typescript"
-import prettierConfig from "eslint-config-prettier/flat"
-import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss"
-import * as drizzle from "eslint-plugin-drizzle"
-import importPlugin from "eslint-plugin-import"
-import pluginPrettier from "eslint-plugin-prettier"
-import pluginReact from "eslint-plugin-react"
-import pluginReactHooks from "eslint-plugin-react-hooks"
-import security from "eslint-plugin-security"
-import pluginSimpleImportSort from "eslint-plugin-simple-import-sort"
-import unusedImports from "eslint-plugin-unused-imports"
-import * as zod from "eslint-plugin-zod"
-import { defineConfig, globalIgnores } from "eslint/config"
-import globals from "globals"
-import { dirname } from "path"
-import tseslint from "typescript-eslint"
-import { fileURLToPath } from "url"
+import css from "@eslint/css";
+import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import json from "@eslint/json";
+import markdown from "@eslint/markdown";
+import eslintNextPlugin from "@next/eslint-plugin-next";
+import typescript from "@typescript-eslint/eslint-plugin";
+import typescriptParser from "@typescript-eslint/parser";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+import prettierConfig from "eslint-config-prettier/flat";
+import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
+import * as drizzle from "eslint-plugin-drizzle";
+import importPlugin from "eslint-plugin-import";
+import pluginPrettier from "eslint-plugin-prettier";
+import pluginReact from "eslint-plugin-react";
+import pluginReactHooks from "eslint-plugin-react-hooks";
+import security from "eslint-plugin-security";
+import pluginSimpleImportSort from "eslint-plugin-simple-import-sort";
+import unusedImports from "eslint-plugin-unused-imports";
+import * as zod from "eslint-plugin-zod";
+import { defineConfig, globalIgnores } from "eslint/config";
+import globals from "globals";
+import { dirname } from "path";
+import tseslint from "typescript-eslint";
+import { fileURLToPath } from "url";
 
-const rootDir = dirname(fileURLToPath(import.meta.url))
+const rootDir = dirname(fileURLToPath(import.meta.url));
 
 export const compat = new FlatCompat({
   baseDirectory: rootDir,
   resolvePluginsRelativeTo: rootDir,
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
-})
+});
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -718,6 +718,6 @@ const eslintConfig = defineConfig([
     "src/styles/globals.css",
     "**/docs/**",
   ]),
-])
+]);
 
-export default eslintConfig
+export default eslintConfig;

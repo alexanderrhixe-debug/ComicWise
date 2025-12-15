@@ -14,12 +14,13 @@ import markdown from "@eslint/markdown";
 import eslintNextPlugin from "@next/eslint-plugin-next";
 import typescript from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+// import nextVitals from "eslint-config-next/core-web-vitals";
+// import nextTs from "eslint-config-next/typescript";
 import prettierConfig from "eslint-config-prettier/flat";
 import pluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 import * as pluginDrizzle from "eslint-plugin-drizzle";
 import importPlugin from "eslint-plugin-import";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
@@ -44,11 +45,11 @@ export const compat = new FlatCompat({
 });
 
 const eslintConfig = defineConfig([
-  nextVitals,
-  nextTs,
+  // nextVitals,
+  // nextTs,
   js.configs.recommended,
   tseslint.configs.recommended,
-  // sonarjs.configs.recommended,
+  sonarjs.configs.recommended,
   compat.plugins("react-hooks"),
   {
     ...pluginReact.configs.flat.recommended,
@@ -59,7 +60,7 @@ const eslintConfig = defineConfig([
       "@typescript-eslint": typescript as any,
       react: pluginReact,
       "react-hooks": pluginReactHooks as any,
-      // "jsx-a11y": jsxA11y,
+      "jsx-a11y": jsxA11y,
       "simple-import-sort": pluginSimpleImportSort,
       "better-tailwindcss": pluginBetterTailwindcss,
       prettier: pluginPrettier,
@@ -234,16 +235,16 @@ const eslintConfig = defineConfig([
       ],
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/explicit-module-boundary-types": "warn",
-      // "@typescript-eslint/no-floating-promises": "warn",
-      // "@typescript-eslint/no-misused-promises": [
-      //   "warn",
-      //   { checksVoidReturn: false, checksConditionals: false },
-      // ],
-      // "@typescript-eslint/no-unsafe-assignment": "warn",
-      // "@typescript-eslint/no-unsafe-call": "warn",
-      // "@typescript-eslint/no-unsafe-member-access": "warn",
-      // "@typescript-eslint/no-unsafe-return": "warn",
-      // "@typescript-eslint/await-thenable": "error",
+      "@typescript-eslint/no-floating-promises": "warn",
+      "@typescript-eslint/no-misused-promises": [
+        "warn",
+        { checksVoidReturn: false, checksConditionals: false },
+      ],
+      "@typescript-eslint/no-unsafe-assignment": "warn",
+      "@typescript-eslint/no-unsafe-call": "warn",
+      "@typescript-eslint/no-unsafe-member-access": "warn",
+      "@typescript-eslint/no-unsafe-return": "warn",
+      "@typescript-eslint/await-thenable": "error",
       "@typescript-eslint/no-unnecessary-type-assertion": "warn",
       "@typescript-eslint/no-unused-expressions": "warn",
       "@typescript-eslint/prefer-nullish-coalescing": "warn",
@@ -320,34 +321,34 @@ const eslintConfig = defineConfig([
       // ═══════════════════════════════════════════════════════════════════════
       // 6. JSX A11Y PLUGIN (eslint-plugin-jsx-a11y)
       // // ═══════════════════════════════════════════════════════════════════════
-      // "jsx-a11y/alt-text": "warn",
-      // "jsx-a11y/anchor-has-content": "warn",
-      // "jsx-a11y/anchor-is-valid": "warn",
-      // "jsx-a11y/aria-activedescendant-has-tabindex": "warn",
-      // "jsx-a11y/aria-props": "warn",
-      // "jsx-a11y/aria-role": "warn",
-      // "jsx-a11y/aria-unsupported-elements": "warn",
-      // "jsx-a11y/click-events-have-key-events": "warn",
-      // "jsx-a11y/heading-has-content": "warn",
-      // "jsx-a11y/html-has-lang": "warn",
-      // "jsx-a11y/iframe-has-title": "warn",
-      // "jsx-a11y/img-redundant-alt": "warn",
-      // "jsx-a11y/interactive-supports-focus": "warn",
-      // "jsx-a11y/label-has-associated-control": "warn",
-      // "jsx-a11y/media-has-caption": "warn",
-      // "jsx-a11y/mouse-events-have-key-events": "warn",
-      // "jsx-a11y/no-access-key": "warn",
-      // "jsx-a11y/no-autofocus": "warn",
-      // "jsx-a11y/no-distracting-elements": "warn",
-      // "jsx-a11y/no-interactive-element-to-noninteractive-role": "warn",
-      // "jsx-a11y/no-noninteractive-element-interactions": "warn",
-      // "jsx-a11y/no-noninteractive-element-to-interactive-role": "warn",
-      // "jsx-a11y/no-noninteractive-tabindex": "warn",
-      // "jsx-a11y/no-redundant-roles": "warn",
-      // "jsx-a11y/no-static-element-interactions": "warn",
-      // "jsx-a11y/role-has-required-aria-props": "warn",
-      // "jsx-a11y/role-supports-aria-props": "warn",
-      // "jsx-a11y/scope": "warn",
+      "jsx-a11y/alt-text": "warn",
+      "jsx-a11y/anchor-has-content": "warn",
+      "jsx-a11y/anchor-is-valid": "warn",
+      "jsx-a11y/aria-activedescendant-has-tabindex": "warn",
+      "jsx-a11y/aria-props": "warn",
+      "jsx-a11y/aria-role": "warn",
+      "jsx-a11y/aria-unsupported-elements": "warn",
+      "jsx-a11y/click-events-have-key-events": "warn",
+      "jsx-a11y/heading-has-content": "warn",
+      "jsx-a11y/html-has-lang": "warn",
+      "jsx-a11y/iframe-has-title": "warn",
+      "jsx-a11y/img-redundant-alt": "warn",
+      "jsx-a11y/interactive-supports-focus": "warn",
+      "jsx-a11y/label-has-associated-control": "warn",
+      "jsx-a11y/media-has-caption": "warn",
+      "jsx-a11y/mouse-events-have-key-events": "warn",
+      "jsx-a11y/no-access-key": "warn",
+      "jsx-a11y/no-autofocus": "warn",
+      "jsx-a11y/no-distracting-elements": "warn",
+      "jsx-a11y/no-interactive-element-to-noninteractive-role": "warn",
+      "jsx-a11y/no-noninteractive-element-interactions": "warn",
+      "jsx-a11y/no-noninteractive-element-to-interactive-role": "warn",
+      "jsx-a11y/no-noninteractive-tabindex": "warn",
+      "jsx-a11y/no-redundant-roles": "warn",
+      "jsx-a11y/no-static-element-interactions": "warn",
+      "jsx-a11y/role-has-required-aria-props": "warn",
+      "jsx-a11y/role-supports-aria-props": "warn",
+      "jsx-a11y/scope": "warn",
 
       // ═══════════════════════════════════════════════════════════════════════
       // 7. IMPORT PLUGIN (eslint-plugin-import)
@@ -475,81 +476,14 @@ const eslintConfig = defineConfig([
     },
   },
 
-  // JavaScript-specific config (disable TypeScript rules)
-  // {
-  //   files: ["**/*.js", "**/*.jsx", "**/*.mjs", "**/*.cjs"],
-  //   languageOptions: {
-  //     ecmaVersion: "latest",
-  //     sourceType: "module",
-  //   },
-  //   rules: {
-  //     "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
-  //     "@typescript-eslint/no-unused-vars": "off",
-  //     "@typescript-eslint/no-explicit-any": "off",
-  //     "@typescript-eslint/explicit-module-boundary-types": "off",
-  //   },
-  // },
-
-  // Test files
-  // {
-  //   files: ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
-  //   languageOptions: {
-  //     parserOptions: {
-  //       project: null,
-  //     },
-  //   },
-  //   rules: {
-  //     "@typescript-eslint/no-explicit-any": "warn",
-  //   },
-  // },
-
-  // Playwright test files
-  // {
-  //   files: ["**/tests/**/*.ts", "**/e2e/**/*.ts"],
-  //   languageOptions: {
-  //     parserOptions: {
-  //       project: null,
-  //     },
-  //   },
-  //   rules: {
-  //     "react-hooks/rules-of-hooks": "warn",
-  //     "@typescript-eslint/no-explicit-any": "warn",
-  //   },
-  // },
-
   // Type definition files
-  // {
-  //   files: ["**/*.d.ts"],
-  //   rules: {
-  //     "@typescript-eslint/no-explicit-any": "warn",
-  //     "@typescript-eslint/triple-slash-reference": "warn",
-  //   },
-  // },
-
-  // TypeScript-specific rules (type-aware)
-  // {
-  //   files: ["**/*.{ts,tsx,mts,cts}"],
-  //   languageOptions: {
-  //     parser: typescriptParser,
-  //     parserOptions: {
-  //       ecmaVersion: "latest",
-  //       sourceType: "module",
-  //       ecmaFeatures: { jsx: true },
-  //       project: ["./tsconfig.json"],
-  //     },
-  //   },
-  //   plugins: {
-  //     "@typescript-eslint": typescript as any,
-  //   },
-  //   rules: {
-  //     ...(typescript.configs.recommended?.rules ?? {}),
-  //     "@typescript-eslint/no-explicit-any": "warn",
-  //     "@typescript-eslint/no-unused-vars": [
-  //       "warn",
-  //       { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-  //     ],
-  //   },
-  // },
+  {
+    files: ["**/*.d.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/triple-slash-reference": "warn",
+    },
+  },
 
   // Config files
   {
@@ -562,31 +496,6 @@ const eslintConfig = defineConfig([
       "simple-import-sort/exports": "off",
     },
   },
-
-  // Generated/type stub files
-  // {
-  //   files: ["src/types/**", "**/*.d.ts"],
-  //   languageOptions: {
-  //     parserOptions: {
-  //       project: null,
-  //     },
-  //   },
-  //   rules: {
-  //     "@typescript-eslint/no-explicit-any": "off",
-  //     "@typescript-eslint/no-unused-vars": "off",
-  //     "@typescript-eslint/triple-slash-reference": "off",
-  //   },
-  // },
-
-  // Hook utilities (no type-aware parsing)
-  // {
-  //   files: ["src/hooks/**"],
-  //   languageOptions: {
-  //     parserOptions: {
-  //       project: null,
-  //     },
-  //   },
-  // },
 
   // JSON files
   {
